@@ -1,0 +1,13 @@
+<md-list-item hide show-gt-md class="block-icon-Option">
+    <div *ngFor="let folderButton of folderButtons">
+        <div [ngSwitch]="folderButton.menuFunction">
+
+            <i *ngSwitchCase="'editFolder'" class=" material-icons icon-button " (click)="selecFunctionClick('edit') " title="แก้ไข ">edit</i>
+
+            <i *ngSwitchCase="'auth'" class="material-icons icon-button " (click)="selecFunctionClick('auth') " title="สิทธิ์ ">settings</i>
+
+            <i *ngSwitchCase="'delFolder'" class="material-icons icon-button " (click)="selecFunctionClick('del') " title="ลบ ">delete</i>
+
+        </div>
+    </div>
+</md-list-item>

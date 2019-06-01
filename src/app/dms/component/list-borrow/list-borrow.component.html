@@ -1,0 +1,113 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>swap_vert</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{dmsfolderName}}</span>
+        </div>
+        <!-- <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button> -->
+        <!-- <md-menu #menu="mdMenu" x-position="before">
+            <div>
+                <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
+                <button md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu> -->
+    </div>
+</div>
+
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+
+                                <p-dataTable #dt [value]="borrowList" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" [resizableColumns]="true" [responsive]="true">
+                                    <p-header>
+                                        <div layout="row" layout-align="space-between start">
+                                            <div></div>
+                                            <div>
+                                                <span>รายการประวัติการยืม-คืนเอกสาร [{{documentName}}]</span>
+                                            </div>
+                                            <div>
+                                                <button (click)="dt.reset()"><i class="fa fa-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                    </p-header>
+                                    <!-- <p-column *ngFor="let col of columns" [field]="col.field" [header]="col.header" [sortable]="col.sort"></p-column> -->
+                                    <p-column field="statusId" header="" [style]="{'width':'3%'}" layout-align="center center">
+                                        <template pTemplate="body" let-col let-row="rowData">
+                                            <label *ngIf="row[col.field]==0">
+                                                <i class="material-icons">assignment_turned_in</i>
+                                            </label>
+                                            <label *ngIf="row[col.field]==1">
+                                                <i class="material-icons">assignment_return</i>
+                                            </label>
+                                            <label *ngIf="row[col.field]==2" style="color: red">
+                                                <i class="material-icons">assignment_returned</i>
+                                            </label>
+                                            <label *ngIf="row[col.field]==3" style="color: red">
+                                                <i class="material-icons">assignment_return</i>
+                                            </label>
+                                            <label *ngIf="row[col.field]==4">
+                                                <i class="material-icons">assignment_returned</i>
+                                            </label>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="statusId" header="สถานะ" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'14%'}">
+                                        <template pTemplate="filter" let-col>
+                                         <p-dropdown [options]="status" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
+                                    </template>
+                                        <template pTemplate="body" let-col let-row="rowData">
+                                         <!-- <span [ngStyle]="cellColor_status(row[col.field])">{{statusType[row[col.field]]}}</span>  -->
+                                         <!-- 0=ว่าง,1=ยืม,2=คืนเกินกำหนด,3=ยืมเกินกำหนด,4=คืนปกติ -->
+                                         <span *ngIf="row[col.field]==0">{{statusType[row[col.field]]}}</span> 
+                                         <span *ngIf="row[col.field]==1" style="color: #ff7f7f">{{statusType[row[col.field]]}}</span>
+                                         <!-- style="color: #00a1ff"  -->
+                                         <span *ngIf="row[col.field]==2">{{statusType[row[col.field]]}}</span>
+                                         <span *ngIf="row[col.field]==3" style="color: #ff0000">{{statusType[row[col.field]]}}</span> 
+                                         <span *ngIf="row[col.field]==4" >{{statusType[row[col.field]]}}</span>  
+                                    </template>
+                                    </p-column>
+                                    <p-column field="lendName" header="ผู้ยืม" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'15%'}"></p-column>
+                                    <p-column field="lendDate" header="วันที่ยืม" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'8%'}"></p-column>
+                                    <p-column field="toReturnDate" header="วันที่กำหนดคืน" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'8%'}"></p-column>
+                                    <p-column field="returnDate" header="วันที่คืน" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'8%'}"></p-column>
+                                    <p-column field="returnName" header="ผุ้คืน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'15%'}"></p-column>
+                                    <p-column field="userProfileHandler.fullName" header="ผู้นำจ่าย" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา" [style]="{'width':'15%'}"></p-column>
+
+                                </p-dataTable>
+                            </md-card-content>
+                        </md-card>
+                        <!-- <div hide-gt-md>
+                            <template let-item let-last="last" ngFor [ngForOf]="datas">
+                                <md-list-item >
+                                    <md-icon md-list-avatar style="background: #b1ccea">attach_file</md-icon>
+                                    
+                                    <h3 md-line class="hover"> {{item.documentName}} </h3>
+                                    <h4 md-line> วันที่ : {{item.documentPublicDate}} </h4>
+                                    <p md-line> ผู้สร้าง : {{item.createdName}} </p>
+
+                                </md-list-item>
+                                <md-divider  md-inset></md-divider>
+                            </template>
+                        </div> -->
+
+                    </md-list>
+
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+
+</div>

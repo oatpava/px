@@ -1,0 +1,35 @@
+<!-- <h3 md-dialog-title>{{header}}</h3>
+<md-dialog-content hide show-gt-md style="min-height: 70px;">
+    <p [innerHTML]="message"></p>
+</md-dialog-content>
+
+<md-dialog-actions *ngIf="confirmation" hide-gt-md layout="column" layout-align="end center">
+    <button flex md-button (click)="ok()" style="width: 100%; margin-bottom: 10px; border: 1px solid #3f51b5" color="primary">ยืนยัน</button>
+    <button flex md-button (click)="cancel()" style="width: 100%; margin-bottom: 10px; border: 1px solid red" color="accent">ยกเลิก</button>
+</md-dialog-actions>
+<md-dialog-actions *ngIf="confirmation" hide show-gt-md layout="row" layout-align="end center">
+    <button flex md-button style="width: 100%;" (click)="ok()" color="primary">ยืนยัน</button>
+    <button flex md-button (click)="cancel()" style="width: 100%;" color="accent">ยกเลิก</button>
+</md-dialog-actions>
+<md-dialog-actions *ngIf="!confirmation" hide-gt-md layout="column" layout-align="end center">
+    <button flex md-button (click)="ok()" style="width: 100%; margin-bottom: 10px; border: 1px solid #3f51b5" color="primary">ตกลง</button>
+</md-dialog-actions>
+<md-dialog-actions *ngIf="!confirmation" hide show-gt-md layout="row" layout-align="end center">
+    <button flex md-button style="width: 100%;" (click)="ok()" color="primary">ตกลง</button>
+</md-dialog-actions> -->
+<div style="background:#e0785f;">
+    <div layout="row">
+        <div flex class="headReport">{{header}}</div>
+        <div class="headReport" (click)="cancel()">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+</div>
+<div class="boxDialog">
+    <p [innerHTML]="message"></p>
+</div>
+<md-divider></md-divider>
+<div class="bottomboxDialog" align="right">
+    <button *ngIf="!confirmation" md-raised-button color="primary" (click)="ok()">ตกลง</button>
+    <button *ngIf="confirmation" md-raised-button color="primary" (click)="ok()">ยืนยัน</button>
+</div>

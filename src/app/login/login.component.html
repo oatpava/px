@@ -1,0 +1,102 @@
+<div class="set-background-Login" [@visibleTrigger]="'visible'">
+    <div layout="column" layout-fill>
+        <div flex hide show-gt-md layout="row" layout-align="end start" class="margin body-Login">
+            <div>
+                <!-- <img src="assets/logo/ghb3.png" style="padding-right: 40px;"> -->
+                <img src="assets/logo/ghb2.png">
+            </div>
+        </div>
+        <div flex>
+            <div layout-gt-md="row" layout-align-gt-md="center start">
+                <div flex-gt-md="40">
+                    <div class="textLoginhead" style="text-align: -webkit-center; text-align: center;">
+                        <div style="text-align: -webkit-center; text-align: center;">
+                            <img [src]="logo">
+                            <div class="head-Font-subtitle">version 8.0</div>
+                        </div>
+                    </div>
+                    <div hide show-gt-md class="f-bane">
+                        Warning: This computer program is protected by copyright law and internationnal treaties, Unauthorized reproduction or distribution of the program, or any portion of it, may resultin servere cicil anf criminal penalties, and will be prosecuted to the
+                        maximum extent possible under the law.
+                    </div>
+                    <!-- <div layout-gt-md="row" class="f-baneTel">
+                        หากท่านใดมีปัญหาในการใช้งานระบบ กรุณาติดต่อ Help Desk
+                    </div>
+                    <div layout-gt-md="row" class="f-baneTel">
+                        หมายเลขโทรศัพท์ : 16000
+                    </div> -->
+                </div>
+                <!-- <div flex-gt-md="40" style="border-left: 3px solid; margin-left: 10px;"> -->
+                <div flex-gt-md="40" style="margin-left: 10px;">
+                    <div flex style="margin-left: 20px">
+                        <div [ngClass]="{'boxSelectClick': selectHover}" class="boxSelect">
+                            <div layout="low" class="headIcon">
+                                <div flex="80">
+                                    <img src="assets/icons/sysLogo.svg">
+                                </div>
+                                <div flex class="logoLock">
+                                    <img src="assets/logo/ghb3.png" style="font-size: 50px;">
+                                    <!-- <md-icon style="font-size: 50px; color: #183d6f">lock</md-icon> -->
+                                    <!-- <md-icon style="font-size: 50px; color: #183d6f" class="hover" title="หนังสือเวียน" (click)="openCircularNotice()">chrome_reader_mode</md-icon> -->
+                                </div>
+                            </div>
+                            <div layout-gt-md="row" layout-align="center start">
+                                <div flex layout="row" layout-align="center start" class="main-Login input-Login ">
+                                    <form #loginForm="ngForm" layout="column" class="setWidth" layout-align="center start">
+                                        <div class="main-Login-center setWidth">
+                                            <div layout="row" (click)="selectHover = true">
+                                                <md-input-container class="setWidth">
+                                                    <span md-prefix>
+                                                        <md-icon>person</md-icon>
+                                                    </span>
+                                                    <input md-input type="text" placeholder="ชื่อผู้ใช้" name="username" [(ngModel)]="user.name" focused required>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout="row">
+                                                <!-- //**//-->
+                                                <!-- <md-input-container class="setWidth" *ngIf="!showPassword">
+                                                    <span md-prefix>
+                                                        <md-icon class="hover" title="แสดงรหัสผ่าน" (click)="showPassword=true;">remove_red_eye</md-icon>
+                                                    </span>
+                                                    <input md-input type="password" placeholder="รหัสผ่าน" class="" name="passwords" [(ngModel)]="user.passwords" required>
+                                                </md-input-container>
+                                                <md-input-container class="setWidth" *ngIf="showPassword">
+                                                    <span md-prefix>
+                                                        <md-icon class="hover" title="ไม่แสดงรหัสผ่าน" (click)="showPassword=false;">visibility_off</md-icon>
+                                                    </span>
+                                                    <input md-input type="text" placeholder="รหัสผ่าน" class="" name="passwords2" [(ngModel)]="user.passwords" required>
+                                                </md-input-container> -->
+                                                <!-- //**//-->
+                                                <md-input-container class="setWidth">
+                                                    <span md-prefix>
+                                                        <md-icon>lock</md-icon>
+                                                    </span>
+                                                    <input md-input type="password" placeholder="รหัสผ่าน" name="passwords" [(ngModel)]="user.passwords" required>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        <div style="padding:5px 10px;">
+                                        </div>
+                                        <button md-raised-button color="primary" [ngClass]="{'md-primary': loginForm.form.valid}" style="width: 100%" [disabled]="!loginForm.form.valid" (click)="checkLogin(user)">เข้าสู่ระบบ</button>
+                                        <!-- <div flex layout-gt-md="row" style="padding-top: 5px" class="setWidth">
+                                            <div flex="50">
+                                                <md-select placeholder="เลือกระบบเพื่อเข้าใช้งาน" [(ngModel)]="selectSystem" name="title" class="pad-top" (ngModelChange)="onChange($event)" style="display:inherit;">
+                                                    <md-option *ngFor="let title of titles" [value]="title.id">
+                                                        {{title.name}}
+                                                    </md-option>
+                                                </md-select>
+                                            </div>
+                                            <div flex="50" style="padding-left: 10px; padding-top: 10px; ">
+                                                <button md-raised-button color="warn" style="width: 100%" (click)="openDialogforgotPassword()">ลืมรหัสผ่าน</button>
+                                            </div>
+                                        </div> -->
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

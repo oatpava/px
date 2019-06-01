@@ -1,0 +1,62 @@
+<div layout-gt-sm="row" layout="column">
+    <div flex="100">
+        <md-card style="margin:0px;">
+            <md-card-title class="title">
+                <span class="md-headline">จัดเก็บเอกสารแนบ</span>
+            </md-card-title>
+            <md-card-content>
+                <form #keepContent="ngForm">
+                    <div layout="column" style="margin-bottom: 1rem;">
+                        <b>เลขทะเบียน</b>
+                        <span>{{contentNo}}</span>
+                    </div>
+                    <div layout="column" style="margin-bottom: 1rem;">
+                        <b>เรื่อง</b>
+                        <span>{{title}}</span>
+                    </div>
+                    <div layout="column" style="margin-bottom: 1rem;">
+                        <b>แฟ้มจัดเก็บ</b>
+                        <div layout="row" layout-align="start center">
+                            <button md-icon-button *ngIf="!selected" title="เลือกแฟ้มจัดเก็บ" (click)="openDialog()"><i class="material-icons">folder_open</i></button>
+                            <button md-icon-button *ngIf="selected" title="เลือกแฟ้มจัดเก็บ" (click)="openDialog()"><i class="material-icons">folder</i></button>
+                            <span>{{selectedFolderPath}}</span>
+                            <i class="material-icons material-icons-folder"></i>
+                        </div>
+                    </div>
+                    <div layout="column" style="margin-bottom: 1rem;">
+                        <b>วันที่จัดเก็บ</b>
+                        <my-date-picker flex [options]="myDatePickerOptions" placeholder="วันที่จัดเก็บ" locale="th" name="keepDate" [(ngModel)]="keepDate" required>
+                        </my-date-picker>
+                    </div>
+                    <div layout="column">
+                        <b>วันที่หมดอายุ</b>
+                        <my-date-picker flex [options]="myDatePickerOptions" placeholder="วันที่หมดอายุ" locale="th" name="expireDate" [(ngModel)]="expireDate">
+                        </my-date-picker>
+                    </div>
+                    <div layout="row" style="width: 100%;">
+                        <md-textarea flex rows="5" placeholder="หมายเหตุการจัดเก็บ" name="description" [(ngModel)]="description"></md-textarea>
+                    </div>
+                    <div layout="column" style="margin-bottom: 1rem;">
+                        <b>ผู้จัดเก็บเอกสารแนบ</b>
+                        <span>{{user}}</span>
+                    </div>
+                    <md-divider></md-divider>
+                    <div layout="row" layout-align="center start" [style.margin-top]="'15px'">
+                        <button md-raised-button md-ripple color="primary" [disabled]="!keepContent.form.valid || !selected" (click)="keep()" [style.margin-right]="'5px'">จัดเก็บ</button>
+                        <button md-raised-button md-ripple (click)="cancel()">ยกเลิก</button>
+                    </div>
+                </form>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+
+<p-dialog [(visible)]="folderDialog" [responsive]="true">
+    <p-header>
+        <span>แฟ้มจัดเก็บ</span>
+    </p-header>
+    <p-tree [value]="folderTree" selectionMode="single" [(selection)]="selectedFolder" (onNodeSelect)="nodeSelect($event)">
+    </p-tree>
+</p-dialog>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

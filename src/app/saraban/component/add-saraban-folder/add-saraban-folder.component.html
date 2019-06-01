@@ -1,0 +1,175 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{icon}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{path}} / {{title}}{{type}}</span>
+        </div>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <div [tdToggle]="!addSarabanFolderClick">
+                            <md-card-title style="background: #efb3a5;">
+                                <span class="md-headline">ประเภท{{type}}</span>
+                            </md-card-title>
+                            <md-card-content>
+
+                                <!-- <form #addFolderForm2="ngForm"> -->
+                                <div layout="column" layout-align="right start" style="margin-bottom: 15px; margin-top: 10px;">
+                                    <md-select style="width: 100%" placeholder="ประเภท{{type}}" name="wfContentType" [(ngModel)]="sarabanFolder.wfContentType.id" required>
+                                        <md-option *ngFor="let contentType of contentTypes" [value]="contentType.id" (click)="setContentTypes2(sarabanFolder.wfContentType.id); updateFolderName();" [disabled]="disableContentType">
+                                            {{contentType.contentTypeName}}
+                                        </md-option>
+
+                                    </md-select>
+                                </div>
+                                <div *ngIf="showType2" layout="column" layout-align="right start" style="margin-bottom: 10px; margin-top: 15px;">
+                                    <md-select style="width: 100%" placeholder="ประเภททะเบียนย่อย" name="wfContentType2" [(ngModel)]="sarabanFolder.wfContentType2.id" required>
+                                        <md-option *ngFor="let contentType2 of contentTypes2" [value]="contentType2.id" (click)="updateFolderName();" [disabled]="disableContentType">
+                                            {{contentType2.wfContentType2Name}}
+                                        </md-option>
+
+                                    </md-select>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input *ngIf="isFolder" md-input type="text" placeholder="เลขทะเบียนขึ้นต้นด้วย" name="wfFolderPreContentNo" [(ngModel)]="sarabanFolder.wfFolderPreContentNo">
+                                        <input *ngIf="!isFolder" md-input type="text" placeholder="เลขที่ขึ้นต้นด้วย" name="wfFolderPreContentNo" [(ngModel)]="sarabanFolder.wfFolderPreContentNo">
+                                    </md-input-container>
+                                </div>
+                                <div *ngIf="isFolder" layout="row" layout-align="left start">
+                                    <md-list style="font-size:14px; padding-top:0px;">
+                                        รูปแบบปีของเลขทะเบียน
+                                        <md-list-item style="height:24px;">
+                                            <md-checkbox color="primary" name="budgetYear" [checked]="budgetYear" [(ngModel)]="budgetYear" style="font-size:14px;height:32px;">
+                                                เลขทะเบียนนับตามปีงบประมาณ
+                                            </md-checkbox>
+                                        </md-list-item>
+                                    </md-list>
+                                </div>
+                                <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 30%;">
+                                    <md-list style="font-size:14px; padding-top:16px;">
+                                        รูปแบบเลขที่หนังสือ
+                                        <md-radio-group style="padding-top:14px;" name="wfFolderBookNoType" [(ngModel)]="sarabanFolder.wfFolderBookNoType">
+                                            <md-list-item style="height:24px;">
+                                                <md-radio-button [value]="0" [checked]="sarabanFolder.wfFolderBookNoType == 0" style="font-size:14px; padding-left:14px;">ไม่กำหนด</md-radio-button>
+                                            </md-list-item>
+                                            <md-list-item style="height:24px;">
+                                                <md-radio-button [value]="1" [checked]="sarabanFolder.wfFolderBookNoType == 1" style="font-size:14px; padding-left:14px;">ตัวอักษร/ตัวเลข</md-radio-button>
+                                            </md-list-item>
+                                            <md-list-item style="height:24px; padding-bottom:20px;">
+                                                <md-radio-button [value]="2" [checked]="sarabanFolder.wfFolderBookNoType == 2" style="font-size:14px; padding-left:14px;">ตัวอักษร/ตัวเลข/ปี</md-radio-button>
+                                            </md-list-item>
+                                        </md-radio-group>
+                                    </md-list>
+                                </div>
+                                <div *ngIf="isFolder && sarabanFolder.wfFolderBookNoType!=0" layout="row" layout-align="left start" style="width: 100%;">
+                                    <!-- <md-input-container flex>
+                                        <input md-input type="text" placeholder="เลขที่หนังสือขึ้นต้นด้วย" name="wfFolderPreBookNo" [(ngModel)]="sarabanFolder.wfFolderPreBookNo">
+                                    </md-input-container> -->
+                                    <p-autoComplete #acPreBookNo flex placeholder="เลขที่หนังสือขึ้นต้นด้วย" [(ngModel)]="preBookNos" [multiple]="true" class="p-autocomplete" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                                    </p-autoComplete>
+                                </div>
+                                <!-- </form> -->
+
+                            </md-card-content>
+                        </div>
+                    </md-card>
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <div [tdToggle]="!addSarabanFolderClick">
+                            <md-card-title style="background: #efb3a5;">
+                                <span class="md-headline">ทั่วไป</span>
+                            </md-card-title>
+                            <md-card-content>
+                                <form #addFolderForm="ngForm">
+                                    <div layout="row" layout-align="left start" style="width: 100%;">
+                                        <md-input-container flex>
+                                            <input md-input type="text" placeholder="ชื่อ{{type}}" name="wfFolderName" [(ngModel)]="sarabanFolder.wfFolderName" required>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="width: 100%;">
+                                        <md-input-container flex>
+                                            <input md-input type="text" placeholder="รายละเอียด" name="wfFolderDetail" [(ngModel)]="sarabanFolder.wfFolderDetail">
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="width: 100%;">
+                                        <md-input-container flex>
+                                            <input md-input type="text" placeholder="เชื่อมต่อหน่วยงาน" name="linkStructure" [(ngModel)]="linkStructure" disabled>
+                                        </md-input-container>
+                                        <button md-icon-button (click)="dialog=true">
+                                            <md-icon>supervisor_account</md-icon>
+                                        </button>
+                                    </div>
+                                    <p-dialog [(visible)]="dialog" [responsive]="true">
+                                        <p-header>
+                                            <span>โครงสร้างหน่วยงาน</span>
+                                        </p-header>
+                                        <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)"></p-tree>
+                                    </p-dialog>
+                                    <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%;">
+                                        <div layout="column" layout-align="left start" style="font-size:14px; padding-top: 15px; padding-right: 10px;">
+                                            กำหนดวันหมดอายุ :
+                                        </div>
+                                        <div layout="column" layout-align="left start">
+                                            <md-input-container flex>
+                                                <input md-input type="text" placeholder="จำนวน" name="wfFolderNumYearExpire" [(ngModel)]="sarabanFolder.wfFolderNumYearExpire">
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="column" layout-align="right start" style="padding-top: 7px;">
+                                            <md-select style="width: 100%" name="wfFolderTypeYearExpire" [(ngModel)]="sarabanFolder.wfFolderTypeYearExpire" placeholder="ประเภท">
+                                                <md-option *ngFor="let listWfFolderTypeYearExpire of listWfFolderTypeYearExpires" [value]="listWfFolderTypeYearExpire.value"> {{listWfFolderTypeYearExpire.viewValue}}
+                                                </md-option>
+                                            </md-select>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%; align-items: center;">
+                                        <span style="padding-right: 0.5rem;">กำหนดฟิลดิ์สำหรับค้นหาหนังสือ :</span>
+                                        <button md-icon-button (click)="openDialogSearchFilter()">
+                                            <md-icon>settings</md-icon>
+                                        </button>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="font-size:14px; width: 100%;">
+                                        <span>ผู้สร้าง : {{sarabanFolder.wfFolderOwnerName}}</span>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="font-size:14px; width: 100%;padding-top: 14px;">
+                                        <span>วันที่ : {{date_str}}</span>
+                                    </div>
+                                </form>
+                                <!-- <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'20px'">
+                                    <button *ngIf="mode==='add'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid&&addFolderForm2.form.valid}" [disabled]="!addFolderForm.form.valid||!addFolderForm2.form.valid" [style.margin-right]="'5px'" (click)="save(sarabanFolder)">บันทึก</button>
+                                    <button *ngIf="mode==='edit'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid&&addFolderForm2.form.valid}" [disabled]="!addFolderForm.form.valid||!addFolderForm2.form.valid" [style.margin-right]="'5px'" (click)="update(sarabanFolder)">แก้ไขและบันทึก</button>
+                                    <button md-raised-button md-ripple (click)="goBack()" [style.margin-right]="'5px'">ยกเลิก</button>
+                                </div> -->
+                                <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'20px'">
+                                    <button *ngIf="mode==='add'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid&&sarabanFolder.wfContentType2.id}" [disabled]="!addFolderForm.form.valid||!sarabanFolder.wfContentType2.id" [style.margin-right]="'5px'" (click)="save(sarabanFolder)">บันทึก</button>
+                                    <button *ngIf="mode==='edit'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid&&sarabanFolder.wfContentType2.id}" [disabled]="!addFolderForm.form.valid||!sarabanFolder.wfContentType2.id" [style.margin-right]="'5px'" (click)="update(sarabanFolder)">แก้ไขและบันทึก</button>
+                                    <button md-raised-button md-ripple (click)="goBack()" [style.margin-right]="'5px'">ยกเลิก</button>
+                                </div>
+                            </md-card-content>
+                        </div>
+                    </md-card>
+
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+
+<!-- <div *ngIf="isFolder" class="showbutton" style="padding-bottom:3px;">
+    <button md-fab [style.background]="'#2e2eb8'" color="accent" title="ย้้าย" (click)=";">
+        <md-icon>group</md-icon>
+    </button>
+</div> -->
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

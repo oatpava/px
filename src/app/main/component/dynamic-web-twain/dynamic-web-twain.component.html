@@ -1,0 +1,32 @@
+<!--<div id="info" style="display:none; padding:20px 30px; width: 350px; border: solid 1px #e7e7e7;">
+    The <strong>PDF Rasterizer</strong> is not installed on this PC
+    <br />
+    Please click the button below to get it installed
+    <p><button (click)="downloadPDFR();">Install PDF Rasterizer</button></p>
+    <i><strong>The installation is a one-time process</strong>
+    <br />
+    It might take some time depending on your network.</i>
+</div>
+    <br />
+    <select [(ngModel)]="selectedTwainSource" ><option *ngFor="let source of twainSources" [ngValue]="source">{{source.name}}</option></select>
+    <button (click)="AcquireImage();">Start Scan</button><button (click)="LoadImages();">Load Images</button>
+<div id="dwtcontrolContainer"></div>-->
+
+<div id="dwtcontrolContainer" style="float:left; width: 120px;"></div>
+<div id="dwtcontrolContainerLargeViewer" style="float:left;"></div>
+
+<button (click)="AcquireImage();">Start Scan</button>
+<button (click)="BrowseImage();">Browse Image</button>
+<br/>
+<button (click)="EditImage();">Edit</button>
+<button (click)="RotateImage();">Rotate left</button>
+<br/>
+<button (click)="SaveToBMP();">Save to BMP</button>
+<button (click)="SaveToJPEG();">Save to JPEG</button>
+<button (click)="SaveToPNG();">Save to PNG</button>
+<button (click)="SaveToTIFF();">Save to TIFF</button>
+<button (click)="SaveToPDF();">Save to PDF</button>
+<br/>
+<button (click)="SaveToMultiTIFF();">Save to Multi-TIFF</button>
+<button (click)="SaveToMultiPDF();">Save to Mulit-PDF</button>
+

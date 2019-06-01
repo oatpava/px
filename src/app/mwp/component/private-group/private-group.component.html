@@ -1,0 +1,79 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+      </button>
+        <button md-icon-button disabled>
+        <md-icon>group</md-icon>
+      </button>
+        <div style="width:80px; padding-top: 10px;">
+            <span>กลุ่มส่วนตัว</span>
+        </div>
+    </div>
+</div>
+
+<md-sidenav-layout flex fullscreen>
+    <div layout="row" layout-align="center start" width="80%">
+        <div flex="40">
+            <md-card>
+                <md-card-title class="title">
+                    กลุ่มส่วนตัว
+                </md-card-title>
+                <md-card-content class="content">
+                    <p-tree [value]="privateGroupTree" selectionMode="single" [(selection)]="selectedGroup" (onNodeSelect)="selectGroup($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+        </div>
+
+        <div *ngIf="isGroupSelected" layout="column" flex="6" style="text-align:center">
+            <div style="padding-top: 2rem;">
+                <button md-raised-button (click)="selectAll()" [style.margin-right]="'5px'" [disabled]="isUserSelected || !isStructureSelected">เพิ่มทั้งหมด</button>
+            </div>
+            <div style="padding-top: 1rem;">
+                <button md-raised-button (click)="select()" [style.margin-right]="'5px'" [disabled]="!isStructureSelected && !isUserSelected">เพิ่ม</button>
+            </div>
+        </div>
+        <div *ngIf="isGroupSelected" flex="40">
+            <md-card>
+                <md-card-title class="title">
+                    โครงสร้างหน่วยงาน
+                </md-card-title>
+                <md-card-content class="content">
+                    <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+        </div>
+
+    </div>
+</md-sidenav-layout>
+
+<div hide show-gt-md layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <div *ngIf="addedUsers.length > 0" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" title="บันทึก" (click)="save()"><md-icon>save</md-icon></button>
+    </div>
+    <div *ngIf="isParentSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" title="เพิ่มกลุ่มส่วนตัว" (click)="add('กลุ่มส่วนตัว', 0)"><md-icon>group_add</md-icon></button>
+    </div>
+    <div *ngIf="isGroupSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:red;" title="ลบกลุ่มส่วนตัว" (click)="delete('กลุ่มส่วนตัว', selectedGroup)"><md-icon>delete</md-icon></button>
+    </div>
+    <div *ngIf="isGroupSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:#00aaff;" title="แก้ไขกลุ่มส่วนตัว" (click)="edit('กลุ่มส่วนตัว', selectedGroup.data.id)"><md-icon>edit</md-icon></button>
+    </div>
+    <div *ngIf="isGroupSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" title="เพิ่มผู้ใช้ภายนอก" (click)="add('ผู้ใช้ภายนอก', selectedGroup.data.id)"><md-icon>person_add</md-icon></button>
+    </div>
+    <div *ngIf="!isGroupSelected && !isNewNodeSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:red;" title="ลบ" (click)="delete('ผู้ใข้', selectedGroup)"><md-icon>delete</md-icon></button>
+    </div>
+    <div *ngIf="isOutsideGroupUserSelected" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:#00aaff;" title="แก้ไขผู้ใช้ภายนอก" (click)="edit('ผู้ใช้ภายนอก', selectedGroup.data.id)"><md-icon>edit</md-icon></button>
+    </div>
+
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+        <md-icon *ngIf="!menuOver">menu</md-icon>
+        <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

@@ -1,0 +1,102 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>search</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>ค้นหาเอกสารทั้งหมด</span>
+        </div>
+        <!--<button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>-->
+        <!--<md-menu #menu="mdMenu" x-position="before">
+            <div>
+                <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
+                <button md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu>-->
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+
+                    <md-list>
+                        <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+
+                                <table td-data-table>
+                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
+                                        {{column.label}}
+                                    </th>
+                                    <tr td-data-table-row *ngFor="let row of datas" (click)="selectDocument(row)">
+                                        <td td-data-table-cell *ngFor="let column of columns" [numeric]="column.numeric">
+                                            <label class="hover" *ngIf="column.name!=='Edit' && column.name!=='createdBy'&& column.name!=='updatedBy' &&
+                                            column.name!=='documentInt01' && column.name!=='documentInt02'&& column.name!=='documentInt03'&& column.name!=='documentInt04'&&  row.isExp =='Y'" style="color: red">{{row[column.name] | truncate:10 }}</label>
+
+                                            <label class="hover" *ngIf="column.name=='documentInt01' && column.name=='documentInt02'&& column.name=='documentInt03'&& column.name=='documentInt04' &&  row.isExp =='Y'" style="color: red">{{row[column.name]  }}</label>
+
+                                            <label class="hover" *ngIf="column.name =='createdBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileCreate.fullName}}</label>
+                                            <label class="hover" *ngIf="column.name =='updatedBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileUpdate.fullName }}</label>
+                                            <label class="hover" *ngIf="column.name =='removedBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileDel.fullName }}</label>
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </md-card-content>
+                        </md-card>
+                        <div hide-gt-md>
+                            <template let-item let-last="last" ngFor [ngForOf]="datas">
+                                <md-list-item >
+                                    <md-icon md-list-avatar style="background: #b1ccea">attach_file</md-icon>
+                                    
+                                    <h3 md-line class="hover"> {{item.documentName}} </h3>
+                                    <h4 md-line> วันที่ : {{item.documentPublicDate}} </h4>
+                                    <p md-line> ผู้สร้าง : {{item.createdName}} </p>
+
+                                </md-list-item>
+                                <md-divider  md-inset></md-divider>
+                            </template>
+                        </div>
+
+                    </md-list>
+
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+
+</div>
+
+
+
+
+
+<!--<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    
+    <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+        <button md-fab title="เพิ่ม" style="margin-bottom: 3px;" md-fab color="accent" (click)="addDocument()">
+                <md-icon>add</md-icon>
+            </button>
+        <button md-fab color="accent" [style.background]="'#1976d2'" title="ค้นหา" style="margin-bottom: 3px;" (click)="sideSubMenu.open(); ModeSearch = false">
+                <md-icon>search</md-icon>
+            </button>
+    </div>
+  
+    <button md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="dmsSearch()">
+        <md-icon>search</md-icon>
+    </button>
+</div>-->

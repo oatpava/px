@@ -1,0 +1,7 @@
+<p-tabView (onChange)="onTabChange($event)">
+    <p-tabPanel *ngFor="let cNFolder of cNFolders" header="{{cNFolder.wfFolderName}}" leftIcon="fa-book">
+        <div layout="column" layout-align="center start" style="width: 100%;">
+            <circular-notice [datas]="datas[tabIndex]" [listReturn]="listReturns[tabIndex]" (loadDatas)="getCircularNotices(cNFolder.id)" (getFileAttachs)="getFileAttachs($event)"></circular-notice>
+        </div>
+    </p-tabPanel>
+</p-tabView>

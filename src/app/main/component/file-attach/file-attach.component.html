@@ -1,0 +1,117 @@
+<div class="drop-files-area">
+
+    <md-list *ngFor="let item of fileAttachs ; let i = index">
+        <md-list-item>
+            <md-icon md-list-avatar>
+                <img src="{{item?.thumbnailUrl}}" flex/>
+            </md-icon>
+            <md-select placeholder="ชั้นความลับ" [(ngModel)]="item.secrets" [disabled]="!authEditDocFile" (ngModelChange)="updateSecrets(item ,item.secrets)">
+                <md-option *ngFor="let secretClass of secretClass" [value]="secretClass.id"> {{secretClass.name}}
+                </md-option>
+            </md-select>
+
+            <button md-icon-button [disabled]="!authDelDocFile " (click)="deleteFileAttach(item)">
+                        <md-icon alt="ลบ" >delete</md-icon>
+                    </button>
+            <h3 md-line style="font-weight:bold">
+                {{ item?.fileAttachName }} &nbsp; &nbsp; {{item?.createdName}} &nbsp; &nbsp;{{item?.createdDate}}
+
+            </h3>
+            <h3 md-line style="font-weight:bold">
+                <button md-icon-button alt="download" (click)="downloadFile(item)" title="สำเนา">
+                            <md-icon >file_download</md-icon>
+                        </button>
+                <button *ngIf="!editMode" [disabled]="!authEditDocFile " md-icon-button alt="editFile" (click)="editFile(item ,i);file2.click()" title="แก้ไขเอกสารแนบ">
+                            <md-icon >edit</md-icon>
+                        </button>
+                <button *ngIf="checkChrome && (item.fileAttachType =='.PDF' || item.fileAttachType =='.TIF' || item.fileAttachType =='.TIFF'|| item.fileAttachType =='.JPG'|| item.fileAttachType =='.PNG')" [disabled]="!authEditDocFile " md-icon-button alt="view" (click)="view(item,1)"
+                    title="ดูเอกสาร">
+                            <md-icon >pageview</md-icon>
+                        </button>
+            </h3>
+
+
+
+
+
+        </md-list-item>
+        <md-list-item *ngFor="let itemChildren of item.children">
+
+            <h3 md-line [style.margin-left]="'10%'" style="filter: alpha(opacity=25); -moz-opacity:.65;opacity:.65;">
+                <!-- {{ itemChildren?.fileAttachName }} -->
+                {{ itemChildren?.fileAttachName }} &nbsp; &nbsp; {{itemChildren?.createdName}} &nbsp; &nbsp;{{itemChildren?.createdDate}}
+
+            </h3>
+            <h3 md-line [style.margin-left]="'10%'" style="filter: alpha(opacity=25); -moz-opacity:.65;opacity:.65;">
+                <button md-icon-button alt="download" (click)="downloadFile(itemChildren)" title="สำเนา">
+                        <md-icon>file_download</md-icon>
+                    </button>
+                <button *ngIf="checkChrome && (itemChildren.fileAttachType =='.PDF' || itemChildren.fileAttachType =='.TIF' || itemChildren.fileAttachType =='.TIFF'|| itemChildren.fileAttachType =='.JPG'|| itemChildren.fileAttachType =='.PNG')" [disabled]="!authEditDocFile "
+                    md-icon-button alt="view" (click)="view(itemChildren,2)" title="ดูเอกสาร">
+                        <md-icon >pageview</md-icon>
+                    </button>
+            </h3>
+        </md-list-item>
+    </md-list>
+
+    <div *ngIf='editMode'>
+        <md-divider></md-divider>
+
+        <h3>กำลังแก้ไขเอกสาร </h3>
+        <md-list *ngFor="let item of fileAttachUpdate">
+            <md-list-item>
+                <md-icon md-list-avatar>
+                    <img src="{{item?.thumbnailUrl}}" flex/>
+                </md-icon>
+                <h3 md-line>
+                    {{ item?.fileAttachName }}
+                </h3>
+                <button md-icon-button (click)="removeUpdate()">
+                        <md-icon alt="ลบ" >clear</md-icon>
+                    </button>
+            </md-list-item>
+
+        </md-list>
+
+
+    </div>
+    <md-list>
+        <md-list-item *ngFor="let item of uploader.queue ;">
+            <md-icon md-list-avatar>
+                <img src="" ImagePreview [myImage]="item?._file" flex/>
+            </md-icon>
+
+            <md-select placeholder="ชั้นความลับ" [(ngModel)]="secretClassData" (ngModelChange)="updateSecretClassData()">
+                <md-option *ngFor="let secretClassA of secretClass" [value]="secretClassA.id"> {{secretClassA.name}}
+                </md-option>
+            </md-select>
+            <button md-icon-button (click)="item.remove();removeTemp();">
+                        <md-icon alt="ลบ" >delete</md-icon>
+                    </button>
+            <h3 md-line>
+                <!-- {{ item?.file?.name }} -->
+                <input type="text" [(ngModel)]="item.file.name">
+            </h3>
+        </md-list-item>
+    </md-list>
+
+    <label for="uploader-input" *ngIf='!editMode'>
+               
+                <div layout="column" layout-align="center center" flex  ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader" (onFileDrop)="addByDrop($event)">
+                    <!--<md-icon *ngIf="!hasBaseDropZoneOver && (!uploader?.queue?.length > 0)">cloud_upload</md-icon>
+                    <span *ngIf="!hasBaseDropZoneOver && (!uploader?.queue?.length > 0)">Drop Files Here</span>-->
+                    <!--<button md-icon-button [disabled]="!addDocumentForm.form.valid" (click)="file.click()">
+                        -->
+                    <button md-icon-button (click)="file.click()" [disabled]="isAttach || !authCreDocFile">
+                        <md-icon alt="นำเข้าไฟล์" >cloud_upload</md-icon>
+                    </button>
+                    <!--<md-icon>cloud_upload</md-icon>-->
+                    <span >วางเอกสาร</span>
+                </div>
+        
+            </label>
+    <input type="file" #file ng2FileSelect (change)="addFileAttach($event)" [uploader]="uploader" [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
+
+    <!--<input type="file " #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [disabled]="isAttach " id="uploader-input " style="display:none " multiple />-->
+    <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
+</div>

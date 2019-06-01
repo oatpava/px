@@ -1,0 +1,204 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>move_to_inbox</md-icon>
+        </button>
+        <div flex style="padding-top: 10px;">
+            <span>{{path[searched[index]]}}</span>
+        </div>
+        <barcode [barcodeFilter]="barcodeFilter[index]" (search)="searchBarcode($event)" (onUnselect)="reset()"></barcode>
+        <div hide show-gt-md layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
+            <span style="margin-right:1rem;">เลือกข้อมูลเข้า</span>
+            <p-dropdown [options]="inboxAssign" [style]="{'width':'30rem'}" [(ngModel)]="index" (onChange)="switchInbox($event.value)"></p-dropdown>
+        </div>
+
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div *ngFor="let menu of menus">
+                <button *ngIf="menu.nameEng==='excel'" md-menu-item (click)="report('xls')"> {{menu.name}} </button>
+                <button *ngIf="menu.nameEng==='pdf'" md-menu-item (click)="report('pdf')"> {{menu.name}} </button>
+                <button *ngIf="menu.nameEng==='search'" md-menu-item (click)="sidenav.open(); ModeSearch = false;">ค้นหา</button>
+            </div>
+        </md-menu>
+
+    </div>
+</div>
+
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+        <md-sidenav #sidenav align="end">
+            <form layout-padding class="sidenav" layout="column" layout-align="center start">
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="จาก" name="from" [(ngModel)]="searchFilters[index].inboxFrom"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="เรื่อง" name="title" [(ngModel)]="searchFilters[index].inboxTitle"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="เลขที่หนังสือ" name="bookNo" [(ngModel)]="searchFilters[index].inboxStr04"></md-input>
+                </div>
+                <div layout="column" layout-align="left start" class="searchFilter">
+                    <my-date-picker [options]="myDatePickerOptions" placeholder="วันเวลาจาก" locale="th" name="startDate" [(ngModel)]="searchFilters[index].inboxStartDate">
+                    </my-date-picker>
+                    <my-date-picker [options]="myDatePickerOptions" placeholder="วันเวลาถึง" locale="th" name="endDate" [(ngModel)]="searchFilters[index].inboxEndDate">
+                    </my-date-picker>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="ข้อความ/การปฏิบัติ" name="note" [(ngModel)]="searchFilters[index].inboxNote"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="หมายเหตุ" name="description" [(ngModel)]="searchFilters[index].inboxDescription"></md-input>
+                </div>
+            </form>
+        </md-sidenav>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="100">
+                    <md-list>
+
+                        <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <p-dataTable #dt [value]="inboxs[index][searched[index]]" [(first)]="tableFirst[index][searched[index]]" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="select(selectedRow)"
+                                    [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                                    <p-header>
+                                        <div layout="row" layout-align="space-between start">
+                                            <div></div>
+                                            <div>
+                                                <span>รายการข้อมูลเข้า</span>
+                                            </div>
+                                            <div>
+                                                <button (click)="resetDataTable()"><i class="fa fa-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                    </p-header>
+                                    <p-footer>
+                                        <loadMore [listReturn]="listReturn[index][searched[index]]" (load)=loadMoreContents()></loadMore>
+                                    </p-footer>
+                                    <p-column field="inboxOpenFlag" header="สถานะ" [filter]="true" filterMatchMode="equals" [style]="{'width':'90px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="filter" let-col>
+                                            <p-dropdown [options]="status" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
+                                        </template>
+                                        <template pTemplate="body" let-row="rowData">
+                                            <i *ngIf="row.inboxOpenFlag!=1" [ngClass]="row.inboxOpenDateDefine.length>1 ? 'material-icons icon-define':'material-icons icon'" [title]="row.inboxOpenDateDefine.length>1 ? 'กำหนดเปิดอ่านภายใน '+row.inboxOpenDateDefine.substr(0, 10):'ยังไม่เปิดอ่าน'">markunread</i>
+                                            <i *ngIf="row.inboxOpenFlag==1" [ngClass]="row.letterStatus1==3 ? 'material-icons icon-flag':'material-icons icon-expire'" [title]="row.letterStatus1==3 ? 'เปิดอ่านแล้ว':'เปิดอ่านแล้วเกินกำนด'">drafts</i>                                                    
+                                            <i *ngIf="row.inboxActionFlag!=1" [ngClass]="row.inboxActionDateDefine.length>1 ? 'material-icons icon-define':'material-icons icon'" [title]="row.inboxActionDateDefine.length>1 ? 'กำหนดมีความเคลื่อนไหวภายใน '+row.inboxActionDateDefine.substr(0, 10):'ยังไม่มีความเคลื่อนไหว'">assignment</i>
+                                            <i *ngIf="row.inboxActionFlag==1" [ngClass]="row.letterStatus2==3 ? 'material-icons icon-flag':'material-icons icon-expire'" [title]="row.letterStatus2==3 ? 'มีความเคลื่อนไหวแล้ว':'มีความเคลื่อนไหวแล้วเกินกำนด'">assignment_turned_in</i>                                                   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxStr03" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxStr03}}</span>
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxStr03}}</span>   
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxStr03}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxSpeed" header="ค.เร่งด่วน" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'95px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="filter" let-col>
+                                             <p-dropdown [options]="speed" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
+                                        </template>
+                                        <template pTemplate="body" let-col let-row="rowData">
+                                             <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1" [ngStyle]="cellColor_speed(row[col.field])">{{speedType[row[col.field]]}}</span>
+                                             <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{speedType[row[col.field]]}}</span>
+                                             <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{speedType[row[col.field]]}}</del></span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxFrom" header="จาก" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'10%', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxFrom}}</span>
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxFrom}}</span>   
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxFrom}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxStr04}}</span>
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxStr04}}</span>      
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxStr04}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxTitle" header="เรื่อง" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'28%', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxTitle}}</span>
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxTitle}}</span>   
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxTitle}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxSendDate" header="วันและเวลาที่ส่ง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxSendDate}}</span>
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxSendDate}}</span>   
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxSendDate}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxNote" header="ข้อความ/การปฏิบัติ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'15%', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxNote}}</span>  
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxNote}}</span>   
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxNote}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="inboxDescription" header="หมายเหตุ" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'14%', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxDescription}}</span> 
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxDescription}}</span>      
+                                            <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxDescription}}</del></span>   
+                                        </template>
+                                    </p-column>
+                                    <p-column header="" [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData">
+                                            <button md-icon-button style="color:#b74f36;" title="ลบรายการ" (click)="deleteInbox(row)"><i class="material-icons">delete</i></button>    
+                                        </template>
+                                    </p-column>
+                                </p-dataTable>
+                            </md-card-content>
+                        </md-card>
+
+                        <div hide-gt-md>
+                            <template let-item let-last="last" ngFor [ngForOf]="inboxs[index][searched[index]]">
+                                <md-list-item (click)="select(item)">
+                                    <md-icon md-list-avatar class="hover icon-flipped" style="background: #008000; color: white;">assignment_return</md-icon>
+                                    <h3 md-line>จาก: {{item.inboxFrom}}</h3>
+                                    <h4 md-line>เรื่อง : {{item.inboxTitle}}</h4>
+                                    <p md-line>วันเวลาที่ส่ง : {{item.inboxSendDate}}</p>
+                                    <div class="block-icon-Option ">
+                                        <i class="material-icons icon-button" (click)="deleteInbox(item)">delete</i>
+                                    </div>
+                                </md-list-item>
+                                <md-divider  md-inset></md-divider>
+                            </template>
+                            <div style="text-align: center;">
+                                <loadMore [listReturn]="listReturn[index][searched[index]]" (load)=loadMoreContents()></loadMore>
+                            </div>
+                        </div>
+
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <div class="menuList" [tdToggle]="!menuOver" *ngFor="let menu of menus">
+        <button md-fab color="accent" [style.background]="menu.color" title="{{menu.name}}" (click)="menuAction(menu)"><md-icon>{{menu.icon}}</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+        <md-icon *ngIf="!menuOver">menu</md-icon>
+        <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="search(searchFilters[index]); barcodeFilter[index] = [];">
+        <md-icon>search</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="100000"></p-growl>

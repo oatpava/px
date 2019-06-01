@@ -1,0 +1,25 @@
+<md-card style="margin:0px;">
+    <md-card-title>
+        <span class="md-headline">{{mode}}</span>
+    </md-card-title>
+    <md-card-content>
+        <form layout="column" class="finish" #finishContent="ngForm" layout-align="top center">
+            <div layout="column" layout-align="center start " style="width: 100%;">
+                <span>วันที่{{mode}}: {{finishDate_str}}</span>
+                <!-- <my-date-picker flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ดำเนินการ" locale="th" name="finishDate" [(ngModel)]="finishDate" required disabled>
+                </my-date-picker> -->
+            </div>
+            <div layout="row" layout-align="center start" style="width: 100%;padding-top: 0.2rem;">
+                <md-input flex type="text" [placeholder]="note_placeholder" name="note" [(ngModel)]="note" [disabled]="note_disabled" required>
+                </md-input>
+            </div>
+            <div layout="row" layout-align="center start" style="width: 100%;">
+                <md-textarea flex rows="5" placeholder="หมายเหตุ" [(ngModel)]="description" name="description"></md-textarea>
+            </div>
+        </form>
+        <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+            <button md-raised-button md-ripple color="primary" [disabled]="!finishContent.form.valid" (click)="finish(false)" [style.margin-right]="'5px'">{{mode}}</button>
+            <!-- <button *ngIf="mode=='เรื่องเสร็จ' && numFileAttach>0" md-raised-button md-ripple color="accent" [disabled]="!finishContent.form.valid" (click)="finish(true)" [style.margin-right]="'5px'">เรื่องเสร็จและจัดเก็บ</button> -->
+        </div>
+    </md-card-content>
+</md-card>

@@ -1,0 +1,74 @@
+<div layout="column" flex>
+    <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
+        <button md-icon-button (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+      </button>
+        <button md-icon-button disabled>
+        <md-icon>build</md-icon>
+      </button>
+        <div flex class="menu-showLabel">
+            <span>แก้ไขสิทธิ์ {{headerName}}</span>
+        </div>
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+          <md-icon>more_vert</md-icon>
+      </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item (click)="save()"> save </button>
+            <button md-menu-item (click)="cancel()"> cancel </button>
+        </md-menu>
+    </div>
+</div>
+
+<div layout="row">
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div layout="row">
+            <div flex class="block">
+                <!--<md-list>
+
+          <template let-item let-last="last" ngFor [ngForOf]="dataUser">
+                          <md-list-item [class.bgSelectfolder]="item.name === currentCompany">
+                                                            
+                              <md-icon  md-list-avatar  class="material-icons" style="cursor: pointer">account_circle</md-icon>
+                              
+                              <h3 md-line class="hover" (click)="selectUser(item);getAuth2(item.id)" > {{item.name}} </h3>
+                          
+                          </md-list-item>
+                          <md-divider  md-inset></md-divider>
+                      </template>
+
+      </md-list>-->
+                <!-- เห็นทั้งหมด -->
+                <px-structure [selectDepartment]="true" [haveSearch]="true" (onselectData)="getUser($event)"></px-structure>
+                <!-- เห็นแต่ในหน่วยตนเอง -->
+                <!-- <px-structure2 [selectDepartment]="true" (onselectData)="getUser($event)"></px-structure2> -->
+
+            </div>
+            <div flex>
+                <md-list>
+                    <md-list-item *ngFor="let auth of dataAuths">
+                        <md-slide-toggle color="primary" [(ngModel)]="auth.auth" (change)="authEvent(auth)">
+                            <div style="padding-left:35px">
+                                {{auth.name}}
+                            </div>
+                        </md-slide-toggle>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+        <button md-fab title="บันทึก" style="margin-bottom: 3px;" md-fab color="accent" (click)="save()">
+              <md-icon>save</md-icon>
+          </button>
+        <button md-fab color="accent" [style.background]="'#1976d2'" title="ยกเลิก" style="margin-bottom: 3px;" (click)="cancel(); ">
+              <md-icon>cancel</md-icon>
+          </button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู">
+      <md-icon>{{listMenu}}</md-icon>
+  </button>
+</div>

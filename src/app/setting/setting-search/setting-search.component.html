@@ -1,0 +1,54 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+      <md-icon>arrow_back</md-icon>
+    </button>
+        <button md-icon-button disabled>
+      <md-icon>search</md-icon>
+    </button>
+        <div flex class="menu-showLabel">
+            <span>ตั้งค่าการค้นหา</span>
+        </div>
+        <button md-icon-button>
+      <md-icon>more_vert</md-icon>
+    </button>
+    </div>
+</div>
+<div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+    <div flex-gt-md="70">
+        <md-card>
+            <md-card-content>
+                <div layout="row" style="width: 100%" layout-align="start center">
+                    <md-input-container style="width: 100%;">
+                        <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ และ" name="iand" [(ngModel)]="data.iand">
+                    </md-input-container>
+                </div>
+                <div layout="row" style="width: 100%" layout-align="start center">
+                    <md-input-container style="width: 100%;">
+                        <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ หรือ" name="ior" [(ngModel)]="data.ior">
+                    </md-input-container>
+                </div>
+                <div layout="row" style="width: 100%" layout-align="start center">
+                    <md-input-container style="width: 100%;">
+                        <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ ไม่" name="inot" [(ngModel)]="data.inot">
+                    </md-input-container>
+                </div>
+
+                <div layout="row" style="width: 100%" layout-align="start center">
+                    <div>แทนช่องว่างด้วยสัญลักษณ์ : </div>
+                    <md-radio-group color="primary" name="แทนช่องว่างด้วยสัญลักษณ์" [(ngModel)]="data.space">
+                        <md-radio-button color="primary" layout="row" style="padding:10px 10px; margin-left: 10px" *ngFor="let radio of space" name="radio.name" value="{{radio.id}}">
+                            {{radio.name}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </div>
+                <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                    <button md-raised-button (click)="save(data) " color="primary" [style.margin-right]="'5px'">บันทึก</button>
+                    <button md-raised-button md-ripple (click)="goBack()">ยกเลิก</button>
+                </div>
+
+
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

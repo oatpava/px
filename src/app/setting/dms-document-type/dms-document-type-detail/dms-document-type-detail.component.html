@@ -1,0 +1,185 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="cancel()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{iconHeader}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>การจัดการประเภทเอกสาร</span>
+        </div>
+        <button md-icon-button>
+            <md-icon>more_vert</md-icon>
+        </button>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="90">
+                    <md-card>
+                        <md-card-title style="background: #efb3a5;">
+                            <span class="md-headline">{{title}}</span>
+                        </md-card-title>
+                        <!--<md-card-title>{{title}}</md-card-title>-->
+                        <!--<md-divider></md-divider>-->
+                        <md-card-content>
+                            <form #editDocumentForm="ngForm">
+                                <div layout="row" layout-margin>
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder="ชื่อประเภทเอกสาร" name="documentTypeName" [(ngModel)]="documentType.documentTypeName" [value]='documentType.documentTypeName' required/>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-margin>
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder="รายละเอียดประเภทเอกสาร" name="documentTypeDescription" [(ngModel)]="documentType.documentTypeDescription" [value]='documentType.documentTypeDescription' required/>
+                                    </md-input-container>
+                                </div>
+                                <table td-data-table id="idTableDetail">
+                                    <tr td-data-table-row>
+                                        <th>
+                                            <md-checkbox name="checkBoxAll" [checked]="checkBoxAll" (change)="checkAll($event)">
+                                            </md-checkbox>
+                                        </th>
+                                        <th td-data-table-column *ngFor="let column of columns">
+                                            {{column.label}}
+                                        </th>
+                                    </tr>
+                                    <tr td-data-table-row *ngFor="let row of allData; let i = index">
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="flagCheck[i]" name="checkSave" (change)="clickSave(i,$event)">
+                                            </md-checkbox>
+                                        </td>
+                                        <td td-data-table-cell>
+                                            {{dmsFields[i].fieldName}}
+                                        </td>
+                                        <td td-data-table-cell>{{dmsFields[i].fieldType}}</td>
+                                        <td td-data-table-cell>
+                                            <md-input-container flex>
+                                                <input md-input type="text" name="documentTypeDetailName" [value]='row.documentTypeDetailName' (keyup)="onKey(i,$event)" />
+                                            </md-input-container>
+                                        </td>
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="row.documentTypeDetailView === 'Y'" name="documentTypeDetailView" (change)="row.documentTypeDetailView = $event.checked ? 'Y' : 'N' ;">
+                                            </md-checkbox>
+                                        </td>
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="row.documentTypeDetailSearch === 'Y'" name="documentTypeDetailSearch" (change)="row.documentTypeDetailSearch = $event.checked ? 'Y' : 'N' ">
+                                            </md-checkbox>
+                                        </td>
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="row.documentTypeDetailEdit === 'Y'" name="documentTypeDetailEdit" (change)="row.documentTypeDetailEdit = $event.checked ? 'Y' : 'N' ">
+                                            </md-checkbox>
+                                        </td>
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="row.documentTypeDetailUnique === 'Y'" name="documentTypeDetailUnique" (change)="row.documentTypeDetailUnique = $event.checked ? 'Y' : 'N' ">
+                                            </md-checkbox>
+                                        </td>
+                                        <td td-data-table-cell class="md-checkbox-cell">
+                                            <md-checkbox [checked]="row.documentTypeDetailRequire === 'Y'" name="documentTypeDetailRequire" (change)="row.documentTypeDetailRequire = $event.checked ? 'Y' : 'N' ">
+                                            </md-checkbox>
+                                        </td>
+
+
+                                        <!--<md-select *ngIf="dmsFields[i].fieldType == 'TEXT' || dmsFields[i].fieldType == 'VARCHAR' && dmsFields[i].fieldName != 'ชื่อเรื่อง'" style="width: 80%" placeholder=" " [(ngModel)]="row.documentTypeDetailLookup" name="documentTypeDetailLookup" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>-->
+                                        <!-- 
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText01' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText01" name="outLookText01" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText02' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText02" name="outLookText02" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText03' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText03" name="outLookText03" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText04' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText04" name="outLookText04" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText05' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText04" name="outLookText05" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar01' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar01" name="documentVarchar01" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar02' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar02" name="documentVarchar02" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar03' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar03" name="documentVarchar03" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar04' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar04" name="documentVarchar04" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar05' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar05" name="documentVarchar05" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar06' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar06" name="documentVarchar06" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar07' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar07" name="documentVarchar07" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar08' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar08" name="documentVarchar08" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar09' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar09" name="documentVarchar09" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar10' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar10" name="documentVarchar10" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
+                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
+                                            </md-option>
+                                        </md-select> -->
+
+
+
+
+                                    </tr>
+                                </table>
+                            </form>
+                        </md-card-content>
+                        <md-divider></md-divider>
+                        <md-card-actions layout="row" layout-align="center start">
+                            <button *ngIf="mode==='Add'" md-button [ngClass]="{'md-primary': editDocumentForm.form.valid}" [disabled]="!editDocumentForm.form.valid" (click)="save()">บันทึก</button>
+                            <button *ngIf="mode==='Edit'" md-button [ngClass]="{'md-primary': editDocumentForm.form.valid}" [disabled]="!editDocumentForm.form.valid" (click)="update()">บันทึก</button>
+                            <button *ngIf="mode==='Edit'" md-button [ngClass]="'md-warn'" (click)="delete()">ลบ</button>
+                            <button md-button (click)="cancel()">ยกเลิก</button>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>

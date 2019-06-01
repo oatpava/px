@@ -1,0 +1,152 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>swap_vert</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{dmsfolderName}}</span>
+        </div>
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div>
+                <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
+                <button md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <!--        <md-sidenav #sideSubMenu align="end">
+            sideSubMenu
+        </md-sidenav>    -->
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <md-card-title style="background: #efb3a5;">
+                            <span class="md-headline">รายละเอียดเอกสาร</span>
+                        </md-card-title>
+                        <!--<md-card-title>{{title}}</md-card-title>-->
+                        <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+                        <md-card-content>
+                            <form #addFolderForm="ngForm">
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='วันที่' value="26 ธันวาคม 2008">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='เรื่องพิจารณา' value="30/2551">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='เลขที่คำวินิจฉัย' value="27/2551">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ผู้ร้อง' value="ศาลจังหวัดมหาสารคาม">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ผู้ถูกร้อง' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ช่องทางของรัฐธรรมนูญ' value="211">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ขัดหรือแย้งต่อรัฐธรรมนูญ' value="4">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='รัฐธรรมนูญอื่น' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ชื่อกฎหมาย' value="ประมวลกฎหมายวิธีพิจารณาความแพ่ง">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ช่องทางของกฎหมาย' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='มาตราของกฎหมาย' value="309 ทวิ วรรคหนึ่ง">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ผลของคำวินิจฉัย' value="ยก">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ผู้ร้อง' value="ศาลจังหวัดมหาสารคาม">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='มติ' value="เอกฉันท์">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='เสียง' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ข้างมาก' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='ข้างน้อย' value="-">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='หมายเหตุ' value="*นางนวลจันทร์ ลครพล หรือแก้วสง่า (จำเลย)">
+                                    </md-input-container>
+                                </div>
+
+
+
+
+
+
+
+
+                            </form>
+                            <div layout="row" layout-align="center" style="width: 100%; text-align: center; margin-top: 10px;">
+                                <button md-raised-button [ngClass]="{ 'md-primary': addFolderForm.form.valid} " [disabled]="!addFolderForm.form.valid " [style.margin-right]=" '5px' " (click)="cancel() ">ยืนยัน</button>
+
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>

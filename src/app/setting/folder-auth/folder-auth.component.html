@@ -1,0 +1,70 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>turned_in</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>กำหนดแฟ้มทะเบียนให้เจ้าหน้าที่</span>
+        </div>
+    </div>
+</div>
+
+<md-sidenav-layout flex fullscreen>
+    <div layout="row" layout-align="center start" width="80%">
+        <div layout="column" flex="40">
+            <md-card *ngIf="!isUserSelected">
+                <md-card-title class="title">
+                    เจ้าหน้าที่
+                </md-card-title>
+                <md-card-content class="content">
+                    <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedUser" (onNodeSelect)="selectStructure($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="isUserSelected">
+                <md-card-title class="title">
+                    แฟ้มทะเบียน
+                </md-card-title>
+                <md-card-content class="content" *ngIf="!isUserSelected">
+                    <p-tree [value]="folderTree"></p-tree>
+                </md-card-content>
+                <md-card-content class="content" *ngIf="isUserSelected">
+                    <p-tree [value]="folderTree" selectionMode="checkbox" [(selection)]="selectedFolders" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex="30" *ngIf="isUserSelected">
+            <md-card>
+                <md-card-title class="title">
+                    <div layout="column">
+                        <span>แฟ้มทะเบียนที่กำหนดสิทธิ์</span>
+                        <span>[{{selectedUser.data.profile.fullName}}]</span>
+                    </div>
+                </md-card-title>
+                <md-card-content class="content">
+                    <md-list>
+                        <md-list-item *ngFor="let folder of selectedFolders; let i=index;" (mouseover)="listButton.hidden=false; listButton.index=i;" (mouseleave)="listButton.hidden=true" draggable="true" (drop)="drop($event, i)" (dragstart)="dragstart($event, i)" (dragover)="dragover($event)"
+                            disableRipple="true">
+                            <md-icon *ngIf="folder.data.isFolder" md-list-avatar style="background: #e60000; color: white; cursor: pointer">collections_bookmark</md-icon>
+                            <md-icon *ngIf="!folder.data.isFolder" md-list-avatar style="background: #e60000; color: white; cursor: pointer">book</md-icon>
+                            <h3 md-line>{{folder.data.folder.wfFolderName}} </h3>
+                            <h4 md-line> {{folder.data.folder.wfFolderParentName}} </h4>
+                            <p md-line> {{folder.data.folder.wfFolderDetail}} </p>
+                            <div hide show-gt-md class="block-icon-Option" [hidden]="listButton.hidden || listButton.index!=i">
+                                <i class="material-icons icon-button" (click)="delete(folder, i)" title="ลบ">delete</i>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                    <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                        <button md-raised-button [ngClass]="{'md-primary': isEdited}" [style.margin-right]="'5px'" [disabled]="!isEdited" (click)="save()">บันทึก</button>
+                        <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</md-sidenav-layout>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

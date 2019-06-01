@@ -1,0 +1,106 @@
+md-sidenav-layout{
+    position: absolute;
+    margin-top: 40px;
+}
+.folder-List{
+    cursor: pointer;
+    padding: 10px 10px;
+    display: -webkit-box;
+    color: rgba(0, 0, 0, 0.54);
+}
+.folder-List:nth-child(even){
+    background: #F1F1F1;
+}
+.folder-List:hover{
+    color: #F1F1F1;
+    background: #1976d2;
+}
+.fontFolder-List{
+    padding-left: 10px;
+    padding-top: 3px;
+}
+
+.form {
+    font-size: 15px;
+}
+
+/*single use only 3: class, stlye, inputstyle*/
+.p-autocomplete {
+    width: 100%;
+}
+/*multiple must add this = need 4*/
+:host/deep/.ui-autocomplete-multiple-container.ui-inputtext {
+    width: 100%;
+}
+
+:host/deep/.ui-dialog {
+    box-shadow: 
+        0 11px 15px -7px rgba(0,0,0,.2), 
+        0 24px 38px 3px rgba(0,0,0,.14), 
+        0 9px 46px 8px rgba(0,0,0,.12);
+}
+
+:host/deep/.ui-dialog.ui-widget .ui-dialog-titlebar {
+    /*background: #d2e3f4;*/
+    background: #efb3a5;
+    padding-top: 0rem;
+    padding-left: 0.5rem;
+    padding-right: 0rem;
+    padding-bottom: 0rem;
+    text-align: left;
+    height: 40px;
+}
+:host/deep/.ui-dialog.ui-widget .ui-dialog-content {
+    padding-top: 0rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    overflow: auto;
+    min-width: 200px;
+    min-height: 100px;
+    max-width: 600px;
+    max-height: 300px;
+}
+:host/deep/.ui-contextmenu {
+    position: fixed;
+}
+
+.fav:hover {
+    background: #cfd4d6;
+    cursor: pointer;
+}
+
+:host/deep/.md-tall .md-list-item {
+    font-size: 14px;
+    padding-left: 1rem;
+}
+.additional {
+     padding-top:1rem; 
+     padding-left:2rem;
+     padding-right:2rem;
+     padding-bottom:2rem;
+     overflow:auto;
+     max-height: 350px;
+}
+
+/* start - hack to fix issue with autocomplete-dropdown-button caret position */
+:host/deep/.ui-autocomplete-dd .ui-inputtext {
+    float: left;
+}
+:host/deep/.ui-autocomplete-dd .ui-autocomplete-dropdown {
+    float: right;
+    transform: translateY(-100%);
+}
+/* end -  hack to fix issue with dropdown caret position */
+
+.animated {
+    position: relative;
+    animation-name: fadein;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+@keyframes fadein {
+    0%   { opacity: 0; }
+    50%  { opacity: 0.5; }
+    100% { opacity: 1; }
+}

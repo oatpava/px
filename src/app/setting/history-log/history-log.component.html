@@ -1,0 +1,166 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+            <md-icon>history</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>ประวัติการใช้งาน</span>
+        </div>
+        <button md-icon-button>
+            <md-icon>more_vert</md-icon>
+        </button>
+    </div>
+</div>
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <md-sidenav #sideSubMenu align="end">
+            <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
+                <div layout="column" layout-align="left start" style="width: 100%; margin-bottom: 10px; ">
+
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ จาก" locale="th" name="wfContentBookDate" [(ngModel)]="searchField.createdDateBegin">
+                    </my-date-picker>
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ ถึง" locale="th" name="wfContentBookTo" [(ngModel)]="searchField.createdDateEnd">
+                    </my-date-picker>
+                    <md-select style="width: 100%; padding-top: 10px; padding-bottom: 10px;" placeholder="Module" [(ngModel)]="searchField.moduleName" name="Module">
+                        <md-option *ngFor="let lkd of modules" [value]="lkd.code">
+                            {{lkd.name}}
+                        </md-option>
+                    </md-select>
+                    <!-- <md-list>
+                        ประเภทงาน -->
+                    <!-- <div *ngFor="let item in additional"> -->
+                    <!-- <md-list-item> -->
+                    <form class="additional" layout-align="center">
+                        <div layout="row">ประเภทงาน</div>
+                        <div layout="row">
+                            <md-checkbox name="type1" [(ngModel)]="additional[1].checked">สร้าง</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type2" [(ngModel)]="additional[2].checked">แก้ไข</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type3" [(ngModel)]="additional[3].checked">ลบ</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type4" [(ngModel)]="additional[4].checked">เข้าใช้งานระบบ</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type5" [(ngModel)]="additional[5].checked">กู้คืน</md-checkbox>
+                        </div>
+                        <!-- <div layout="row">
+                            <md-checkbox name="type6" [(ngModel)]="additional[6].checked">พิมพ์</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type7" [(ngModel)]="additional[7].checked">คัดลอก</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type8" [(ngModel)]="additional[8].checked">นำออก</md-checkbox>
+                        </div>
+                        <div layout="row">
+                            <md-checkbox name="type9" [(ngModel)]="additional[9].checked">เปิดใช้</md-checkbox>
+                        </div> -->
+                        <div layout="row">
+                            <md-checkbox name="type10" [(ngModel)]="additional[10].checked">ออกจากระบบ</md-checkbox>
+                        </div>
+                    </form>
+                    <!-- <md-checkbox color="primary" name="type" [(ngModel)]="item[i].checked" style="font-size:14px;height:32px;">
+                                {{ item.label }}
+                            </md-checkbox> -->
+                    <!-- </div> -->
+                    <!-- </md-list-item>
+                    </md-list> -->
+                    <!-- <md-checkbox color="primary" name="budgetYear" [checked]="budgetYear" [(ngModel)]="budgetYear" style="font-size:14px;height:32px;">
+                        เลขทะเบียนนับตามปีงบประมาณ
+                    </md-checkbox>   -->
+                    <!-- <md-input flex placeholder="รายละเอียด" name="description" [(ngModel)]="searchField.description">
+                    </md-input> -->
+                    <md-input-container class="setWidth">
+                        <span style="cursor: pointer;" (click)="getUser()" md-prefix>
+                            <md-icon>supervisor_account</md-icon>
+                        </span>
+                        <input md-input type="text" placeholder="บุคลากร" name="userName" disabled [(ngModel)]="searchField.userName">
+                        <span style="cursor: pointer;" (click)="clearUser()" md-suffix>
+                            <md-icon>close</md-icon>
+                        </span>
+                        <!-- <button mat-button mdSuffix md-icon-button aria-label="Clear" (click)="clearUser()">
+                            <md-icon>close</md-icon>
+                        </button> -->
+                    </md-input-container>
+                    <!-- <md-input flex placeholder="บุคลากร" name="detail" [(ngModel)]="searchField.detail">
+                    </md-input> -->
+                </div>
+            </form>
+        </md-sidenav>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <md-card style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <table td-data-table>
+                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
+                                        {{column.label}}
+                                    </th>
+                                    <tr td-data-table-row *ngFor="let row of data" (click)="select(row)">
+                                        <td td-data-table-cell *ngFor="let column of columns">
+                                            <label class="hover" *ngIf="column.name!=='edit'">{{row[column.name]}}</label>
+                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
+                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                            </div>
+                                        </td>
+                                        <!--<td td-data-table-cell *ngFor="let column of columns" (click)="edit(row)">
+                                            <label class="hover" *ngIf="column.name!=='edit'">{{row[column.name]}}</label>
+                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
+                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                            </div>
+                                        </td>-->
+                                    </tr>
+                                </table>
+                            </md-card-content>
+                        </md-card>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+
+<!-- <div [tdToggle]="!ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
+        <md-icon>search</md-icon>
+    </button>
+</div> -->
+
+<div layout="column" [tdToggle]="!ModeSearch" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div [tdToggle]="hoverMenuEdit">
+
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
+                <md-icon>search</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#00cc00'" title="กราฟ" color="accent" (click)="report();">
+                <md-icon>pie_chart</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#00ffff'" title="รายงาน PDF" color="accent" (click)="reportpdf();">
+                <md-icon>pie_chart</md-icon>
+            </button>
+        </div>
+    </div>
+    <button *ngIf="showMenu" md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" title="ค้นหา" color="accent" (click)="searchLog(searchField,additional);">
+        <md-icon>search</md-icon>
+    </button>
+</div>

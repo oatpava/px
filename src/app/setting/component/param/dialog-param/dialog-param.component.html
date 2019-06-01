@@ -1,0 +1,19 @@
+<div flex style="   
+background: #b74f36;
+padding: 12px;
+color: #FFF;
+font-size: large;">
+    <span class="md-headline">{{title}}</span>
+</div>
+<div style="padding-top: 20px; padding-left:10px; padding-right:10px;">
+    <div layout="column">
+        <md-input-container class="setWidth" style="display:flex;">
+            <input md-input #paramValue type="text" placeholder="{{title}}" class="" name="paramValue" [(ngModel)]="param.paramValue" required>
+        </md-input-container>
+    </div>
+    <div layout="row" flex style="text-align: center; padding:10px;" layout-align="center">
+        <button md-raised-button (click)="save(param)" color="primary" style="margin-right: 5px;">ตกลง</button>
+        <button md-raised-button (click)="cancel()" color="warn">ยกเลิก</button>
+    </div>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

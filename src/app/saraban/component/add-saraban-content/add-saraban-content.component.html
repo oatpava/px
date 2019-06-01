@@ -1,0 +1,344 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>          
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{folderIcon}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{path}}</span>
+        </div>
+
+        <button *ngIf="mode=='show'" hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div *ngFor="let menu of menus">
+                <button md-menu-item (click)="menuAction(menu, sarabanContent)">{{menu.name}}</button>
+            </div>
+        </md-menu>
+
+    </div>
+</div>
+
+<md-sidenav-layout layout="column" flex fullscreen>
+    <div layout="column" flex style="word-wrap: break-word;">
+        <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+            <div *ngIf="!disable" flex-gt-md="60">
+                <md-card style="margin-left: 0px; margin-right: 0px;">
+                    <md-card-title class="normal">
+                        <span>{{title}}</span>
+                    </md-card-title>
+                    <md-card-content [ngClass]="{'finish-content': isFinish, 'canceled-content': isCanceled}">
+                        <div layout="row" style="font-size: 16px; margin-top:-20px; margin-bottom:0.5rem; align-items:baseline;">
+                            <span style="width:50%;">
+                                    </span>
+                            <md-input style="width:50%;" placeholder="ไปรษณีย์ลงทะเบียน" type="text" name="wfContentStr03" [(ngModel)]="sarabanContent.wfContentStr03">
+                            </md-input>
+                        </div>
+                        <div layout="row" style="font-size: 16px; margin-bottom:0.5rem; align-items:baseline;">
+                            <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}
+                                    <i class="material-icons contentNo" *ngIf="mode!='edit' && !useReserve && !usePoint" title="แก้ไขเลขทะเบียน" (click)="editContentNo()">mode_edit</i>
+                                    <i class="material-icons contentNo" *ngIf="mode!='edit' && (useReserve || usePoint)" title="ใช้เลขล่าสุด" (click)="useContentNo()">redo</i>                                  
+                            </span>
+                            <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
+                            <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
+                        </div>
+                        <div layout="row" style="align-items: center;">
+                            <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()">
+                            </md-input>
+                            <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
+                                <i *ngIf="!usePoint" class="material-icons contentNo" title="แก้ไขคำนำหน้าเลขที่หนังสือ" (click)="editBookNo()">mode_edit</i>
+                            </span>
+                            <span *ngIf="diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
+                            </span>
+                            <span style="font-size: 16px;"><b>ลงวันที่ : &nbsp;</b></span>
+                            <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="ลงวันที่*" locale="th" name="wfContentBookDate" [(ngModel)]="sarabanContent.wfContentBookDate" (dateChanged)="onDateChanged($event)" required>
+                            </my-date-picker>
+                        </div>
+                        <div layout="row" layout-align="left start" style="width: 100%;">
+                            <md-select style="width:50%; margin-top:15px; margin-bottom:10px;" placeholder="ความเร่งด่วน" [(ngModel)]="sarabanContent.wfContentSpeed" name="wfContentSpeed">
+                                <md-option *ngFor="let sarabanSpeed of sarabanSpeeds" [value]="sarabanSpeed.id">
+                                    {{sarabanSpeed.sarabanSpeedName}}
+                                </md-option>
+                            </md-select>
+                            <md-select style="width: 50%; margin-top: 15px; margin-bottom:10px;" placeholder="ชั้นความลับ" [(ngModel)]="sarabanContent.wfContentSecret" name="wfContentSecret">
+                                <md-option *ngFor="let sarabanSecret of sarabanSecrets" [value]="sarabanSecret.id">
+                                    {{sarabanSecret.sarabanSecretName}}
+                                </md-option>
+                            </md-select>
+                        </div>
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #acFrom flex="95" placeholder="จาก" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
+                        </div>
+                        <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
+                            <p-header><span>จาก</span></p-header>
+                            <p-tabView>
+                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
+                                </p-tabPanel>
+                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </p-dialog>
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #acTo flex="95" placeholder="เรียน" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+                            <template></template>
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="เรียน" (click)="openStructureDialog(1)"><md-icon>person_add</md-icon></button>
+                        </div>
+                        <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
+                            <p-header><span>เรียน</span></p-header>
+                            <p-tabView>
+                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
+                                </p-tabPanel>
+                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </p-dialog>
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #acThru flex="95" placeholder="ผ่าน" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+                            <template></template>
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="ผ่าน" (click)="openStructureDialog(2)"><md-icon>person_add</md-icon></button>
+                        </div>
+                        <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
+                            <p-header><span>ผ่าน</span></p-header>
+                            <p-tabView>
+                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
+                                </p-tabPanel>
+                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </p-dialog>
+                        <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="wfContentTitle" [(ngModel)]="sarabanContent.wfContentTitle" required>
+                        </md-textarea>
+                        <md-textarea rows="3" style="width: 100%;" placeholder="อ้างถึง" type="text" name="wfContentReference" [(ngModel)]="sarabanContent.wfContentReference">
+                        </md-textarea>
+                        <md-textarea rows="3" style="width: 100%;" placeholder="สิ่งที่ส่งมาด้วย" type="text" name="wfContentAttachment" [(ngModel)]="sarabanContent.wfContentAttachment">
+                        </md-textarea>
+                        <md-textarea rows="3" style="width: 100%;" placeholder="การปฏิบัติ" type="text" name="wfContentText01" [(ngModel)]="sarabanContent.wfContentText01">
+                        </md-textarea>
+                        <md-textarea rows="3" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
+                        </md-textarea>
+                        <div layout="row" layout-align="left start" style="margin-top:1rem; margin-bottom:2rem;width:100%;">
+                            <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                            <md-checkbox style="width:25%;" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" [disabled]="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
+                            <span *ngIf="hardCopyRecieved" style="width:15%;"><b>วันที่ : </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}</span>
+                            <span *ngIf="hardCopyRecieved"><b>เวลา : </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
+                        </div>
+                        <div layout="row" layout-align="center start" style="width: 100%; color:black;" [style.margin-top]="'15px'">
+                            <button *ngIf="mode=='add'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0" [style.margin-right]="'5px'"
+                                (click)="save('สร้างหนังสือ')">บันทึก</button>
+                            <button *ngIf="mode=='register'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0"
+                                [style.margin-right]="'5px'" (click)="save('ลงทะเบียนหนังสือ')">ลงทะเบียน</button>
+                            <button *ngIf="mode=='edit'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0" [style.margin-right]="'5px'"
+                                (click)="update()">แก้ไขและบันทึก</button>
+                            <button md-raised-button md-ripple (click)="cancel(mode)" [style.margin-right]="'5px'">ยกเลิก</button>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+            <div *ngIf="disable" flex-gt-md="50">
+                <md-card style="margin-left: 0px; margin-right: 0px;">
+                    <md-card-title *ngIf="!isFinish && !isCanceled" class="normal">
+                        <span>{{title}}</span>
+                    </md-card-title>
+                    <md-card-title *ngIf="isFinish" class="finish">
+                        <span *ngIf="!isKeeped">สถานะหนังสือ: เรื่องเสร็จ</span>
+                        <span *ngIf="isKeeped">สถานะหนังสือ: เรื่องเสร็จจัดเก็บ</span>
+                    </md-card-title>
+                    <md-card-title *ngIf="isCanceled" class="canceled">
+                        <span>สถานะหนังสือ: ถูกยกเลิก</span>
+                    </md-card-title>
+                    <md-card-content [ngClass]="{'finish-content': isFinish, 'canceled-content': isCanceled}">
+                        <div style="font-size: 16px;">
+                            <div layout="row" style="margin-top:-20px;">
+                                <span style="width:50%;"></span>
+                                <span style="width:50%;"><b>ไปรษณีย์ลงทะเบียน : </b>{{sarabanContent.wfContentStr03}}</span>
+                            </div>
+                            <div layout="row">
+                                <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}</span>
+                                <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
+                                <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
+                            </div>
+                            <div layout="row">
+                                <span style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}</span>
+                                <span><b>ลงวันที่ : </b>{{bookDate_str}}</span>
+                            </div>
+                            <div layout="row">
+                                <span style="width:50%;"><b>ความเร่งด่วน : </b>{{sarabanContent.wfContentSpeedStr}}</span>
+                                <span style="width:50%;"><b>ชั้นความลับ : </b>{{sarabanContent.wfContentSecretStr}}</span>
+                            </div>
+                            <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                                <span><b>จาก : </b>{{sarabanContent.wfContentFrom}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>เรียน : </b>{{sarabanContent.wfContentTo}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>ผ่าน : </b>{{sarabanContent.wfContentText03}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>เรื่อง : </b>{{sarabanContent.wfContentTitle}}</span>
+                            </div>
+                            <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>อ้างถึง : </b>{{sarabanContent.wfContentReference}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>สิ่งที่ส่งมาด้วย : </b>{{sarabanContent.wfContentAttachment}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>หมายเหตุ : </b>{{sarabanContent.wfContentDescription}}</span>
+                            </div>
+                            <div style="margin-top:1rem;" layout="row">
+                                <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                                <span *ngIf="!hardCopyRecieved">รอเอกสารตัวจริง</span>
+                                <span *ngIf="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว<b> วันที่ : </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}<b> เวลา : </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
+                            </div>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+
+            <div flex-gt-md="35" *ngIf="mode=='show'">
+                <md-card style="margin-left: 5px; margin-right: 5px;">
+                    <md-card-content>
+                        <td-expansion-panel>
+                            <template td-expansion-panel-header>
+                                        ผังการไหล
+                                    </template>
+                            <td-expansion-summary>
+                                <md-list>
+                                    <md-list-item (click)="showWorkflowText(sarabanContent.wfDocumentId)">
+                                        <md-icon md-list-avatar>format_color_text</md-icon>
+                                        <h3 md-line>แบบข้อความ</h3>
+                                    </md-list-item>
+                                    <md-list-item (click)="showWorkflow(sarabanContent.id, sarabanContent.wfDocumentId)">
+                                        <md-icon md-list-avatar>landscape</md-icon>
+                                        <h3 md-line>แบบรูปภาพ</h3>
+                                    </md-list-item>
+                                </md-list>
+                            </td-expansion-summary>
+                        </td-expansion-panel>
+                    </md-card-content>
+                </md-card>
+                <md-card style="margin-left: 5px; margin-right: 5px;">
+                    <md-card-content>
+                        <td-expansion-panel>
+                            <template td-expansion-panel-header>
+                                        เอกสารแนบ [ {{numFileAttach}} รายการ ]
+                                    </template>
+                            <td-expansion-summary>
+                                <md-list>
+                                    <md-list-item (click)="fileAttachContent(sarabanContent.wfDocumentId)">
+                                        <md-icon md-list-avatar>edit</md-icon>
+                                        <p md-line>เพิ่ม-แก้ไข เอกสารแนบ</p>
+                                    </md-list-item>
+                                </md-list>
+                            </td-expansion-summary>
+                        </td-expansion-panel>
+                    </md-card-content>
+                </md-card>
+                <md-card style="margin-left: 5px; margin-right: 5px;">
+                    <md-card-content>
+                        <td-expansion-panel>
+                            <template td-expansion-panel-header>
+                                        ขั้นตอนการดำเนินการ
+                                    </template>
+                            <td-expansion-summary>
+                                <md-list *ngFor="let process of outboxs; let i=index;">
+                                    <md-list-item>
+                                        <h5 md-line style="word-wrap: break-word; white-space: normal;"> {{process.outboxNote}} </h5>
+                                        <h6 md-line> {{process.outboxFrom}} </h6>
+                                        <h6 md-line> {{process.outboxSendDate}} </h6>
+                                        <p md-line style="word-wrap: break-word; white-space: normal;"> [ส่งหนังสือให้] {{process.outboxTo}} </p>
+                                    </md-list-item>
+                                    <!-- <pdf-viewer *ngIf="process.wfe.length>0" style="display: block;" [src]="process.wfe[0].xxx" [show-all]="true" [stick-to-page]="true"></pdf-viewer> -->
+                                    <img *ngIf="process.wfe.length>0" [src]="process.wfe[0].url" style="width:600px; height:300px; cursor: pointer;" (click)="viewImage(process.wfe[0].url)">
+                                    <!-- <img src="xxx.pdf"> -->
+                                    <!-- <embed [src]="contentE[0].url" width="600px" height="300px" /> -->
+                                </md-list>
+                                <!-- <md-list>
+                                    <md-list-item>
+                                        <h5 md-line> เพื่อโปรดพิจารณาอนุมัติ </h5>
+                                        <h6 md-line> สกุล ภวภูตานนท์ </h6>
+                                        <h6 md-line> 15/06/2561 16:06 </h6>
+                                        <p md-line> [ส่งหนังสือให้] รองกรรมการผู้จัดการ กลุ่มงานบริหารหนี้และปฏิบัติการ </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x1.jpg">
+                                    <md-list-item>
+                                        <h5 md-line> เพื่อโปรดพิจารณาอนุมัติ </h5>
+                                        <h6 md-line> สกุล ภวภูตานนท์ </h6>
+                                        <h6 md-line> 15/06/2561 16:06 </h6>
+                                        <p md-line> [ส่งหนังสือให้] รองกรรมการผู้จัดการ กลุ่มงานบริหารหนี้และปฏิบัติการ </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x1.jpg">
+                                    <md-list-item>
+                                        <h5 md-line> เพื่อโปรดพิจารณาดำเนินการ </h5>
+                                        <h6 md-line> กัญทิม แม้นเหลืองอ่อน </h6>
+                                        <h6 md-line> 15/06/2561 16:42 </h6>
+                                        <p md-line> [ส่งหนังสือให้] กองบริหารงานอนุญาติ </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x2.jpg"> md-list-item>
+                                    <md-list-item>
+                                        <h5 md-line> ให้นายสมชายดำเนินการต่อ </h5>
+                                        <h6 md-line> นิคม พักดีวิจิตรศิลป์ </h6>
+                                        <h6 md-line> 15/06/2561 17:03 </h6>
+                                        <p md-line> [ส่งหนังสือให้] สมชาย ชาติดำรงค์สมุทร </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x2.jpg">
+                                    <md-list-item>
+                                        <h5 md-line> เพื่อโปรดพิจารณาอนุมัติ </h5>
+                                        <h6 md-line> สกุล ภวภูตานนท์ </h6>
+                                        <h6 md-line> 15/06/2561 17:28 </h6>
+                                        <p md-line> [ส่งหนังสือให้] รองกรรมการผู้จัดการ กลุ่มงานบริหารหนี้และปฏิบัติการ </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x1.jpg">
+                                    <md-list-item>
+                                        <h5 md-line> เพื่อโปรดพิจารณาอนุมัติ </h5>
+                                        <h6 md-line> สกุล ภวภูตานนท์ </h6>
+                                        <h6 md-line> 15/06/2561 17:28 </h6>
+                                        <p md-line> [ส่งหนังสือให้] รองกรรมการผู้จัดการ กลุ่มงานบริหารหนี้และปฏิบัติการ </p>
+                                        <md-divider md-line></md-divider>
+                                    </md-list-item>
+                                    <img src="assets/instruction/x1.jpg">
+                                </md-list> -->
+                            </td-expansion-summary>
+                        </td-expansion-panel>
+                    </md-card-content>
+                </md-card>
+            </div>
+
+        </div>
+    </div>
+</md-sidenav-layout>
+
+
+<div *ngIf="mode=='show'" hide show-gt-md layout="column" id="fixedbutton">
+    <div class="menuList" [tdToggle]="!menuClick" *ngFor="let menu of menus">
+        <button md-fab color="accent" [style.background]="menu.color" title="{{menu.name}}" (click)="menuAction(menu, sarabanContent); menuClick=false;"><md-icon>{{menu.icon}}</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuClick=!menuClick">
+        <md-icon *ngIf="!menuClick">menu</md-icon>
+        <md-icon *ngIf="menuClick">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="5000"></p-growl>

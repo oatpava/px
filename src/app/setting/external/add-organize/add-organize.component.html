@@ -1,0 +1,53 @@
+<div layout-gt-md="row" layout-align-gt-md="center center">
+    <div flex-gt-md="70">
+        <md-card>
+            <md-card-title style="background: #efb3a5;">
+                {{modeTitle}}หน่วยงานภายนอก
+            </md-card-title>
+            <!-- <md-divider></md-divider> -->
+            <md-card-content>
+                <form #addStructureform="ngForm">
+                    <div layout="row" layout-xs="column" layout-margin>
+                        <div flex="100" flex-xs="100">
+                            <md-input-container style="width:100%;">
+                                <input md-input #structureCode placeholder="รหัสหน่วยงาน" name="structureCode" OnlyNumber="true" [(ngModel)]="structure.code" tdAutoTrim required minlength="1" maxlength="15">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{structureCode.value.length}} / 15</md-hint>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-xs="column" layout-margin>
+                        <div flex="70" flex-xs="100">
+                            <md-input-container style="width:100%;">
+                                <input md-input #structureName placeholder="ชื่อหน่วยงาน" name="structureName" [(ngModel)]="structure.name" tdAutoTrim required minlength="1" maxlength="255">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{structureName.value.length}} / 255</md-hint>
+                            </md-input-container>
+                        </div>
+                        <div flex="30" flex-xs="100">
+                            <md-input-container style="width:100%;">
+                                <input md-input #structureDetail placeholder="ชื่อย่อหน่วยงาน" name="structureShortName" [(ngModel)]="structure.shortName" tdAutoTrim required minlength="1" maxlength="30">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{structureDetail.value.length}} / 30</md-hint>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div layout="row" layout-margin>
+                        <div layout="row" flex>
+                            <md-input-container style="width:100%;">
+                                <input md-input placeholder="รายละเอียด" name="structureDetail" [(ngModel)]="structure.detail">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </form>
+            </md-card-content>
+            <md-card-actions>
+                <div layout="row" layout-align="center center">
+                    <button *ngIf="mode==='edit'" md-raised-button color="warn" (click)="deleteStructure(structure)" class="push-right">ลบ</button>
+                    <button *ngIf="mode==='edit'" md-raised-button [ngClass]="{'md-primary': addStructureform.form.valid}" [disabled]="!addStructureform.form.valid" (click)="updateStructure(structure)" class="push-right">บันทึก</button>
+                    <button *ngIf="mode==='add'" color="primary" md-raised-button [ngClass]="{'md-primary': addStructureform.form.valid}" [disabled]="!addStructureform.form.valid" (click)="createStructure(structure)" class="push-right">บันทึก</button>
+
+                    <button md-raised-button md-ripple [disabled]="isDisabled" (click)="goBack()">ยกเลิก</button>
+                </div>
+            </md-card-actions>
+        </md-card>
+    </div>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

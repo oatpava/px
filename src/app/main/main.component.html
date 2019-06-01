@@ -1,0 +1,100 @@
+<td-layout #layout logo="assets:icon" sidenavTitle="{{sidenavTitle}}" displayName="" (logout)="logout()">
+    <md-nav-list menu-items style="padding-top: 0px">
+        <div layout="row" class="profiles" title="แก้ไขโปรไฟล์นี้">
+            <md-list-item style="width: 100%; padding: 0px 0px; margin-top: 64px;">
+                <md-icon md-list-avatar [style.font-size]="'50px'">account_circle</md-icon>
+                <h4 md-line style="color:white;"><span class="text-wrap">{{userProfile.fullName}}</span></h4>
+                <p md-line style="color:white;">{{userProfile.position?.name}}</p>
+                <p md-line style="color:white;">{{userProfile.email}}</p>
+            </md-list-item>
+        </div>
+        <template let-item let-last="last" ngFor [ngForOf]="routes">
+           <a md-list-item  (click)="selectModule(item.id, item.route); layout.close();">
+                <md-icon>{{item.icon}}</md-icon>
+                {{item.title}}
+           </a>
+        </template>
+    </md-nav-list>
+    <td-layout-nav logo="assets:icon">
+        <div toolbar-content layout="row" layout-align="center center" flex>
+            <!-- <span hide show-gt-md><img src="assets/icons/font-nha.svg"></span>
+            <span hide show-gt-md flex style="padding-left: 1rem;"><b>{{archiveHeader}}</b></span> -->
+            <div layout="column">
+                <span hide show-gt-md><b>{{appName}}</b></span>
+                <span hide show-gt-md>{{appNameEng}}</span>
+            </div>
+            <span hide show-gt-md flex style="padding-left: 1rem;"><b>{{archiveHeader}}</b></span>
+            <!-- <button md-icon-button [mdMenuTriggerFor]="notificationsMenu" [style.background]="'#f44336'">
+                <td-notification-count [notifications]="10">
+                <md-icon>notifications</md-icon>
+                </td-notification-count>
+            </button> -->
+            <button hide show-gt-md md-icon-button [mdMenuTriggerFor]="personProfiles" [style.background]="'#e0785f'" title="{{userProfile.fullName}}">
+                <md-icon>person</md-icon>
+            </button>
+            <md-menu #personProfiles="mdMenu">
+                <td-menu>
+                    <div layout="row" style="width: 100%; padding: 0px 0px;" title="แก้ไขโปรไฟล์นี้">
+                        <md-nav-list dense style="width: 100%; padding: 0px 0px;" (click)="settingProfile()">
+                            <a md-list-item>
+                                <md-icon md-list-avatar [style.font-size]="'50px'">account_circle</md-icon>
+                                <h4 md-line><span class="text-wrap">{{userProfile.fullName}}</span></h4>
+                                <p md-line>{{userProfile.position?.name}}</p>
+                                <p md-line>{{userProfile.email}}</p>
+                            </a>
+                        </md-nav-list>
+                    </div>
+                    <div layout="row" layout-align="left start" style="width: 100%;" [style.margin-top]="'10px'" [style.margin-bottom]="'10px'">
+                        <button md-icon-button style="margin-left:5px; margin-right:5px;" (click)="download()">
+                            <md-icon>file_download</md-icon>
+                        </button>
+                        <button style="margin-left: 10px; margin-right: 10px; text-align: left" md-button color="primary" td-menu-footer (click)="openDialogChangePassword();">
+                            <md-icon>swap_horiz</md-icon>
+                            รหัสผ่าน
+                        </button>
+                        <button style="margin-right: 10px;" md-button color="accent" td-menu-footer (click)="logOut()">
+                            <md-icon>exit_to_app</md-icon>
+                            ออกจากระบบ
+                        </button>
+                    </div>
+                </td-menu>
+            </md-menu>
+            <div hide-gt-md>
+                <!-- <button style="margin-left: 10px; margin-right: 10px; text-align: left" md-button (click)="openDialogChangePassword();">
+                    <md-icon>swap_horiz</md-icon>
+                    รหัสผ่าน
+                </button> -->
+                <button style="margin-right: 0px;" md-button td-menu-footer (click)="logOut()">
+                    <md-icon>exit_to_app</md-icon>
+                    ออกจากระบบ
+                </button>
+            </div>
+            <!-- <md-menu #notificationsMenu="mdMenu">
+                <td-menu>
+                    <div td-menu-header class="md-subhead">Notifications</div>
+                    <md-nav-list dense>
+                        <template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
+                            <a md-list-item>
+                                <md-icon md-list-avatar>today</md-icon>
+                                <h4 md-line><span class="text-wrap">ข้อมูลเข้า : หน่วยงานพัฒนาสังคมและการศึกษาภายในองค์กร</span></h4>
+                                <p md-line>22 minutes ago</p>
+                            </a>
+                            <md-divider *ngIf="!last"></md-divider>
+                        </template>
+                    </md-nav-list>
+                    <button md-button color="accent" td-menu-footer>
+                            See All Notifications
+                    </button>
+                </td-menu>
+            </md-menu> -->
+            <span hide show-gt-md>
+                <span style="margin-right: 20px; display: grid;">
+                <span style="font-size: 15px"> {{userProfile.fullName}} </span>
+            <span style="font-size: small"> {{userProfile.position?.name}}  </span>
+            </span>
+            </span>
+        </div>
+        <router-outlet name="center" [@visibleTrigger]="'visible'"></router-outlet>
+    </td-layout-nav>
+</td-layout>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

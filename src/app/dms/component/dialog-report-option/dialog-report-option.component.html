@@ -1,0 +1,24 @@
+<h3 md-dialog-title *ngIf='folderId > 0'>เลือกประเภทการออกรายงาน</h3>
+
+
+<td-data-table *ngIf='folderId > 0' #dataTable [data]="data" [selectable]="true" [(ngModel)]="selectedRows" [columns]="columns" [multiple]="false" [style.height.px]="200">
+</td-data-table>
+
+
+<h3 md-dialog-title>เลือก Field ที่ต้องการแสดง</h3>
+
+
+<td-data-table #dataTable2 [data]="this.documentTypeDetails" [selectable]="true" [multiple]="true" [(ngModel)]="selectedField" [columns]="columns2" [multiple]="false" [style.height.px]="200">
+</td-data-table>
+
+
+
+
+<md-dialog-actions hide-gt-md layout="column" layout-align="end center">
+    <button flex md-button (click)="ok()" style="width: 100%; margin-bottom: 10px; border: 1px solid #3f51b5" color="primary">ยืนยัน</button>
+    <button flex md-button (click)="cancel()" style="width: 100%; margin-bottom: 10px; border: 1px solid red" color="accent">ยกเลิก</button>
+</md-dialog-actions>
+<md-dialog-actions hide show-gt-md layout="row" layout-align="end center">
+    <button flex md-button style="width: 100%;" (click)="ok()" color="primary">ยืนยัน</button>
+    <button flex md-button (click)="cancel()" style="width: 100%;" color="accent">ยกเลิก</button>
+</md-dialog-actions>

@@ -1,0 +1,291 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+
+
+
+        <button md-icon-button disabled>
+          <md-icon>{{icon}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{textIcon}}</span>
+        </div>
+    </div>
+</div>
+
+<div layout="column" flex>
+
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <md-card-title>{{textIcon}}</md-card-title>
+                        <md-card-content>
+                            <form #addDocumentForm="ngForm">
+                                <div layout="row" *ngFor="let dtd of documentTypeDetails" layout-align="left start" style="width: 100%;">
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentName'" flex>
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentName">
+
+                                    </md-input-container>
+
+
+                                    <!-- <my-date-picker *ngIf="dtd.dmsFieldMap==='createdDate'" [options]="myDatePickerOptionsCreate" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.createdDate"></my-date-picker> -->
+
+
+
+                                    <!-- <my-date-picker *ngIf="dtd.dmsFieldMap==='documentExpireDate'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentExpireDate"></my-date-picker>
+
+                                    <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate01'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate01"></my-date-picker>
+
+                                    <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate02'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate02"></my-date-picker>
+
+                                    <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate03'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate03"></my-date-picker>
+
+                                    <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate04'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{dtd.documentTypeDetailName}}" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate04"></my-date-picker> -->
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='createdDate'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='createdDate'" [options]="myDatePickerOptionsCreate" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.createdDate"></my-date-picker>
+                                    </div>
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='documentExpireDate'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='documentExpireDate'" [options]="myDatePickerOptionsExp" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentExpireDate"></my-date-picker>
+                                    </div>
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='documentDate01'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate01'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate01"></my-date-picker>
+                                    </div>
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='documentDate02'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate02'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate02"></my-date-picker>
+                                    </div>
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='documentDate03'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate03'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate03"></my-date-picker>
+                                    </div>
+
+                                    <div style="width: 100%;" *ngIf="dtd.dmsFieldMap==='documentDate04'">
+                                        <div flex class="LabelReadonly">{{dtd.documentTypeDetailName}}</div>
+                                        <my-date-picker *ngIf="dtd.dmsFieldMap==='documentDate04'" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" locale="th" name="{{dtd.dmsFieldMap}}" [(ngModel)]="dmsDocument.documentDate04"></my-date-picker>
+                                    </div>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentFloat01'" flex>
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentFloat01">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentFloat02'" flex>
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentFloat02">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentInt01'" flex>
+                                        <input md-input type="number" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentInt01">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentInt02'" flex>
+                                        <input md-input type="number" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentInt02">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentInt03'" flex>
+                                        <input md-input type="number" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentInt03">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentInt04'" flex>
+                                        <input md-input type="number" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentInt04">
+                                    </md-input-container>
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentText01' && dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <textarea md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText01"></textarea>
+                                    </md-input-container>
+
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentText01' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentText01" name="documentText01 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentText02'&& dtd.documentTypeDetailLookup === 0 " flex style="width: 100% ;margin-top: 20px;">
+                                        <textarea md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText02"></textarea>
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentText02' && dtd.documentTypeDetailLookup > 0 " flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentText02" name="documentText02 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+                                    <!-- /////// wf type  -->
+                                    <!-- <md-input-container *ngIf="dtd.dmsFieldMap ==='documentText02'&& documentTypeId === 2 " flex style="width: 100% ;margin-top: 20px;" (click)="listWfdocType()">
+                                        <md-input md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText02"></md-input>
+
+                                    </md-input-container> -->
+
+                                    <!-- <md-input *ngIf="dtd.dmsFieldMap ==='documentText02' && documentTypeId === 2" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.documentTypeDetailName}}' [(ngModel)]="dmsDocument.documentText02" name="{{dtd.documentTypeDetailName }}" (click)="listWfdocType()"
+                                        [(ngModel)]="search[df.dmsFieldMap]">
+                                      
+
+                                    </md-input> -->
+
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentText03'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <textarea md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText03"></textarea>
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentText03' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentText03" name="documentText03 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentText04'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <textarea md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText04"></textarea>
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentText04' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentText04" name="documentText04 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentText05'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <textarea md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText05"></textarea>
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentText05' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentText05" name="documentText05 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar01'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar01">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar01' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar01" name="documentVarchar01 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar02'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar02">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar02' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar02" name="documentVarchar02 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar03'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar03">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar03' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar03" name="documentVarchar03 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar04'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar04">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar04' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar04" name="documentVarchar04 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar05'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar05">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar05' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar05" name="documentVarchar05 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar06'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar06">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar06' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar06" name="documentVarchar06 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar07'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar07">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar07' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar07" name="documentVarchar07 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar08'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar08">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar08' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar08" name="documentVarchar08 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar09'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar09">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar09' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar09" name="documentVarchar09 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentVarchar10'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="dmsDocument.documentVarchar10">
+                                    </md-input-container>
+                                    <md-select *ngIf="dtd.dmsFieldMap==='documentVarchar10' && dtd.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.lookupName}}' [(ngModel)]="dmsDocument.documentVarchar10" name="documentVarchar10 ">
+                                        <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                                        </md-option>
+                                    </md-select>
+
+
+
+                                    <md-input-container *ngIf="dtd.dmsFieldMap==='documentIntComma'" flex>
+                                        <input md-input type="text" placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [required]="true" [(ngModel)]="numberComma " (focus)=" removeCommas() " (blur)="addCommas() ">
+                                    </md-input-container>
+
+                                </div>
+
+                            </form>
+
+
+                        </md-card-content>
+                        <md-divider></md-divider>
+                        <md-card-content>
+                            <app-file-attach [uploader]="uploader " [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved " [isAttach]="!addDocumentForm.form.valid " (referenceFileAttachId)="getReferenceFileAttachId($event)" (secrets)="getSecrets($event)" (updateAtt)="updateAtt($event)"
+                                (addAttachFile)="saveAddAttachFile($event)" (UpdateSecrets)="UpdateSecrets($event)" [folderId]="folderId"></app-file-attach>
+                        </md-card-content>
+                        <md-divider></md-divider>
+
+                        <md-card-actions *ngIf=" checkIe" layout="row" layout-align="center start" style="width: 100%; padding:8px" [style.margin-top]="'15px '">
+                            <button md-raised-button [disabled]="!authCreDocFile" (click)="newWindow()">สแกน</button>
+                        </md-card-actions>
+
+                        <md-card-actions layout="row" layout-align="center start" style="width: 100%; padding:8px" [style.margin-top]="'15px '">
+                            <button md-raised-button layout-align="center start" (click)="scan()">scan</button>
+                        </md-card-actions>
+                        <!-- <button md-raised-button layout-align="center start" (click)="scan()">scan</button> -->
+                        <md-card-actions layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px '">
+
+                            <button *ngIf="mode==='Add' " md-raised-button [ngClass]="{'md-primary ': addDocumentForm.form.valid}" [disabled]="!addDocumentForm.form.valid" [style.margin-right]="'5px '" (click)="save(dmsDocument)">บันทึก</button>
+                            <button *ngIf="mode==='Edit' " [disabled]="!authEditDoc" md-raised-button [ngClass]="{'md-primary ': addDocumentForm.form.valid}" [disabled]="!addDocumentForm.form.valid" [style.margin-right]="'5px '" (click)="update(dmsDocument)">บันทึก</button>
+                            <button *ngIf="mode==='Edit'  " [disabled]="!authDelDoc" md-raised-button [ngClass]="'md-warn '" [style.margin-right]="'5px '" (click)="delete(dmsDocument)">ลบเอกสาร</button>
+                            <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px '">ยกเลิก</button>
+                        </md-card-actions>
+
+                    </md-card>
+
+
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+
+
+
+</div>
+
+<div hide show-gt-md layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <!--<div >-->
+    <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+        <button md-fab color="accent" [style.background]="'#e600ac '" title="ส่งอีเมล" style="margin-bottom: 3px;" (click)="email()">
+                <md-icon>email</md-icon>
+            </button>
+
+    </div>
+    <button md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+    <!--</div>-->
+</div>

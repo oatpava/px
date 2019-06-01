@@ -1,0 +1,18 @@
+<div layout-gt-sm="row" layout="column">
+    <div flex="100">
+        <md-card style="margin:0px;">
+            <md-card-title>
+                <span class="md-headline">ยกเลิกเลขจอง</span>
+            </md-card-title>
+            <md-card-content>
+                <div layout="row " layout-align="center start " style="width: 100%;">
+                    <md-textarea flex rows="8" style="margin-right: 20px;" [(ngModel)]="note" [ngModelOptions]="{standalone: true}" placeholder="หมายเหตุการยกเลิกเลขจอง"></md-textarea>
+                </div>
+                <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                    <button md-raised-button md-ripple color="primary" (click)="ok()" [style.margin-right]="'5px'">บันทึก</button>
+                    <button md-raised-button md-ripple (click)="cancel()">ยกเลิก</button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

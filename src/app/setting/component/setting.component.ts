@@ -1,0 +1,203 @@
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute, Params } from '@angular/router'
+import { TdLoadingService } from '@covalent/core'
+import 'rxjs/add/operator/switchMap'
+
+import { SettingService } from '../service/setting.service'
+// import { ParamAdminService } from '../service/param-admin.service'
+import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
+import { Setting } from '../model/setting.model'
+import { MdDialog, MdDialogRef } from '@angular/material'
+import { ConfirmDialogComponent } from '../../main/component/confirm-dialog/confirm-dialog.component'
+import { TreeModule, TreeNode, Message } from 'primeng/primeng';
+
+@Component({
+  selector: 'app-setting',
+  templateUrl: './setting.component.html',
+  styleUrls: ['./setting.component.styl'],
+  providers: [SettingService]
+})
+export class SettingComponent implements OnInit {
+  settings: Setting[] = []
+  subModuleUserAuth: any[] = []
+  ckEq: boolean = false;
+  msgs: Message[] = []
+  constructor(
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _loadingService: TdLoadingService,
+    private _settingService: SettingService,
+    private _dialog: MdDialog,
+    private _paramSarabanService: ParamSarabanService,
+    // private _paramAdminService: ParamAdminService,
+  ) { }
+
+  ngOnInit() {
+    this.getSettings()
+    console.log('settingcomponent')
+  }
+
+  // getSettings() {
+  //   this._loadingService.register('main')
+  //   this._settingService
+  //     .getSettings()
+  //     .subscribe(response => {
+  //       // console.log(response)
+  //       this.settings = response as Setting[]
+  //     })
+  //   this._loadingService.resolve('main')
+  // }
+
+  modules: any[] = []
+  getSettings() {
+    this._loadingService.register('main')
+    console.log('userProfileTypeId : ', this._paramSarabanService.userProfileTypeId)
+    if (this._paramSarabanService.userProfileTypeId == 1) {
+      this._settingService
+        .getSettings()
+        .subscribe(response => {
+          // this.settings = response as Setting[]
+          this.modules = response as Setting[]
+        })
+      this._loadingService.resolve('main')
+    } else {
+      this._settingService
+        .getSettings()
+        .subscribe(response => {
+          console.log('getSetting')
+          this.settings = response as Setting[]
+          this._settingService
+            .getAuthority()
+            .subscribe(rep => {
+              console.log('getAuthority')
+              this.subModuleUserAuth = rep
+              this.settings.forEach((data: Setting, index1: number) => {
+                let mdata = new Setting(data)
+                this.modules[index1] = mdata
+                this.modules[index1].child = []
+                data.child.forEach((data1: any, index: number) => {
+                  console.log('data1', data1)
+                  this.ckEq = false;
+                  this.subModuleUserAuth.forEach((data2: any) => {
+                    if (data1.childId === data2.submoduleAuth.id) {
+                      this.modules[index1].child.push(data1)
+                      this.ckEq = true;
+                    }
+                  })
+                })
+              })
+              console.log(this.modules)
+            })
+        })
+      // .getSettings()
+      // .subscribe(response => {
+      //   console.log('response ',response)
+      //   this.settings = response as Setting[]
+      //   this._settingService
+      //     .getAuthority()
+      //     .subscribe(rep => {
+      //       console.log('rep ',rep)
+      //       this.subModuleUserAuth = rep
+      //       this.settings.forEach((data: any) => {
+      //         console.log('data ',data)
+      //         data.child.forEach((data1: any, index: number) => {
+      //           // console.log('data1 ',data1)
+      //           this.ckEq = false;
+      //           this.subModuleUserAuth.forEach((data2: any) => {
+      //             console.log('data2 ',data2.submoduleAuth.id)
+      //             if (data1.childId == data2.submoduleAuth.id) {
+      //               // console.log('data1.childId ',data1.childId)
+      //               this.ckEq = true;
+      //             }
+      //           })
+      //           if (!this.ckEq) {
+      //             data.child.splice(index, 1)
+      //           }
+      //         })
+      //       })
+      //     })
+      // })
+      this._loadingService.resolve('main')
+    }
+  }
+
+  selectdSetting(selectdSetting: Setting): void {
+    console.log(selectdSetting)
+    if (selectdSetting.subSetting == 'hrs-structure') {
+
+      let dialogRef1 = this._dialog.open(ConfirmDialogComponent, {
+        width: '50%',
+      });
+      let instance = dialogRef1.componentInstance
+      instance.dataName = 'นำเข้า HRIS (หน่วยงาน)'
+      dialogRef1.afterClosed().subscribe(result => {
+
+        if (result) {
+          this._loadingService.register('main')
+          this._settingService
+            .mergeStructure()
+            .subscribe(response => {
+              console.log(response)
+              this.msgs = [];
+              this.msgs.push(
+                {
+                  severity: 'success',
+                  summary: 'สำเร็จ',
+                  detail: 'นำเข้า HRIS (หน่วยงาน) ',
+                },
+              );
+              this._loadingService.resolve('main')
+
+            })
+
+        }
+
+      })
+
+    } else if (selectdSetting.subSetting == 'hrs-user') {
+
+      let dialogRef1 = this._dialog.open(ConfirmDialogComponent, {
+        width: '50%',
+      });
+      let instance = dialogRef1.componentInstance
+      instance.dataName = 'นำเข้า HRIS (รายชื่อบุคลากร)'
+      dialogRef1.afterClosed().subscribe(result => {
+
+        if (result) {
+
+          this._loadingService.register('main')
+          this._settingService
+            .mergeUsers()
+            .subscribe(response => {
+              console.log(response)
+              this.msgs = [];
+              this.msgs.push(
+                {
+                  severity: 'success',
+                  summary: 'สำเร็จ',
+                  detail: 'นำเข้า HRIS (รายชื่อบุคลากร) ',
+                },
+              );
+              this._loadingService.resolve('main')
+            })
+
+
+        }
+
+      })
+
+    } else {
+      let param = {
+        // t: new Date().getTime()
+      }
+      this._router.navigate(
+        ['/main', {
+          outlets: {
+            center: [selectdSetting.subSetting, param],
+          }
+        }],
+        { relativeTo: this._route })
+    }
+  }
+
+}

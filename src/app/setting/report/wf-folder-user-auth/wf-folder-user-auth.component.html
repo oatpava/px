@@ -1,0 +1,68 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+  <md-icon>arrow_back</md-icon>
+</button>
+        <button md-icon-button disabled>
+    <md-icon>dns</md-icon>
+</button>
+        <div flex class="menu-showLabel">
+            <span>แฟ้มทะเบียน</span>
+        </div>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <!-- <div flex-gt-md="90">
+                  <md-list>
+                      <div flex-xs flex-gt-xs="50" layout="row">
+                          <md-card *ngIf="!showSearchResult" style="margin-left: 0px; margin-right: 0px;">
+                              <md-card-content>
+                                  <p-tree [value]="folderTree" selectionMode="single" [(selection)]="selectedFolder" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+                              </md-card-content>
+                          </md-card>
+                      </div>
+                  </md-list>
+              </div> -->
+                <div flex-xs flex-gt-xs="50" layout="column">
+                    <!-- <div flex-gt-md="70"> -->
+                    <md-list>
+                        <!-- <div flex-xs flex-gt-xs="50" layout="row"> -->
+                        <md-card *ngIf="!showSearchResult" style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <p-tree [value]="folderTree" selectionMode="single" [(selection)]="selectedFolder" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+                            </md-card-content>
+                        </md-card>
+                        <!-- </div> -->
+                    </md-list>
+                </div>
+                <div flex-xs flex-gt-xs="50" layout="column">
+                    <md-list>
+                        <md-card>
+                            <md-card-title>{{title}}</md-card-title>
+                            <md-divider></md-divider>
+                            <md-card-content>
+                                <md-select style="width: 100%" placeholder="สิทธิ" [(ngModel)]="auth" name="auth" required>
+                                    <md-option *ngFor="let sel of dataAuths" [value]="sel.id"> {{sel.authName}}
+                                    </md-option>
+                                </md-select>
+
+                                <!-- <md-radio-group [(ngModel)]="dataAuths">
+                                  <md-radio-button color="primary" layout="row" style="padding:10px 10px; margin-left: 10px" *ngFor="let rad of dataAuths" name="rad.authName" value="{{rad.id}}">
+                                      {{rad.authName}}
+                                  </md-radio-button>
+                              </md-radio-group> -->
+                            </md-card-content>
+                        </md-card>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+<button id="fixedbutton" md-fab color="accent" title="print" (click)="genReport()">
+<md-icon>print</md-icon>
+</button>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

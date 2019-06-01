@@ -1,0 +1,35 @@
+<p-dataTable #dt [value]="workflows" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[1,5,10]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+    <p-header>
+        <div layout="row" layout-align="space-between start">
+            <div></div>
+            <div layout="column" style="word-wrap: break-word; word-break: break-all; white-space: normal;">
+                <span>รายการผังการไหล:</span>
+                <span>{{contentTitle}}</span>
+            </div>
+            <div>
+                <button (click)="report('pdf')" title="รายงาน PDF"><i class="material-icons">assignment</i></button>
+                <button (click)="report('xls')" title="รายงาน Excel"><i class="material-icons">grid_on</i></button>
+            </div>
+        </div>
+    </p-header>
+    <p-column [sortable]="true" [style]="{'width':'40px', 'text-align':'center', 'vertical-align':'top'}">
+        <template pTemplate="body" let-i="rowIndex+1">   
+            <span>{{i}}</span>
+        </template>
+    </p-column>
+    <p-column field="workflowActionType" header="เหตุการณ์" [sortable]="false" [style]="{'width':'10%', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="createdDate" header="วันที่" [sortable]="false" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+        <template pTemplate="body" let-row="rowData">   
+            <span>{{row.createdDate.slice(0,16)}}</span>
+        </template>
+    </p-column>
+    <p-column field="workflowActionName" header="ผู้ดำเนินการ" [sortable]="false" [style]="{'width':'20%', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="workflowDetail" header="รายละเอียด" [sortable]="false" [style]="{'width':'30%', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="workflowNote" header="ที่" [sortable]="false" [style]="{'width':'15%', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="workflowDescription" header="หมายเหตุ" [sortable]="false" [style]="{'width':'10%', 'vertical-align':'top'}">
+    </p-column>
+</p-dataTable>

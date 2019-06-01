@@ -1,0 +1,58 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button *ngIf="!showSearch" md-icon-button (click)="goBack()">
+      <md-icon>arrow_back</md-icon>
+    </button>
+        <button md-icon-button disabled>
+      <md-icon>people</md-icon>
+    </button>
+        <div flex class="menu-showLabel">
+            <span>โครงสร้างหน่วยงานภายนอก</span>
+        </div>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <!-- <div layout="row" layout-align="left start" class="blockSearch">
+              <md-input-container style="width: 100%;">
+                <input md-input type="text" flex placeholder="ค้นหาชื่อผู้ใช้งาน" name="search" [(ngModel)]="userProfileName" (ngModelChange)="searchUserProfiles()">
+              </md-input-container>
+            </div> -->
+
+                        <md-card style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <app-organize-external [selectDepartment]="true" [structureTree]="structureTree" (onselectData)="selectStructure($event)"></app-organize-external>
+                            </md-card-content>
+                        </md-card>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div [tdToggle]="hoverMenuEdit">
+        <!-- Structure -->
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="แก้ไขหน่วยงาน" [style.background]="'#00AAFF'" color="accent" (click)="manageStructure('edit','แก้ไข')">
+        <md-icon>edit</md-icon>
+      </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="เพิ่มหน่วยงาน" [style.background]="'#0000FF'" color="accent" (click)="manageStructure('add','เพิ่ม'); ">
+        <i class="fa fa-tag"></i>
+      </button>
+        </div>
+        <!-- Structure -->
+    </div>
+    <button *ngIf="showMenu" md-fab color="accent" title="รายการเมนู">
+    <md-icon>{{listMenu}}</md-icon>
+  </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

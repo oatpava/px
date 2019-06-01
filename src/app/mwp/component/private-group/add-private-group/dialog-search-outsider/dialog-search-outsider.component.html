@@ -1,0 +1,47 @@
+<div style="padding:24px;">
+    <div>
+        <span class="headline">ค้นหาผู้ใช้ภายนอก</span>
+    </div>
+    <div>
+        <form #searchForm="ngForm">
+            <div layout="row">
+                <md-input-container flex>
+                    <input md-input #searchName placeholder="ชื่อผู้ใช้" name="name" [(ngModel)]="name" tdAutoTrim required minlength="1" maxlength="255">
+                    <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{searchName.value.length}} / 255</md-hint>
+                </md-input-container>
+            </div>
+        </form>
+        <div layout="row" layout-align="center center" style="margin-top:1rem;">
+            <button color="accent" md-raised-button [ngClass]="{'md-primary': searchForm.form.valid}" [disabled]="!searchForm.form.valid" (click)="search()">ค้นหา</button>
+        </div>
+    </div>
+
+    <div *ngIf="isSearch">
+        <div style="margin-top:20px;">
+            <span class="headline">ผลการค้นหา</span>
+        </div>
+        <div layout="column" layout-align="center start" style="width: 100%;">
+            <p-dataTable [value]="datas" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                <p-column [style]="{'width':'30px', 'text-align':'center', 'vertical-align':'center'}">
+                    <template pTemplate="header" let-row="rowData">
+              <md-checkbox [(ngModel)]="allCheck" (change)="checkAll()">
+              </md-checkbox>   
+            </template>
+                    <template pTemplate="body" let-row="rowData">
+              <md-checkbox [(ngModel)]="row.selected" (change)="select(row.selected)">
+              </md-checkbox>   
+            </template>
+                </p-column>
+                <p-column field="i" [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
+                </p-column>
+                <p-column field="profile.fullName" header="ชื่อ" [sortable]="true" [style]="{'width':'45%', 'vertical-align':'top'}">
+                </p-column>
+                <p-column field="profile.email" header="อีเมล์" [sortable]="true" [style]="{'width':'45%', 'vertical-align':'top'}">
+                </p-column>
+            </p-dataTable>
+        </div>
+        <div layout="row" layout-align="center center" style="margin-top:1rem;">
+            <button color="primary" md-raised-button ngClass="md-primary" (click)="ok()" [disabled]="numCheck==0">เพิ่ม</button>
+        </div>
+    </div>
+</div>

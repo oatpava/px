@@ -1,0 +1,134 @@
+<md-card *ngIf="userProfileList.length>0">
+    <md-card-title class="push-bottom-none" style="background: #efb3a5;">
+        <span class="md-headline">ประวัติรายละเอียดผู้ใช้งาน</span>
+    </md-card-title>
+    <md-card-content class="push-bottom-none">
+        <md-list ngInit="showEdit=-1">
+            <md-list-item *ngFor="let upl of userProfileList; let i=index;" class="listProfile hover" (mouseover)="showEdit=i" (mouseleave)="showEdit=-1">
+                <md-icon md-list-avatar>person</md-icon>
+                <h3 md-line>{{upl.fullName}}
+                    <md-icon *ngIf="upl.defaultSelect === 0" class="md-18" style="vertical-align: bottom;">grade</md-icon>
+                </h3>
+                <h5 md-line>ตำแหน่ง : {{upl.position?.name}}</h5>
+                <p md-line>หน่วยงาน : {{upl.structure?.name}}</p>
+                <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="editProfile(upl)">
+                    <md-icon alt="แก้ไข">edit</md-icon>
+                </button>
+                <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="setDefaultProfile(upl)">
+                    <md-icon alt="ใช้เป็นค่าเริ่มต้น">grade</md-icon>
+                </button>
+                <button hide-gt-md md-icon-button (click)="editProfile(upl)">
+                    <md-icon alt="แก้ไข">edit</md-icon>
+                </button>
+                <button hide-gt-md md-icon-button (click)="setDefaultProfile(upl)">
+                    <md-icon alt="ใช้เป็นค่าเริ่มต้น">grade</md-icon>
+                </button>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>
+<md-card [tdToggle]="toggleAddProfile">
+    <md-card-title class="push-bottom-none" style="background: #efb3a5;">
+        <span class="md-headline">สร้างรายละเอียดผู้ใช้งาน</span>
+    </md-card-title>
+    <md-card-content class="push-bottom-none">
+        <form #addUserProfileform="ngForm" [tdToggle]="formAddProfile">
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="100" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input type="text" placeholder="รหัสพนักงาน" name="code" [(ngModel)]="userProfile.code" required>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="48" flex-xs="100">
+                    <md-select placeholder="ประเภทผู้ใช้งาน" [(ngModel)]="userProfile.userProfileType.id" name="userProfileType" class="pad-top" style="display:inherit;" (change)="onProfileTypeChange(this.value)" required #userProfileType="ngModel">
+                        <md-option *ngFor="let upt of userProfileTypes" [value]="upt.id">
+                            {{upt.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+                <div flex="48" flex-xs="100">
+                    <md-select placeholder="คำนำหน้า" [(ngModel)]="userProfile.title.id" name="title" class="pad-top" style="display:inherit;" required>
+                        <md-option *ngFor="let title of titles" [value]="title.id">
+                            {{title.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="50" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input type="text" placeholder="ชื่อ" name="firstName" [(ngModel)]="userProfile.firstName" required>
+                    </md-input-container>
+                </div>
+                <div flex="50" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input type="text" placeholder="นามสกุล" name="lastName" [(ngModel)]="userProfile.lastName">
+                    </md-input-container>
+                </div>
+            </div>
+            <div *ngIf="userProfileType.value == 3" layout="row" layout-xs="column" layout-margin>
+                <div flex="100" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input #idCard type="text" placeholder="เลขบัตรประชาชน" name="idCard" OnlyNumber="true" minlength="13" maxlength="13" [(ngModel)]="userProfile.idCard" required>
+                        <!-- (keyup)="genFormat(idCard.value)" -->
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="48" flex-xs="100">
+                    <md-select placeholder="ตำแหน่ง" [(ngModel)]="userProfile.position.id" name="position" class="pad-top" style="display:inherit;" required>
+                        <md-option *ngFor="let position of positions" [value]="position.id">
+                            {{position.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+                <div flex="48" flex-xs="100">
+                    <md-select placeholder="ระดับ" [(ngModel)]="userProfile.positionLevel" name="positionLevel" class="pad-top" style="display:inherit;">
+                        <md-input-container flex style="width: 100%">
+                            <input md-input type="text" (keyup)="addOptionLevel($event.target.value)" />
+                        </md-input-container>
+                        <md-option *ngFor="let pl of posLevel" [value]="pl.id">
+                            {{pl.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="50" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input type="text" placeholder="Tel." name="tel" [(ngModel)]="userProfile.tel">
+                    </md-input-container>
+                </div>
+                <div flex="50" flex-xs="100">
+                    <md-input-container style="width:100%;">
+                        <input md-input type="text" placeholder="E-mail" name="email" [(ngModel)]="userProfile.email" required>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div layout="row" layout-xs="column" layout-margin>
+                <div flex="100" flex-xs="100">
+                    สถานะผู้ใช้งาน : {{userProfile.userStatus.name}}
+                </div>
+            </div>
+        </form>
+    </md-card-content>
+    <md-card-actions [tdToggle]="toggleAddProfile" layout="row" layout-align="center center">
+        <button *ngIf="modeProfile==='edit'" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid}" [disabled]="!addUserProfileform.form.valid" (click)="updateProfile(userProfile)" class="push-right">บันทึก</button>
+        <button *ngIf="modeProfile==='add'" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid}" [disabled]="!addUserProfileform.form.valid" (click)="createProfile(userProfile)" color="primary" [style.margin-right]="'5px'">บันทึก</button>
+        <button md-raised-button md-ripple [disabled]="isDisabled" (click)="cancelCreateProfile()">ยกเลิก</button>
+    </md-card-actions>
+</md-card>
+<md-card [tdToggle]="toggleCommand" style="background-color: #efb3a5;">
+    <md-card-content>
+        <md-list>
+            <md-list-item class="hover" (click)="openFormAddProfile()">
+                <md-icon md-list-avatar class="hover">add_circle_outline</md-icon>
+                <h4 md-line style="font-weight: bold;" title="Create : New User Profiles">สร้าง : รายละเอียดผู้ใช้งาน</h4>
+                <p md-line title="Create : New Profiles">สร้างรายละเอียดผู้ใช้งาน..</p>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>

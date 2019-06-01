@@ -1,0 +1,23 @@
+<div style="padding:24px;">
+    <h3 md-dialog-title>ช่วงวันที่ของข้อมูล</h3>
+    <md-dialog-content style="height: 200px;">
+        <div layout="column" layout-align="left start" class="searchFilter">
+            <b>จากวันที่ :</b>
+            <my-date-picker flex [options]="myDatePickerOptions_start" (dateChanged)="startDate_str = onDateChanged($event);" locale="th" name="startDate" [(ngModel)]="startDate">
+            </my-date-picker>
+        </div>
+        <div layout="column" layout-align="left start" class="searchFilter">
+            <b>ถึงวันที่ :</b>
+            <my-date-picker flex [options]="myDatePickerOptions_end" (dateChanged)="endDate_str = onDateChanged($event);" locale="th" name="endDate" [(ngModel)]="endDate">
+            </my-date-picker>
+        </div>
+        <div *ngIf="showEmsField" layout="column" layout-align="left start" class="searchFilter">
+            <md-input style="width:100%;" placeholder="ไปรษณีย์ลงทะเบียน" type="text" name="ems" [(ngModel)]="ems">
+            </md-input>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="column" layout-align="end center">
+        <button *ngIf="!showEmsField" md-raised-button class="md-primary" [style.margin-right]="'5px'" (click)="ok()">ตกลง</button>
+        <button *ngIf="showEmsField" md-raised-button [style.margin-right]="'5px'" [ngClass]="{'md-primary': ems}" [disabled]="!ems" (click)="ok()">ตกลง</button>
+    </md-dialog-actions>
+</div>

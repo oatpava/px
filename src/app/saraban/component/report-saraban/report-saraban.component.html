@@ -1,0 +1,13 @@
+<div layout-gt-sm="row" layout="column">
+    <div flex="100" style="width: 100%;" layout="column" layout-align="top center">
+        <md-list *ngFor="let item of reportList">
+            <div class="folder-List">
+                <md-list-item (click)="showReport(item, false)">
+                    <md-icon md-list-avatar style="background: #FFDEAD; cursor: pointer" *ngIf="reportType === 'pdf'">assignment</md-icon>
+                    <md-icon md-list-avatar style="background: #FFDEAD; cursor: pointer" *ngIf="reportType === 'xls'">grid_on</md-icon>
+                    <div class="fontFolder-List">{{item.name}}</div>
+                </md-list-item>
+            </div>
+        </md-list>
+    </div>
+</div>

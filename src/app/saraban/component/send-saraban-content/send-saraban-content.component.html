@@ -1,0 +1,258 @@
+<div class="plain">
+    <div layout-gt-md="row" layout-align-gt-md="center start">
+        <div flex-gt-md style="word-wrap: break-word;">
+
+            <md-card style="margin:0px;">
+                <div *ngIf="!scanning" (click)="checkInput()">
+                    <md-card-title style="background: #efb3a5;" layout="row" flex>
+                        <div>
+                            <span class="md-headline">{{title}}</span>
+                        </div>
+                        <div layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
+                            <button *ngIf="!scanned" md-icon-button style="color:#b74f36;" title="สแกนไฟล์คำสั่งการ/คำเสนอ" (click)="scan()"><i class="material-icons">scanner</i></button>
+                            <span *ngIf="scanned" style="cursor:pointer;color:#007179;font-size:medium;" (click)="viewImage(wfe.url)"><u>{{wfe.fileAttachName}}    </u></span>
+                            <button *ngIf="scanned" md-icon-button title="สแกนไฟล์คำสั่งการ/คำเสนอแล้ว" disabled><i class="material-icons">playlist_add_check</i></button>
+                        </div>
+                    </md-card-title>
+                    <md-card-content style="margin:0px;">
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #ac0 flex="85" placeholder="ถึง" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
+                            <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
+                                <p-header>
+                                    <md-checkbox color="primary" [(ngModel)]="allCheck[0]" (change)="checkAll(0)">
+                                    </md-checkbox>
+                                    <span *ngIf="!nodeFavorite">ถึง</span>
+                                    <span *ngIf="nodeFavorite">จัดการรายการโปรด</span>
+                                    <button *ngIf="!nodeFavorite" md-icon-button title="จัดการรายการโปรด" (click)="manageFavorite(true)"><i class="fa fa-star-o"></i></button>
+                                    <button *ngIf="nodeFavorite" md-icon-button title="ยกเลิกการจัดการรายการโปรด" (click)="manageFavorite(false)"><i class="fa fa-star"></i></button>
+                                </p-header>
+                                <p-tree *ngIf="!nodeFavorite" [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav">{{node.label}}<sup><i class="fa fa-star"></i></sup></span>
+                                    </template>
+                                </p-tree>
+                                <p-tree *ngIf="nodeFavorite" [value]="structureTree">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav"><b><i>{{node.label}}</i></b><sup><i class="fa fa-star"></i></sup></span>
+                                        <i *ngIf="!node.data.fav" class="fav fa fa-plus" (click)="addFavorite(node, 0)"></i>
+                                        <i *ngIf="node.data.fav" class="fav fa fa-minus" (click)="removeFavorite(node)"></i>
+                                    </template>
+                                </p-tree>
+                            </p-dialog>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="รายการโปรด" [mdMenuTriggerFor]="menu1"><md-icon>star</md-icon></button>
+                            <md-menu #menu1="mdMenu">
+                                <button *ngIf="structureTree_favorite.length==0" md-menu-item>
+                                        <md-icon>error_outline</md-icon>                                     
+                                        <span>ไม่มีรายการโปรด</span>
+                                    </button>
+                                <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 0)">
+                                            <md-icon *ngIf="!favouriteNodeAdded[0][i+1]">add</md-icon>
+                                            <md-icon *ngIf="favouriteNodeAdded[0][i+1]">remove</md-icon>
+                                            <span>{{node.label}}</span>
+                                    </button>
+                            </md-menu>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="กลุ่มส่วนตัว" (click)="showPgDialog(0);"><md-icon>person_pin</md-icon></button>
+                            <p-dialog [(visible)]="dialogPg[0]" [responsive]="true">
+                                <p-header>
+                                    <span>ถึง</span>
+                                </p-header>
+                                <p-tree [value]="privateGroupTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedGroup[0]" (onNodeSelect)="groupSelect($event, 0)" (onNodeUnselect)="groupUnSelect($event, 0)">
+                                </p-tree>
+                            </p-dialog>
+                        </div>
+
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #ac1 flex="85" placeholder="สำเนา" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(1);"><md-icon>person_add</md-icon></button>
+                            <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
+                                <p-header>
+                                    <md-checkbox color="primary" [(ngModel)]="allCheck[1]" (change)="checkAll(1)">
+                                    </md-checkbox>
+                                    <span *ngIf="!nodeFavorite">สำเนา</span>
+                                    <span *ngIf="nodeFavorite">จัดการรายการโปรด</span>
+                                    <button *ngIf="!nodeFavorite" md-icon-button title="จัดการรายการโปรด" (click)="manageFavorite(true)"><i class="fa fa-star-o"></i></button>
+                                    <button *ngIf="nodeFavorite" md-icon-button title="ยกเลิกการจัดการรายการโปรด" (click)="manageFavorite(false)"><i class="fa fa-star"></i></button>
+                                </p-header>
+                                <p-tree *ngIf="!nodeFavorite" [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav">{{node.label}}<sup><i class="fa fa-star"></i></sup></span>
+                                    </template>
+                                </p-tree>
+                                <p-tree *ngIf="nodeFavorite" [value]="structureTree">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav"><b><i>{{node.label}}</i></b><sup><i class="fa fa-star"></i></sup></span>
+                                        <i *ngIf="!node.data.fav" class="fav fa fa-plus" (click)="addFavorite(node, 1)"></i>
+                                        <i *ngIf="node.data.fav" class="fav fa fa-minus" (click)="removeFavorite(node)"></i>
+                                    </template>
+                                </p-tree>
+                            </p-dialog>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="รายการโปรด" [mdMenuTriggerFor]="menu3"><md-icon>star</md-icon></button>
+                            <md-menu #menu3="mdMenu">
+                                <button *ngIf="structureTree_favorite.length==0" md-menu-item>
+                                        <md-icon>error_outline</md-icon>                                     
+                                        <span>ไม่มีรายการโปรด</span>
+                                    </button>
+                                <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 1)">
+                                        <md-icon *ngIf="!favouriteNodeAdded[1][i+1]">add</md-icon>
+                                        <md-icon *ngIf="favouriteNodeAdded[1][i+1]">remove</md-icon>
+                                        <span>{{node.label}}</span>
+                                    </button>
+                            </md-menu>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="กลุ่มส่วนตัว" (click)="showPgDialog(1);"><md-icon>person_pin</md-icon></button>
+                            <p-dialog [(visible)]="dialogPg[1]" [responsive]="true">
+                                <p-header>
+                                    <span>สำเนา</span>
+                                </p-header>
+                                <p-tree [value]="privateGroupTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedGroup[1]" (onNodeSelect)="groupSelect($event, 1)" (onNodeUnselect)="groupUnSelect($event, 1)">
+                                </p-tree>
+                            </p-dialog>
+                        </div>
+
+                        <div layout="row" layout-align="left start" style="align-items: center;">
+                            <p-autoComplete #ac2 flex="85" placeholder="สำเนาลับ" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                            </p-autoComplete>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(2);"><md-icon>person_add</md-icon></button>
+                            <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
+                                <p-header>
+                                    <md-checkbox color="primary" [(ngModel)]="allCheck[2]" (change)="checkAll(2)">
+                                    </md-checkbox>
+                                    <span *ngIf="!nodeFavorite">สำเนาลับ</span>
+                                    <span *ngIf="nodeFavorite">จัดการรายการโปรด</span>
+                                    <button *ngIf="!nodeFavorite" md-icon-button title="จัดการรายการโปรด" (click)="manageFavorite(true)"><i class="fa fa-star-o"></i></button>
+                                    <button *ngIf="nodeFavorite" md-icon-button title="ยกเลิกการจัดการรายการโปรด" (click)="manageFavorite(false)"><i class="fa fa-star"></i></button>
+                                </p-header>
+                                <p-tree *ngIf="!nodeFavorite" [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav">{{node.label}}<sup><i class="fa fa-star"></i></sup></span>
+                                    </template>
+                                </p-tree>
+                                <p-tree *ngIf="nodeFavorite" [value]="structureTree">
+                                    <template let-node pTemplate="default">
+                                        <span *ngIf="!node.data.fav">{{node.label}}</span>
+                                        <span *ngIf="node.data.fav"><b><i>{{node.label}}</i></b><sup><i class="fa fa-star"></i></sup></span>
+                                        <i *ngIf="!node.data.fav" class="fav fa fa-plus" (click)="addFavorite(node, 2)"></i>
+                                        <i *ngIf="node.data.fav" class="fav fa fa-minus" (click)="removeFavorite(node)"></i>
+                                    </template>
+                                </p-tree>
+                            </p-dialog>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="รายการโปรด" [mdMenuTriggerFor]="menu5"><md-icon>star</md-icon></button>
+                            <md-menu #menu5="mdMenu">
+                                <button *ngIf="structureTree_favorite.length==0" md-menu-item>
+                                        <md-icon>error_outline</md-icon>                                     
+                                        <span>ไม่มีรายการโปรด</span>
+                                    </button>
+                                <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 2)">
+                                        <md-icon *ngIf="!favouriteNodeAdded[2][i+1]">add</md-icon>
+                                        <md-icon *ngIf="favouriteNodeAdded[2][i+1]">remove</md-icon>
+                                        <span>{{node.label}}</span>
+                                    </button>
+                            </md-menu>
+
+                            <button md-icon-button flex="5" style="color:#b74f36;" title="กลุ่มส่วนตัว" (click)="showPgDialog(2);"><md-icon>person_pin</md-icon></button>
+                            <p-dialog [(visible)]="dialogPg[2]" [responsive]="true">
+                                <p-header>
+                                    <span>สำเนาลับ</span>
+                                </p-header>
+                                <p-tree [value]="privateGroupTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedGroup[2]" (onNodeSelect)="groupSelect($event, 2)" (onNodeUnselect)="groupUnSelect($event, 2)">
+                                </p-tree>
+                            </p-dialog>
+                        </div>
+                        <div layout="row" layout-align="left start" style="width:100%;">
+                            <!-- <md-input flex="100" color="primary" placeholder="เรื่อง" type="text" name="sendTitle" [(ngModel)]="sendTitle">
+                            </md-input> -->
+                            <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="sendTitle" [(ngModel)]="sendTitle">
+                            </md-textarea>
+                        </div>
+                        <div layout="column" layout-align="left start" style="width:100%;">
+                            <span style="font-size:11.5px;color:#a8a8a8; padding-bottom:5px;">เพื่อ</span>
+                            <p-autoComplete #acProcess placeholder="ดำเนินการ" [(ngModel)]="sendNote" [suggestions]="filteredProcesses" (completeMethod)="processFilter($event)" [dropdown]="true" (onDropdownClick)="handleDropdown($event)" class="p-autocomplete" [style]="{'width':'100%'}"
+                                [inputStyle]="{'width':'100%'}" required>
+                            </p-autoComplete>
+                        </div>
+                        <div layout="row" layout-align="left start" style="width: 100%; margin-top:-1rem;">
+                            <md-textarea flex rows="4" color="accent" placeholder="ข้อความ" name="sendNote2" [(ngModel)]="sendNote2">
+                            </md-textarea>
+                        </div>
+                        <div layout="row" layout-align="left start" style="width:100%;">
+                            <!-- <md-input flex="100" color="primary" placeholder="หมายเหตุ" type="text" name="sendDescription" [(ngModel)]="sendDescription">
+                            </md-input> -->
+                            <md-textarea rows="3" style="width: 100%;" placeholder="หมายเหตุ" name="sendDescription" [(ngModel)]="sendDescription">
+                            </md-textarea>
+                        </div>
+
+                        <div layout="row" layout-align="left start" style="width:100%;">
+                            <td-expansion-panel label="" style="width:100%;">
+                                <template td-expansion-panel-header>เพิ่มเติม
+                                    <md-icon layout-align="right">keyboard_arrow_down</md-icon>                                    
+                                </template>
+                                <form class="additional" layout-align="center">
+                                    <div layout="row" layout-align="left start" style="width:100%;">
+                                        <md-checkbox flex="67" color="primary" style="margin-bottom:12px;" name="cb1" [(ngModel)]="additional[1].checked">กำหนดวันที่เปิดอ่าน</md-checkbox>
+                                        <my-date-picker flex="33" *ngIf="additional[1].checked" [options]="myDatePickerOptions[0]" (dateChanged)="onDateChanged($event, 1)" name="dateRead" placeholder="วันที่กำหนดเปิดอ่าน" locale="th" [(ngModel)]="additional[1].date">
+                                        </my-date-picker>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="width:100%;">
+                                        <md-checkbox flex="67" color="primary" style="margin-bottom:12px;" name="cb2" [(ngModel)]="additional[2].checked">กำหนดวันที่มีความเคลื่อนไหว</md-checkbox>
+                                        <my-date-picker flex="33" *ngIf="additional[2].checked" [options]="myDatePickerOptions[1]" (dateChanged)="onDateChanged($event, 2)" name="dateAction" placeholder="วันที่กำหนดความเคลื่อนไหว" locale="th" [(ngModel)]="additional[2].date">
+                                        </my-date-picker>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="width:100%;">
+                                        <md-checkbox flex="67" color="primary" style="margin-bottom:12px;" name="cb3" [(ngModel)]="additional[3].checked">กำหนดวันที่เรื่องเสร็จ</md-checkbox>
+                                        <my-date-picker flex="33" *ngIf="additional[3].checked" [options]="myDatePickerOptions[2]" (dateChanged)="onDateChanged($event, 3)" name="dateFinish" placeholder="วันที่กำหนดเรื่องเสร็จ" locale="th" [(ngModel)]="additional[3].date">
+                                        </my-date-picker>
+                                    </div>
+                                    <div layout="row" layout-align="left start" style="width:100%;">
+                                        <md-checkbox flex="70" color="primary" style="margin-bottom:12px;" name="cb4" [(ngModel)]="additional[4].checked">ทำสำเนาที่แฟ้มข้อมูลออก</md-checkbox>
+                                    </div>
+                                    <div *ngIf="showSMS" layout="row" layout-align="left start" style="width:100%;">
+                                        <md-checkbox flex="70" color="primary" name="cb5" [(ngModel)]="sms">ส่ง SMS</md-checkbox>
+                                    </div>
+                                </form>
+                            </td-expansion-panel>
+                        </div>
+
+                        <div layout="row" layout-align="center start" style="padding-top:2rem;">
+                            <button md-raised-button [ngClass]="{'md-primary': !sendTo[0].length==0 && !blockUI}" [style.margin-right]="'5px'" [disabled]="sendTo[0].length==0 || blockUI" (click)="send()">ส่ง</button>
+                            <button md-raised-button [style.margin-right]="'5px'" [disabled]="blockUI" (click)="cancel()">ยกเลิก</button>
+
+                        </div>
+
+                    </md-card-content>
+                </div>
+
+                <div flex-gt-md *ngIf="scanning">
+                    <md-card style="margin: 0px; height: -webkit-fill-available;">
+                        <md-card-title style="background: #efb3a5;">
+                            <span class="animated">กำลังดึงไฟล์คำสั่งการ/คำเสนอ...</span>
+                        </md-card-title>
+                        <md-card-content style="padding-top: 80px">
+                            <md-progress-spinner style="margin:0 auto;" mode="indeterminate" color="primary">
+                            </md-progress-spinner>
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+            </md-card>
+        </div>
+    </div>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

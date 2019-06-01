@@ -1,0 +1,569 @@
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+
+////import { DrawDataService } from '../../../rwf/service/drawData.service'
+import { DrawData } from '../../../rwf/model/drawData.model'
+import { DrawNodeData } from "../../../rwf/model/drawNodeData.model"
+import { DrawLinkData } from "../../../rwf/model/drawLinkData.model"
+
+declare var go: any;
+@Component({
+    selector: 'app-flow-chart',
+    templateUrl: './flow-chart.component.html',
+    styleUrls: ['./flow-chart.component.styl'],
+    ////providers: [DrawDataService],
+})
+export class FlowChartComponent implements OnInit {
+    @Input("fcDataArray") dataArray: any[] = []
+    @Input("fcLinkDataArray") linkDataArray: any[] = []
+    @Input("flowChartName") title: string
+    @Input("autoLayout") autoLayout: string
+    @Input("adminModeShow") adminModeShow: string
+    @Output('msgs') msgs = new EventEmitter();
+    @ViewChild('myDiagramDiv') div;
+    @ViewChild('myKey') divKey;
+    colorText: string = 'black';
+    mySavedModel: any
+    myDiagram: any
+    myKey: any
+    //title: string = "02 - Flow Create Vender’s Contract"
+    resultData: DrawData
+    saveDrawData: DrawData
+
+    constructor(
+        ////private _drawDataService: DrawDataService,
+    ) {
+        this.saveDrawData = new DrawData
+    }
+
+    ngOnInit() {
+        // create a make type from go namespace and assign it to MAKE
+        const MAKE = go.GraphObject.make;
+        // get the div in the HTML file
+        const diagramDiv = this.div.nativeElement;
+        const diagramDivKey = this.divKey.nativeElement;
+        // instatiate MAKE with Diagram type and the diagramDiv
+        this.myKey =
+            MAKE(go.Diagram, diagramDivKey,
+                {
+                    initialContentAlignment: go.Spot.Center, // center Diagram contents
+                });
+
+        if (this.autoLayout === "true") {
+            this.myDiagram =
+                MAKE(go.Diagram, diagramDiv,
+                    {
+                        initialAutoScale: go.Diagram.Uniform,  // an initial automatic zoom-to-fit
+                        initialContentAlignment: go.Spot.Center, // center Diagram contents
+                        allowDrop: true, // must be true to accept drops from the Palette
+                        "animationManager.duration": 800, // slightly longer than default (600ms) animation
+                        "undoManager.isEnabled": true,  // enable undo & redo
+                        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+                        // layout: MAKE(go.TreeLayout, {
+                        //     angle: 90, nodeSpacing: 10, layerSpacing: 40, layerStyle: go.TreeLayout.LayerUniform
+                        // })
+                        layout: MAKE(go.LayeredDigraphLayout, {
+                            columnSpacing: 4,
+                            setsPortSpots: false
+                        }),
+                    });
+        } else {
+            this.myDiagram =
+                MAKE(go.Diagram, diagramDiv,
+                    {
+                        initialAutoScale: go.Diagram.Uniform,  // an initial automatic zoom-to-fit
+                        initialContentAlignment: go.Spot.Center, // center Diagram contents
+                        allowDrop: true, // must be true to accept drops from the Palette
+                        "animationManager.duration": 800, // slightly longer than default (600ms) animation
+                        "undoManager.isEnabled": true,  // enable undo & redo
+                        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom
+                    });
+        }
+
+        //=====My key==================================================================================
+        this.myKey.add(
+            MAKE(go.Part, "Table",
+                { position: new go.Point(300, 10), selectable: false },
+                MAKE(go.Panel, "Horizontal",
+                    { row: 1, column: 0, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#00A74C', stroke: '#00863D', margin: 5 }),
+                    MAKE(go.TextBlock, "Sale",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 1
+                MAKE(go.Panel, "Horizontal",
+                    { row: 1, column: 1, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#00A3DF', stroke: '#0088BB', margin: 5 }),
+                    MAKE(go.TextBlock, "Management",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 2
+                MAKE(go.Panel, "Horizontal",
+                    { row: 1, column: 2, width: 150, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#ECEC00', stroke: '#CACA00', margin: 5 }),
+                    MAKE(go.TextBlock, "PMO",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 3
+                MAKE(go.Panel, "Horizontal",
+                    { row: 2, column: 0, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#FF53FF', stroke: '#FF31FF', margin: 5 }),
+                    MAKE(go.TextBlock, "Business Support",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 4
+                MAKE(go.Panel, "Horizontal",
+                    { row: 2, column: 1, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#BC00EA', stroke: '#A200CA', margin: 5 }),
+                    MAKE(go.TextBlock, "Sale MA",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 5
+                MAKE(go.Panel, "Horizontal",
+                    { row: 2, column: 2, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#F03000', stroke: '#CA2800', margin: 5 }),
+                    MAKE(go.TextBlock, "Sale Outsourcing",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 6
+                //---------------------------------------------------------------
+                MAKE(go.Panel, "Horizontal",
+                    { row: 3, column: 0, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#8ACC42', stroke: '#79BA32', margin: 5 }),
+                    MAKE(go.TextBlock, "Presales",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 7
+                MAKE(go.Panel, "Horizontal",
+                    { row: 3, column: 1, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#AD9FC5', stroke: '#9C8AB9', margin: 5 }),
+                    MAKE(go.TextBlock, "Legal",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 8
+                MAKE(go.Panel, "Horizontal",
+                    { row: 3, column: 2, width: 150, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#FFC386', stroke: '#FFB164', margin: 5 }),
+                    MAKE(go.TextBlock, "RMO",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 9
+                MAKE(go.Panel, "Horizontal",
+                    { row: 4, column: 0, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#FFBDFF', stroke: '#FF97FF', margin: 5 }),
+                    MAKE(go.TextBlock, "FA",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 10
+                MAKE(go.Panel, "Horizontal",
+                    { row: 4, column: 1, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#C386FF', stroke: '#B164FF', margin: 5 }),
+                    MAKE(go.TextBlock, "Service Delivery",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ), // end row 11
+                MAKE(go.Panel, "Horizontal",
+                    { row: 4, column: 2, alignment: go.Spot.Left },
+                    MAKE(go.Shape, "Rectangle",
+                        { desiredSize: new go.Size(20, 20), fill: '#FF9020', stroke: '#FD7E00', margin: 5 }),
+                    MAKE(go.TextBlock, "Service Outsourcing",
+                        { font: "700 14px Droid Serif, sans-serif" })
+                ) // end row 12
+            ));
+        //=====My key End==============================================================================
+
+        //the template we defined earlier
+        //======================node====================================================================   
+        this.myDiagram.nodeTemplateMap.add("Start",
+            MAKE(go.Node, "Spot", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Panel, "Auto",
+                    MAKE(go.Shape, "terminator",
+                        { minSize: new go.Size(100, 50), fill: "#F6F6F6", stroke: "black" }),
+                    MAKE(go.TextBlock, "Start",
+                        { font: "bold 10pt Helvetica, Arial, sans-serif", stroke: this.colorText },
+                        new go.Binding("text"))
+                ),
+                // three named ports, one on each side except the top, all output only:
+                this.makePort("L", go.Spot.Left, true, false),
+                this.makePort("R", go.Spot.Right, true, false),
+                this.makePort("B", go.Spot.Bottom, true, false)
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("End",
+            MAKE(go.Node, "Spot", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Panel, "Auto",
+                    MAKE(go.Shape, "terminator",
+                        { minSize: new go.Size(100, 50), fill: "#F6F6F6", stroke: "black" }),
+                    MAKE(go.TextBlock, "End",
+                        { font: "bold 10pt Helvetica, Arial, sans-serif", stroke: this.colorText },
+                        new go.Binding("text"))
+                ),
+                // three named ports, one on each side except the bottom, all input only:
+                this.makePort("T", go.Spot.Top, false, true),
+                this.makePort("L", go.Spot.Left, false, true),
+                this.makePort("R", go.Spot.Right, false, true),
+                this.makePort("B", go.Spot.Bottom, false, true)
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("",
+            MAKE(go.Node, "Auto", this.nodeStyle(),
+                { deletable: false },
+                // define the node's outer shape
+                MAKE(go.Panel, "Vertical",
+                    MAKE(go.TextBlock, // the label
+                        {
+                            alignment: go.Spot.Right,
+                            row: 0, column: 0,
+                            font: "Bold 11pt Helvetica, Arial, sans-serif",
+                            editable: true, isMultiline: false,
+                            minSize: new go.Size(10, 16)
+                        }, new go.Binding("stroke", "labelColor"),
+                        new go.Binding("text", "label")),
+                    MAKE(go.Panel, "Auto",
+                        MAKE(go.Shape, "RoundedRectangle",
+                            {
+                                name: "SHAPE", stroke: "black", fill: "#F8F8FF"
+                            }),
+                        MAKE(go.Panel, "Vertical",
+                            // define the panel where the text will appear
+                            MAKE(go.Panel, "Table",
+                                {
+                                    maxSize: new go.Size(150, 300),
+                                    defaultAlignment: go.Spot.Center
+                                },
+                                MAKE(go.Shape, "rectangle",
+                                    {
+                                        height: 30, width: 200, stroke: "black"
+                                    }, new go.Binding("fill", "color")
+                                ),
+                                MAKE(go.TextBlock, // the name
+                                    {
+                                        row: 0, column: 0, columnSpan: 5,
+                                        font: "Bold 10pt Helvetica, Arial, sans-serif",
+                                        editable: true, isMultiline: false,
+                                        minSize: new go.Size(10, 16)
+                                    },
+                                    new go.Binding("text", "name")),
+                                MAKE(go.TextBlock, // the text
+                                    {
+                                        margin: new go.Margin(5, 5, 5, 5),
+                                        maxSize: new go.Size(120, NaN),
+                                        wrap: go.TextBlock.WrapFit,
+                                        row: 1, column: 0, columnSpan: 5,
+                                        font: "10pt Helvetica, Arial, sans-serif",
+                                        minSize: new go.Size(10, 16)
+                                    },
+                                    new go.Binding("text", "text"))
+                            )  // end Table Panel
+                        ), // end Horizontal Panel
+                        this.makePort("T", go.Spot.Top, false, true),
+                        this.makePort("L", go.Spot.Left, true, true),
+                        this.makePort("R", go.Spot.Right, true, true),
+                        this.makePort("B", go.Spot.Bottom, true, false)
+                    )
+                )
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("Comment",
+            MAKE(go.Node, "Auto", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Shape, "File",
+                    { fill: "#EFFAB4", stroke: null }),
+                MAKE(go.TextBlock,
+                    {
+                        margin: 5,
+                        maxSize: new go.Size(100, NaN),
+                        wrap: go.TextBlock.WrapFit,
+                        textAlign: "center",
+                        editable: true,
+                        font: "bold 10pt Helvetica, Arial, sans-serif",
+                        stroke: '#454545'
+                    },
+                    new go.Binding("text").makeTwoWay())
+                // no ports, because no links are allowed to connect with a comment
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("Conditional",
+            MAKE(go.Node, "Spot", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Panel, "Auto",
+                    MAKE(go.Shape, "Diamond",
+                        { fill: "#FAFAFA", stroke: "black" }),
+                    MAKE(go.TextBlock,
+                        {
+                            margin: 5,
+                            maxSize: new go.Size(80, NaN),
+                            wrap: go.TextBlock.WrapFit,
+                            textAlign: "center",
+                            font: "bold 10pt Helvetica, Arial, sans-serif",
+                            stroke: 'black'
+                        },
+                        new go.Binding("text", "text"))
+                    // no ports, because no links are allowed to connect with a comment
+                ),
+                this.makePort("T", go.Spot.Top, false, true),
+                this.makePort("L", go.Spot.Left, true, true),
+                this.makePort("R", go.Spot.Right, true, true),
+                this.makePort("B", go.Spot.Bottom, true, false)
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("Port",
+            MAKE(go.Node, "Spot", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Panel, "Auto",
+                    MAKE(go.Shape, "circle",
+                        { maxSize: new go.Size(30, 30), fill: "#F6F6F6", stroke: "black" }),
+                    // three named ports, one on each side except the bottom, all input only:
+                    this.makePort("T", go.Spot.Top, false, true),
+                    this.makePort("L", go.Spot.Left, true, true),
+                    this.makePort("R", go.Spot.Right, true, true),
+                    this.makePort("B", go.Spot.Bottom, true, false)
+                )));
+
+        this.myDiagram.nodeTemplateMap.add("Flow",
+            MAKE(go.Node, "Auto", this.nodeStyle(),
+                { deletable: false },
+                MAKE(go.Panel, "Auto",
+                    MAKE(go.Shape, "Procedure",
+                        { fill: "#AEB8DC", stroke: "black" }),
+                    MAKE(go.TextBlock,
+                        {
+                            margin: new go.Margin(20, 20, 20, 20),
+                            maxSize: new go.Size(120, NaN),
+                            wrap: go.TextBlock.WrapFit,
+                            textAlign: "center",
+                            font: "10pt Helvetica, Arial, sans-serif",
+                            stroke: 'black'
+                        },
+                        new go.Binding("text", "text")),
+                    this.makePort("T", go.Spot.Top, false, true),
+                    this.makePort("L", go.Spot.Left, true, true),
+                    this.makePort("R", go.Spot.Right, true, true),
+                    this.makePort("B", go.Spot.Bottom, true, false)
+                )
+                // no ports, because no links are allowed to connect with a comment
+            ));
+
+        this.myDiagram.nodeTemplateMap.add("Letter",
+            MAKE(go.Node, "Auto", this.nodeStyle(),
+                { deletable: false },
+                // define the node's outer shape
+                MAKE(go.Shape, "Rectangle",
+                    {
+                        name: "SHAPE", stroke: null
+                    }, new go.Binding("fill", "color")),
+                MAKE(go.Panel, "Horizontal",
+                    MAKE(go.Picture,
+                        {
+                            name: 'Picture',
+                            desiredSize: new go.Size(40, 30),
+                            margin: new go.Margin(6, 8, 6, 10),
+                            source: "../../../assets/icons/LetterPicture.png"
+                        }),
+                    // define the panel where the text will appear
+                    MAKE(go.Panel, "Table",
+                        {
+                            maxSize: new go.Size(250, NaN),
+                            defaultAlignment: go.Spot.Left
+                        },
+                        MAKE(go.RowColumnDefinition, { column: 2, width: 4 }),
+                        MAKE(go.TextBlock, // the name
+                            {
+                                margin: new go.Margin(5, 5, 5, 5),
+                                row: 0, column: 0, columnSpan: 5,
+                                wrap: go.TextBlock.WrapFit,
+                                textAlign: "center",
+                                font: "10pt Helvetica, Arial, sans-serif",
+                                stroke: 'black'
+                            },
+                            new go.Binding("text", "text"))
+                    )  // end Table Panel
+                ), // end Horizontal Panel
+                this.makePort("T", go.Spot.Top, false, true),
+                this.makePort("L", go.Spot.Left, true, true),
+                this.makePort("R", go.Spot.Right, true, true),
+                this.makePort("B", go.Spot.Bottom, true, false)
+            ));  // end Node
+
+
+        // define a Link template that routes orthogonally, with no arrowhead
+        this.myDiagram.linkTemplate =
+            MAKE(go.Link, // the whole link panel
+                {
+                    routing: go.Link.AvoidsNodes,
+                    curve: go.Link.JumpOver,
+                    corner: 5, toShortLength: 4,
+                    relinkableFrom: true,
+                    relinkableTo: true,
+                    reshapable: true,
+                    resegmentable: true,
+                    deletable: false,
+                    // mouse-overs subtly highlight links:
+                    mouseEnter: function (e, link) {
+                        link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)";
+                    },
+                    mouseLeave: function (e, link) {
+                        link.findObject("HIGHLIGHT").stroke = "transparent";
+                    }
+                },
+                new go.Binding("points").makeTwoWay(),
+                MAKE(go.Shape, // the highlight shape, normally transparent
+                    { isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT" }),
+                MAKE(go.Shape, // the link path shape
+                    new go.Binding("strokeDashArray", "dash"),
+                    new go.Binding("stroke", "colorLine"),
+                    { isPanelMain: true, strokeWidth: 2 }),
+                MAKE(go.Shape, // the arrowhead
+                    new go.Binding("stroke", "colorLine"),
+                    new go.Binding("fill", "colorLine"),
+                    { toArrow: "standard" }),
+                MAKE(go.Panel, "Auto", // text on edge
+                    { defaultAlignment: go.Spot.Left, segmentIndex: 1, segmentFraction: 0.5 },
+                    MAKE(go.Shape, // the label background, which becomes transparent around the edges
+                        { stroke: null },
+                        new go.Binding("fill", "bg")),
+                    MAKE(go.TextBlock, // the label text
+                        {
+                            textAlign: "center",
+                            font: "10pt helvetica, arial, sans-serif",
+                            margin: 4
+                        },
+                        new go.Binding("stroke", "colorText"),
+                        new go.Binding("text", "textLine"))
+                )
+            ); // the link shape
+        //======================node====================================================================  
+        this.load()
+        // console.log("4 " , this.dataArray)
+        // console.log("5 " , this.linkDataArray)
+
+    }
+
+    // helper definitions for node templates
+    nodeStyle() {
+        return [
+            // The Node.location comes from the "loc" property of the node data,
+            // converted by the Point.parse static method.
+            // If the Node.location is changed, it updates the "loc" property of the node data,
+            // converting back using the Point.stringify static method.
+            new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+            {
+                // the Node.location is at the center of each node
+                locationSpot: go.Spot.Center,
+                isShadowed: true,
+                shadowColor: "#888",
+                // handle mouse enter/leave events to show/hide the ports
+                mouseEnter: function (e, obj) {
+                    // this.showPorts(obj.part, true);
+                    const diagram = obj.part.diagram;
+                    if (!diagram || diagram.isReadOnly || !diagram.allowLink)
+                        return;
+                    obj.part.ports.each(function (port) {
+                        port.stroke = (true ? "white" : null);
+                    });
+                },
+                mouseLeave: function (e, obj) {
+                    // this.showPorts(obj.part, false);
+                    const diagram = obj.part.diagram;
+                    if (!diagram || diagram.isReadOnly || !diagram.allowLink)
+                        return;
+                    obj.part.ports.each(function (port) {
+                        port.stroke = (false ? "white" : null);
+                    });
+                }
+            }
+        ];
+    }
+
+    makePort(name: string, spot: any, output: boolean, input: boolean) {
+        // the port is basically just a small circle that has a white stroke when it is made visible
+        return go.GraphObject.make(go.Shape, "Circle",
+            {
+                fill: "transparent",
+                stroke: null, // this is changed to "white" in the showPorts function
+                desiredSize: new go.Size(8, 8),
+                alignment: spot, alignmentFocus: spot, // align the port on the main Shape
+                portId: name, // declare this object to be a "port"
+                fromSpot: spot, toSpot: spot, // declare where links may connect at this port
+                fromLinkable: output, toLinkable: input, // declare whether the user may draw links to/from here
+                cursor: "pointer"  // show a different cursor to indicate potential link point
+            });
+    }
+
+    save() {
+        let nodeDataArray: DrawNodeData[] = [];
+        for (let nodeData of this.myDiagram.model.nodeDataArray) {
+            //console.log('nodeData',nodeData)
+            nodeDataArray.push(this._update(nodeData, new DrawNodeData()))
+        }
+        let linkDataArray: DrawLinkData[] = [];
+
+        for (let linkData of this.myDiagram.model.linkDataArray) {
+            let p: number[] = []
+            // for (let linkDataPoint of linkData.points.o) {
+            //     p.push(linkDataPoint.L)
+            //     p.push(linkDataPoint.M)
+            // }
+            for (let linkDataPoint of linkData.points) {
+                p.push(linkDataPoint)
+            }
+            linkData.points = p
+            linkDataArray.push(this._update(linkData, new DrawLinkData({
+            })))
+
+        }
+        this.saveDrawData = new DrawData({
+            nodeDataArray: nodeDataArray,
+            linkDataArray: linkDataArray,
+            autoLayout: "true"
+        })
+        //console.log("=save=== ", this.saveDrawData)
+        //// this._drawDataService
+        //     .updateDrawData(this.saveDrawData)
+        //     .subscribe(response => {
+        //         this.resultData = response as DrawData
+        //         this.dataArray = this.resultData.nodeDataArray
+        //         this.linkDataArray = this.resultData.linkDataArray
+        //     })
+        ////this.mySavedModel = this.myDiagram.model.toJson();
+
+        this.msgs.emit(
+              {
+                severity: 'success',
+                summary: 'บันทึกข้อมูลสำเร็จ',
+                detail: 'คุณได้ทำการบันทึกการจัดการผังข้อมูลแล้ว',
+              },
+            );
+
+    }
+
+    load() {
+        let model = go.GraphObject.make(go.GraphLinksModel)
+        model.linkFromPortIdProperty = "fromPort"
+        model.linkToPortIdProperty = "toPort"
+        model.nodeDataArray = this.dataArray;
+        model.linkDataArray = this.linkDataArray;
+        this.myDiagram.model = model;
+    }
+
+    _update(srcObj, destObj) {
+        for (var key in destObj) {
+            if (destObj.hasOwnProperty(key) && srcObj.hasOwnProperty(key)) {
+                destObj[key] = srcObj[key];
+            }
+        }
+        return destObj;
+    }
+
+    // cancel() {
+    //     console.log("1 ", this.tempDataArray)
+    //     console.log("2 ", this.tempLinkDataArray)
+    //     this.dataArray = this.tempDataArray
+    //     this.linkDataArray = this.tempLinkDataArray
+    //     this.load()
+    //     console.log("7 ", this.tempDataArray)
+    //     console.log("8 ", this.tempLinkDataArray)
+    // }
+
+}

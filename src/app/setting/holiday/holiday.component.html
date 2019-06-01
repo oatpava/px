@@ -1,0 +1,67 @@
+<div class="body-showCenter">
+    <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+        <div flex-gt-md="70">
+            <md-list style="width: 100%;">
+                <!--<select name='viewsHoliday' [(ngModel)]='views' (change)="changeSelect(views)">
+                <option value='1'>Month</option>
+                <option value='2'>Year</option>
+                </select>-->
+                <!--<div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                    <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+                    <span class="md-title">Title here</span>
+                    </span>
+                    <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+                    
+                    </span>
+                    <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" (searchDebounce)="search($event)" flex>
+                    </td-search-box>
+                </div>
+
+                <md-divider></md-divider>
+                <td-data-table [data]="filteredData" [columns]="columns" [sortable]="true" [sortBy]="sortBy" [sortOrder]="sortOrder" (sortChange)="sort($event)">
+                </td-data-table>
+                <td-paging-bar [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>-->
+                <md-card style="margin-left: 0px; margin-right: 0px;">
+                    <md-card-content>
+                        <template let-item let-last="last" ngFor [ngForOf]="holidays">
+                            <md-list-item  (mouseover)="over(item.id);" (mouseleave)="leave();">    
+                                <md-icon class="hover" md-list-avatar>perm_contact_calendar</md-icon>
+                                <h4 md-line>{{item.holidayDate}} </h4>
+                                <p md-line> {{item.holidayName}} </p> 
+                                <div hide show-gt-md  class="block-icon-Option" [hidden]="hoverEdit == item.id">
+                                    <i [hidden]="hoverEdit !== item.id" 
+                                    [ngClass]="{'displayShow': hoverEdit == item.id, 'displayIconNone': hoverEdit !== item.id}" 
+                                    class="material-icons icon-button"  (click)="edit(item)" >edit</i>
+                                </div>
+                                <div hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="edit(item)" >edit</i>
+                                </div>
+                                <div hide show-gt-md  class="block-icon-Option" [hidden]="hoverEdit == item.id">
+                                    <i [hidden]="hoverEdit !== item.id" 
+                                    [ngClass]="{'displayShow': hoverEdit == item.id, 'displayIconNone': hoverEdit !== item.id}" 
+                                    class="material-icons icon-button"  (click)="delete(item)" >delete</i>
+                                </div>
+                                <div hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="delete(item)" >delete</i>
+                                </div>
+                                </md-list-item>
+                                <md-divider *ngIf="!last" md-inset></md-divider>
+                        </template>
+                    </md-card-content>
+                </md-card>
+            </md-list>
+            <button id="fixedbutton" md-fab color="accent" title="add" (click)="add()">
+                <md-icon>add</md-icon>
+            </button>
+            <!--<div layout="row" layout-align="center start" style="width: 100%;">
+                <button md-fab color="accent" mdTooltip="เพิ่ม" mdTooltipPosition="above" (click)="add()">
+                    <md-icon >add</md-icon>
+                </button>-->
+            <!--<button md-raised-button [ngClass]="'md-primary'" [style.margin-right]="'5px'" (click)="add()">เพิ่ม</button>-->
+            <!--<button *ngIf="mode==='Edit'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid}" [disabled]="!addFolderForm.form.valid" [style.margin-right]="'5px'" (click)="update(folder)">บันทึก</button>
+                <button *ngIf="mode==='Edit'" md-raised-button [ngClass]="'md-warn'" [style.margin-right]="'5px'" (click)="delete(folder)">ลบ</button>-->
+            <!--<button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>

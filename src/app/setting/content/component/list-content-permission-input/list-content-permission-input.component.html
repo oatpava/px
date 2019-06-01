@@ -1,0 +1,10 @@
+<!--<ul>
+    <li *ngFor="let dir of directories">
+        <span (click)="toggle(dir)"><md-icon md-list-avatar class="hover" style="background: #e60000; color: white;" >{{dir.inOutAssignOwnerType == 0 ? 'person' : 'book'}}</md-icon>{{ dir.assignName }}</span>
+        <div *ngIf="dir.expanded">
+            <tree-view-permission [directories]="dir.children" [userList]="userList" [ownerType]="ownerType" [ownerId]="ownerId"></tree-view-permission>
+        </div>
+    </li>
+</ul>-->
+<p-tree [value]="dataList" selectionMode="single" [(selection)]="selectedUser" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

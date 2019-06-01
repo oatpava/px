@@ -1,0 +1,73 @@
+{
+    "project": {
+        "version": "1.0.0-beta.24",
+        "name": "praxticol8"
+    },
+    "apps": [{
+        "root": "src",
+        "outDir": "dist",
+        "assets": [
+            "assets",
+            "favicon.ico"
+        ],
+        "index": "index.html",
+        "main": "main.ts",
+        "test": "test.ts",
+        "tsconfig": "tsconfig.json",
+        "prefix": "app",
+        "mobile": false,
+        "styles": [
+            "../node_modules/@covalent/core/common/platform.css",
+            "./Resources/reference/hint.css",
+            "./Resources/reference/html5_editor.css",
+            "../node_modules/font-awesome/css/font-awesome.min.css",
+            "styles.styl",
+            "../node_modules/primeng/resources/primeng.min.css",
+            "../node_modules/primeng/resources/themes/omega/theme.css"
+        ],
+        "scripts": [
+            "../node_modules/hammerjs/hammer.min.js",
+            "../node_modules/showdown/dist/showdown.js",
+            "./Resources/dynamsoft.webtwain.initiate.js",
+            "./Resources/addon/dynamsoft.webtwain.addon.pdf.js",
+            "./Resources/dynamsoft.webtwain.config.js",
+            "./Resources/dynamsoft.webtwain.install.js",
+            "../node_modules/gojs/release/go-debug.js",
+            "../node_modules/chart.js/dist/Chart.js"
+        ],
+        "environments": {
+            "source": "environments/environment.ts",
+            "dev": "environments/environment.ts",
+            "prod": "environments/environment.prod.ts"
+        }
+    }],
+    "addons": [],
+    "packages": [],
+    "e2e": {
+        "protractor": {
+            "config": "./protractor.conf.js"
+        }
+    },
+    "test": {
+        "karma": {
+            "config": "./karma.conf.js"
+        }
+    },
+    "defaults": {
+        "styleExt": "styl",
+        "prefixInterfaces": false,
+        "inline": {
+            "style": false,
+            "template": false
+        },
+        "spec": {
+            "class": false,
+            "component": true,
+            "directive": true,
+            "module": false,
+            "pipe": true,
+            "service": true
+        }
+    }
+
+}

@@ -1,0 +1,50 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>build</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>แก้ไขสิทธิ์แฟ้มทะเบียน {{sarabanFolderName}}</span>
+        </div>
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item (click)="save()"> save </button>
+            <button md-menu-item (click)="cancel()"> cancel </button>
+        </md-menu>
+    </div>
+</div>
+<div layout="row">
+    <div flex>
+        <px-structure [selectDepartment]="true" (onselectData)="selectStructure($event)"></px-structure>
+    </div>
+    <div flex>
+        <md-list *ngIf="isSelected">
+            <md-list-item *ngFor="let auth of dataAuths; let i=index;">
+                <md-slide-toggle color="primary" [(ngModel)]="auth.auth" (change)="authEvent(i)">
+                    {{auth.name}}
+                </md-slide-toggle>
+            </md-list-item>
+        </md-list>
+
+        <div show-gt-md layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+            <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+                <button md-fab title="บันทึก" color="accent" style="margin-bottom: 3px;" md-fab (click)="save()">
+                <md-icon>save</md-icon>
+            </button>
+                <button md-fab [style.background]="'#1976d2'" color="accent" title="ยกเลิก" style="margin-bottom: 3px;" (click)="cancel(); ">
+                <md-icon>cancel</md-icon>
+            </button>
+            </div>
+            <button md-fab color="accent" title="รายการเมนู">
+              <md-icon>{{listMenu}}</md-icon>
+            </button>
+        </div>
+    </div>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

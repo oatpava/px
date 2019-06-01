@@ -1,0 +1,10 @@
+<!--<div>
+    <div *ngFor="let dataUserName of dataUser" class="setting-List" (click)="save(dataUserName)">
+        <md-icon md-list-avatar>view_list</md-icon>
+        <div class="fontSetting-List">{{dataUserName.fullName}}</div>
+    </div>
+
+</div>-->
+<div>
+    <px-structure [selectDepartment]="false" [alertMsgTo]="true" (onselectData)="addActorInRole($event)" (msgTo)="alertMsg($event)"></px-structure>
+</div>

@@ -1,0 +1,81 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+      </button>
+        <button md-icon-button disabled>
+        <md-icon>group</md-icon>
+      </button>
+        <div style="width:80px; padding-top: 10px;">
+            <span>กลุ่มส่วนตัว</span>
+        </div>
+    </div>
+</div>
+
+<md-sidenav-layout flex fullscreen>
+    <div layout-gt-md="row" layout-align-gt-md="center center">
+        <div flex-gt-md="70">
+
+            <md-card>
+                <md-card-title style="background: #efb3a5;" layout="row" flex>
+                    <div>
+                        <span>{{mode}}{{type}}</span>
+                    </div>
+                    <div *ngIf="isAddMode && type==='ผู้ใช้ภายนอก'" layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
+                        <button md-icon-button title="ค้นหาผู้ใช้ภายนอก" (click)="openSearchDialog()"><i class="material-icons">search</i></button>
+                    </div>
+                </md-card-title>
+                <md-card-content>
+                    <form #addForm="ngForm">
+                        <div *ngIf="type==='กลุ่มส่วนตัว'" layout="row">
+                            <md-input-container flex>
+                                <input md-input #groupName placeholder="ชื่อกลุ่ม" name="groupName" [(ngModel)]="privateGroup.groupName" tdAutoTrim required minlength="1" maxlength="255">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{groupName.value.length}} / 255</md-hint>
+                            </md-input-container>
+                        </div>
+                        <div *ngIf="type==='ผู้ใช้ภายนอก'" layout="row">
+                            <md-input-container flex="50">
+                                <input md-input #userName placeholder="ชื่อผู้ใช้" name="userName" [(ngModel)]="privateGroupUser.userName" tdAutoTrim required minlength="1" maxlength="255">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{userName.value.length}} / 255</md-hint>
+                            </md-input-container>
+                            <md-input-container flex="50">
+                                <input md-input #email placeholder="อีเมล์" name="email" [(ngModel)]="privateGroupUser.email" tdAutoTrim required minlength="1" maxlength="255">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{email.value.length}} / 255</md-hint>
+                            </md-input-container>
+                        </div>
+                    </form>
+                </md-card-content>
+                <md-card-actions>
+                    <div layout="row" layout-align="center center">
+                        <button *ngIf="!isAddMode" color="primary" md-raised-button [ngClass]="{'md-primary': addForm.form.valid}" [disabled]="!addForm.form.valid" (click)="edit(type)">แก้ไขและบันทึก</button>
+                        <button *ngIf="isAddMode && type==='กลุ่มส่วนตัว'" color="primary" md-raised-button [ngClass]="{'md-primary': addForm.form.valid}" [disabled]="!addForm.form.valid" (click)="create(type)">บันทึก</button>
+                        <button *ngIf="isAddMode && type==='ผู้ใช้ภายนอก'" color="primary" md-raised-button [ngClass]="{'md-primary': addForm.form.valid}" [disabled]="!addForm.form.valid" (click)="add()">เพิ่ม</button>
+                        <button md-raised-button md-ripple [disabled]="isDisabled" (click)="goBack()">ยกเลิก</button>
+                    </div>
+                </md-card-actions>
+            </md-card>
+
+            <md-card *ngIf="isAddMode && type==='ผู้ใช้ภายนอก' && listOutsider.length > 0">
+                <md-card-content>
+                    <md-list *ngFor="let outsider of listOutsider; let i=index;">
+                        <md-list-item (mouseover)="listButton.hidden=false; listButton.index=i;" (mouseleave)="listButton.hidden=true" (click)="remove(i)" title="ลบ">
+                            <md-icon md-list-avatar style="background: #e60000; color: white; cursor: pointer">account_circle</md-icon>
+                            <h3 md-line>{{outsider.userName}} </h3>
+                            <p md-line>{{outsider.email}}</p>
+                            <div hide show-gt-md class="block-icon-Option" [hidden]="listButton.hidden || listButton.index!=i">
+                                <i class="material-icons icon-button">delete</i>
+                            </div>
+                        </md-list-item>
+                        <md-divider md-inset></md-divider>
+                    </md-list>
+                </md-card-content>
+                <md-card-actions>
+                    <div layout="row" layout-align="center center">
+                        <button color="primary" md-raised-button ngClass="md-primary" (click)="create(type)">บันทึก</button>
+                    </div>
+                </md-card-actions>
+            </md-card>
+
+        </div>
+    </div>
+</md-sidenav-layout>

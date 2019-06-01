@@ -1,0 +1,38 @@
+<div layout-gt-sm="row" layout="column">
+    <div flex="100">
+        <md-card style="margin:0px;">
+            <md-card-title>
+                <span class="md-headline">{{title}}</span>
+            </md-card-title>
+            <md-card-content>
+                <div style="margin-bottom:0.2rem;">
+                    <span><b>เลขล่าสุด : </b>{{lastContentNo}}</span>
+                </div>
+                <div *ngIf="reserveMode">
+                    <div style="margin-bottom:0.2rem;">
+                        <span><b>วันที่ : </b>{{date}}</span>
+                    </div>
+                    <div style="margin-bottom:0.2rem;">
+                        <span><b>เวลา : </b>{{time}}</span>
+                    </div>
+                    <div style="margin-bottom:0.2rem;">
+                        <span><b>ผู้จอง : </b>{{userName}}</span>
+                    </div>
+                    <div style="margin-top:0.5rem;">
+                        <md-input flex style="width:100%" type="number" min="1" placeholder="จำนวนเลขที่ต้องการ" name="amountReserve" [(ngModel)]="amountReserve" [disabled]="noContent"></md-input>
+                    </div>
+                </div>
+                <div *ngIf="!reserveMode && lastContentNumber!=0">
+                    <div style="margin-top:0.5rem;">
+                        <md-input flex style="width:100%" type="number" [min]="lastContentNumber+1" placeholder="เลขเริ่มต้น" name="startNumber" [(ngModel)]="amountReserve"></md-input>
+                    </div>
+                </div>
+                <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                    <button *ngIf="reserveMode" md-raised-button md-ripple color="primary" [disabled]="amountReserve < 1 || noContent" (click)="reserve(amountReserve, 0)" [style.margin-right]="'5px'">จองเลข</button>
+                    <button *ngIf="!reserveMode" md-raised-button md-ripple color="primary" [disabled]="amountReserve < (lastContentNumber+1) || lastContentNumber==0" (click)="reserve(amountReserve-lastContentNumber, 1)" [style.margin-right]="'5px'">บันทึก</button>
+                    <button md-raised-button md-ripple (click)="cancel()">ยกเลิก</button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

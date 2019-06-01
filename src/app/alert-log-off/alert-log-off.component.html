@@ -1,0 +1,17 @@
+<div style="background:#e0785f;">
+    <div layout="row">
+        <div flex class="headReport">แจ้งเตือนจากระบบ</div>
+        <div class="headReport" (click)="close()">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+</div>
+<div class="boxDialog">
+    <p>
+        ท่านไม่ได้ใช้งานระบบนานเกินกว่าเวลาที่กำหนด ถ้าต้องการเข้าสู่ระบบ กรุณา login อีกครั้ง
+    </p>
+</div>
+<md-divider></md-divider>
+<div class="bottomboxDialog" align="right">
+    <button md-raised-button color="primary" (click)="close()">ตกลง</button>
+</div>

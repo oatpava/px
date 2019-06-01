@@ -1,0 +1,24 @@
+<div style="padding:24px;">
+    <div>
+        <span class="headline">กำหนดฟิลดิ์สำหรับค้นหาหนังสือ</span>
+    </div>
+    <div layout="column" layout-align="center start">
+        <p-dataTable [value]="searchfields">
+            <p-column [style]="{'width':'30px', 'text-align':'center', 'vertical-align':'center'}">
+                <template pTemplate="header" let-row="rowData">
+                      <md-checkbox [(ngModel)]="allCheck" (change)="checkAll()">
+                      </md-checkbox>   
+                  </template>
+                <template pTemplate="body" let-row="rowData">
+                      <md-checkbox [(ngModel)]="row.selected">
+                      </md-checkbox>   
+                  </template>
+            </p-column>
+            <p-column field="name" header="ฟิลดิ์">
+            </p-column>
+        </p-dataTable>
+    </div>
+    <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+        <button md-raised-button md-ripple color="primary" (click)="ok()" [style.margin-right]="'5px'">ตกลง</button>
+    </div>
+</div>

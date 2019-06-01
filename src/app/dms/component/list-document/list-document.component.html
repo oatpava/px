@@ -1,0 +1,208 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>folder</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{dmsfolderName}}</span>
+        </div>
+        <button md-icon-button (click)="change()">
+          <md-icon>cached</md-icon>
+        </button>
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div>
+                <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
+                <button md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu>
+    </div>
+</div>
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <md-sidenav #sideSubMenu align="end">
+            <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
+
+                <div *ngFor="let df of documentTypeDetails" layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px;">
+
+                    <div *ngIf="df.dmsFieldType==='DATETIME'">
+                        <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{df.documentTypeDetailName}} จาก" locale="th" name="{{df.documentTypeDetailName}}จาก" [(ngModel)]="search[df.dmsFieldMap+'Form']">
+                        </my-date-picker>
+
+                        <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="{{df.documentTypeDetailName}} ถึง" locale="th" name="{{df.documentTypeDetailName}}ถึง" [(ngModel)]="search[df.dmsFieldMap+'To']">
+                        </my-date-picker>
+
+                    </div>
+
+                    <md-input *ngIf="df.dmsFieldType !=='DATETIME' && df.dmsFieldMap !=='documentIntComma' && df.documentTypeDetailLookup === 0" flex placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}" [(ngModel)]="search[df.dmsFieldMap]">
+                    </md-input>
+
+                    <md-input *ngIf="df.dmsFieldMap ==='documentIntComma' " flex placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}" [(ngModel)]="documentIntComma " (focus)=" removeCommas() " (blur)="addCommas() ">
+                    </md-input>
+
+                    <!--<md-input-container *ngIf="df.dmsFieldMap==='documentText01' && df.documentTypeDetailLookup === 0" flex>
+                        <textarea md-input placeholder="{{df.documentTypeDetailName}}" name="{{df.dmsFieldMap}}" maxlength="255" [(ngModel)]="documentText01"></textarea>
+                    </md-input-container>-->
+                    <md-select *ngIf="df.dmsFieldType==='TEXT' && df.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                        </md-option>
+                    </md-select>
+                    <!--<md-select *ngIf="df.dmsFieldMap==='documentText02' && df.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                        </md-option>
+                    </md-select>
+                    <md-select *ngIf="df.dmsFieldMap==='documentText03' && df.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                        </md-option>
+                    </md-select>
+                    <md-select *ngIf="df.dmsFieldMap==='documentText04' && df.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                        </md-option>
+                    </md-select>-->
+
+                    <md-select *ngIf="df.dmsFieldType==='VARCHAR' && df.documentTypeDetailLookup > 0 && df.dmsFieldMap != 'documentName' " flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                        </md-option>
+                    </md-select>
+
+
+                </div>
+
+            </form>
+        </md-sidenav>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+
+                                <table td-data-table>
+                                    <!--checkbox-->
+                                    <!--<th td-data-table-column>
+                                    </th>-->
+                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
+                                        {{column.label}}
+                                    </th>
+
+                                    <tr td-data-table-row *ngFor="let row of datas" (click)="selectDocument(row)">
+                                        <!--checkbox-->
+                                        <!--<md-list-item layout="row" style="padding:0px 0px;">
+                                            <md-checkbox [checked]="assda">
+
+                                            </md-checkbox>
+                                        </md-list-item>-->
+
+
+                                        <td td-data-table-cell *ngFor="let column of columns" [numeric]="column.numeric">
+                                            <!--<label><input type="checkbox"></label>-->
+                                            <label class="hover" *ngIf="column.name!=='Edit' && column.name!=='createdBy'&& column.name!=='updatedBy' &&
+                                            column.name!=='documentInt01' && column.name!=='documentInt02'&& column.name!=='documentInt03'&& column.name!=='documentInt04'  &&  row.isExp =='Y'" style="color: red">{{row[column.name] | truncate:30 }}</label>
+
+
+                                            <!--<label class="hover" *ngIf="column.name=='documentInt01' && column.name=='documentInt02'&& column.name=='documentInt03'&& column.name=='documentInt04' &&  row.isExp =='Y'" style="color: red">{{row[column.name]  }}</label>-->
+
+                                            <label class="hover" *ngIf="column.name=='documentInt01' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt02' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt03' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt04' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+
+                                            <label class="hover" *ngIf="column.name=='documentFloat01' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentFloat02' &&  row.isExp =='Y'" style="color: red">{{row[column.name]}}</label>
+
+                                            <label class="hover" *ngIf="column.name =='createdBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileCreate.fullName}}</label>
+                                            <label class="hover" *ngIf="column.name =='updatedBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileUpdate.fullName }}</label>
+                                            <label class="hover" *ngIf="column.name =='removedBy'  &&  row.isExp =='Y'" style="color: red">{{row.userProfileDel.fullName }}</label>
+
+                                            <!--//////-->
+                                            <label class="hover" *ngIf="column.name!=='Edit' && column.name!=='createdBy'&& column.name!=='updatedBy' &&
+                                            column.name!=='documentInt01' && column.name!=='documentInt02'&& column.name!=='documentInt03'&& column.name!=='documentInt04'  &&  row.isExp =='N'">{{row[column.name] | truncate:30 }}</label>
+
+                                            <!--<label class="hover" *ngIf="column.name=='documentInt01' && column.name=='documentInt02'&& column.name=='documentInt03'&& column.name=='documentInt04' &&  row.isExp =='N'">{{row[column.name]}}</label>-->
+                                            <label class="hover" *ngIf="column.name=='documentInt01' &&  row.isExp =='N'">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt02' &&  row.isExp =='N'">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt03' &&  row.isExp =='N'">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentInt04' &&  row.isExp =='N'">{{row[column.name]}}</label>
+
+                                            <label class="hover" *ngIf="column.name=='documentFloat01' &&  row.isExp =='N'">{{row[column.name]}}</label>
+                                            <label class="hover" *ngIf="column.name=='documentFloat02' &&  row.isExp =='N'">{{row[column.name]}}</label>
+
+                                            <label class="hover" *ngIf="column.name =='createdBy'  &&  row.isExp =='N'">{{row.userProfileCreate.fullName}}</label>
+                                            <label class="hover" *ngIf="column.name =='updatedBy'  &&  row.isExp =='N'">{{row.userProfileUpdate.fullName }}</label>
+                                            <label class="hover" *ngIf="column.name =='removedBy'  &&  row.isExp =='N'">{{row.userProfileDel.fullName }}</label>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </md-card-content>
+                        </md-card>
+                        <div hide-gt-md>
+                            <template let-item let-last="last" ngFor [ngForOf]="datas">
+                                <md-list-item >
+                                    <md-icon md-list-avatar style="background: #b1ccea">description</md-icon>
+                                    
+                                    <h3 md-line class="hover"> {{item.documentName}} </h3>
+                                    <!--<h4 md-line> วันที่ : {{item.documentPublicDate}} </h4>
+                                    <p md-line> ผู้สร้าง : {{item.createdName}} </p>-->
+
+                                </md-list-item>
+                                <md-divider  md-inset></md-divider>
+                            </template>
+                        </div>
+
+                    </md-list>
+
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+
+</div>
+<!--<button id="fixedbutton" md-fab color="accent" title="add" (click)="addDocument()">
+    <md-icon>add</md-icon>
+</button>-->
+
+
+
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <!--<div >-->
+    <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+
+        <!--<button md-fab color="accent" [style.background]="'#FFD700'" title="ยืม-คืน" style="margin-bottom: 3px;" (click)="borrow()">
+                <md-icon>swap_vert</md-icon>
+            </button>-->
+
+
+
+        <!--<button md-fab [style.background]="'#cc7a00'" color="accent" title="รายงาน" style="margin-bottom: 3px;">
+                <md-icon>assignment</md-icon>
+            </button>-->
+
+        <button md-fab color="accent" [style.background]="'#0000ff'" title="เพิ่มเอกสาร" style="margin-bottom: 3px;" (click)="addDocument()">
+                <md-icon>add</md-icon>
+            </button>
+        <button md-fab color="accent" [style.background]="'#1976d2'" title="ค้นหา" style="margin-bottom: 3px;" (click)="sideSubMenu.open(); ModeSearch = false">
+                <md-icon>search</md-icon>
+            </button>
+
+
+    </div>
+    <!--</div>-->
+    <button md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="dmsSearch();sideSubMenu.close();">
+        <md-icon>search</md-icon>
+    </button>
+</div>

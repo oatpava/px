@@ -1,0 +1,97 @@
+.menuList {
+    padding-bottom: 3px;
+}
+
+.form {
+    font-size: 15px;
+}
+
+.normal {
+    background: #efb3a5;
+}
+
+.finish {
+    background: #97a1a8;
+}
+
+.finish-content {
+    color: grey;
+}
+
+.canceled {
+    background: red;
+}
+
+.canceled-content {
+    color: red;
+    text-decoration: line-through;
+}
+
+:host/deep/md-list-item.md-list-avatar .md-list-item:hover {
+    cursor: pointer;
+    background: #dcdfe2;
+}
+
+:host/deep/md-list-item.md-multi-line .md-list-item, {
+    padding-top: 0;
+    height: auto;
+}
+
+:host/deep/md-list-item.md-multi-line .md-list-item:hover {
+    /*cursor: pointer;*/
+    /*color: #F1F1F1;*/
+    background: #dcdfe2;
+}
+
+.attach:hover {
+    display: inline-block;
+    cursor: pointer;
+    background: #dcdfe2;
+}
+
+/*single use only 3: class, stlye, inputstyle*/
+.p-autocomplete {
+    width: 100%;
+}
+/*multiple must add this = need 4*/
+:host/deep/.ui-autocomplete-multiple-container.ui-inputtext {
+    width: 100%;
+}
+
+.contentNo {
+    cursor: pointer;
+    color: #b74f36;
+}
+
+.contentNo:hover {
+    cursor: pointer;
+    color: grey;
+}
+
+:host/deep/.ui-dialog.ui-widget .ui-dialog-titlebar {
+    background: #efb3a5;
+    padding-top: 0.8rem;
+    padding-left: 0.5rem;
+    padding-right: 0rem;
+    padding-bottom: 0rem;
+    text-align: left;
+}
+:host/deep/.ui-dialog.ui-widget .ui-dialog-content {
+    padding-top: 0rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
+    overflow: auto;
+    min-width: 200px;
+    min-height: 100px;
+    max-width: 600px;
+    max-height: 300px;
+}
+
+:host/deep/.ui-widget-header {
+    border: none;
+}
+
+:host/deep/.ui-state-active a {
+    font-weight: bold;
+}

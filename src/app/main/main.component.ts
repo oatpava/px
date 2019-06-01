@@ -1,0 +1,264 @@
+import { Component, OnInit, trigger, state, animate, transition, style } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { environment } from '../../environments/environment'
+import { MdDialog, MdDialogRef } from '@angular/material';
+import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core'
+
+import { UserProfileService } from '../setting/service/user-profile.service'
+import { SettingService } from '../setting/service/setting.service'
+// import { ParamAdminService } from '../setting/service/param-admin.service'
+
+import { UserProfile } from '../setting/model/user-profile.model'
+import { Keepalive } from '@ng-idle/keepalive'
+import { AlertLogOffComponent } from '../alert-log-off/alert-log-off.component'
+
+import { ParamSarabanService } from '../saraban/service/param-saraban.service'
+import { Location } from '@angular/common'
+import { ChangePasswordComponent } from '../login/change-password/change-password.component'
+import { AlertMessageComponent } from '../login/alert-message/alert-message.component'
+// import { SetPasswordComponent } from '../setting/component/set-password/set-password.component'
+import { SettingDefultProfileComponent } from '../main/component/setting-defult-profile/setting-defult-profile.component'
+import { Response } from '@angular/http/src/static_response';
+
+import { LoginService } from '../login/login.service'
+import { DialogInstructionComponent } from './component/dialog-instruction/dialog-instruction.component'
+import { Message } from 'primeng/primeng';
+import { ConfirmDialogComponent } from './component/confirm-dialog/confirm-dialog.component'
+
+@Component({
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.styl'],
+  providers: [UserProfileService, SettingService, LoginService],
+  animations: [
+    trigger('visibleTrigger', [
+      state('visible', style({ opacity: '1' })),
+      transition('void => *', [style({ opacity: '0' }), animate('400ms 300ms')]),
+      transition('* => void', [animate('200ms', style({ opacity: '0' }))])
+    ])
+  ],
+  host: { '[@visibleTrigger]': '' }
+})
+export class MainComponent implements OnInit {
+  private appName: string
+  private appNameEng: string
+  private appAcronym: string
+  private sidenavTitle: string = 'Praxticol'
+  private archiveHeader: string = ''
+  private _mainUrl: string = ''// '/mainlayout'
+  private msgs: Message[] = []
+
+  routes: any[] = [
+    {
+      id: 1,
+      title: 'ข้อมูลส่วนตัว',
+      route: this._mainUrl + 'mwps',
+      icon: 'folder',
+    },
+    {
+      id: 2,
+      title: 'ทะเบียนส่วนกลาง',
+      route: this._mainUrl + 'sarabans',
+      icon: 'class',
+    },
+    //**//
+    // {
+    //   id: 3,
+    //   title: 'ระบบจัดเก็บเอกสารฯ',
+    //   route: this._mainUrl + 'folders',
+    //   icon: 'dashboard',
+    // },
+    // {
+    //   id: 4,
+    //   title: 'หนังสือเวียน',
+    //   route: this._mainUrl + 'sarabans',//circularNotice
+    //   icon: 'chrome_reader_mode',
+    // },
+    {
+      id: 0,
+      title: 'ส่วนงานผู้ดูแลระบบ',
+      route: this._mainUrl + 'settings',
+      icon: 'settings',
+    }
+  ]
+  userProfile: UserProfile
+
+  constructor(
+    private _route: ActivatedRoute,
+    private _router: Router,
+    private _userProfileService: UserProfileService,
+    private _settingService: SettingService,
+    private _paramSarabanService: ParamSarabanService,
+    private _location: Location,
+    private _dialog: MdDialog,
+    private _idle: Idle,
+    private _loginService: LoginService,
+  ) {
+    this.appName = environment.appName
+    this.appNameEng = environment.appNameEng
+    this.appAcronym = environment.appAcronym
+    this.userProfile = new UserProfile()
+  }
+
+  ngOnInit() {
+    //console.log('MainComponent',this.routes)
+    this.setTimeOut()
+    this.loadDefaultModule('mwps', { t: new Date().getTime() })
+    this.getUserProfile()
+    //this.showInstructionDialog()
+    if (this.appAcronym !== 'demo') {
+      this.sidenavTitle = this.appName + ' (' + this.appAcronym + ')'
+    }
+  }
+
+  loadDefaultModule(defaultModule: string, params: Object) {
+    this._router.navigate(
+      [{
+        outlets: {
+          center: [defaultModule, params],
+        }
+      }],
+      { relativeTo: this._route })
+  }
+
+  selectModule(moduleId: number, moduleName: string) {
+    let param = {}
+    switch (moduleId) {
+      case (2): param = { parentId: 0 }; break;
+      case (3): param = {
+        parentId: 1,
+        folderType: 'A',
+        t: new Date().getTime()
+      }; break;
+      case (4): param = { parentId: -1 }; break;
+    }
+    this._router.navigate(
+      [{
+        outlets: {
+          center: [moduleName, param],
+        }
+      }],
+      { relativeTo: this._route })
+  }
+
+  logOut() {
+    localStorage.removeItem('px-auth-token')
+    let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+    });
+    let instance = dialogRef.componentInstance
+    instance.dataName = 'ออกจากระบบ'
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._settingService
+          .checkLogout('1.0')
+          .subscribe(response => {
+          })
+        // this._loginService
+        //   .changeapiUrl()
+        this._router.navigate(['/login'])
+        setTimeout(()=>{    //<<<---    using ()=> syntax
+          window.location.reload()
+     }, 500);
+        
+      }
+    })
+  }
+
+  download() {
+    // var blob = new Blob([data], { type: 'text/csv' });
+    let url = environment.plugIn + '/activex/PlugIn.EXE'
+    window.open(url);
+  }
+
+  getUserProfile() {
+    this._userProfileService
+      .getUserProfile(-1, '1.0')
+      .subscribe(response => {
+        console.log('getUserProfile', response)
+        this.userProfile = response as UserProfile
+        this._paramSarabanService.userId = this.userProfile.id
+        this._paramSarabanService.userName = this.userProfile.fullName
+        this._paramSarabanService.structure = this.userProfile.structure
+        this._paramSarabanService.structureId = this.userProfile.structure.id
+        this._paramSarabanService.structureName = this.userProfile.structure.name
+        this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
+        if (this.userProfile.userProfileType.id != 1 && this.userProfile.userProfileType.id != 3) {
+          this.routes = this.routes.filter(route => route.title != 'ส่วนงานผู้ดูแลระบบ')
+        }
+        //**//
+        // if (this._paramSarabanService.isArchive) {
+        //   this.archiveHeader = '(ระบบฐานข้อมูลเอกสารเก่า)'
+        //   this._loginService
+        //     .changeSetapiUrl()
+        // }
+
+      })
+  }
+
+  settingProfile() {
+    let dialogRef = this._dialog.open(SettingDefultProfileComponent, {
+      width: '70%',
+    });
+    let instance = dialogRef.componentInstance
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    })
+  }
+
+  openDialogChangePassword(): void {
+    let dialogRef = this._dialog.open(ChangePasswordComponent, {
+      width: '40%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let dialogAlert = this._dialog.open(AlertMessageComponent, {
+          width: '40%',
+        });
+        dialogAlert.componentInstance.message = 'กรุณาเข้าระบบใหม่'
+      }
+    });
+  }
+
+  goBack() {
+    this._location.back()
+  }
+
+  setTimeOut() {
+    // sets an idle timeout of 5 seconds, for testing purposes.
+    this._idle.setIdle(5);
+    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    this._settingService.getParams('TIMEOUT')
+      .subscribe(Response => {
+        if (Response != null) {
+          console.log(Response.paramValue)
+          this._idle.setTimeout(Number(Response.paramValue));
+        } else {
+          console.log(100)
+          this._idle.setTimeout(15000);
+        }
+      });
+    // idle.setTimeout(300);
+    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    this._idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    this._idle.onTimeoutWarning.subscribe((countdown: number) => {
+      // console.log('TimeoutWarning: ' + countdown);
+    });
+    this._idle.onTimeout.subscribe(() => {
+      // console.log('Timeout');
+      this._dialog.open(AlertLogOffComponent);
+      localStorage.clear();
+      this._router.navigate(['/basic', { sessionExpirate: 'true' }]);
+    });
+    this._idle.watch();
+  }
+
+  showInstructionDialog() {
+    let dialogRef = this._dialog.open(DialogInstructionComponent, {
+      //width: '40%',
+    })
+  }
+
+}

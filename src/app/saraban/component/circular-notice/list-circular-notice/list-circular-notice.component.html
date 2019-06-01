@@ -1,0 +1,109 @@
+<div layout="column" flex>
+    <div class="bgc-blue-700" [style.color]="'#fff'" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+                <md-icon>arrow_back</md-icon>
+            </button>
+        <button md-icon-button disabled>
+              <md-icon>chrome_reader_mode</md-icon>
+            </button>
+        <div flex style="padding-top: 10px;">
+            <span>หนังสือเวียน - {{folderName}}</span>
+        </div>
+
+        <!-- <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+                <md-icon>more_vert</md-icon>
+            </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div *ngFor="let menu of menus">
+                <button md-menu-item (click)="menuAction(menu)">{{menu.name}}</button>
+            </div>
+        </md-menu> -->
+
+    </div>
+</div>
+
+<!-- <div layout="column" flex (click)="sideNavAlert($event)"> -->
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <!-- <md-sidenav #sidenav align="end">
+            <form layout-padding class="sidenav" layout="column" layout-align="center start">
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex type="number" placeholder="ปี" name="year" [(ngModel)]="searchFilters.wfContentContentYear"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="เลขที่" name="contentNo" [(ngModel)]="searchFilters.wfContentContentNo"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex="50" type="number" placeholder="ลำดับเลขที่" name="startContenNo" [(ngModel)]="searchFilters.wfContentStartContentNo"></md-input>
+                    <md-input flex="50" type="number" placeholder="ลำดับเลขที่" name="endContenNo" [(ngModel)]="searchFilters.wfContentEndContentNo"></md-input>
+                </div>
+                <div layout="column" layout-align="left start" class="searchFilter">
+                        <my-date-picker [options]="myDatePickerOptions" placeholder="วันที่จาก" locale="th" name="contentStartDate" [(ngModel)]="searchFilters.wfContentContentStartDate">
+                        </my-date-picker>
+                        <my-date-picker [options]="myDatePickerOptions" placeholder="วันที่ถึง" locale="th" name="contentEndDate" [(ngModel)]="searchFilters.wfContentContentEndDate">
+                        </my-date-picker>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="เรื่อง" name="title" [(ngModel)]="searchFilters.wfContentTitle"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="ผู้รับผิดชอบ" name="userName" [(ngModel)]="searchFilters.userName"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="ข้อความในเอกสารแนบ" name="fileAttachText" [(ngModel)]="searchFilters.fileAttachText"></md-input>
+                </div>
+            </form>
+        </md-sidenav> -->
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="90">
+                    <md-card hide show-gt-md>
+                        <md-card-content>
+                            <circular-notice [datas]="datas" [listReturn]="listReturn" (loadDatas)="getCircularNotices(folderId)" (getFileAttachs)="getFileAttachs($event)" (rowSelect)="rowSelect($event)"></circular-notice>
+                        </md-card-content>
+                    </md-card>
+
+                    <div hide-gt-md>
+                        <md-list>
+                            <md-list-item *ngFor="let item of data" (click)="show(item)">
+                                <md-icon md-list-avatar>description</md-icon>
+                                <h2 md-line>เลขที่: {{item.wfContentContentNo}}</h2>
+                                <h3 md-line>เรื่อง: {{item.wfContentTitle}}</h3>
+                                <p md-line>วันที่: {{item.wfContentContentDate}} {{item.wfContentContentTime.slice(0,5)}}</p>
+                                <md-divider md-inset></md-divider>
+                            </md-list-item>
+                        </md-list>
+                        <div style="text-align: center;">
+                            <loadMore [listReturn]="listReturn" (load)=loadMoreContents()></loadMore>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </md-sidenav-layout>
+</div>
+
+<!-- <div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton"> -->
+<div hide show-gt-md layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <!-- <div *ngIf="selectedRow_num>0" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:red;" title="ลบ" (click)="deleteList()"><md-icon>delete</md-icon></button>
+    </div> -->
+    <div class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:#00aaff;" title="สร้างหนังสือเวียน" (click)="add()"><md-icon>note_add</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+        <md-icon *ngIf="!menuOver">menu</md-icon>
+        <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<!-- <div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="search(searchFilters)">
+            <md-icon>search</md-icon>
+        </button>
+</div> -->
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

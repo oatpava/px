@@ -1,0 +1,8 @@
+<ul>
+    <li *ngFor="let dir of directories">
+        <span (click)="toggle(dir)"><md-icon md-list-avatar style="background: #e60000; color: white;" class="hover">{{dir.type == 1 ? 'book' : 'person'}}</md-icon>{{ dir.name }}</span>
+        <div *ngIf="dir.expanded">
+            <structure-view [directories]="dir.children" [userList]="userList"></structure-view>
+        </div>
+    </li>
+</ul>

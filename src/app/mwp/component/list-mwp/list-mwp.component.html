@@ -1,0 +1,68 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button disabled>
+          <md-icon>folder</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>ข้อมูลส่วนตัว</span>
+        </div>
+
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item (click)="privateGroup(menu)">จัดการกลุ่มส่วนตัว</button>
+        </md-menu>
+
+    </div>
+</div>
+
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <template let-item let-last="last" ngFor [ngForOf]="mwps">
+                            <md-list-item>
+                                <md-icon md-list-avatar class="hover icon-flipped" *ngIf="item.userProfileFolderType==='I'"  style="background: #008000; color: white;" (click)="selectFolder(item)">assignment_return</md-icon>   
+                                <md-icon md-list-avatar class="hover" *ngIf="item.userProfileFolderType==='O'"  style="background: #e65c00; color: white;" (click)="selectFolder(item)">assignment_return</md-icon>
+                                <md-icon md-list-avatar class="hover" *ngIf="item.userProfileFolderType==='Z'"  style="background: #802b00; color: white;" (click)="selectFolder(item)">delete</md-icon>
+                                <md-icon md-list-avatar class="hover" *ngIf="item.userProfileFolderType==='W'"  style="background: #e6b800; color: white;" (click)="selectFolder(item)">folder_open</md-icon>                                
+                                <h3 md-line class="hover" (click)="selectFolder(item)"> {{item.userProfileFolderName}} </h3>
+                                <p md-line class="hover" (click)="selectFolder(item)"> {{item.userProfileFolderDetail}} </p>
+                            </md-list-item>
+                        <md-divider md-inset></md-divider>
+                        </template>
+                        <template let-item let-last="last" ngFor [ngForOf]="shortCutSaraban">
+                            <md-list-item class="hover" (click)="selectShortcutFolder(item)">
+                                <md-icon md-list-avatar [ngStyle]="{'background': (item.wfContentType.id==1) ? '#008000' : (item.wfContentType.id==2) ? '#e65c00' : '#e60000',
+                                'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900'}">book</md-icon>
+                                <h3 md-line> {{item.wfFolderName}} </h3>
+                                <h4 md-line> {{item.wfFolderParentName}} </h4>
+                                <p md-line> {{item.wfFolderDetail}} </p>
+                            </md-list-item>
+                        <md-divider *ngIf="!last" md-inset></md-divider>
+                        </template>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div class="showbutton" [tdToggle]="hoverMenuEdit" style="padding-bottom:3px;">
+        <button md-fab [style.background]="'#00aaff'" style="padding-bottom:3px;" color="accent" title="ขั้นตอนการออกรายงาน" (click)="showInstructionDialog()">
+            <md-icon>info_outline</md-icon>
+        </button>
+    </div>
+    <div class="showbutton" [tdToggle]="hoverMenuEdit" style="padding-bottom:3px;">
+        <button md-fab [style.background]="'#2e2eb8'" color="accent" title="จัดการกลุ่มส่วนตัว" (click)="privateGroup(menu)">
+            <md-icon>group</md-icon>
+        </button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>

@@ -1,0 +1,28 @@
+<div layout="row">
+    <md-card>
+        <md-card-title class="title">
+            เลือกแฟ้มทะเบียนที่ต้องการย้าย
+        </md-card-title>
+        <md-card-content class="content">
+            <div>
+                <p-tree [value]="folderTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedFolders" (onNodeExpand)="nodeExpand($event)"></p-tree>
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <md-card *ngIf="selectedFolders.length>0">
+        <md-card-title class="title">
+            เลือกแฟ้มทะเบียนเป้าหมาย
+        </md-card-title>
+        <md-card-content class="content">
+            <div>
+                <p-tree [value]="folderTree2" selectionMode="single" [(selection)]="selectedFolder2" (onNodeExpand)="nodeExpand2($event)"></p-tree>
+            </div>
+        </md-card-content>
+        <md-card-actions layout-align="end">
+            <div layout="row" layout-align="end">
+                <button md-raised-button (click)="move()" [ngClass]="{'md-primary': selectedFolder2}" [disabled]="!selectedFolder2">ย้าย {{selectedFolders.length}} แฟ้มทะเบียน</button>
+            </div>
+        </md-card-actions>
+    </md-card>
+</div>

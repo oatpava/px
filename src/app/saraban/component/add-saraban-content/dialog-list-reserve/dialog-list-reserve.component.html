@@ -1,0 +1,56 @@
+<p-tabView *ngIf="editContentNo">
+    <p-tabPanel header="แทรกเลข" leftIcon="fa-external-link">
+        <div layout="row" layout-align="left start">
+            <md-input flex type="number" min="1" [max]="lastNumber" placeholder="แทรกหมายเลขทะเบียน (1 - {{lastNumber}})" name="เลขทะเบียน" [(ngModel)]="insertAt" (change)="checkRange()"></md-input>
+        </div>
+        <div layout="row" layout-align="center start" style="padding-top:1rem;">
+            <button md-raised-button [ngClass]="{'md-primary': (insertAt>0 && insertAt<=lastNumber)}" [disabled]="!insertAt || insertAt < 1 || insertAt > lastNumber" [style.margin-right]="'5px'" (click)="insertPoint()">ตกลง</button>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="เลขจอง" leftIcon="fa-calendar">
+        <p-dataTable #dt [value]="reserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="ok(1)" [resizableColumns]="true" [responsive]="true">
+            <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
+                <template pTemplate="body" let-i="rowIndex+1">   
+                    <span>{{i}}</span>
+                </template>
+            </p-column>
+            <p-column field="reserveContentNoContentNo" header="เลขทะเบียน" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top'}">
+            </p-column>
+            <p-column field="reserveContentNoContentDate" header="วันที่ทำการจอง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+            </p-column>
+            <p-column field="reserveContentNoUserName" header="ผู้จอง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top'}">
+            </p-column>
+        </p-dataTable>
+    </p-tabPanel>
+    <p-tabPanel header="เลขจองที่ถูกยกเลิก" leftIcon="fa-calendar-times-o">
+        <p-dataTable #dt [value]="canceledReserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="ok(2)" [resizableColumns]="true" [responsive]="true">
+            <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
+                <template pTemplate="body" let-i="rowIndex+1">   
+                    <span>{{i}}</span>
+                </template>
+            </p-column>
+            <p-column field="reserveContentNoContentNo" header="เลขทะเบียน" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top'}">
+            </p-column>
+            <p-column field="reserveContentNoContentDate" header="วันที่ทำการจอง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+            </p-column>
+            <p-column field="reserveContentNoUserName" header="ผู้จอง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top'}">
+            </p-column>
+        </p-dataTable>
+    </p-tabPanel>
+</p-tabView>
+
+<p-tabView *ngIf="!editContentNo">
+    <p-tabPanel header="คำนำหน้าเลขที่หนังสือ" leftIcon="fa-ellipsis-h">
+        <div layout="row" layout-align="left start">
+            <md-select style="width: 100%; padding-top: 1rem; padding-bottom: 5px;" placeholder="เลขที่หนังสือขึ้นต้นด้วย" name="preBookNoIndex" [(ngModel)]="preBookNoIndex">
+                <md-option *ngFor="let preBookNo of preBookNos; let i = index;" [value]="i">
+                    <span *ngIf="preBookNo">{{preBookNo}}</span>
+                    <span *ngIf="!preBookNo">(ไม่มีคำนำหน้า)</span>
+                </md-option>
+            </md-select>
+        </div>
+        <div layout="row" layout-align="center start" style="padding-top:1rem;">
+            <button md-raised-button [ngClass]="'md-primary'" [style.margin-right]="'5px'" (click)="ok(1)">ตกลง</button>
+        </div>
+    </p-tabPanel>
+</p-tabView>

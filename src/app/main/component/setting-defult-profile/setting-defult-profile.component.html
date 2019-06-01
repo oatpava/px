@@ -1,0 +1,40 @@
+<div layout="row" flex style="   
+background: #b74f36;
+padding: 12px;
+color: #FFF;
+margin-bottom: 10px;
+font-size: large;">
+    <span flex="99"> Setting</span>
+    <md-icon md-list-avatar style="cursor: pointer;" (click)="close()">close</md-icon>
+</div>
+<md-card-content>
+    <div style="padding-left:10px; padding-right:10px;">
+        <div layout="row" style="width: 100%" layout-align="start center">
+            <md-input-container style="width: 100%;">
+                <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ และ" name="iand" [(ngModel)]="data.iand">
+            </md-input-container>
+        </div>
+        <div layout="row" style="width: 100%" layout-align="start center">
+            <md-input-container style="width: 100%;">
+                <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ หรือ" name="ior" [(ngModel)]="data.ior">
+            </md-input-container>
+        </div>
+        <div layout="row" style="width: 100%" layout-align="start center">
+            <md-input-container style="width: 100%;">
+                <input md-input type="text" flex placeholder="ตัวสัญลักษณ์ ไม่" name="inot" [(ngModel)]="data.inot">
+            </md-input-container>
+        </div>
+
+        <div layout="row" style="width: 100%" layout-align="start center">
+            <div>แทนช่องว่างด้วยสัญลักษณ์ : </div>
+            <md-radio-group color="primary" name="แทนช่องว่างด้วยสัญลักษณ์" [(ngModel)]="data.space">
+                <md-radio-button color="primary" layout="row" style="padding:10px 10px; margin-left: 10px" *ngFor="let radio of space" name="radio.name" value="{{radio.id}}">
+                    {{radio.name}}
+                </md-radio-button>
+            </md-radio-group>
+        </div>
+    </div>
+</md-card-content>
+<div layout="row" layout-align="end start" style="width: 100%; padding: 5px; background: #d4daec;" [style.margin-top]="'15px'">
+    <button md-raised-button (click)="save(data) " color="primary" [style.margin-right]="'5px'">บันทึก</button>
+</div>

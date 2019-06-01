@@ -1,0 +1,141 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{icon}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{title}}</span>
+        </div>
+        <!--<button md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item *ngFor="let menu of menus" (click)="add(menu)"> เพิ่ม{{menu.name}} </button>
+        </md-menu>-->
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <!--        <md-sidenav #sideSubMenu align="end">
+            sideSubMenu
+        </md-sidenav>    -->
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <md-card-title style="background: #efb3a5;">
+                            <span class="md-headline">{{title}}</span>
+                        </md-card-title>
+                        <!--<md-card-title>{{title}}</md-card-title>-->
+                        <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+                        <md-card-content>
+                            <form #addFolderForm="ngForm">
+
+
+
+
+
+
+                                <div *ngIf="checkDrawer" layout="row" layout-align="left start" style="width: 100%;">
+
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='{{nameAdd}}' name="folderName2" [(ngModel)]="folderName">
+                                    </md-input-container>
+
+                                    <!-- <div>
+                                        <button md-icon-button (click)="listWfdocType()">
+                                         <md-icon>folder</md-icon>
+                                    </button>
+                                    </div> -->
+                                </div>
+
+
+
+                                <div *ngIf="!checkDrawer" layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='{{nameAdd}}' name="folderName" [(ngModel)]="folder.folderName">
+                                    </md-input-container>
+                                </div>
+
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder="รายละเอียด" name="folderDescription" [(ngModel)]="folder.folderDescription">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder="ผู้สร้าง " disabled name="createBy" [(ngModel)]="createName">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <my-date-picker ng-disabled="true" [options]="myDatePickerOptions" placeholder="วันที่สร้าง" (dateChanged)="onDateChanged($event)" name="createDate" locale="th" [(ngModel)]='folder.createDate'>
+                                    </my-date-picker>
+
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px; margin-top: 20px;">
+                                    <md-select style="width: 100%" placeholder="ประเภทเอกสาร" [(ngModel)]="folder.documentTypeId" name="documentType" required>
+                                        <md-option *ngFor="let documentType of documentTypes" [value]="documentType.id"> {{documentType.documentTypeName}}
+                                        </md-option>
+
+                                    </md-select>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%; margin-top: 20px;">
+                                    <md-input-container flex>
+
+                                        <input md-input type="number" min="0" placeholder="กำหนดวันหมดอายุ" name='folderTypeExpireNumber' [(ngModel)]="folder.folderTypeExpireNumber">
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%; margin-top: 20px;">
+                                    <md-select style="width: 100%" placeholder="ประเภทเอกสารวันหมดอายุ " [(ngModel)]="folder.folderTypeExpire " name="folderTypeExpire ">
+                                        <md-option *ngFor="let folderTypeExpire of folderTypeExpires " [value]="folderTypeExpire.data "> {{folderTypeExpire.name}}
+                                        </md-option>
+
+                                    </md-select>
+                                </div>
+
+                                <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%; margin-top: 20px;">
+                                    <md-input-container flex (click)="addName()">
+
+                                        <input md-input type="text" placeholder="ผู้รับผิดชอบ" name="dmsUserPreExpire" [(ngModel)]="userPreExpire">
+
+
+                                    </md-input-container>
+
+                                </div>
+
+                                <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%; margin-top: 20px;">
+                                    <md-input-container flex>
+
+                                        <input md-input type="text" placeholder="อีเมล เพิ่มเติม" name='dmsEmailUserPreExpire' [(ngModel)]="folder.dmsEmailUserPreExpire">
+                                    </md-input-container>
+
+                                </div>
+                                <!--<px-structure [selectDepartment]="false" [alertMsgTo]="true" (onselectData)="addActorInRole($event)" (msgTo)="alertMsg($event)"></px-structure>-->
+
+
+
+
+                            </form>
+                            <div layout="row" layout-align="center" style="width: 100%; text-align: center; margin-top: 10px;">
+                                <button *ngIf="mode==='Add' " md-raised-button [ngClass]="{ 'md-primary': addFolderForm.form.valid} " [disabled]="!addFolderForm.form.valid " [style.margin-right]=" '5px' " (click)="save(folder ) ">บันทึก</button>
+                                <button *ngIf="mode==='Edit' " md-raised-button [ngClass]="{ 'md-primary': addFolderForm.form.valid} " [disabled]="!addFolderForm.form.valid " [style.margin-right]=" '5px' " (click)="update(folder) ">บันทึก</button>
+                                <!--<button *ngIf="mode==='Edit' " md-raised-button [ngClass]=" 'md-warn' " [style.margin-right]=" '5px' " (click)="openDialog(folder) ">ลบ</button>-->
+                                <button md-raised-button md-ripple (click)="cancel() " [style.margin-right]=" '5px' ">ยกเลิก</button>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>

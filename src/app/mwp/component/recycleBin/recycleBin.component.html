@@ -1,0 +1,150 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>delete</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{path[searched]}}</span>
+        </div>
+        <!-- <button md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item (click)="getRecycle('','')"> ทั้งหมด </button>
+            <button md-menu-item (click)="getRecycle('mwp','ข้อมูลเข้า')"> ข้อมูลเข้า </button>
+            <button md-menu-item (click)="getRecycle('mwp','ข้อมูลออก')"> ข้อมูลออก </button>
+            <button md-menu-item (click)="getRecycle('dms','')"> ระบบจัดเก็บ</button>
+            <button md-menu-item (click)="getRecycle('dms','ตู้')"> ระบบจัดเก็บ -> ตู้ </button>
+            <button md-menu-item (click)="getRecycle('dms','ลิ้นชัก')"> ระบบจัดเก็บ -> ลิ้นชัก </button>
+            <button md-menu-item (click)="getRecycle('dms','แฟ้ม')"> ระบบจัดเก็บ -> แฟ้ม </button>
+            <button md-menu-item (click)="getRecycle('dms','เอกสาร')"> ระบบจัดเก็บ -> เอกสาร </button>
+            <button hide-gt-md md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+        </md-menu> -->
+    </div>
+</div>
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <md-sidenav #sidenav align="end">
+            <form layout-padding class="sidenav" layout="column" layout-align="center start">
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-select flex placeholder="ระบบ" name="module" [(ngModel)]="searchFilters.moduleName">
+                        <md-option *ngFor="let module of modules" [value]="module.moduleName">
+                            {{module.name}}
+                        </md-option>
+                    </md-select>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="รายละเอียดรายการ" name="description" [(ngModel)]="searchFilters.description"></md-input>
+                </div>
+                <div layout="column" layout-align="left start" class="searchFilter">
+                    <my-date-picker [options]="myDatePickerOptions" placeholder="วันที่ลบจาก" locale="th" name="startDate" [(ngModel)]="searchFilters.startDate">
+                    </my-date-picker>
+                    <my-date-picker [options]="myDatePickerOptions" placeholder="วันที่ลบถึง" locale="th" name="endDate" [(ngModel)]="searchFilters.endDate">
+                    </my-date-picker>
+                </div>
+            </form>
+        </md-sidenav>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <p-dataTable #dt [value]="datas[searched]" [(first)]="tableFirst[searched]" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" [(selection)]="selectedRow" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                                    <p-header>
+                                        <div layout="row" layout-align="space-between start">
+                                            <div></div>
+                                            <div>
+                                                <span>รายการถังขยะ</span>
+                                            </div>
+                                            <div>
+                                                <button (click)="dt.reset(); reset();"><i class="fa fa-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                    </p-header>
+                                    <p-footer>
+                                        <loadMore [listReturn]="listReturn[searched]" (load)=loadMoreContents()></loadMore>
+                                    </p-footer>
+
+                                    <p-column [style]="{'width':'30px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="header" let-row="rowData">
+                                          <md-checkbox [(ngModel)]="allCheck" (change)="checkAll()">
+                                          </md-checkbox>   
+                                        </template>
+                                        <template pTemplate="body" let-row="rowData">
+                                          <md-checkbox [(ngModel)]="row.selected" (change)="check($event)">
+                                          </md-checkbox>   
+                                        </template>
+                                    </p-column>
+                                    <p-column field="moduleName" header="ระบบ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'10%', 'vertical-align':'top'}">
+                                    </p-column>
+
+
+                                    <p-column field="description" header="รายการ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'50%', 'vertical-align':'top'}">
+
+                                    </p-column>
+                                    <p-column field="createdDate" header="วันและเวลาที่ลบ" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+                                    </p-column>
+                                    <!-- <p-column header="" [style]="{'width':'45px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData"> 
+                                                <button md-icon-button title="ลบ" (click)="deleteRecycle(row)"><i class="material-icons">delete_forever</i></button>                                                 
+                                        </template>
+                                    </p-column>
+                                    <p-column header="" [style]="{'width':'45px', 'text-align':'center', 'vertical-align':'top'}">
+                                        <template pTemplate="body" let-row="rowData"> 
+                                                <button md-icon-button title="กู้คืน" (click)="restore(row)"><i class="material-icons">restore</i></button>                                                 
+                                                </template>
+                                    </p-column> -->
+
+                                </p-dataTable>
+                            </md-card-content>
+                        </md-card>
+
+                        <div hide-gt-md>
+                            <template let-item let-last="last" ngFor [ngForOf]="datas[searched]">
+                                <md-list-item >
+                                    <!-- <md-icon md-list-avatar style="background: #b1ccea"><img class="ipadImg" src="../../../assets/icons/workflow_icon.svg" flex></md-icon> -->
+                                    <md-icon md-list-avatar style="background: #b1ccea"></md-icon>
+                                    <h4 md-line class="hover"> เรื่อง : {{item.description}} </h4>
+                                    <p md-line > วันเวลาที่ลบ : {{item.createdDate}} </p>
+                                     <div class="block-icon-Option ">
+                                        <i class="material-icons icon-button " (click)="deleteRecycle(item) " title="ลบ">delete</i>
+                                    </div>
+                                     <div class="block-icon-Option ">
+                                        <i class="material-icons icon-button " (click)="restore(item) " title="กู้คืน">restore</i>
+                                    </div>
+                                </md-list-item>
+                                <md-divider  md-inset></md-divider>
+                            </template>
+                            <div style="text-align: center;">
+                                <loadMore [listReturn]="listReturn[searched]" (load)=loadMoreContents()></loadMore>
+                            </div>
+                        </div>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <div class="menuList" [tdToggle]="!menuOver" *ngFor="let menu of menus">
+        <button *ngIf="menu.id==1 || selectedRow_num>0" md-fab color="accent" [style.background]="menu.color" title="{{menu.name}}" (click)="menuAction(menu)"><md-icon>{{menu.icon}}</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+                <md-icon *ngIf="!menuOver">menu</md-icon>
+                <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+            </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="search(searchFilters)">
+        <md-icon>search</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

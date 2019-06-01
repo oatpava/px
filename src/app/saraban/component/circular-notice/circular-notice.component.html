@@ -1,0 +1,47 @@
+<p-dataTable #dt [value]="datas" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)"
+    expandableRows="true">
+    <p-footer>
+        <loadMore [listReturn]="listReturn" (load)=loadMoreContents()></loadMore>
+    </p-footer>
+    <p-column [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'center'}">
+        <template pTemplate="body" let-row="rowData" let-i="rowIndex">
+            <div *ngIf="row.numFileAttach>0">
+                <button *ngIf="!dt.isRowExpanded(row)" md-icon-button title="แสดงเอกสารแนบ" (click)="expandRow(i, row.wfDocumentId); dt.toggleRow(row);"><i class="material-icons">expand_more</i></button>{{expanded}}
+                <button *ngIf="dt.isRowExpanded(row)" md-icon-button title="ซ่อนเอกสารแนบ" (click)="dt.toggleRow(row);"><i class="material-icons">expand_less</i></button>
+            </div>
+        </template>
+    </p-column>
+    <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
+        <template pTemplate="body" let-i="rowIndex+1">   
+            <span>{{i}}</span>
+        </template>
+    </p-column>
+    <p-column field="wfContentContentNo" header="เลขที่" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'115px', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="wfContentTitle" header="เรื่อง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'45%', 'vertical-align':'top'}">
+    </p-column>
+    <p-column field="createdDate" header="วันและเวลา" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'110px', 'text-align':'center', 'vertical-align':'top'}">
+        <template pTemplate="body" let-row="rowData">   
+            <span>{{row.createdDate.slice(0,16)}}</span>
+        </template>
+    </p-column>
+    <p-column field="wfContentOwnername" header="ผู้รับผิดชอบ" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'15%', 'vertical-align':'top'}">
+    </p-column>
+
+    <template pTemplate="rowexpansion" let-rowData style="background: red;">
+        <md-list *ngFor="let item of rowData.fileAttachs; let i = index;" (click)="view(item)" class="expandList">
+            <!-- <md-list-item class="listFile"> -->
+            <md-list-item>
+                <md-icon md-list-avatar>
+                <img src="assets/filetype/{{item.fileAttachType.substring(1)}}.svg" onError="this.src='assets/filetype/unknown.svg'" flex>
+                </md-icon>
+                <h3 md-line><i>({{i+1}}) {{item.fileAttachName}}</i></h3>
+                <h4 md-line></h4>
+                <p md-line></p>
+                <button md-icon-button title="ทำสำเนา" (click)="download(item)"><i class="material-icons">file_download</i></button>
+            </md-list-item>
+            <md-divider md-inset></md-divider>
+        </md-list>
+        <md-divider></md-divider>
+</template>
+</p-dataTable>

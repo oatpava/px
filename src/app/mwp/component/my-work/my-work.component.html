@@ -1,0 +1,94 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+      </button>
+        <button md-icon-button disabled>
+        <md-icon>folder_open</md-icon>
+      </button>
+        <div style="width:80px; padding-top: 10px;">
+            <span>แฟ้มส่วนตัว</span>
+        </div>
+
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button *ngIf="selectedRow_num>0" md-menu-item (click)="deleteList(menu)">ลบ</button>
+            <button md-menu-item (click)="select(null, 'add')">สร้างเอกสาร</button>
+        </md-menu>
+
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+            <div flex-gt-md="80">
+
+                <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
+                    <md-card-content>
+                        <p-dataTable #dt [value]="datas" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="select(selectedRow, 'show')" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                            <p-header>
+                                <div layout="row" layout-align="space-between start">
+                                    <div></div>
+                                    <div>
+                                        <span>รายการเอกสารส่วนตัว</span>
+                                    </div>
+                                    <div>
+                                        <button (click)="dt.reset(); reset();"><i class="fa fa-refresh"></i></button>
+                                    </div>
+                                </div>
+                            </p-header>
+                            <p-column [style]="{'width':'30px', 'text-align':'center', 'vertical-align':'center'}">
+                                <template pTemplate="header" let-row="rowData">
+                                  <md-checkbox color="primary" [(ngModel)]="allCheck" (change)="checkAll()">
+                                  </md-checkbox>   
+                                </template>
+                                <template pTemplate="body" let-row="rowData">
+                                  <md-checkbox color="primary" [(ngModel)]="row.selected" (change)="check($event)">
+                                  </md-checkbox>   
+                                </template>
+                            </p-column>
+                            <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
+                                <template pTemplate="body" let-i="rowIndex+1">   
+                                  <span>{{i}}</span>
+                              </template>
+                            </p-column>
+                            <p-column field="wfContentTitle" header="เรื่อง" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'70%', 'vertical-align':'top'}">
+                            </p-column>
+                            <p-column field="wfContentBookDate" header="วันที่สร้าง" [sortable]="true" [style]="{'width':'90px', 'text-align':'center', 'vertical-align':'top'}">
+                            </p-column>
+                        </p-dataTable>
+                    </md-card-content>
+                </md-card>
+
+                <div hide-gt-md>
+                    <template let-item let-last="last" ngFor [ngForOf]="datas">
+                        <md-list-item (click)="select(item, 'show')">
+                            <md-icon md-list-avatar class="hover icon-flipped" style="background: #00aaff; color: white;">book</md-icon>
+                            <h3 md-line>เรื่อง: {{item.wfContentTitle}}</h3>
+                            <h4 md-line>วันที่สร้าง : {{item.wfContentBookDate}}</h4>
+                        </md-list-item>
+                        <md-divider  md-inset></md-divider>
+                    </template>
+                </div>
+
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div hide show-gt-md layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <div *ngIf="selectedRow_num>0" class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:red;" title="ลบ" (click)="deleteList()"><md-icon>delete</md-icon></button>
+    </div>
+    <div class="menuList" [tdToggle]="!menuOver">
+        <button md-fab color="accent" style="background:#00aaff;" title="สร้างเอกสาร" (click)="select(null, 'add')"><md-icon>note_add</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+        <md-icon *ngIf="!menuOver">menu</md-icon>
+        <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

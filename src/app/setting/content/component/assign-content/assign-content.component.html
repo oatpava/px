@@ -1,0 +1,52 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{iconHeader}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{title}}</span>
+        </div>
+        <button md-icon-button>
+            <md-icon>more_vert</md-icon>
+        </button>
+    </div>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="90">
+                    <md-card>
+                        <md-card-content>
+                            <div layout="row" class="row-height">
+                                <div flex="50" class="p-title p-title-input">
+                                    <tree-view [directories]="directories" [userList]="userList" [type]="type" [objId]="objId"></tree-view>
+                                </div>
+                                <div class="main-liner"></div>
+                                <div flex="50">
+                                    <md-list style="width: 100%;">
+                                        <template let-item let-last="last" ngFor [ngForOf]="userList" let-i="index">
+                                        <md-list-item >    
+                                            <md-icon md-list-avatar>book</md-icon>
+                                            <h4 md-line>{{item.wfFolderName}}</h4>
+                                            <p md-line >[{{item.wfFolderParentName}}]</p>
+                                            <div class="block-icon-Option" >
+                                                <i class="material-icons icon-button"  (click)="delete(item)" >delete</i>
+                                            </div>
+                                            </md-list-item>
+                                            <md-divider md-inset></md-divider>
+                                    </template>
+                                    </md-list>
+                                </div>
+                            </div>
+                        </md-card-content>
+                        <!--<md-divider></md-divider>-->
+                        <!--<md-card-actions>
+                        </md-card-actions>-->
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>

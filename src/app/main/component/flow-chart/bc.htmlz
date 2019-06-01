@@ -1,0 +1,39 @@
+<!--<div layout="column" flex-gt-md="80">-->
+<md-card style="margin-left: 0px; margin-right: 0px;">
+    <md-card-content>
+        <td-expansion-panel label="Flowchart" sublabel="" (expanded)="load()">
+            <td-expansion-summary>
+
+            </td-expansion-summary>
+
+            <div style="position: absolute; left: 20px; top: 163px; z-index: 999; background-color: #FFFFFF; width: 180px; height: 90px;"></div>
+            <div style="position: absolute; left: 20px; top: 314px; z-index: 999; background-color: #FFFFFF; width: 180px; height: 90px;"></div>
+            <!--<div style="float:left; background-color: gray; width: 20%; height: 40px;">
+                        <span style="font-size: 18pt;">{{nowDate}}</span>
+                    </div>-->
+            <div flex style="background-color: #FFC000; padding: 10px; margin-bottom: 3px;  margin-top: 3px; border: 1px solid #FFC000;">
+                <span style="font-size: 16pt; padding: 20px;">{{title}}</span>
+            </div>
+
+            <div flex style="border: solid 1px #FFC000; padding: 10px;
+                             background-image:-webkit-linear-gradient(#FFC000,#FFFBBF);
+                             background-image: -moz-linear-gradient( #FFC000,#FFFBBF );
+                             background-image: -ms-linear-gradient( #FFC000,#FFFBBF );
+                             background-image: -o-linear-gradient( #FFC000,#FFFBBF );
+                             background-image: linear-gradient( #FFC000,#FFFBBF );
+                             ">
+                <span style="font-size: 14pt; padding: 10px; padding-left: 20px;">users</span>
+            </div>
+            <div #myKey flex style="border: solid 1px #FFC000; height: 150px;"></div>
+            <div #myDiagramDiv flex style="height:500px; border: 1px solid #FFC000;"></div>
+            <div *ngIf="adminModeShow !== true" layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'" [style.margin-bottom]="'15px'">
+                <button md-raised-button md-ripple color="primary" (click)="save()" [style.margin-right]="'5px'">บันทึก</button>
+                <!--<button md-raised-button md-ripple (click)="cancel()">ยกเลิก</button>-->
+            </div>
+        </td-expansion-panel>
+    </md-card-content>
+</md-card>
+<!--</div style="width:80%; height:700px;">-->
+<!--<button id="SaveButton" (click)="save()">Save</button>-->
+<!--<button id="LoadButton" (click)="load()">Load</button>-->
+<!--<textarea id="mySavedModel" style="width:100%;height:300px" [(ngModel)]="mySavedModel"></textarea>-->

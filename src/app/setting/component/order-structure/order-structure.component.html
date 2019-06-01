@@ -1,0 +1,24 @@
+<div layout="row" flex style="   
+background: #b74f36;
+padding: 12px;
+color: #FFF;
+margin-bottom: 10px;
+font-size: large;">
+    <span flex="99">จัดลำดับ {{typeName}} </span>
+    <md-icon md-list-avatar style="cursor: pointer;" (click)="close()">close</md-icon>
+</div>
+<div class="bodyDialogHeigthMove">
+
+    <ul dnd-sortable-container [sortableData]="dataList" style="-webkit-padding-start: 0px; ">
+        <div *ngFor="let item of dataList; let i = index" class="orderList" dnd-sortable [sortableIndex]="i" [dragData]="item" (onDropSuccess)="rightData($event, dataList)">
+            <i *ngIf="type == 'user'" style="margin-top: 4px" class="material-icons">person</i>
+            <div *ngIf="type == 'user'" class="orderf-list"> {{item.fullName}} </div>
+            <div *ngIf="type == 'structure'" class="orderf-list"> {{item.name}} </div>
+            <!-- <md-divider md-inset></md-divider> -->
+        </div>
+    </ul>
+
+</div>
+<div layout="row" layout-align="end start" style="width: 100%; padding: 5px; background: #d4daec;" [style.margin-top]="'15px'">
+    <button md-raised-button (click)="selectMove() " color="primary" [style.margin-right]="'5px'">ปิด</button>
+</div>

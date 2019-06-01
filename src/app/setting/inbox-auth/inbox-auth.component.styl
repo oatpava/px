@@ -1,0 +1,48 @@
+.title {
+    background: #efb3a5;
+    padding-bottom: 16px;
+    text-align: -webkit-center;
+}
+
+.content {
+    padding-top: 0;
+}
+
+.in {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+}
+
+.list {
+    height: auto;
+}
+
+:host/deep/md-list-item.assignedInbox .md-list-item {
+    height: auto;
+}
+
+:host/deep/md-list-item.assignedInbox .md-list-item:hover {
+    /*cursor: pointer;*/
+    color: #F1F1F1;
+    background: #1976d2;
+}
+
+.block-icon-Option {
+    cursor: pointer;
+    /*color: #707070*/
+    color: #F1F1F1;
+}
+
+:host/deep/md-list-item.md-2-line .md-list-item:hover {
+    color: #F1F1F1;
+    background: #1976d2;
+}
+
+:host/deep/md-list-item.defaultInbox .md-list-item {
+    height: auto;
+    color: grey;
+}
+:host/deep/md-list-item.defaultInbox .md-list-item :hover {
+    cursor: not-allowed;
+}
+

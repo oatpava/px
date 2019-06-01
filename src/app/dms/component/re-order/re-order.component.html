@@ -1,0 +1,99 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+
+        <div flex class="menu-showLabel">
+            <span>{{'จัดลำดับ'}}</span>
+        </div>
+
+    </div>
+</div>
+
+<!--<h4>Simple sortable</h4>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Favorite drinks
+            </div>
+            <div class="panel-body">
+                <ul class="list-group" dnd-sortable-container [sortableData]="listOne">
+                    <li *ngFor="let item of listOne; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item.folderName}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                My prefences:<br/>
+                <span *ngFor="let item of listOne; let i = index">{{i + 1}}) {{item.id}}<br/></span>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+
+
+                        <!--<ul class="list-group" dnd-sortable-container [sortableData]="listOne">
+                            <li *ngFor="let item of listOne; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">{{item.folderName}}</li>
+                        </ul>-->
+
+
+                        <!--<template let-item let-last="last" ngFor [ngForOf]="listOne">
+                            <md-list-item >
+                           
+                                <md-icon md-list-avatar  style="cursor: pointer" 
+                                 [style.background]="item.iconColor">{{item.icon}}</md-icon>
+                                
+                                <h3 md-line class="hover" > {{item.folderName}} </h3>
+                                <p md-line> {{item.folderDescription}} </p>
+                                
+                            
+                                
+                            </md-list-item>
+                           
+                        </template>-->
+
+                        <ul class="list-group" dnd-sortable-container [sortableData]="listOne">
+                            <div *ngFor="let item of listOne; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">
+                                <md-list-item>
+                                    <md-icon md-list-avatar style="cursor: pointer" [style.background]="item.iconColor">{{item.icon}}</md-icon>
+                                    <h3 md-line class="hover"> {{item.folderName}} </h3>
+                                    <p md-line> {{item.folderDescription}} </p>
+                                </md-list-item>
+                                <md-divider md-inset></md-divider>
+                            </div>
+                        </ul>
+
+
+                    </md-list>
+                    <div layout="row " style="width: 100%; " [style.margin-top]=" '15px' " layout-align-gt-md="center start" class="margin main-admin">
+
+                        <!--<button md-raised-button [style.margin-right]=" '5px' " (click)="saveOrder() ">บันทึก</button>
+                        <button md-raised-button md-ripple (click)="cancel() " [style.margin-right]=" '5px' ">ยกเลิก</button>-->
+                        <button md-raised-button color="primary" [style.margin-right]="'5px'" (click)="saveOrder()">บันทึก</button>
+
+                        <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+    </md-sidenav-layout>
+</div>

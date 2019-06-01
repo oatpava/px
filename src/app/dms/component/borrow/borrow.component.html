@@ -1,0 +1,131 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>swap_vert</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{dmsfolderName}}</span>
+        </div>
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div>
+                <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
+                <button md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu>
+    </div>
+</div>
+
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <md-card-title style="background: #efb3a5;">
+                            <span *ngIf="!borrowed" class="md-headline">ยืมเอกสาร</span>
+                            <span *ngIf="borrowed" class="md-headline">คืนเอกสาร</span>
+                        </md-card-title>
+
+                        <md-card-content>
+                            <form #addFolderForm="ngForm">
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='รายชื่อเอกสาร' name="documentName" [(ngModel)]="documentName" disabled="true">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+
+                                    <md-input-container flex>
+                                        <input md-input type="text" placeholder='สถานะของเอกสาร' name="documentStatus" [(ngModel)]="documentStatus" disabled="true">
+                                        <!-- <input *ngIf="borrowed" flex="20" md-input type="text" placeholder='ผู้ยืม' name="borrower" [(ngModel)]="borrower" disabled="true"> -->
+                                    </md-input-container>
+
+                                    <md-input-container flex *ngIf="borrowed">
+                                        <input md-input type="text" placeholder='ผู้ยืม' name="borrower" [(ngModel)]="borrower" disabled="true">
+                                    </md-input-container>
+                                </div>
+
+
+                                <div layout="row" layout-align="left start" style="width: 100%; padding-bottom:3px;">
+                                    <my-date-picker ng-disabled="true" [options]="myDatePickerOptions[0]" placeholder="วันที่ยืม" name="borrowDate" locale="th" [(ngModel)]="borrowDate" (dateChanged)="onBorrowDateChanged($event)" [disabled]="borrowed" required>
+                                    </my-date-picker>
+
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="number" min="1" placeholder='จำนวนวันที่ยืม' name="numDate" [(ngModel)]="numDate" (change)="numDateChange()" [disabled]="borrowed" required>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%; padding-bottom:3px;">
+                                    <my-date-picker ng-disabled="true" [options]="myDatePickerOptions[1]" placeholder="วันที่ถึงกำหนดคืน" name="toReturnDate" locale="th" [(ngModel)]="toReturnDate" disabled="true">
+                                    </my-date-picker>
+
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%; padding-bottom:3px;">
+                                    <my-date-picker ng-disabled="true" [options]="myDatePickerOptions[2]" placeholder="วันที่คืน" name="returnDate" locale="th" [(ngModel)]="returnDate" (dateChanged)="onReturnDateChanged($event)" [disabled]="!borrowed" required>
+                                    </my-date-picker>
+
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <!-- <p-autoComplete flex="95" [placeholder]="borrowerType" name="sendTo" [(ngModel)]="sendTo" [suggestions]="filtered" field="label" (completeMethod)="nodeFilter($event)" (onSelect)="nodeAdd($event)" (onClear)="nodeRemove($event)" [style]="{'width':'100%'}"
+                                        required>
+                                    </p-autoComplete> -->
+                                    <md-input-container flex="95">
+                                        <input md-input type="text" [placeholder]="borrowerType" name="borrowUser" [(ngModel)]="borrowUser" (change)="borrowUserChanged()" required>
+                                    </md-input-container>
+                                    <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
+                                    <p-dialog [(visible)]="dialogTo" [responsive]="true">
+                                        <p-header>
+                                            <button *ngIf="!nodeExpand" md-icon-button title="Expand All" (click)="expandAllNode(true)"><i class="fa fa-expand"></i></button>
+                                            <button *ngIf="nodeExpand" md-icon-button title="Collapse All" (click)="expandAllNode(false)"><i class="fa fa-compress"></i></button>
+                                            <span>{{borrowerType}}</span>
+                                        </p-header>
+                                        <!-- <p-tree [value]="tree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)">
+                                            <template let-node pTemplate="default">
+                                                <span >{{node.label}}</span>
+                                            </template>
+                                        </p-tree> -->
+                                        <!-- <px-structure [selectDepartment]="true" (onselectData)="selectStructure($event)"></px-structure> -->
+                                        <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+                                    </p-dialog>
+                                </div>
+
+                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                    <md-input-container flex>
+                                        <input md-input type="text" [placeholder]="handlerTitel" [(ngModel)]="handler" name="handler" disabled="true">
+                                    </md-input-container>
+                                </div>
+
+
+
+
+
+
+                            </form>
+                            <div layout="row" layout-align="center" style="width: 100%; text-align: center; margin-top: 10px;">
+                                <button *ngIf="!borrowed" md-raised-button [ngClass]="{ 'md-primary': addFolderForm.form.valid} " [disabled]="!addFolderForm.form.valid " [style.margin-right]=" '5px' " (click)="borrow() ">ยืม</button>
+                                <button *ngIf="borrowed" md-raised-button [ngClass]="{ 'md-primary': addFolderForm.form.valid} " [disabled]="!addFolderForm.form.valid " [style.margin-right]=" '5px' " (click)="return() ">คืน</button>
+                                <button md-raised-button [ngClass]=" 'md-accent' " [style.margin-right]=" '5px' " (click)="listBorrow() ">ประวัติ</button>
+                                <button md-raised-button md-ripple [style.margin-right]=" '5px' " (click)="cancel() ">ยกเลิก</button>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

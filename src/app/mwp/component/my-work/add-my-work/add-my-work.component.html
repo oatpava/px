@@ -1,0 +1,79 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+      </button>
+        <button md-icon-button disabled>
+        <md-icon>{{folderIcon}}</md-icon>
+      </button>
+        <div style="padding-top: 10px;">
+            <span>{{path}}</span>
+        </div>
+    </div>
+</div>
+
+<md-sidenav-layout layout="column" flex fullscreen>
+    <div layout-gt-md="row" layout-align-gt-md="center start">
+
+        <div flex-gt-md="60" *ngIf="!blockUI">
+            <md-card style="margin-left: 0px; margin-right: 0px;">
+                <md-card-title *ngIf="!editMode" style="background: #efb3a5;" layout="row" flex>
+                    <div>
+                        {{title}}
+                    </div>
+                    <div *ngIf="auth[0]" layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
+                        <button md-icon-button title="สแกนไฟล์เอกสาร" (click)="scan()" [disabled]="nullTitle"><i class="material-icons">scanner</i></button>
+                    </div>
+                </md-card-title>
+                <md-card-title *ngIf="editMode" style="background: #efb3a5;">กำลังแก้ไขเอกสารแนบ</md-card-title>
+                <md-card-content>
+                    <md-input *ngIf="!viewOnly" style="width: 100%;" placeholder="เรื่อง" type="text" name="wfContentTitle" [(ngModel)]="myWork.wfContentTitle" (ngModelChange)="editTitle(myWork.wfContentTitle)" [disabled]="editMode" required>
+                    </md-input>
+                    <div *ngIf="viewOnly" style="margin-bottom:0.2rem;">
+                        <span><b>เรื่อง : </b>{{myWork.wfContentTitle}}</span>
+                    </div>
+                    <div style="margin-bottom:0.2rem;">
+                        <span><b>ผู้รับผิดชอบ : </b>{{myWork.wfContentOwnername}}</span>
+                    </div>
+                    <div *ngIf="num>0">
+                        <span><b>เอกสารแนบ : </b></span>
+                    </div>
+                    <app-file-attach-saraban [uploader]="uploader" [secret]="secrets" [type]="types" [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved" [editMode]="editMode" [uploaderUpdate]="uploaderUpdate" [auth]="auth" (addFileAttach)=addFileAttach($event)
+                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()">
+                    </app-file-attach-saraban>
+                </md-card-content>
+                <md-card-actions *ngIf="auth[0]" layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                    <button *ngIf="!editMode" md-raised-button [ngClass]="{'md-primary': !nullTitle && (edited_myWork || added || deleted)}" [disabled]="nullTitle || (!edited_myWork && !added && !deleted)" [style.margin-right]="'5px'" (click)="save()">บันทึก</button>
+                    <button *ngIf="!editMode && num>0" md-raised-button [ngClass]="{'md-accent': !edited_myWork && !added && !deleted}" [disabled]="edited_myWork || added || deleted" [style.margin-right]="'5px'" (click)="edit()">แก้ไขเอกสารแนบ</button>
+                    <button *ngIf="editMode" md-raised-button [ngClass]="{'md-primary': edited}" [disabled]="!edited" [style.margin-right]="'5px'" (click)="saveEdit()">แก้ไขและบันทึก</button>
+                    <button md-raised-button (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                </md-card-actions>
+            </md-card>
+        </div>
+
+        <div flex-gt-md="60" *ngIf="blockUI">
+            <md-card style="margin-left: 0px; margin-right: 0px;">
+                <md-card-title style="background: #efb3a5;">
+                    <span class="animated">กำลังอัพโหลดเอกสารแนบ...</span>
+                </md-card-title>
+                <md-card-content>
+                    <md-progress-spinner style="margin:0 auto;" mode="indeterminate" color="primary">
+                    </md-progress-spinner>
+                </md-card-content>
+            </md-card>
+        </div>
+
+    </div>
+</md-sidenav-layout>
+
+<div *ngIf="menus.length>0" hide show-gt-md layout="column" id="fixedbutton" (mouseleave)="menuOver=false">
+    <div class="menuList" [tdToggle]="!menuOver" *ngFor="let menu of menus">
+        <button md-fab color="accent" [style.background]="menu.color" title="{{menu.name}}" (click)="menuAction(menu)"><md-icon>{{menu.icon}}</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuOver=true">
+        <md-icon *ngIf="!menuOver">menu</md-icon>
+        <md-icon *ngIf="menuOver">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="life"></p-growl>

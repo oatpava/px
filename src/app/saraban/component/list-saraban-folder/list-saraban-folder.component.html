@@ -1,0 +1,86 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()" *ngIf="parentId>0">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>{{icon}}</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>{{path}}</span>
+        </div>
+
+        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <div *ngFor="let menu of menus">
+                <button *ngIf="menu.nameEng==='pdf'" md-menu-item (click)="report('pdf')"> {{menu.name}} </button>
+                <button *ngIf="menu.nameEng==='excel'" md-menu-item (click)="report('xls')"> {{menu.name}} </button>
+                <button *ngIf="menu.nameEng=='addfolder'" md-menu-item (click)="add(menu)"> เพิ่ม{{menu.name}} </button>
+                <button *ngIf="menu.nameEng==='search'" md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+            </div>
+        </md-menu>
+
+    </div>
+</div>
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <template let-item let-last="last" ngFor [ngForOf]="sarabanFolder">
+                            <md-list-item (mouseover)="hoverEdit=item.id" (mouseleave)="hoverEdit=-1" (click)="selectdFolder(item); hoverClicked=false;">                           
+                                <md-icon *ngIf="item.wfContentType.id==3" md-list-avatar style="background: #e60000; color: white; cursor: pointer">collections_bookmark</md-icon>
+                                <md-icon *ngIf="item.wfContentType.id==1" md-list-avatar [ngStyle]="{'background': '#008000', 'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900', 'cursor': 'pointer'}">book</md-icon>
+                                <md-icon *ngIf="item.wfContentType.id==2" md-list-avatar [ngStyle]="{'background': '#e65c00', 'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900', 'cursor': 'pointer'}">book</md-icon>
+                                <md-icon *ngIf="item.wfContentType.id==4" md-list-avatar style="background: #186ba0; color: white; cursor: pointer">chrome_reader_mode</md-icon>
+                                <h3 md-line>{{item.wfFolderName}}</h3>
+                                <h4 md-line>{{item.wfFolderParentName}}</h4>
+                                <p md-line>{{item.wfFolderDetail}}</p>
+                                <div *ngIf="!isArchive && hoverEdit==item.id" hide show-gt-md class="block-icon-Option" (click)="hoverClicked=true">
+                                    <button *ngIf="item.auth[2]" md-icon-button title="แก้ไข" (click)="edit(item)"><md-icon>edit</md-icon></button>
+                                    <button *ngIf="item.auth[3]" md-icon-button title="ลบ" (click)="delete(item)"><md-icon>delete</md-icon></button>
+                                    <button *ngIf="item.auth[4]" md-icon-button title="สิทธิ์" (click)="authSaraban(item)"><md-icon>settings</md-icon></button>
+                                </div>
+
+                                <div *ngIf="!isArchive" layout="row">
+                                <div *ngIf="item.auth[2]" hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="edit(item)" title="แก้ไข">edit</i>
+                                </div>
+                                <div *ngIf="item.auth[3]" hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="delete(item)" title="ลบ">delete</i>
+                                </div>
+                                 <div *ngIf="item.auth[4]" hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="authSaraban(item)" title="สิทธิ์">settings</i>
+                                </div>
+                                </div>
+                                                    
+                            </md-list-item>
+                            <md-divider  md-inset></md-divider>
+                        </template>
+
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton">
+    <div class="menuList" [tdToggle]="!menuClick" *ngFor="let menu of menus">
+        <button md-fab color="accent" [style.background]="menu.color" title="{{menu.name}}" (click)="menuAction(menu)"><md-icon>{{menu.icon}}</md-icon></button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuClick=!menuClick">
+        <md-icon *ngIf="!menuClick">menu</md-icon>
+        <md-icon *ngIf="menuClick">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="sarabanSearch()"><md-icon>search</md-icon></button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

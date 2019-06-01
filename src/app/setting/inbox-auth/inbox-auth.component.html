@@ -1,0 +1,81 @@
+<div layout="column" flex>
+    <div style="background:#e0785f; color:#fff;" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+          <md-icon>lock_outline</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>กำหนดสิทธิ์ข้อมูลเข้า</span>
+        </div>
+    </div>
+</div>
+
+<md-sidenav-layout flex fullscreen>
+    <div layout="row" layout-align="center start" width="80%">
+        <div layout="column" flex="40">
+            <md-card *ngIf="!isOwnerSelected">
+                <md-card-title class="title">
+                    โครงสร้างหน่วยงาน
+                </md-card-title>
+                <md-card-content class="content">
+                    <p-tree [value]="ownerTree" selectionMode="single" [(selection)]="selectedOwner" (onNodeSelect)="selectOwner($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+            <md-card *ngIf="isOwnerSelected">
+                <md-card-title class="title">
+                    <div layout="column">
+                        <span>กำหนดสิทธิ์ข้อมูลเข้า</span>
+                        <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
+                        <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span>
+                    </div>
+                </md-card-title>
+                <md-card-content class="content">
+                    <p-tree [value]="userToAssignTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedUsersToAssign" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnSelect($event)"></p-tree>
+                </md-card-content>
+            </md-card>
+        </div>
+        <div flex="30" *ngIf="isOwnerSelected">
+            <md-card>
+                <md-card-title class="title">
+                    <div layout="column">
+                        <span>กล่องข้อมูลเข้า</span>
+                        <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
+                        <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span>
+                    </div>
+                </md-card-title>
+                <md-card-content class="content">
+                    <md-list *ngIf="selectedOwner.leaf" disabled="true">
+                        <md-list-item class="defaultInbox">
+                            <md-icon md-list-avatar><i class="fa fa-user"></i></md-icon>
+                            <h3 md-line>{{selectedOwner.data.profile.fullName}}</h3>
+                            <h4 md-line>{{selectedOwner.data.profile.structure.name}}</h4>
+                            <h5 md-line>{{selectedOwner.data.profile.position.name}}</h5>
+                        </md-list-item>
+                        <md-divider md-inset></md-divider>
+                    </md-list>
+                    <md-divider></md-divider>
+                    <md-list *ngFor="let inbox of assignedInboxs_tree; let i=index;">
+                        <md-list-item class="assignedInbox" (mouseover)="listButton.hidden=false; listButton.index=i;" (mouseleave)="listButton.hidden=true">
+                            <md-icon md-list-avatar><i class="fa fa-user"></i></md-icon>
+                            <h3 md-line>{{inbox.label}}</h3>
+                            <h4 md-line>{{inbox.data.profile.structure.name}}</h4>
+                            <p md-line *ngIf="inbox.data.profile.position">{{inbox.data.profile.position.name}}</p>
+                            <div hide show-gt-md class="block-icon-Option" [hidden]="listButton.hidden || listButton.index!=i">
+                                <i class="material-icons icon-button" (click)="delete(inbox)" title="ลบ">indeterminate_check_box</i>
+                            </div>
+                        </md-list-item>
+                        <md-divider md-inset></md-divider>
+                    </md-list>
+                    <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                        <button md-raised-button [ngClass]="{'md-primary': isEdited}" [style.margin-right]="'5px'" [disabled]="!isEdited" (click)="save()">บันทึก</button>
+                        <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</md-sidenav-layout>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

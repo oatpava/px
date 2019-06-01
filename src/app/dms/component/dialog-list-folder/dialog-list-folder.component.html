@@ -1,0 +1,4 @@
+<div style="height: 400px;overflow: auto">
+    <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)" (onNodeExpand)="loadNode($event)"></p-tree>
+    <p-growl [(value)]="msgs" [life]="3000"></p-growl>
+</div>

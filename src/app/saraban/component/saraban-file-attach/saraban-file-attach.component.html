@@ -1,0 +1,48 @@
+<div>
+    <div layout-gt-md="row" layout-align-gt-md="center start">
+
+        <div flex-gt-md *ngIf="!blockUI">
+            <md-card style="margin:0px;">
+                <md-card-title *ngIf="!editMode" style="background: #efb3a5;" layout="row" flex>
+                    <div>
+                        เอกสารแนบ: {{title}}
+                    </div>
+                    <div *ngIf="!viewOnly" layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
+                        <button md-icon-button style="color:#b74f36;" title="สแกนไฟล์เอกสาร" (click)="scan()"><i class="material-icons">scanner</i></button>
+                    </div>
+                </md-card-title>
+                <md-card-title *ngIf="editMode" style="background: #efb3a5;">กำลังแก้ไขเอกสารแนบ</md-card-title>
+                <md-card-content *ngIf="!loading">
+                    <app-file-attach-saraban [uploader]="uploader" [secret]="secrets" [type]="types" [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved" [editMode]="editMode" [uploaderUpdate]="uploaderUpdate" [auth]="auth" (addFileAttach)=addFileAttach($event)
+                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()">
+                    </app-file-attach-saraban>
+                </md-card-content>
+                <md-card-content *ngIf="loading">
+                    <div style="text-align: center; font-size: 30px;">
+                        <span class="animated">กำลังดึงรายการเอกสารแนบ กรุณารอสักครู่...</span>
+                    </div>
+                </md-card-content>
+                <md-card-actions *ngIf="!viewOnly && !loading" layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+                    <button *ngIf="!editMode" md-raised-button [ngClass]="{'md-primary': added || deleted}" [disabled]="!added && !deleted" [style.margin-right]="'5px'" (click)="saveAdd()">บันทึก</button>
+                    <button *ngIf="!editMode && num>0" md-raised-button [ngClass]="{'md-accent': !added && !deleted}" [disabled]="added || deleted" [style.margin-right]="'5px'" (click)="edit()">แก้ไข</button>
+                    <button *ngIf="editMode" md-raised-button [ngClass]="{'md-primary': edited}" [disabled]="!edited" [style.margin-right]="'5px'" (click)="saveEdit()">แก้ไขและบันทึก</button>
+                    <button md-raised-button (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                </md-card-actions>
+            </md-card>
+        </div>
+
+        <div flex-gt-md *ngIf="blockUI">
+            <md-card style="margin:0px;">
+                <md-card-title style="background: #efb3a5;">
+                    <span class="animated">กำลังอัพโหลดเอกสารแนบ...</span>
+                </md-card-title>
+                <md-card-content>
+                    <md-progress-spinner style="margin:0 auto;" mode="indeterminate" color="primary">
+                    </md-progress-spinner>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>
+
+<p-growl [(value)]="msgs" [life]="life"></p-growl>
