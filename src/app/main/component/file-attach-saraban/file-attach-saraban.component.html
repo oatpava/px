@@ -13,9 +13,9 @@
                 <h4 md-line>{{item?.createdDate.substr(0,16)}}</h4>
                 <p md-line>{{item?.createdName}}</p>
                 <div *ngIf="hoverEdit==item.id && (auth[item.secrets] || viewOnly)" class="block-icon-Option">
-                    <button *ngIf="item.canView" md-icon-button style="color:#b74f36;" title="ดู" (click)="view(item)"><md-icon >pageview</md-icon></button>
-                    <button md-icon-button style="color:#b74f36;" title="ทำสำเนา" (click)="download(item)"><md-icon>file_download</md-icon></button>
-                    <button *ngIf="!viewOnly" md-icon-button style="color:#b74f36;" title="ลบ" (click)="delete(item)" [ngClass]="{'no-auth': !item.owner}" [disabled]="!item.owner"><md-icon>delete</md-icon></button>
+                    <button *ngIf="item.canView" md-icon-button title="ดู" (click)="view(item)"><md-icon >pageview</md-icon></button>
+                    <button md-icon-button title="ทำสำเนา" (click)="download(item)"><md-icon>file_download</md-icon></button>
+                    <button *ngIf="!viewOnly" md-icon-button title="ลบ" (click)="delete(item)" [ngClass]="{'no-auth': !item.owner}" [disabled]="!item.owner"><md-icon>delete</md-icon></button>
                 </div>
                 <div *ngIf="hoverEdit==item.id && !auth[item.secrets] && !viewOnly" class="block-icon-Option no-auth">
                     <button md-icon-button title="ดู" disabled><md-icon >pageview</md-icon></button>
@@ -28,8 +28,8 @@
                 <h4 md-line class="no-auth">{{child?.createdDate.substr(0,16)}}</h4>
                 <p md-line class="no-auth">{{child?.createdName}}</p>
                 <div *ngIf="hoverEdit==child.id && (auth[item.secrets] || viewOnly)" class="block-icon-Option">
-                    <button *ngIf="item.canView" md-icon-button style="color:#b74f36;" title="ดู" (click)="view(child)"><md-icon >pageview</md-icon></button>
-                    <button md-icon-button style="color:#b74f36;" title="ทำสำเนา" (click)="download(child)"><md-icon>file_download</md-icon></button>
+                    <button *ngIf="item.canView" md-icon-button title="ดู" (click)="view(child)"><md-icon >pageview</md-icon></button>
+                    <button md-icon-button title="ทำสำเนา" (click)="download(child)"><md-icon>file_download</md-icon></button>
                 </div>
                 <div *ngIf="hoverEdit==child.id && !auth[item.secrets] && !viewOnly" class="block-icon-Option no-auth">
                     <button md-icon-button title="ดู" disabled><md-icon >pageview</md-icon></button>
@@ -53,11 +53,11 @@
                 <md-select placeholder="ชั้นความลับ" [(ngModel)]="secret[i]" (ngModelChange)="selectSecret($event, i)">
                     <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
                 </md-select>
-                <button md-icon-button style="color:#b74f36;" title="ลบรายการ" (click)="remove(i)"><i class="material-icons">cancel</i></button>
+                <button md-icon-button title="ลบรายการ" (click)="remove(i)"><i class="material-icons">cancel</i></button>
             </md-list-item>
         </md-list>
         <div layout="column" layout-align="center center">
-            <button md-icon-button style="color:#b74f36;" title="นำเข้าไฟล์เอกสาร" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
+            <button md-icon-button title="นำเข้าไฟล์เอกสาร" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
             <span>วางเอกสารแนบ</span>
             <span>(drag & drop files)</span>
             <input type="file" ng2FileSelect #file [uploader]="uploader" (change)="add()" style="display:none;" [accept]="allowedMimeType.toString()">
@@ -85,8 +85,8 @@
             <md-select placeholder="ชั้นความลับ" [(ngModel)]="item.secrets" (ngModelChange)="edit(item ,i)" [disabled]="!auth[item.secrets] || !item.owner">
                 <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
             </md-select>
-            <button *ngIf="!item.uploaded" md-icon-button style="color:#b74f36;" title="นำเข้าไฟล์เอกสารแก้ไข" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
-            <button *ngIf="item.uploaded" md-icon-button style="color:#b74f36;" title="มีการแก้ไขเอกสาร" disabled><md-icon>playlist_add_check</md-icon></button>
+            <button *ngIf="!item.uploaded" md-icon-button title="นำเข้าไฟล์เอกสารแก้ไข" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
+            <button *ngIf="item.uploaded" md-icon-button title="มีการแก้ไขเอกสาร" disabled><md-icon>playlist_add_check</md-icon></button>
             <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" (change)="update(item ,i)" style="display:none ">
         </md-list-item>
         <md-divider md-inset></md-divider>

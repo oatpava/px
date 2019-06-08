@@ -73,7 +73,7 @@
                             <p-autoComplete #acFrom flex="95" placeholder="จาก" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
-                            <button md-icon-button flex="5" style="color:#b74f36;" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
+                            <button md-icon-button flex="5" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
                         </div>
                         <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
                             <p-header><span>จาก</span></p-header>
@@ -91,7 +91,7 @@
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
                             <template></template>
-                            <button md-icon-button flex="5" style="color:#b74f36;" title="เรียน" (click)="openStructureDialog(1)"><md-icon>person_add</md-icon></button>
+                            <button md-icon-button flex="5" title="เรียน" (click)="openStructureDialog(1)"><md-icon>person_add</md-icon></button>
                         </div>
                         <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
                             <p-header><span>เรียน</span></p-header>
@@ -109,7 +109,7 @@
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
                             <template></template>
-                            <button md-icon-button flex="5" style="color:#b74f36;" title="ผ่าน" (click)="openStructureDialog(2)"><md-icon>person_add</md-icon></button>
+                            <button md-icon-button flex="5" title="ผ่าน" (click)="openStructureDialog(2)"><md-icon>person_add</md-icon></button>
                         </div>
                         <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
                             <p-header><span>ผ่าน</span></p-header>
