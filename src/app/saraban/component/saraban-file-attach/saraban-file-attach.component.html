@@ -3,7 +3,7 @@
 
         <div flex-gt-md *ngIf="!blockUI">
             <md-card style="margin:0px;">
-                <md-card-title *ngIf="!editMode" style="background: #efb3a5;" layout="row" flex>
+                <md-card-title *ngIf="!editMode" style="background: #8fc2f5;" layout="row" flex>
                     <div>
                         เอกสารแนบ: {{title}}
                     </div>
@@ -11,7 +11,7 @@
                         <button md-icon-button title="สแกนไฟล์เอกสาร" (click)="scan()"><i class="material-icons">scanner</i></button>
                     </div>
                 </md-card-title>
-                <md-card-title *ngIf="editMode" style="background: #efb3a5;">กำลังแก้ไขเอกสารแนบ</md-card-title>
+                <md-card-title *ngIf="editMode" style="background: #8fc2f5;">กำลังแก้ไขเอกสารแนบ</md-card-title>
                 <md-card-content *ngIf="!loading">
                     <app-file-attach-saraban [uploader]="uploader" [secret]="secrets" [type]="types" [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved" [editMode]="editMode" [uploaderUpdate]="uploaderUpdate" [auth]="auth" (addFileAttach)=addFileAttach($event)
                         (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()">
@@ -33,7 +33,7 @@
 
         <div flex-gt-md *ngIf="blockUI">
             <md-card style="margin:0px;">
-                <md-card-title style="background: #efb3a5;">
+                <md-card-title style="background: #8fc2f5;">
                     <span class="animated">กำลังอัพโหลดเอกสารแนบ...</span>
                 </md-card-title>
                 <md-card-content>

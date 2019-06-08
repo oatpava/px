@@ -1,5 +1,5 @@
 <md-card *ngIf="userProfileList.length>0">
-    <md-card-title class="push-bottom-none" style="background: #efb3a5;">
+    <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
         <span class="md-headline">ประวัติรายละเอียดผู้ใช้งาน</span>
     </md-card-title>
     <md-card-content class="push-bottom-none">
@@ -28,7 +28,7 @@
     </md-card-content>
 </md-card>
 <md-card [tdToggle]="toggleAddProfile">
-    <md-card-title class="push-bottom-none" style="background: #efb3a5;">
+    <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
         <span class="md-headline">สร้างรายละเอียดผู้ใช้งาน</span>
     </md-card-title>
     <md-card-content class="push-bottom-none">
@@ -121,7 +121,7 @@
         <button md-raised-button md-ripple [disabled]="isDisabled" (click)="cancelCreateProfile()">ยกเลิก</button>
     </md-card-actions>
 </md-card>
-<md-card [tdToggle]="toggleCommand" style="background-color: #efb3a5;">
+<md-card [tdToggle]="toggleCommand" style="background-color: #8fc2f5;">
     <md-card-content>
         <md-list>
             <md-list-item class="hover" (click)="openFormAddProfile()">
