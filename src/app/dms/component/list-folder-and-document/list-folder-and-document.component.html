@@ -1,6 +1,6 @@
 <div *ngIf="!booleanCheckDocInFolder">
     <div layout="column" flex>
-        <div style="background:#e0785f; color:#fff;" layout="row">
+        <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
             <button md-icon-button (click)="goBack()" *ngIf="parentId>1" [disabled]="disableBack">
             <md-icon>arrow_back</md-icon>
         </button>
@@ -252,7 +252,7 @@
 <!--list doc ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssc-->
 <div *ngIf="booleanCheckDocInFolder">
     <div layout="column" flex>
-        <div style="background:#e0785f; color:#fff;" layout="row">
+        <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
             <button md-icon-button (click)="goBack()" [disabled]="disableBack">
             <md-icon>arrow_back</md-icon>
         </button>
