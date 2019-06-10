@@ -218,7 +218,7 @@ export class AddSarabanContentComponent implements OnInit {
       case (14): this.unCancelContent(content); break
       case (15): this.sendEmail(content); break
       case (17): this.reply(content); break
-      case (20): this.genBarcode(content.wfContentFolderId, content.id); break
+      //case (20): this.genBarcode(content.wfContentFolderId, content.id); break
     }
   }
 
@@ -816,7 +816,7 @@ export class AddSarabanContentComponent implements OnInit {
                   this._loadingService.resolve('main')
                   this.sarabanContent.id = response.id
                   this.createWorkflow()
-                  this.genBarcode(response.wfContentFolderId, response.id)
+                  //this.genBarcode(response.wfContentFolderId, response.id)
                   this.pushParamData(response)
                 })
             } else {
@@ -827,7 +827,7 @@ export class AddSarabanContentComponent implements OnInit {
                   this._loadingService.resolve('main')
                   this.sarabanContent.id = response.id
                   this.createWorkflow()
-                  this.genBarcode(response.wfContentFolderId, response.id)
+                  //this.genBarcode(response.wfContentFolderId, response.id)
                   this.pushParamData(response)
                 })
             }
@@ -1882,15 +1882,15 @@ export class AddSarabanContentComponent implements OnInit {
     }
   }
 
-  genBarcode(folderId: number, contentId: number) {
-    let dialogRef = this._dialog.open(ReportSarabanComponent, {
-      width: '60%'
-    })
-    dialogRef.componentInstance.reportType = 'pdf'
-    dialogRef.componentInstance.menuType = 'barcode'
-    dialogRef.componentInstance.folderType = 0
-    dialogRef.componentInstance.paramValue = [null, null, '' + folderId, '' + contentId, null]
-  }
+  // genBarcode(folderId: number, contentId: number) {
+  //   let dialogRef = this._dialog.open(ReportSarabanComponent, {
+  //     width: '60%'
+  //   })
+  //   dialogRef.componentInstance.reportType = 'pdf'
+  //   dialogRef.componentInstance.menuType = 'barcode'
+  //   dialogRef.componentInstance.folderType = 0
+  //   dialogRef.componentInstance.paramValue = [null, null, '' + folderId, '' + contentId, null]
+  // }
 
   deleteInBoxNoRecyc(id: number) {
     this._loadingService.register('main')
