@@ -446,7 +446,7 @@ export class ListSarabanContentComponent implements OnInit {
 
   gtmd_cellColor_speed(speed: number) {
     switch (speed) {
-      case (1): return { 'background': '#e0785f', 'color': 'white' }
+      case (1): return { 'background': '#1976d2', 'color': 'white' }
       case (2): return { 'background': 'red', 'color': 'white' }
       case (3): return { 'background': 'red', 'color': 'white' }
       case (4): return { 'background': 'red', 'color': 'white' }
