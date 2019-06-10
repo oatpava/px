@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Message, TreeNode } from 'primeng/primeng'
 import { SarabanAuth } from '../model/sarabanAuth.model'
-import { SarabanContentFilter } from '../model/SarabanContentFilter.model'
 import { Structure } from '../../setting/model/structure.model'
 import { ListReturn } from '../../main/model/listReturn.model';
 
@@ -42,15 +41,13 @@ export class ParamSarabanService {
   listReturn: ListReturn[]
   tableFirst: number[]
   barcodeFilter: string[]
-  // reloadInbox: boolean
-  // reloadOutbox: boolean
 
   contentAuth: SarabanAuth[]
   structureTree: TreeNode[]
   structureTree_filter: TreeNode[]
 
   externalTree: TreeNode[]
-  externalTree_filter: TreeNode[] //for add node(normal + external)
+  externalTree_filter: TreeNode[]//for add node(normal + external)
 
   privateGroupTree: TreeNode[][]
 
