@@ -5,7 +5,16 @@
 /tmp
 
 # dependencies
-/node_modules
+/node_modules/*
+!/node_modules/primeng
+/node_modules/primeng/*
+!/node_modules/primeng/resources
+/node_modules/primeng/resources/*
+!/node_modules/primeng/resources/themes
+/node_modules/primeng/resources/themes/*
+!/node_modules/primeng/resources/themes/omega
+/node_modules/primeng/resources/themes/omega/*
+!/node_modules/primeng/resources/themes/omega/theme.css
 
 # IDEs and editors
 /.idea
