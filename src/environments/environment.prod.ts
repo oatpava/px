@@ -10,8 +10,8 @@ export const environment = {
   reportPass: 'jasperadmin',
   //ng build --prod -bh /praxticol8_pawn/
   //apiServer: 'http://172.28.1.10:8080',
-  apiServer: 'http://127.0.0.1:8080',
+  apiServer: 'http://127.0.0.1:82',
   apiName: '/pxservice-pawn/api',
-  plugIn: 'http://127.0.0.1',
+  plugIn: 'http://127.0.0.1:83',
   url: 'http://127.0.0.1/praxticol8_pawn/#'
 };
