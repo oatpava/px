@@ -234,7 +234,26 @@ export class AddSarabanContentComponent implements OnInit {
     this.disable = false
     this.getReserveNo(this.folderId)
     this.getCanceledReserveNo(this.folderId)
-    this.getSarabanLastNumber(folderId, null)
+
+    //เชคส่งภายนอก
+    if (this._paramSarabanService.folderType == 4) {
+      this._loadingService.register('main')
+      this._sarabanService
+        .listByContentTypeId("T", 2, 4, 0)//ทะเบียนส่งกลาง
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          if (response.length > 0) {
+            this.openDialogWarning(false, "แจ้งเตือน", "หนังสือในทะเบียนส่งหนังสือภายนอก\nหนังสือจะใช้เลขทะเบียนจากทะเบียนกลาง")
+            let sharedFolder = response[0]
+            this.sharedFolderId = sharedFolder.id
+            this.sharedFolderPre = sharedFolder.wfFolderPreContentNo
+            this.getSarabanLastNumber(folderId, null)
+          } else {
+            this.openDialogWarning(false, "แจ้งเตือน", "หนังสือในทะเบียนส่งหนังสือภายนอก\nไม่มีทะเบียนกลาง หนังสือจะใช้เลขทะเบียนจากทะเบียนที่เลือก")
+            this.getSarabanLastNumber(folderId, null)
+          }
+        })
+    } else this.getSarabanLastNumber(folderId, null)
   }
 
   getSarabanContent(sarabanContentId: number) {
@@ -417,8 +436,10 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentInt01 = 1//ต้นเรื่อง, wf'N'        
         this.sarabanContent.version = 1
         this.sarabanContent.wfContentFolderId = folderId
-        this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? "" : sarabanFolder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
+        let contentPre = (this.sharedFolderId == -1) ? sarabanFolder.wfFolderPreContentNo : this.sharedFolderPre
+        if (contentPre == null) contentPre = ''
+        this.sarabanContent.wfContentContentPre = contentPre
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.isOrderFolder = true
           this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560               

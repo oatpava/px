@@ -157,6 +157,8 @@ export class ListSarabanFolderComponent implements OnInit {
         this._paramSarabanService.folderName = selectFolder.wfFolderName
         this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName
         this._paramSarabanService.folderIcon = "list"
+        this._paramSarabanService.folderType = this._paramSarabanService
+          .getFolderType(selectFolder.wfContentType.id, selectFolder.wfContentType2.id)
         this._paramSarabanService.inboxId = null
         this._paramSarabanService.inboxFlag = { open: 1, action: 1, finish: 1 }
         this._paramSarabanService.mwp = { fromMwp: false, isUser: true, id: this._paramSarabanService.userId, replyTo: null, inboxIndex: null }
@@ -213,7 +215,7 @@ export class ListSarabanFolderComponent implements OnInit {
             this._loadingService.resolve('main')
             this.getSarabanFoldersWithAuth(this.parentId)
             this.msgs = [];
-            this.msgs.push({ severity: 'success', summary: 'ลบข้อมูลสำเร็จ', detail: 'คุณได้ทำการลบแฟ้มทะเบียน ' + sarabanFolder.wfFolderName }, )
+            this.msgs.push({ severity: 'success', summary: 'ลบข้อมูลสำเร็จ', detail: 'คุณได้ทำการลบแฟ้มทะเบียน ' + sarabanFolder.wfFolderName })
           })
       }
     })
@@ -265,7 +267,7 @@ export class ListSarabanFolderComponent implements OnInit {
       case (4): this.report('pdf'); break
       case (5): this.report('xls'); break
       case (22): this.add(); break
-      case (23): this.move();break
+      case (23): this.move(); break
     }
   }
 

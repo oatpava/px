@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { TdLoadingService } from '@covalent/core'
 import { MdDialog } from '@angular/material'
@@ -120,6 +120,8 @@ export class ListMwpComponent implements OnInit {
     this._paramSarabanService.folderName = selectFolder.wfFolderName
     this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName
     this._paramSarabanService.folderIcon = "list"
+    this._paramSarabanService.folderType = this._paramSarabanService
+      .getFolderType(selectFolder.wfContentType.id, selectFolder.wfContentType2.id)
     this._paramSarabanService.inboxId = null
     this._paramSarabanService.inboxFlag = { open: 1, action: 1, finish: 1 }
     this._paramSarabanService.mwp = { fromMwp: false, isUser: true, id: this._paramSarabanService.userId, replyTo: null, inboxIndex: null }
