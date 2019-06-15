@@ -274,4 +274,15 @@ export class SarabanService {
     }
   }
 
+  listSarabanFoldersByStructureId(structureId: number): Observable<SarabanFolder[]> {
+    if (environment.production) {
+      return this._http.get(this._apiUrl + '/listByLinkId/' + structureId, this._options)
+        .map((response: Response) => {
+          return this.pxService.verifyResponseArray(response.json().data)
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }

@@ -12,11 +12,14 @@ import { Structure } from '../../../model/structure.model'
 import { StructureService } from '../structure.service'
 import { StructureFolder } from '../../../model/structure-folder.model'
 
+import { SarabanFolder } from '../../../../saraban/model/sarabanFolder.model'
+import { SarabanService } from '../../../../saraban/service/saraban.service'
+
 @Component({
   selector: 'px-add-structure',
   templateUrl: './add-structure.component.html',
   styleUrls: ['./add-structure.component.styl'],
-  providers: [StructureService,],
+  providers: [StructureService, SarabanService],
 })
 export class AddStructureComponent implements OnInit {
   msgs: Message[] = []
@@ -34,6 +37,7 @@ export class AddStructureComponent implements OnInit {
     private _location: Location,
     private _structureService: StructureService,
     private _dialog: MdDialog,
+    private _sarabanService: SarabanService
   ) { }
 
   ngOnInit() {
@@ -46,7 +50,7 @@ export class AddStructureComponent implements OnInit {
         this.parentId = +params['parentId']
         this.getStructure(this.mode, this.parentId)
       })
-    }   
+  }
 
   createStructure(structure: Structure) {
     //check Code
@@ -79,12 +83,12 @@ export class AddStructureComponent implements OnInit {
                 detail: 'เพิ่มหน่วยงาน' + structure.name
               })
               this._structureService
-              .createStructure(structure)
-              .subscribe(response => {
-                setTimeout(() => {
-                  this.createStructureFolders(response)
-                }, 1000);
-              })
+                .createStructure(structure)
+                .subscribe(response => {
+                  setTimeout(() => {
+                    this.createStructureFolders(response)
+                  }, 1000);
+                })
             }
           })
         }
@@ -112,7 +116,15 @@ export class AddStructureComponent implements OnInit {
           .createStructureFolder(structureFolder)
           .subscribe(response => {
             this._loadingService.resolve('main')
-            this.goBack()
+
+            if (structure.parentId != 1) {//get folder type 3 of parent Structure to use folderId as parentFodlerId
+              this._sarabanService
+              .listSarabanFoldersByStructureId(structure.parentId)
+              .subscribe(parentFolder => {
+                if (parentFolder.length > 0) this.createSarabanFolder(structure, parentFolder[0].id)
+                else this.createSarabanFolder(structure, 0)
+              })
+            } else this.createSarabanFolder(structure, 0)
           })
       })
   }
@@ -151,7 +163,7 @@ export class AddStructureComponent implements OnInit {
               this._structureService
                 .updateStructure(structure)
                 .subscribe(response => {
-                  
+
                   setTimeout(() => {
                     this.updateStructureFolders(structure)
                   }, 1000);
@@ -245,5 +257,58 @@ export class AddStructureComponent implements OnInit {
   goBack() {
     this._location.back()
   }
+
+  createSarabanFolder(structure: Structure, rootParentId: number): void {
+    let folder = new SarabanFolder()
+    folder.parentId = rootParentId
+    folder.wfFolderType = "T"
+    folder.wfFolderLinkId = structure.id
+    folder = this._sarabanService.changeBudgetYear(folder, false)
+    folder = this._sarabanService.changeBookNoType(folder)
+    folder.wfContentType.id = 3
+    folder.wfContentType2.id = 1
+    folder.wfFolderName = structure.name
+    this._sarabanService
+      .createSarabanFolder(folder)
+      .subscribe(response => {
+        let parentId = response.id
+        folder.parentId = parentId
+
+        folder.wfContentType.id = 1
+        folder.wfContentType2.id = 2
+        folder.wfFolderName = "ทะเบียนรับหนังสือภายใน"
+        folder.wfFolderDetail = "ทะเบียนรับ"
+        this._sarabanService
+          .createSarabanFolder(folder)
+          .subscribe(response => {
+            folder.wfContentType.id = 1
+            folder.wfContentType2.id = 3
+            folder.wfFolderName = "ทะเบียนรับหนังสือภายนอก"
+            folder.wfFolderDetail = "ทะเบียนรับ"
+            this._sarabanService
+              .createSarabanFolder(folder)
+              .subscribe(response => {
+                folder.wfContentType.id = 2
+                folder.wfContentType2.id = 2
+                folder.wfFolderName = "ทะเบียนส่งหนังสือภายใน"
+                folder.wfFolderDetail = "ทะเบียนส่ง"
+                this._sarabanService
+                  .createSarabanFolder(folder)
+                  .subscribe(response => {
+                    folder.wfContentType.id = 2
+                    folder.wfContentType2.id = 3
+                    folder.wfFolderName = "ทะเบียนส่งหนังสือภายนอก"
+                    folder.wfFolderDetail = "ทะเบียนรส่ง"
+                    this._sarabanService
+                      .createSarabanFolder(folder)
+                      .subscribe(response => {
+                        this.goBack()
+                      })
+                  })
+              })
+          })
+      })
+  }
+
 
 }
