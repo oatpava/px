@@ -175,7 +175,7 @@ import {
     AddCircularNoticeComponent,
     AuthAdminComponent,
     DialogViewComponent,
-    BarcodeComponent,
+    //BarcodeComponent,
     DialogMoveFolderComponent
    // LocationHistory,
     // AuthGuard
@@ -330,7 +330,7 @@ import {
         AddCircularNoticeComponent,
         AuthAdminComponent,
         DialogViewComponent,
-        BarcodeComponent,
+        //BarcodeComponent,
         DialogMoveFolderComponent
     ],
     imports: [

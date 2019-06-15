@@ -10,12 +10,7 @@
             <span hide show-gt-md>{{path[searched]}}</span>
             <span hide-gt-md>{{folder.wfFolderName}}</span>
         </div>
-        <!-- <div layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
-            <span style="margin-right:1rem;">บาร์โค้ด</span>
-            <p-autoComplete #acBarcode [multiple]="true" [(ngModel)]="barcodeFilter" (completeMethod)="searchBarcode($event)" (onUnselect)="reset()" placeholder="" [minLength]="3" (onFocus)="checkMultiple()"></p-autoComplete>
-        </div> -->
-        <barcode [barcodeFilter]="barcodeFilter" (search)="searchBarcode($event)" (onUnselect)="reset()"></barcode>
-
+        <!-- <barcode [barcodeFilter]="barcodeFilter" (search)="searchBarcode($event)" (onUnselect)="reset()"></barcode> -->
 
         <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
             <md-icon>more_vert</md-icon>
