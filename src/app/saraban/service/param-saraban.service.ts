@@ -27,6 +27,7 @@ export class ParamSarabanService {
   folderName: string
   folderParentName: string
   folderIcon: string
+  folderType: number
   menuName: string
   menuType: string
   mode: string
@@ -99,6 +100,26 @@ export class ParamSarabanService {
       }
     })
     return result
+  }
+
+  getFolderType(folderTypeId: number, folderTypeId2: number): number {
+    if (folderTypeId == 1) {
+      if (folderTypeId2 == 2) {
+        return 1
+      } else if (folderTypeId2 == 3) {
+        return 2
+      } else {
+        return 1//รับ null
+      }
+    } else if (folderTypeId == 2) {
+      if (folderTypeId2 == 2) {
+        return 3
+      } else if (folderTypeId2 == 3) {
+        return 4
+      } else {
+        return 3//ส่ง null
+      }
+    }
   }
 
 }
