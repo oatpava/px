@@ -232,8 +232,8 @@ export class AddSarabanContentComponent implements OnInit {
   addSarabanContent(folderId: number) {
     this.title = "เพิ่มหนังสือ"
     this.disable = false
-    this.getReserveNo(this.folderId)
-    this.getCanceledReserveNo(this.folderId)
+    this.getReserveNo(folderId)
+    this.getCanceledReserveNo(folderId)
 
     //เชคส่งภายนอก
     if (this._paramSarabanService.folderType == 4) {
@@ -500,7 +500,6 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentDate01 = this.contentDate_str + " " + this.time_str
         this.hardCopyRecieved = true
       })
-
   }
 
   setRegisterSarabanContent(folderId: number, registerContent: SarabanContent, contentNumber: number) {
@@ -841,6 +840,7 @@ export class AddSarabanContentComponent implements OnInit {
                   this.pushParamData(response)
                 })
             } else {
+              this.sarabanContent.wfContentFolderId = folderId//maybe cause system run so fast, so folderId change before save
               this._loadingService.register('main')
               this._sarabanContentService
                 .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
