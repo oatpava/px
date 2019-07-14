@@ -17,7 +17,7 @@ import { ParamSarabanService } from '../../service/param-saraban.service'
 
 import { Menu } from '../../model/menu.model'
 import { SarabanContent } from '../../model/sarabanContent.model'
-import { SarabanContent_get } from '../../model/sarabanContentGet.model';
+import { SarabanContent_get } from '../../model/sarabanContentGet.model'
 import { SarabanSpeed } from '../../model/sarabanSpeed.model'
 import { SarabanSecret } from '../../model/sarabanSecret.model'
 import { SarabanReserveContent } from '../../model/sarabanReserveContent.model'
@@ -25,8 +25,6 @@ import { SarabanAuth } from '../../model/SarabanAuth.model'
 import { Workflow } from '../../../mwp/model/workflow.model'
 import { Document } from '../../../dms/model/document.model'
 import { Inbox } from '../../../mwp/model/inbox.model'
-import { Outbox } from '../../../mwp/model/outbox.model'
-import { FileAttach } from '../../../shared';
 
 import { FinishSarabanContentComponent } from '../finish-saraban-content/finish-saraban-content.component'
 import { RegisterSarabanContentComponent } from '../register-saraban-content/register-saraban-content.component'
@@ -38,9 +36,7 @@ import { DialogListReserveComponent } from './dialog-list-reserve/dialog-list-re
 import { SarabanFileAttachComponent } from '../saraban-file-attach/saraban-file-attach.component'
 import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
 import { SendEmailComponent } from '../send-email/send-email.component'
-import { ReportSarabanComponent } from '../report-saraban/report-saraban.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
-import { SarabanFolder } from '../../model/sarabanFolder.model';
 
 
 @Component({
@@ -775,13 +771,12 @@ export class AddSarabanContentComponent implements OnInit {
       if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId)
     } else {
       let lastContent: SarabanContent_get
-      let checkFolderId: number
-      (this.sharedFolderId == -1) ? checkFolderId = folderId : checkFolderId = this.sharedFolderId
+      let checkFolderId: number = (this.sharedFolderId == -1) ? folderId : this.sharedFolderId
       this._loadingService.register('main')
       this._sarabanContentService
         .getSarabanMaxContentNo(checkFolderId)
         .map(response => {
-          lastContent = response as SarabanContent_get
+          lastContent = response
         })
         .subscribe(
           (data) => {

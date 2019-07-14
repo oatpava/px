@@ -12,7 +12,7 @@ export const environment = {
   //apiServer: 'http://172.28.1.10:8080',
   apiServer: 'http://127.0.0.1:8080',
   apiName: '/pxservice-ghb/api',
-  plugIn: 'http://172.28.1.10',
+  plugIn: 'http://127.0.0.1:82',
   url: 'http://172.28.1.10/praxticol8_ghb/#'
 };
 
