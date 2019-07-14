@@ -7,8 +7,7 @@
                 </md-icon>
                 <!-- <h3 md-line style="font-weight:bold">{{item?.fileAttachName}}{{item?.type}} [ชั้นความลับ : {{secretClass[item.secrets-1].label}}]</h3> -->
                 <h3 md-line style="font-weight:bold">
-                    <span>{{item?.fileAttachName}}{{item?.type}} </span> [
-                    <span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
+                    <span>{{item?.fileAttachName}}{{item?.type}} </span> [<span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
                 </h3>
                 <h4 md-line>{{item?.createdDate.substr(0,16)}}</h4>
                 <p md-line>{{item?.createdName}}</p>
@@ -79,8 +78,7 @@
             </h3>
             <!-- <h3 md-line *ngIf="!auth[item.secrets] || !item.owner" style="font-weight:bold">{{item?.fileAttachName}}{{item?.type}} [ชั้นความลับ : {{secretClass[item.secrets-1].label}}]</h3> -->
             <h3 md-line *ngIf="!auth[item.secrets] || !item.owner" style="font-weight:bold">
-                <span>{{item?.fileAttachName}}{{item?.type}} </span> [
-                <span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
+                <span>{{item?.fileAttachName}}{{item?.type}} </span> [<span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
             </h3>
             <md-select placeholder="ชั้นความลับ" [(ngModel)]="item.secrets" (ngModelChange)="edit(item ,i)" [disabled]="!auth[item.secrets] || !item.owner">
                 <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
