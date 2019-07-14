@@ -437,9 +437,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.version = 1
         this.sarabanContent.wfContentFolderId = folderId
         this.sarabanContent.wfContentContentNumber = contentNumber
-        let contentPre = (this.sharedFolderId == -1) ? sarabanFolder.wfFolderPreContentNo : this.sharedFolderPre
-        if (contentPre == null) contentPre = ''
-        this.sarabanContent.wfContentContentPre = contentPre
+        this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.isOrderFolder = true
           this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560               
@@ -514,8 +512,6 @@ export class AddSarabanContentComponent implements OnInit {
       .getSarabanFolder(folderId)
       .subscribe(sarabanFolder => {
         this._loadingService.resolve('main')
-        contentPre = (this.sharedFolderId == -1) ? sarabanFolder.wfFolderPreContentNo : this.sharedFolderPre
-        if (contentPre == null) contentPre = ''
 
         this.folderBookNoType = sarabanFolder.wfFolderBookNoType
         if (sarabanFolder.wfFolderPreBookNo) {
@@ -530,7 +526,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.day = dateTime.getDate()
         this.sarabanContent.version = 1
         this.sarabanContent.wfContentFolderId = folderId
-        this.sarabanContent.wfContentContentPre = contentPre
+        this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560 
@@ -878,6 +874,7 @@ export class AddSarabanContentComponent implements OnInit {
   createSarabanContentNoWorkflow(sharedFolderId: number) {
     let tmp = Object.assign({}, this.sarabanContent)//clone obj
     tmp.wfContentFolderId = sharedFolderId
+    tmp.wfContentContentPre = this.sharedFolderPre
     this._loadingService.register('main')
     this._sarabanContentService
       .createSarabanContent(tmp, this.preBookNoIndex)
