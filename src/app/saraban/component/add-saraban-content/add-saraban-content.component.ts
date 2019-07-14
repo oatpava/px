@@ -840,7 +840,6 @@ export class AddSarabanContentComponent implements OnInit {
                   this.pushParamData(response)
                 })
             } else {
-              this.sarabanContent.wfContentFolderId = folderId//maybe cause system run so fast, so folderId change before save
               this._loadingService.register('main')
               this._sarabanContentService
                 .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
@@ -877,7 +876,7 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   createSarabanContentNoWorkflow(sharedFolderId: number) {
-    let tmp = this.sarabanContent
+    let tmp = Object.assign({}, this.sarabanContent)//clone obj
     tmp.wfContentFolderId = sharedFolderId
     this._loadingService.register('main')
     this._sarabanContentService
