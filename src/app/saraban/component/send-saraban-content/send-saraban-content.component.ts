@@ -975,7 +975,7 @@ export class SendSarabanContentComponent implements OnInit {
     localStorage.setItem('scan', 'uncomplete')
 
     this._pxService
-      .createEmptyData('wfe', documentId)
+      .createEmptyData('wfe', documentId, 0)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 

@@ -315,10 +315,10 @@ export class PxService {
   encrypt(paramString: string): string {
     return btoa(crypto.AES.encrypt(paramString, environment.key).toString())
   }
-    
-  createEmptyData(linkType :string ,linkId: number) {
+
+  createEmptyData(linkType: string, linkId: number, referenceId: number) {
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/fileAttachs/createEmptyData/' + linkType + '/' + linkId, { headers: this._headers })
+      return this._http.get(this._apiUrl + '/v1/fileAttachs/createEmptyData/' + linkType + '/' + linkId + '/' + referenceId, { headers: this._headers })
         .map((response: Response) => {
           return response.json().data
         })
@@ -328,10 +328,9 @@ export class PxService {
     }
   }
 
-  checkHaveAttach(attachId){
-
+  checkHaveAttach(attachId: number) {
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/fileAttachs/checkHaveAttach/' + attachId,  this._options)
+      return this._http.get(this._apiUrl + '/v1/fileAttachs/checkHaveAttach/' + attachId, this._options)
         .map((response: Response) => {
           return response.json()
         })
@@ -339,8 +338,6 @@ export class PxService {
     } else {
 
     }
-
   }
-
 
 }

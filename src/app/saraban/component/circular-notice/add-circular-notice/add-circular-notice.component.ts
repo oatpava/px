@@ -357,7 +357,7 @@ export class AddCircularNoticeComponent implements OnInit {
       let urlNoName = ''
       localStorage.setItem('scan', 'uncomplete')
       this._pxService
-      .createEmptyData('dms', documentId)
+      .createEmptyData('dms', documentId, 0)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
         const timer = TimerObservable.create(4000, 2000)

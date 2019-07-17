@@ -342,7 +342,7 @@ export class SarabanFileAttachComponent implements OnInit {
     localStorage.setItem('scan', 'uncomplete')
 
     this._pxService
-      .createEmptyData(linkType, documentId)
+      .createEmptyData(linkType, documentId, 0)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
@@ -374,6 +374,10 @@ export class SarabanFileAttachComponent implements OnInit {
       result = true
     }
     return result
+  }
+
+  editFileAttachView() {
+    this.getFileAttachs()
   }
 
 }
