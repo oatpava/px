@@ -24,8 +24,7 @@ import { Structure } from '../../../setting/model/structure.model'
 
 import { environment } from '../../../../environments/environment'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { Subscription } from 'rxjs/Rx'
-import { FileAttach } from '../../../shared';
+import { FileAttach } from '../../../shared'
 import { DialogViewComponent } from '../add-saraban-content/dialog-view/dialog-view.component'
 
 @Component({
@@ -141,8 +140,6 @@ export class SendSarabanContentComponent implements OnInit {
   scanned: boolean = false
   scanning: boolean = false
   wfe: FileAttach
-  //private tick: string;
-  private subscription: Subscription;
   showSMS: boolean = false
   sms: boolean = false
 
@@ -963,10 +960,10 @@ export class SendSarabanContentComponent implements OnInit {
       }
     })
   }
-  private tick: string;
+
   scan() {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     this.scanning = true
-    console.log('---scan---')
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'add'
@@ -982,55 +979,28 @@ export class SendSarabanContentComponent implements OnInit {
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        const timer = TimerObservable.create(1000, 1000);
-        this.subscription = timer.subscribe(t => {
-          this._pxService
-            .checkHaveAttach(res.id)
-            .subscribe(res2 => {
-              if (res2.data == 'true') {
-                this._pxService
-                  .getFileAttachs('wfe', -this.sarabanContent.id, 'desc')
-                  .subscribe(wfe => {
-                    this.wfe = new FileAttach(wfe[0])
-                    this.scanned = true
-                    this.scanning = false
-                    this.subscription.unsubscribe()
-                  })
-
-                  
-              }
-
-            })
-
-           
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this._pxService
+                    .getFileAttachs('wfe', -this.sarabanContent.id, 'desc')
+                    .subscribe(wfe => {
+                      this.wfe = new FileAttach(wfe[0])
+                      this.scanned = true
+                      this.scanning = false
+                      this._paramSarabanService.ScanSubscription.unsubscribe()
+                    })
+                }
+              })
+          }
         })
 
-
-
       })
-
-
-    // window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName+ "&fileAttachId=" + fileAttachId, 'scan', "height=600,width=1000")
-
-    // const timer = TimerObservable.create(500, 1000);
-    // this.subscription = timer.subscribe(t => {
-    //   if (localStorage.getItem('scan') == 'complete') {
-    //     console.log('---scan complete---')
-    //     this.subscription.unsubscribe();
-    //     this._loadingService.register('main')
-    //     this._pxService
-    //       .getFileAttachs('wfe', -this.sarabanContent.id, 'desc')
-    //       .subscribe(wfe => {
-
-    //         console.log('--wfe---',wfe)
-    //         this._loadingService.resolve('main')
-    //         this.wfe = new FileAttach(wfe[0])
-    //         this.scanned = true
-    //         this.scanning = false
-    //         localStorage.setItem('scan', 'uncomplete')
-    //       })
-    //   }
-    // })
   }
 
   viewImage(url: string) {

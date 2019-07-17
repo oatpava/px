@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core'
 import { Message, TreeNode } from 'primeng/primeng'
 import { SarabanAuth } from '../model/sarabanAuth.model'
 import { Structure } from '../../setting/model/structure.model'
-import { ListReturn } from '../../main/model/listReturn.model';
+import { ListReturn } from '../../main/model/listReturn.model'
+import { Subscription } from 'rxjs/Rx'
 
 @Injectable()
 export class ParamSarabanService {
@@ -54,6 +55,8 @@ export class ParamSarabanService {
 
   structureId: number
   structureName: string
+
+  ScanSubscription: Subscription
 
   setMode(mode: string) {
     this.mode = mode

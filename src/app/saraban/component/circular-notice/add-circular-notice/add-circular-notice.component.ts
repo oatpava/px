@@ -6,7 +6,6 @@ import { Message } from 'primeng/primeng'
 import { FileUploader } from 'ng2-file-upload'
 import { MdDialog } from '@angular/material'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { Subscription } from 'rxjs/Rx'
 import { setTimeout } from 'timers';
 
 import { SarabanContentService } from '../../../../saraban/service/saraban-content.service'
@@ -63,9 +62,6 @@ export class AddCircularNoticeComponent implements OnInit {
 
   auth: boolean[] = [true, true, true, true, true]//(add/edit)[10], secret1[15], secret2[16], secret3[17], secret4[18]
   viewOnly: boolean = false
-
-  private tick: string;
-  private subscription: Subscription;
 
   constructor(
     private _location: Location,
@@ -348,6 +344,7 @@ export class AddCircularNoticeComponent implements OnInit {
   }
 
   scan() {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let linkId = this.circularNotice.wfDocumentId
     if (linkId != 0) {
       let temp = environment.plugIn
@@ -359,16 +356,25 @@ export class AddCircularNoticeComponent implements OnInit {
       let documentId = linkId
       let urlNoName = ''
       localStorage.setItem('scan', 'uncomplete')
-      window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName, 'scan', "height=500,width=800")
-      const timer = TimerObservable.create(500, 1000);
-      this.subscription = timer.subscribe(t => {
-        this.tick = '' + t;
-        if (localStorage.getItem('scan') == 'complete') {
-          this.getFileAttachs()
-          this.subscription.unsubscribe();
-          localStorage.setItem('scan', 'uncomplete')
-        }
-      });
+      this._pxService
+      .createEmptyData('dms', documentId)
+      .subscribe(res => {
+        window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+          this._pxService
+            .checkHaveAttach(res.id)
+            .subscribe(res2 => {
+              if (res2.data == 'true') {
+                this.getFileAttachs()
+                this._paramSarabanService.ScanSubscription.unsubscribe()
+              }
+            })
+          }
+        })
+      })
     } else {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "แจ้งเตือน"
