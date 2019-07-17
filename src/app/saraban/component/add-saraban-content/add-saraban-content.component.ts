@@ -869,7 +869,7 @@ export class AddSarabanContentComponent implements OnInit {
   createSarabanContentNoWorkflow(sharedFolderId: number) {
     let tmp = Object.assign({}, this.sarabanContent)//clone obj with no refference
     tmp.wfContentFolderId = sharedFolderId
-    tmp.wfContentContentNo = this.sharedFolderPre + tmp.wfContentContentNo.replace(tmp.wfContentContentPre, '')//with this way no need to care about point/reserve
+    tmp.wfContentContentNo = this.sharedFolderPre + tmp.wfContentContentNo.substring(tmp.wfContentContentPre.length)//with this way no need to care about point/reserve
     tmp.wfContentContentPre = this.sharedFolderPre
 
     this._loadingService.register('main')
