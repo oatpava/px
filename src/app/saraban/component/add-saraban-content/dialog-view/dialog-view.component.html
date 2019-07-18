@@ -1,1 +1,68 @@
-<img [src]="url">
+<img *ngIf="wfe" [src]="url">
+
+<div *ngIf="!wfe">
+    <md-card style="margin-left: 0px; margin-right: 0px;">
+        <md-card-title *ngIf="!sarabanContent.hasFinish && !sarabanContent.isCanceled" class="normal">
+            <span>อ้างถึง: {{sarabanContent.wfContentTitle}}</span>
+        </md-card-title>
+        <md-card-title *ngIf="sarabanContent.hasFinish" class="finish">
+            <span *ngIf="!sarabanContent.isKeeped">สถานะหนังสือ: เรื่องเสร็จ</span>
+            <span *ngIf="sarabanContent.isKeeped">สถานะหนังสือ: เรื่องเสร็จจัดเก็บ</span>
+        </md-card-title>
+        <md-card-title *ngIf="sarabanContent.isCanceled" class="canceled">
+            <span>สถานะหนังสือ: ถูกยกเลิก</span>
+        </md-card-title>
+        <md-card-content [ngClass]="{'finish-content': sarabanContent.hasFinish, 'canceled-content': sarabanContent.isCanceled}">
+            <div style="font-size: 16px;">
+                <div layout="row" style="margin-top:-20px;">
+                    <span style="width:50%;"></span>
+                    <span style="width:50%;"><b>ไปรษณีย์ลงทะเบียน : </b>{{sarabanContent.wfContentStr03}}</span>
+                </div>
+                <div layout="row">
+                    <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}</span>
+                    <span style="width:30%;"><b>วันที่ : </b>{{sarabanContent.wfContentContentDate.substr(0, 10)}}</span>
+                    <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
+                </div>
+                <div layout="row">
+                    <span style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}</span>
+                    <span><b>ลงวันที่ : </b>{{sarabanContent.wfContentContentDate.substr(0, 10)}}</span>
+                </div>
+                <div layout="row">
+                    <span style="width:50%;"><b>ความเร่งด่วน : </b>{{sarabanContent.wfContentSpeedStr}}</span>
+                    <span style="width:50%;"><b>ชั้นความลับ : </b>{{sarabanContent.wfContentSecretStr}}</span>
+                </div>
+                <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                    <span><b>จาก : </b>{{sarabanContent.wfContentFrom}}</span>
+                </div>
+                <div style="margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>เรียน : </b>{{sarabanContent.wfContentTo}}</span>
+                </div>
+                <div style="margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>ผ่าน : </b>{{sarabanContent.wfContentText03}}</span>
+                </div>
+                <div style="margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>เรื่อง : </b>{{sarabanContent.wfContentTitle}}</span>
+                </div>
+                <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>อ้างถึง :
+                        </b>{{sarabanContent.wfContentReference}}</span>
+                </div>
+                <div style="margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>สิ่งที่ส่งมาด้วย :
+                        </b>{{sarabanContent.wfContentAttachment}}</span>
+                </div>
+                <div style="margin-bottom:0.2rem;">
+                    <span style="word-wrap: break-word;"><b>หมายเหตุ :
+                        </b>{{sarabanContent.wfContentDescription}}</span>
+                </div>
+                <div style="margin-top:1rem;" layout="row">
+                    <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                    <span *ngIf="!hardCopyRecieved">รอเอกสารตัวจริง</span>
+                    <span *ngIf="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว<b> วันที่ :
+                        </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}<b> เวลา :
+                        </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>

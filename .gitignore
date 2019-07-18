@@ -17,6 +17,8 @@ dist.7z
 /node_modules/primeng/resources/themes/omega/*
 !/node_modules/primeng/resources/themes/omega/theme.css
 
+!/node_modules/mydatepicker
+
 # IDEs and editors
 /.idea
 .project

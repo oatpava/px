@@ -5,7 +5,6 @@ import { FileUploader } from 'ng2-file-upload'
 import { Message, BlockUI } from 'primeng/primeng'
 import { MdProgressSpinner } from '@angular/material'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { Subscription } from 'rxjs/Rx'
 import { setTimeout } from 'timers'
 import { environment } from '../../../../environments/environment'
 
@@ -49,9 +48,6 @@ export class SarabanFileAttachComponent implements OnInit {
   num: number
   title: string
   loading: boolean = false
-
-  private tick: string;
-  private subscription: Subscription;
 
   constructor(
     private _loadingService: TdLoadingService,
@@ -333,30 +329,8 @@ export class SarabanFileAttachComponent implements OnInit {
     return this._pxService.uploadFileAttachsByItem(this.uploaderUpdate, this.genFileattachDetail2(), index)
   }
 
-  // scan() {
-  //   let temp = environment.plugIn
-  //   let url = temp + '/scan/?'
-  //   let mode = 'add'
-  //   let linkType = 'dms'
-  //   let fileAttachName = 'Document'
-  //   let secret = 1
-  //   let documentId = this.linkId
-  //   let urlNoName = ''
-  //   localStorage.setItem('scan', 'uncomplete')
-  //   window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName, 'scan', "height=600,width=1000")
-  //   const timer = TimerObservable.create(500, 1000);
-  //   this.subscription = timer.subscribe(t => {
-  //     this.tick = '' + t;
-  //     if (localStorage.getItem('scan') == 'complete') {
-  //       this.getFileAttachs()
-  //       this.subscription.unsubscribe();
-  //       localStorage.setItem('scan', 'uncomplete')
-  //     }
-  //   });
-
-  // }
-
   scan() {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'add'
@@ -368,25 +342,29 @@ export class SarabanFileAttachComponent implements OnInit {
     localStorage.setItem('scan', 'uncomplete')
 
     this._pxService
-      .createEmptyData(linkType, documentId)
+      .createEmptyData(linkType, documentId, 0)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        const timer = TimerObservable.create(1000, 1000);
-        this.subscription = timer.subscribe(t => {
-          this._pxService
-            .checkHaveAttach(res.id)
-            .subscribe(res2 => {
-              if (res2.data == 'true') {
-                this._pxService
-                  .getFileAttachs('dms', this.linkId, 'asc')
-                  .subscribe(wfe => {
-                    this.getFileAttachs()
-                    this.subscription.unsubscribe()
-                  })
-              }
-            })
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this._pxService
+                    .getFileAttachs('dms', this.linkId, 'asc')
+                    .subscribe(response => {
+                      this.getFileAttachs()
+                      this._paramSarabanService.ScanSubscription.unsubscribe()
+                    })
+                }
+              })
+          }
         })
+
       })
   }
 
@@ -396,6 +374,10 @@ export class SarabanFileAttachComponent implements OnInit {
       result = true
     }
     return result
+  }
+
+  editFileAttachView() {
+    this.getFileAttachs()
   }
 
 }

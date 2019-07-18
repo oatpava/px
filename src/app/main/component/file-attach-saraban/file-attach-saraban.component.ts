@@ -13,8 +13,8 @@ import { environment } from '../../../../environments/environment'
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { Subscription } from 'rxjs/Rx';
 
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'app-file-attach-saraban',
@@ -40,6 +40,7 @@ export class FileAttachSarabanComponent implements OnInit {
   @Output() addFileAttach = new EventEmitter()
   @Output() editFileAttach = new EventEmitter()
   @Output() uploadFileAttach = new EventEmitter()
+  @Output() editFileAttachView = new EventEmitter()
 
   hasBaseDropZoneOver: boolean = false
   hoverEdit: number = -1
@@ -73,50 +74,15 @@ export class FileAttachSarabanComponent implements OnInit {
   //   { label: 'del', auth: true }
   // ]
 
-  //checkIe: boolean = false
-  checkChrome: boolean = false
-  private tick: string;
-  private subscription: Subscription;
 
   constructor(
     private _pxService: PxService,
-    private _dialog: MdDialog
+    private _dialog: MdDialog,
+    private _paramSarabanService: ParamSarabanService
   ) {
   }
 
   ngOnInit() {
-    let ua = window.navigator.userAgent;
-
-    // this.uploader = new FileUploader({
-    //   allowedMimeType: this.allowedMimeType
-    // });
-
-    // this.uploaderUpdate=new FileUploader({
-    //   allowedMimeType: this.allowedMimeType
-    // })
-
-
-    // this.checkIe = false
-    // let msie = ua.indexOf('MSIE ');
-    // if (msie > 0) {
-    //   // IE 10 or older => return version number
-    //   let a = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-    //   // console.log('a -',a)
-    //   this.checkIe = true
-    // }
-
-    // let trident = ua.indexOf('Trident/');
-    // if (trident > 0) {
-    //   // IE 11 => return version number
-    //   var rv = ua.indexOf('rv:');
-    //   let a = parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-    //   this.checkIe = true
-    // }
-
-    let Chrome = ua.indexOf('Chrome');
-    if (Chrome > 0) {
-      this.checkChrome = true
-    }
   }
 
   fileOverBase(event) {
@@ -165,43 +131,39 @@ export class FileAttachSarabanComponent implements OnInit {
     if (index == 0) this.addFileAttach.emit(false)//no added file left
   }
 
-  view(fileAttach: FileAttach) {
-    // if (fileAttach.fileAttachType == '.PDF' || fileAttach.fileAttachType == '.TIF' || fileAttach.fileAttachType == '.TIFF') {
-    //   let temp = environment.plugIn
-    //   let url = temp + '/scan/?'
-    //   let mode = 'view'
-    //   localStorage.setItem('scan', 'uncomplete')
-    //   window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id, 'scan', "height=500,width=800")
-    //   //console.log('view: ',temp)
-    if (fileAttach.fileAttachType == '.PDF' || fileAttach.fileAttachType == '.TIF' || fileAttach.fileAttachType == '.TIFF' || fileAttach.fileAttachType == '.JPG' || fileAttach.fileAttachType == '.PNG') {
-      let temp = environment.plugIn
-      let auth = 0
-      if (!this.viewOnly) {
-        auth = 1
-      }
-      let url = temp + '/scan/?'
+  view(fileAttach: any) {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+    let temp = environment.plugIn
+    let url = temp + '/scan/?'
+
+    if (!fileAttach.owner) {
       let mode = 'view'
-      localStorage.setItem('scan', 'uncomplete')
+      let auth = (!this.viewOnly) ? 1 : 0
       window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
-
-      const timer = TimerObservable.create(500, 1000);
-      this.subscription = timer.subscribe(t => {
-        this.tick = '' + t;
-        if (localStorage.getItem('scan') == 'complete') {
-          //this.updateAtt.emit(true)
-          localStorage.setItem('scan', 'uncomplete')
-        }
-      });
     } else {
-      let temp = environment.plugIn
-      let url = temp + '/activeX/view.html?'
-      let mode = 'view'
-      let fileurl = fileAttach.url
-      let fileAttachType = fileAttach.fileAttachType
-      localStorage.setItem('activeX', 'uncomplete')
-      window.open(url + "mode=" + mode + "&fileAttachType=" + fileAttachType + "&url=" + fileurl, 'scan', "height=500,width=800")
-    }
+      let mode = 'add'
+      localStorage.setItem('scan', 'uncomplete')
 
+      this._pxService
+        .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
+        .subscribe(res => {
+          window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName +"&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + '' + "&fileAttachId=" + fileAttach.id, 'scan', "height=600,width=1000")
+          const timer = TimerObservable.create(4000, 2000)
+          this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+            if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+            else {
+              this._pxService
+                .checkHaveAttach(res.id)
+                .subscribe(res2 => {
+                  if (res2.data == 'true') {
+                    this.editFileAttachView.emit()
+                  }
+                })
+            }
+          })
+        })
+
+    }
   }
 
   download(fileAttach: FileAttach) {
