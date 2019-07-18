@@ -127,6 +127,8 @@ export class AddSarabanContentComponent implements OnInit {
   changePreBookNo: boolean = false
   diableEditBookNo: boolean = false
 
+  referenceContent: SarabanContent
+
   private isArchive: boolean
 
   private myDatePickerOptions: IMyOptions = {
@@ -561,7 +563,8 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentDescription = registerContent.wfContentDescription
         this.sarabanContent.wfContentText01 = registerContent.wfContentText01
         if (!this._paramSarabanService.mwp.fromMwp) {
-          this.sarabanContent.wfContentReference = registerContent.wfContentBookNo
+          this.sarabanContent.wfContentReference = 'เลขทะเบียน: ' + registerContent.wfContentContentNo + ' เลขที่หนังสือ: ' + registerContent.wfContentBookNo
+          this.sarabanContent.wfContentInt02 = registerContent.id
         } else {
           this.sarabanContent.wfContentReference = registerContent.wfContentReference
           this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
@@ -2051,6 +2054,26 @@ export class AddSarabanContentComponent implements OnInit {
           }
         }
       })
+  }
+
+  openViewDialog(id: number) {
+    if (this.referenceContent == null) {
+      this._sarabanContentService
+        .getSarabanContent(id)
+        .subscribe(response => {
+          this.referenceContent = response
+          let dialogRef = this._dialog.open(DialogViewComponent, {
+            width: '50%'})
+          dialogRef.componentInstance.wfe = false
+          dialogRef.componentInstance.sarabanContent = response
+        })
+    } else {
+      let dialogRef = this._dialog.open(DialogViewComponent, {
+        width: '50%'})
+      dialogRef.componentInstance.wfe = false
+      dialogRef.componentInstance.sarabanContent = this.referenceContent
+    }
+
   }
 
 }
