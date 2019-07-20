@@ -1406,36 +1406,10 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         this.bookDate_str = response.wfContentBookDate.substr(0, 10)
         let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        tmp.wfContentStr03 = response.wfContentStr03
-        tmp.wfContentBookNo = response.wfContentBookNo
-        tmp.wfContentBookDate = response.wfContentBookDate
-        tmp.wfContentSpeed = response.wfContentSpeed
-        tmp.wfContentSpeedStr = response.wfContentSpeedStr
-        tmp.wfContentSecret = response.wfContentSecret
-        tmp.wfContentSecretStr = response.wfContentSecretStr
-        tmp.wfContentFrom = response.wfContentFrom
-        tmp.wfContentTo = response.wfContentTo
-        tmp.wfContentTitle = response.wfContentTitle
-        tmp.wfContentReference = response.wfContentReference
-        tmp.wfContentAttachment = response.wfContentAttachment
-        tmp.wfContentDescription = response.wfContentDescription
-        tmp.wfContentDate01 = response.wfContentDate01
+        if (tmp) tmp = Object.assign({}, response)
         if (this._paramSarabanService.searchFilters) {
           let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          tmp1.wfContentStr03 = response.wfContentStr03
-          tmp1.wfContentBookNo = response.wfContentBookNo
-          tmp1.wfContentBookDate = response.wfContentBookDate
-          tmp1.wfContentSpeed = response.wfContentSpeed
-          tmp1.wfContentSpeedStr = response.wfContentSpeedStr
-          tmp1.wfContentSecret = response.wfContentSecret
-          tmp1.wfContentSecretStr = response.wfContentSecretStr
-          tmp1.wfContentFrom = response.wfContentFrom
-          tmp1.wfContentTo = response.wfContentTo
-          tmp1.wfContentTitle = response.wfContentTitle
-          tmp1.wfContentReference = response.wfContentReference
-          tmp1.wfContentAttachment = response.wfContentAttachment
-          tmp1.wfContentDescription = response.wfContentDescription
-          tmp1.wfContentDate01 = response.wfContentDate01
+          if (tmp1) tmp1 = Object.assign({}, response)
         }
         this.show('แก้ไข')
       })
