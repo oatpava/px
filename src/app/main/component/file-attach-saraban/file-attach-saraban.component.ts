@@ -135,38 +135,32 @@ export class FileAttachSarabanComponent implements OnInit {
     if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let temp = environment.plugIn
     let url = temp + '/scan/?'
+    let mode = 'view'
+    let auth = (this.viewOnly) ? 0 : (fileAttach.owner) ? 1 : 0
+    localStorage.setItem('scan', 'uncomplete')
 
-    if (!fileAttach.owner) {
-      let mode = 'view'
-      let auth = (!this.viewOnly) ? 1 : 0
-      window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
-    } else {
-      let mode = 'add'
-      localStorage.setItem('scan', 'uncomplete')
-
-      this._pxService
-        .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
-        .subscribe(res => {
-          window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName 
-          + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + '' 
-          + "&fileAttachId=" + res.id + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
-          const timer = TimerObservable.create(4000, 2000)
-          this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
-            if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
-            else {
-              this._pxService
-                .checkHaveAttach(res.id)
-                .subscribe(res2 => {
-                  if (res2.data == 'true') {
-                    this.editFileAttachView.emit()
-                    this._paramSarabanService.ScanSubscription.unsubscribe()
-                  }
-                })
-            }
-          })
+    this._pxService
+      .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
+      .subscribe(res => {
+        window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
+          + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
+          + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this.editFileAttachView.emit()
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
+                }
+              })
+          }
         })
+      })
 
-    }
   }
 
   download(fileAttach: FileAttach) {

@@ -1908,6 +1908,7 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   pushParamData(content: SarabanContent) {
+    console.log('push', content)
     let tmp = content
     tmp.numFileAttach = 0
     tmp.status = 1
