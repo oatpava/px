@@ -144,7 +144,7 @@ export class FileAttachSarabanComponent implements OnInit {
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
           + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
-          + "&fileAttachId=" + fileAttach.id + "&auth=" + auth + "&attachId=" + res.id, 'scan', "height=600,width=1000")
+          + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
         const timer = TimerObservable.create(4000, 2000)
         this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
           if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
