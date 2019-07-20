@@ -457,11 +457,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         this.sarabanContent.wfContentBookPre = this.preBookNos[0]
         this.sarabanContent.wfContentBookNumber = contentNumber
-        switch (this.folderBookNoType) {
-          case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
-        }
+        this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.year)
         this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
         this.bookDate_str = this.contentDate_str
         this.sarabanContent.wfContentSpeed = 1
@@ -546,11 +542,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         this.sarabanContent.wfContentBookPre = this.preBookNos[0]
         this.sarabanContent.wfContentBookNumber = contentNumber
-        switch (this.folderBookNoType) {
-          case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
-        }
+        this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.year)
         this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
         this.bookDate_str = this.contentDate_str
 
@@ -787,11 +779,7 @@ export class AddSarabanContentComponent implements OnInit {
             if (lastContent.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
               this.sarabanContent.wfContentContentNo = lastContent.wfContentNo
               this.sarabanContent.wfContentBookNumber = lastContent.wfContentNumber
-              switch (this.folderBookNoType) {
-                case (0): this.sarabanContent.wfContentBookNo = ""; break
-                case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-                case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
-              }
+              this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.year)
               this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + lastContent.wfContentNumber
                 + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
                 + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
@@ -1418,36 +1406,10 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         this.bookDate_str = response.wfContentBookDate.substr(0, 10)
         let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        tmp.wfContentStr03 = response.wfContentStr03
-        tmp.wfContentBookNo = response.wfContentBookNo
-        tmp.wfContentBookDate = response.wfContentBookDate
-        tmp.wfContentSpeed = response.wfContentSpeed
-        tmp.wfContentSpeedStr = response.wfContentSpeedStr
-        tmp.wfContentSecret = response.wfContentSecret
-        tmp.wfContentSecretStr = response.wfContentSecretStr
-        tmp.wfContentFrom = response.wfContentFrom
-        tmp.wfContentTo = response.wfContentTo
-        tmp.wfContentTitle = response.wfContentTitle
-        tmp.wfContentReference = response.wfContentReference
-        tmp.wfContentAttachment = response.wfContentAttachment
-        tmp.wfContentDescription = response.wfContentDescription
-        tmp.wfContentDate01 = response.wfContentDate01
+        if (tmp) tmp = Object.assign({}, response)
         if (this._paramSarabanService.searchFilters) {
           let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          tmp1.wfContentStr03 = response.wfContentStr03
-          tmp1.wfContentBookNo = response.wfContentBookNo
-          tmp1.wfContentBookDate = response.wfContentBookDate
-          tmp1.wfContentSpeed = response.wfContentSpeed
-          tmp1.wfContentSpeedStr = response.wfContentSpeedStr
-          tmp1.wfContentSecret = response.wfContentSecret
-          tmp1.wfContentSecretStr = response.wfContentSecretStr
-          tmp1.wfContentFrom = response.wfContentFrom
-          tmp1.wfContentTo = response.wfContentTo
-          tmp1.wfContentTitle = response.wfContentTitle
-          tmp1.wfContentReference = response.wfContentReference
-          tmp1.wfContentAttachment = response.wfContentAttachment
-          tmp1.wfContentDescription = response.wfContentDescription
-          tmp1.wfContentDate01 = response.wfContentDate01
+          if (tmp1) tmp1 = Object.assign({}, response)
         }
         this.show('แก้ไข')
       })
@@ -1684,11 +1646,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentContentNumber = dialogRef.componentInstance.selectedRow.reserveContentNoContentNumber
         if (this.mode == 'add') {
           this.sarabanContent.wfContentBookNumber = dialogRef.componentInstance.selectedRow.reserveContentNoContentNumber
-          switch (this.folderBookNoType) {
-            case (0): this.sarabanContent.wfContentBookNo = ""; break
-            case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-            case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.sarabanContent.wfContentBookYear; break//praxis/00001/2560
-          }
+          this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.sarabanContent.wfContentBookYear)
         }
         if (result == 1) {//only reserve change dateTime
           this.time_str = this.reservedContent.reserveContentNoContentTime + ':00'
@@ -2026,11 +1984,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.changePreBookNo = true
         this.preBookNoIndex = dialogRef.componentInstance.preBookNoIndex
         this.sarabanContent.wfContentBookPre = this.preBookNos[this.preBookNoIndex]
-        switch (this.folderBookNoType) {
-          case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.sarabanContent.wfContentContentYear; break//praxis/00001/2560
-        }
+        this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.sarabanContent.wfContentContentYear)
         this.bookNo_tmp = this.sarabanContent.wfContentBookNo
       }
     })
@@ -2074,6 +2028,16 @@ export class AddSarabanContentComponent implements OnInit {
       dialogRef.componentInstance.sarabanContent = this.referenceContent
     }
 
+  }
+
+  setBookNo(content: SarabanContent, folderBookNoType: number, year: number): string {
+    let bookNo: string =''
+    switch (folderBookNoType) {
+      case (0): bookNo = ""; break
+      case (1): bookNo = content.wfContentBookPre + "/" + ("000000" + content.wfContentBookNumber).substr(-6); break//praxis/00001
+      case (2): bookNo = content.wfContentBookPre + "/" + ("000000" + content.wfContentBookNumber).substr(-6) + "/" + year; break//praxis/00001/2560
+    }
+    return bookNo
   }
 
 }
