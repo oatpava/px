@@ -459,8 +459,8 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentBookNumber = contentNumber
         switch (this.folderBookNoType) {
           case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
+          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
+          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
         }
         this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
         this.bookDate_str = this.contentDate_str
@@ -548,8 +548,8 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentBookNumber = contentNumber
         switch (this.folderBookNoType) {
           case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
+          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
+          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
         }
         this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
         this.bookDate_str = this.contentDate_str
@@ -789,8 +789,8 @@ export class AddSarabanContentComponent implements OnInit {
               this.sarabanContent.wfContentBookNumber = lastContent.wfContentNumber
               switch (this.folderBookNoType) {
                 case (0): this.sarabanContent.wfContentBookNo = ""; break
-                case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-                case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
+                case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
+                case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.year; break//praxis/00001/2560
               }
               this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + lastContent.wfContentNumber
                 + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
@@ -1686,8 +1686,8 @@ export class AddSarabanContentComponent implements OnInit {
           this.sarabanContent.wfContentBookNumber = dialogRef.componentInstance.selectedRow.reserveContentNoContentNumber
           switch (this.folderBookNoType) {
             case (0): this.sarabanContent.wfContentBookNo = ""; break
-            case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
-            case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.sarabanContent.wfContentBookYear; break//praxis/00001/2560
+            case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6); break//praxis/00001
+            case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentBookNumber).substr(-6) + "/" + this.sarabanContent.wfContentBookYear; break//praxis/00001/2560
           }
         }
         if (result == 1) {//only reserve change dateTime
@@ -2028,8 +2028,8 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentBookPre = this.preBookNos[this.preBookNoIndex]
         switch (this.folderBookNoType) {
           case (0): this.sarabanContent.wfContentBookNo = ""; break
-          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6); break//praxis/00001
-          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.sarabanContent.wfContentContentYear; break//praxis/00001/2560
+          case (1): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6); break//praxis/00001
+          case (2): this.sarabanContent.wfContentBookNo = this.sarabanContent.wfContentBookPre + "/" + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.sarabanContent.wfContentContentYear; break//praxis/00001/2560
         }
         this.bookNo_tmp = this.sarabanContent.wfContentBookNo
       }
