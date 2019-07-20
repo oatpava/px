@@ -159,6 +159,7 @@ export class FileAttachSarabanComponent implements OnInit {
                 .subscribe(res2 => {
                   if (res2.data == 'true') {
                     this.editFileAttachView.emit()
+                    this._paramSarabanService.ScanSubscription.unsubscribe()
                   }
                 })
             }
