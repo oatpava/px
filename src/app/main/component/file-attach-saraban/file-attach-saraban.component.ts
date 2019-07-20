@@ -160,89 +160,89 @@ export class FileAttachSarabanComponent implements OnInit {
           }
         })
       })
-      
-}
 
-download(fileAttach: FileAttach) {
-  let tmp = new FileAttach(fileAttach)
-  //tmp.fileAttachName = tmp.fileAttachName + tmp.fileAttachType.toLowerCase()
-  this._pxService
-    .downloadFileAttach(tmp)
-  // .subscribe(response => {
-  // })
-}
-
-delete (fileAttach: any) {
-  //console.log('deleteFileAttach')
-  // if (this.userId != fileAttach.createdBy) {
-  //   let dialogRef = this._dialog.open(DialogWarningComponent)
-  //   dialogRef.componentInstance.header = "แจ้งเตือน"
-  //   dialogRef.componentInstance.message = "ไม่สามารถลบ เนื่องจากคุณไม่ใช่ผู้รับผิดชอบของเอกสารแนบดังกล่าว"
-  //   dialogRef.componentInstance.confirmation = false
-  // } else {
-  let dialogRef = this._dialog.open(DeleteDialogComponent)
-  // let dialogRef = this._dialog.open(DialogWarningComponent)
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      let indexRemovedFile: number = this.fileAttachs.indexOf(fileAttach)
-
-      this.fileAttachs.splice(indexRemovedFile, 1)
-      this.fileAttachRemoved.push(fileAttach)
-      this.editFileAttach.emit(-1)//for reload FileAttach
-    }
-  })
-  //}
-}
-
-edit(fileAttach: any, index: number) {
-  //console.log('editFileattach', this.fileAttachUpdate[index])
-  if (!this.fileAttachs[index].uploaded) this.fileAttachs[index].edited = true
-  this.editFileAttach.emit(0)
-  //console.log('uploadFileattach', this.fileAttachUpdate[index])
-}
-
-update(fileAttach: any, index: number) {
-  //console.log("uploadderUpdateIndex", this.uploaderUpdateIndex)
-  //console.log("uploadderUpdate ", this.uploaderUpdate.queue[this.uploaderUpdateIndex].file)
-  let last: number = this.uploaderUpdate.queue.length - 1
-  let name: string = this.uploaderUpdate.queue[last].file.name
-  let typePos: number = name.lastIndexOf(".")
-  let uploadedFileAttach = new FileAttach(
-    {
-      //fileAttachName: this.uploaderUpdate.queue[last].file.name,
-      fileAttachName: name.substr(0, typePos),
-      linkType: 'dms',
-      linkId: fileAttach.linkId,
-      referenceId: fileAttach.id,
-      secrets: fileAttach.secrets
-    })
-  this.fileAttachs[index] = uploadedFileAttach
-  this.fileAttachs[index].type = name.substr(typePos)
-  this.fileAttachs[index].uploaded = true
-  this.fileAttachs[index].uploadIndex = this.uploaderUpdateIndex
-  this.editFileAttach.emit(1)
-  this.uploadFileAttach.emit()
-  //console.log('uploadFileattach', this.fileAttachs[index])
-
-}
-
-ngAfterViewInit() {
-  this.uploader.onAfterAddingFile = (item => {
-    this.uploaderRef.nativeElement.value = ''
-  });
-  // this.uploaderUpdate.onAfterAddingFile = (item => {
-  //   this.uploaderUpdateRef.nativeElement.value = ''
-  // });
-}
-
-cellColor_secret(secret: number) {
-  switch (secret) {
-    case (1): return null
-    case (2): return { 'color': 'red' }
-    case (3): return { 'color': 'red' }
-    case (4): return { 'color': 'red' }
-    default: return null
   }
-}
+
+  download(fileAttach: FileAttach) {
+    let tmp = new FileAttach(fileAttach)
+    //tmp.fileAttachName = tmp.fileAttachName + tmp.fileAttachType.toLowerCase()
+    this._pxService
+      .downloadFileAttach(tmp)
+    // .subscribe(response => {
+    // })
+  }
+
+  delete(fileAttach: any) {
+    //console.log('deleteFileAttach')
+    // if (this.userId != fileAttach.createdBy) {
+    //   let dialogRef = this._dialog.open(DialogWarningComponent)
+    //   dialogRef.componentInstance.header = "แจ้งเตือน"
+    //   dialogRef.componentInstance.message = "ไม่สามารถลบ เนื่องจากคุณไม่ใช่ผู้รับผิดชอบของเอกสารแนบดังกล่าว"
+    //   dialogRef.componentInstance.confirmation = false
+    // } else {
+    let dialogRef = this._dialog.open(DeleteDialogComponent)
+    // let dialogRef = this._dialog.open(DialogWarningComponent)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let indexRemovedFile: number = this.fileAttachs.indexOf(fileAttach)
+
+        this.fileAttachs.splice(indexRemovedFile, 1)
+        this.fileAttachRemoved.push(fileAttach)
+        this.editFileAttach.emit(-1)//for reload FileAttach
+      }
+    })
+    //}
+  }
+
+  edit(fileAttach: any, index: number) {
+    //console.log('editFileattach', this.fileAttachUpdate[index])
+    if (!this.fileAttachs[index].uploaded) this.fileAttachs[index].edited = true
+    this.editFileAttach.emit(0)
+    //console.log('uploadFileattach', this.fileAttachUpdate[index])
+  }
+
+  update(fileAttach: any, index: number) {
+    //console.log("uploadderUpdateIndex", this.uploaderUpdateIndex)
+    //console.log("uploadderUpdate ", this.uploaderUpdate.queue[this.uploaderUpdateIndex].file)
+    let last: number = this.uploaderUpdate.queue.length - 1
+    let name: string = this.uploaderUpdate.queue[last].file.name
+    let typePos: number = name.lastIndexOf(".")
+    let uploadedFileAttach = new FileAttach(
+      {
+        //fileAttachName: this.uploaderUpdate.queue[last].file.name,
+        fileAttachName: name.substr(0, typePos),
+        linkType: 'dms',
+        linkId: fileAttach.linkId,
+        referenceId: fileAttach.id,
+        secrets: fileAttach.secrets
+      })
+    this.fileAttachs[index] = uploadedFileAttach
+    this.fileAttachs[index].type = name.substr(typePos)
+    this.fileAttachs[index].uploaded = true
+    this.fileAttachs[index].uploadIndex = this.uploaderUpdateIndex
+    this.editFileAttach.emit(1)
+    this.uploadFileAttach.emit()
+    //console.log('uploadFileattach', this.fileAttachs[index])
+
+  }
+
+  ngAfterViewInit() {
+    this.uploader.onAfterAddingFile = (item => {
+      this.uploaderRef.nativeElement.value = ''
+    });
+    // this.uploaderUpdate.onAfterAddingFile = (item => {
+    //   this.uploaderUpdateRef.nativeElement.value = ''
+    // });
+  }
+
+  cellColor_secret(secret: number) {
+    switch (secret) {
+      case (1): return null
+      case (2): return { 'color': 'red' }
+      case (3): return { 'color': 'red' }
+      case (4): return { 'color': 'red' }
+      default: return null
+    }
+  }
 
 }
