@@ -113,9 +113,9 @@ export class SarabanContentService {
   }
 
 
-  getSarabanMaxContentNo(sarabanFolderId: number): Observable<SarabanContent_get> {
+  getSarabanMaxContentNo(folderId: number): Observable<SarabanContent_get> {
     if (environment.production) {
-      return this._http.get(this._apiUrl + "/maxContentNo/" + sarabanFolderId, this._options)
+      return this._http.get(this._apiUrl + "/maxContentNo/" + folderId, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
         })

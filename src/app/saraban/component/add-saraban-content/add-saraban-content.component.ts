@@ -360,27 +360,15 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   getSarabanLastNumber(folderId: number, registerContent: SarabanContent): void {
-    let content: SarabanContent_get
-    let checkFolderId: number
-    (this.sharedFolderId == -1) ? checkFolderId = folderId : checkFolderId = this.sharedFolderId
+    //(this.sharedFolderId == -1) ? checkFolderId = folderId : checkFolderId = this.sharedFolderId
     this._loadingService.register('main')
     this._sarabanContentService
-      .getSarabanMaxContentNo(checkFolderId)
-      .map(response => {
-        content = response as SarabanContent_get
+      .getSarabanMaxContentNo(folderId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        if (registerContent == null) this.setSarabanContent(folderId, response.wfContentYear, response.wfContentNumber)//bookNO=contenNo        
+        else this.setRegisterSarabanContent(folderId, registerContent, response.wfContentNumber)//booNo use old, new contentNo  
       })
-      .subscribe(
-        (data) => {
-          this._loadingService.resolve('main')
-          if (registerContent == null) this.setSarabanContent(folderId, content.wfContentYear, content.wfContentNumber)//nookNO=contenNo        
-          else this.setRegisterSarabanContent(folderId, registerContent, content.wfContentNumber)//booNo use old, new contentNo
-        },
-        (err) => {//no centent in folder
-          this._loadingService.resolve('main')
-          let date = new Date()
-          if (registerContent == null) this.setSarabanContent(folderId, date.getFullYear() + 543, 1)
-          else this.setRegisterSarabanContent(folderId, registerContent, 1)
-        })
   }
 
   getSarabanSpeeds(): void {
@@ -762,36 +750,27 @@ export class AddSarabanContentComponent implements OnInit {
 
   checkContentNo(folderId: number) {
     if (this.useReserve || this.usePoint) {//no check last
-      this.createSarabanContent(folderId)
-      if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId)
+      if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId, folderId)
+      else this.createSarabanContent(null)
     } else {
-      let lastContent: SarabanContent_get
       let checkFolderId: number = (this.sharedFolderId == -1) ? folderId : this.sharedFolderId
       this._loadingService.register('main')
       this._sarabanContentService
         .getSarabanMaxContentNo(checkFolderId)
-        .map(response => {
-          lastContent = response
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          if (response.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
+            this.sarabanContent.wfContentContentNo = response.wfContentNo
+            this.sarabanContent.wfContentBookNumber = response.wfContentNumber
+            this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
+            this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
+              + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
+              + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
+          }
+
+          this.createSarabanContent(folderId)
+          if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId)
         })
-        .subscribe(
-          (data) => {
-            this._loadingService.resolve('main')
-            if (lastContent.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
-              this.sarabanContent.wfContentContentNo = lastContent.wfContentNo
-              this.sarabanContent.wfContentBookNumber = lastContent.wfContentNumber
-              this.sarabanContent.wfContentBookNo = this.setBookNo(this.sarabanContent, this.folderBookNoType, this.year)
-              this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + lastContent.wfContentNumber
-                + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
-                + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
-            }
-            this.createSarabanContent(folderId)
-            if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId)
-          },
-          (err) => {
-            this._loadingService.resolve('main')
-            this.createSarabanContent(folderId)
-            if (this.sharedFolderId != -1) this.createSarabanContentNoWorkflow(this.sharedFolderId)
-          })
     }
   }
 
