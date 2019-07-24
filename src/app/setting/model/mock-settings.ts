@@ -83,41 +83,41 @@ export const SETTINGS: Setting[] = [
       // },      
     ]
   }
-  // ,{
-  //   id: 2,
-  //   moduleId: 1,
-  //   name: 'ระบบจัดเก็บเอกสาร',
-  //   type: '',
-  //   subSetting: '',
-  //   iconModule: 'dashboard',
-  //   child: [ 
-  //     {
-  //       childId: 1,
-  //       childName: 'การจัดการประเภทเอกสาร',
-  //       childIcon: 'text_fields',
-  //       subSetting: 'document-type',
-  //     }, 
-  //     {
-  //       childId: 2,
-  //       childName: 'รายการสิทธิ์แฟ้มทะเบียน',
-  //       childIcon: 'dns',
-  //       subSetting: 'dms-auth',
-  //     }, 
-  //     {
-  //       childId: 3,
-  //       childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
-  //       childIcon: 'reorder',
-  //       subSetting: 'dms-user-auth',
-  //     }, 
+  ,{
+    id: 2,
+    moduleId: 1,
+    name: 'ระบบจัดเก็บเอกสาร',
+    type: '',
+    subSetting: '',
+    iconModule: 'dashboard',
+    child: [ 
+      {
+        childId: 1,
+        childName: 'การจัดการประเภทเอกสาร',
+        childIcon: 'text_fields',
+        subSetting: 'document-type',
+      }, 
+      {
+        childId: 2,
+        childName: 'รายการสิทธิ์แฟ้มทะเบียน',
+        childIcon: 'dns',
+        subSetting: 'dms-auth',
+      }, 
+      {
+        childId: 3,
+        childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
+        childIcon: 'reorder',
+        subSetting: 'dms-user-auth',
+      }, 
 
-  //     // {
-  //     //   childId: 6,
-  //     //   childName: 'ประเภทเอกสาร',
-  //     //   childIcon: 'list',
-  //     //   subSetting: 'list-document-type',
-  //     // },
-  //   ]
-  // }
+      // {
+      //   childId: 6,
+      //   childName: 'ประเภทเอกสาร',
+      //   childIcon: 'list',
+      //   subSetting: 'list-document-type',
+      // },
+    ]
+  }
   , {
     id: 4,
     moduleId: 4,

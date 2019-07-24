@@ -61,13 +61,12 @@ export class MainComponent implements OnInit {
       route: this._mainUrl + 'sarabans',
       icon: 'class',
     },
-    //**//
-    // {
-    //   id: 3,
-    //   title: 'ระบบจัดเก็บเอกสารฯ',
-    //   route: this._mainUrl + 'folders',
-    //   icon: 'dashboard',
-    // },
+    {
+      id: 3,
+      title: 'ระบบจัดเก็บเอกสารฯ',
+      route: this._mainUrl + 'folders',
+      icon: 'dashboard',
+    },
     // {
     //   id: 4,
     //   title: 'หนังสือเวียน',
