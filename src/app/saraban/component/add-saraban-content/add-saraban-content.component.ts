@@ -763,6 +763,7 @@ export class AddSarabanContentComponent implements OnInit {
         .subscribe(response => {
           this._loadingService.resolve('main')
           if (response.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
+            this.sarabanContent.wfContentBookNumber = response.wfContentNumber
             this.sarabanContent.wfContentContentNo = response.wfContentNo
             if (!this.sharedFolder) {
               this.sarabanContent.wfContentBookNumber = response.wfContentNumber
