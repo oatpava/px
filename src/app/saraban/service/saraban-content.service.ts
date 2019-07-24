@@ -8,6 +8,7 @@ import * as crypto from 'crypto-js'
 
 import { Menu } from '../model/menu.model'
 import { MENUS } from '../model/MENUS'
+import { SarabanFolder } from '../model/sarabanFolder.model'
 import { SarabanContent } from '../model/sarabanContent.model'
 import { SarabanContent_get } from '../model/sarabanContentGet.model'
 import { SarabanContentFilter } from '../model/SarabanContentFilter.model'
@@ -113,9 +114,9 @@ export class SarabanContentService {
   }
 
 
-  getSarabanMaxContentNo(sarabanFolderId: number): Observable<SarabanContent_get> {
+  getSarabanMaxContentNo(folderId: number): Observable<SarabanContent_get> {
     if (environment.production) {
-      return this._http.get(this._apiUrl + "/maxContentNo/" + sarabanFolderId, this._options)
+      return this._http.get(this._apiUrl + "/maxContentNo/" + folderId, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
         })
@@ -132,10 +133,11 @@ export class SarabanContentService {
     return this.pxService.createObservable(SARABANSECRETS)
   }
 
-  createSarabanContent(newContent: SarabanContent, preBookNoIndex: number): Observable<SarabanContent> {
+  createSarabanContent(newContent: SarabanContent, preBookNoIndex: number, sharedFolder: SarabanFolder): Observable<SarabanContent> {
     if (environment.production) {////check id login db or not
+      let sharedFolderId: number = (sharedFolder) ? sharedFolder.id : 0
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('preBookNoIndex=' + preBookNoIndex))
+      params.set('q', this.pxService.encrypt('preBookNoIndex=' + preBookNoIndex + '&sharedFolderId=' + sharedFolderId))
       this._options.search = params
       return this._http.post(this._apiUrl, newContent, this._options)
         .map((response: Response) => {

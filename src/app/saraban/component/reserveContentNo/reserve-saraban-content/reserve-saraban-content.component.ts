@@ -78,20 +78,17 @@ export class ReserveSarabanContentComponent implements OnInit {
     this._loadingService.register('main')
     this._sarabanContentService
       .getSarabanMaxContentNo(folderId)
-      .map(response => {
-        this.lastContentNo = response.wfContentNo
-        this.lastContentNumber = response.wfContentNumber
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        if (response.wfContentNumber == 1) {//no centent in folder
+          this.lastContentNo = "(ไม่มีหนังสือในแฟ้มทะเบียน)"
+          this.lastContentNumber = 0
+          this.noContent = true
+        } else {
+          this.lastContentNo = response.wfContentNo
+          this.lastContentNumber = response.wfContentNumber
+        }
         if (!this.reserveMode) this.amountReserve = response.wfContentNumber + 1
-      })
-      .subscribe(
-      (data) => {
-        this._loadingService.resolve('main')
-      },
-      (err) => {//no centent in folder
-        this._loadingService.resolve('main')
-        this.lastContentNo = "(ไม่มีหนังสือในแฟ้มทะเบียน)"
-        this.lastContentNumber = 0
-        this.noContent = true
       })
   }
 

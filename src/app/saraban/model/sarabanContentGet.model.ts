@@ -7,7 +7,7 @@ export class SarabanContent_get {
     
     constructor(values: Object = {}) {
         this.wfContentNo = ""
-        this.wfContentYear = 0
+        this.wfContentYear = new Date().getFullYear() + 543
         this.wfContentPoint = 0
         this.wfContentNumber = 1
         this.wfFolderPre = ""

@@ -481,23 +481,13 @@ export class AddCircularNoticeComponent implements OnInit {
   }
 
   getSarabanLastNumber(folderId: number) {
-    let content: SarabanContent_get
     this._loadingService.register('main')
     this._sarabanContentService
       .getSarabanMaxContentNo(folderId)
-      .map(response => {
-        content = response as SarabanContent_get
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.setSarabanContent(folderId, response.wfContentYear, response.wfContentNumber)//bookNO=contenNo 
       })
-      .subscribe(
-        (data) => {
-          this._loadingService.resolve('main')
-          this.setSarabanContent(folderId, content.wfContentYear, content.wfContentNumber)//bookNO=contenNo        
-        },
-        (err) => {//no centent in folder
-          this._loadingService.resolve('main')
-          let date = new Date()
-          this.setSarabanContent(folderId, date.getFullYear() + 543, 1)
-        })
   }
 
   setSarabanContent(folderId: number, contentYear: number, contentNumber: number) {
