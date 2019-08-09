@@ -4,14 +4,13 @@ export const environment = {
   appName: 'สำนักงานธนานุเคราะห์',
   appNameEng: 'Office of The Government Pawshop',
   appAcronym: 'pawn', //login logo .png(200*200px), icon .svg, default is 'demo'
-  reportServer: 'http://127.0.0.1:8080/jasperserver/flow.html?',
+  reportServer: 'http://10.10.59.26:85/jasperserver/flow.html?',
   reportSite: 'pawn',
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',
   //ng build --prod -bh /praxticol8_pawn/
-  //apiServer: 'http://172.28.1.10:8080',
-  apiServer: 'http://127.0.0.1:82',
+  apiServer: 'http://10.10.59.24:82',
   apiName: '/pxservice-pawn/api',
-  plugIn: 'http://127.0.0.1:83',
-  url: 'http://127.0.0.1/praxticol8_pawn/#'
+  plugIn: 'http://10.10.59.24:83',
+  url: 'http://10.10.59.24/praxticol8_pawn/#'
 };
