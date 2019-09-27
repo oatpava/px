@@ -121,7 +121,7 @@ export class ChangePasswordComponent implements OnInit {
       this.user2.passwords = ''
       let dialogRef = this._dialog.open(ErrorPasswordComponent, {
       });
-      dialogRef.componentInstance.message = 'รหัสผ่านต้องประกอบด้วย ตัวอักษร, ตัวเลข, และสัญลักษณ์พิเศษ รวมอย่างน้อย 8 ตัวอักษร'
+      dialogRef.componentInstance.message = 'รหัสผ่านต้องมีขนาดอย่างน้อย 8 ตัวอักษร'
     }
     localStorage.removeItem('px-auth-token')
   }
@@ -130,8 +130,7 @@ export class ChangePasswordComponent implements OnInit {
     let result: boolean = false
     let password = this.user.passwords
 
-    if (/[a-zA-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*()_+.|]/.test(password) && (password.length > 7)) {
-      // if (/[a-zA-Z]/.test(password) && /[0-9]/.test(password) && /[&._-]/.test(password) && (password.length > 7)) {
+    if (password.length > 7) {//(/[a-zA-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*()_+.|]/.test(password) && (password.length > 7))
       result = true
     } else {
       result = false
