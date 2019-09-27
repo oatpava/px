@@ -4,15 +4,15 @@ export const environment = {
   appName: 'กรมอุตสาหกรรมพื้นฐานและการเหมืองแร่',
   appNameEng: 'Department of Primary Industries and Mines',
   appAcronym: 'dpim', //login logo .png(200*200px), icon .svg, default is 'demo'
-  reportServer: 'http://172.28.1.10:8080/jasperserver/flow.html?',
+  reportServer: 'http://saraban62.dpim.go.th:85/jasperserver/flow.html?',
   reportSite: '',
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',
   //ng build --prod -bh /praxticol8_dpim/
   //apiServer: 'http://172.28.1.10:8080',
-  apiServer: 'http://127.0.0.1:82',
+  apiServer: 'http://saraban62.dpim.go.th:82',
   apiName: '/pxservice-dpim/api',
-  plugIn: 'http://127.0.0.1:83',
-  url: 'http://172.28.1.10/praxticol8_dpim/#'
+  plugIn: 'http://saraban62.dpim.go.th:80',
+  url: 'http://saraban62.dpim.go.th/praxticol8_dpim/#'
 };
 
