@@ -245,4 +245,13 @@ export class FileAttachSarabanComponent implements OnInit {
     }
   }
 
+  viewImage(fileAttach: any) {
+    let temp = environment.plugIn
+    let url = temp + '/activeX/view.html?'
+    let mode = 'view'
+    let fileurl = fileAttach.url
+    let fileAttachType = fileAttach.fileAttachType
+    window.open(url + "mode=" + mode + "&fileAttachType=" + fileAttachType + "&url=" + fileurl, 'scan', "height=600,width=1000")
+  }
+
 }
