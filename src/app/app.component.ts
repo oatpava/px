@@ -46,6 +46,8 @@ export class AppComponent {
     // this._domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/icon-unknown.svg'))
     // this._iconRegistry.addSvgIconInNamespace('assets', 'px-ic-word',
     // this._domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/icon-word.svg'))
+
+    console.log('BUILD DATE: ' + environment.buildDate)
   }
 
   
