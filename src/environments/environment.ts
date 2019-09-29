@@ -25,5 +25,6 @@ export const environment = {
   // apiServerHome: "http://PRAXiS-PC:82",
   // apiNameHome: "/pxservice-nha/api",
   
+  
   buildDate: '2019-09-30'
 };
