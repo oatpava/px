@@ -282,18 +282,18 @@ export class ListMergeUsersComponent implements OnInit {
   genInbox(userProfile: UserProfile): UserProfileFolder {
     return new UserProfileFolder({
       userProfileId: userProfile.id,
-      userProfileFolderName: 'กล่องข้อมูลเข้า',
+      userProfileFolderName: 'กล่องหนังสือเข้า',
       userProfileFolderType: 'I',
-      userProfileFolderDetail: 'ข้อมูลเข้าของ ' + userProfile.fullName
+      userProfileFolderDetail: 'หนังสือเข้าของ ' + userProfile.fullName
     })
   }
 
   genOutbox(userProfile: UserProfile): UserProfileFolder {
     return new UserProfileFolder({
       userProfileId: userProfile.id,
-      userProfileFolderName: 'กล่องข้อมูลออก',
+      userProfileFolderName: 'กล่องหนังสือออก',
       userProfileFolderType: 'O',
-      userProfileFolderDetail: 'ข้อมูลออกของ ' + userProfile.fullName
+      userProfileFolderDetail: 'หนังสือออกของ ' + userProfile.fullName
     })
   }
 

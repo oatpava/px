@@ -7,7 +7,7 @@
           <md-icon>lock_outline</md-icon>
         </button>
         <div flex class="menu-showLabel">
-            <span>กำหนดสิทธิ์ข้อมูลเข้า</span>
+            <span>กำหนดสิทธิ์หนังสือเข้า</span>
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
             <md-card *ngIf="isOwnerSelected">
                 <md-card-title class="title">
                     <div layout="column">
-                        <span>กำหนดสิทธิ์ข้อมูลเข้า</span>
+                        <span>กำหนดสิทธิ์หนังสือเข้า</span>
                         <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
                         <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span>
                     </div>
@@ -40,7 +40,7 @@
             <md-card>
                 <md-card-title class="title">
                     <div layout="column">
-                        <span>กล่องข้อมูลเข้า</span>
+                        <span>กล่องหนังสือเข้า</span>
                         <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
                         <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span>
                     </div>

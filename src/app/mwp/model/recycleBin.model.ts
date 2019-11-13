@@ -18,7 +18,7 @@ export class RecycleBin {
         this.moduleName = "หน้าจอส่วนตัว"
         this.moduleIcon = "mwp.png"
         this.entityName = null
-        this.description = "ข้อมูลเข้า : ลบรายการ[ระบบสารบรรณฯ]  เรื่อง : string"
+        this.description = "หนังสือเข้า : ลบรายการ[ระบบสารบรรณฯ]  เรื่อง : string"
         this.userProfileName = "ผู้ดูแลระบบ"
         this.ipAddress = "127.0.0.1"
 

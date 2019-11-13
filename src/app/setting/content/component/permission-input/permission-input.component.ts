@@ -30,7 +30,7 @@ export class PermissionInputComponent implements OnInit {
   userList: InOutAssign[]
   directories: InOutAssign[]
   iconHeader: string = 'lock_outline'
-  title: string = 'กำหนดสิทธิ์ข้อมูลเข้า'
+  title: string = 'กำหนดสิทธิ์หนังสือเข้า'
   ownerId: number
   ownerType: number
   constructor(private _location: Location,

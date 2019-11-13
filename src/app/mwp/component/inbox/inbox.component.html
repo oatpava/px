@@ -11,7 +11,7 @@
         </div>
         <!-- <barcode [barcodeFilter]="barcodeFilter[index]" (search)="searchBarcode($event)" (onUnselect)="reset()"></barcode> -->
         <div hide show-gt-md layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
-            <span style="margin-right:1rem;">เลือกข้อมูลเข้า</span>
+            <span style="margin-right:1rem;">เลือกหนังสือเข้า</span>
             <p-dropdown [options]="inboxAssign" [style]="{'width':'30rem'}" [(ngModel)]="index" (onChange)="switchInbox($event.value)"></p-dropdown>
         </div>
 
@@ -71,7 +71,7 @@
                                         <div layout="row" layout-align="space-between start">
                                             <div></div>
                                             <div>
-                                                <span>รายการข้อมูลเข้า</span>
+                                                <span>รายการหนังสือเข้า</span>
                                             </div>
                                             <div>
                                                 <button (click)="resetDataTable()"><i class="fa fa-refresh"></i></button>
