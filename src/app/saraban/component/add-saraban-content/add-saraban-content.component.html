@@ -45,7 +45,7 @@
                             <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
                             <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
                         </div>
-                        <div layout="row" style="align-items: center;">
+                        <div layout="row" style="font-size: 16px; align-items: center;">
                             <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()">
                             </md-input>
                             <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
@@ -53,7 +53,7 @@
                             </span>
                             <span *ngIf="diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
                             </span>
-                            <span style="font-size: 16px;"><b>ลงวันที่ : &nbsp;</b></span>
+                            <span><b>ลงวันที่ : &nbsp;</b></span>
                             <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="ลงวันที่*" locale="th" name="wfContentBookDate" [(ngModel)]="sarabanContent.wfContentBookDate" (dateChanged)="onDateChanged($event)" required>
                             </my-date-picker>
                         </div>
@@ -70,7 +70,7 @@
                             </md-select>
                         </div>
                         <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #acFrom flex="95" placeholder="จาก" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
+                            <p-autoComplete #acFrom flex="95" placeholder="จาก*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
                             <button md-icon-button flex="5" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
@@ -87,7 +87,7 @@
                             </p-tabView>
                         </p-dialog>
                         <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #acTo flex="95" placeholder="เรียน" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
+                            <p-autoComplete #acTo flex="95" placeholder="เรียน*" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
                             <template></template>

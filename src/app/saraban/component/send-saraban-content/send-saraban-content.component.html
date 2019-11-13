@@ -16,7 +16,7 @@
                     </md-card-title>
                     <md-card-content style="margin:0px;">
                         <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #ac0 flex="85" placeholder="ถึง" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
+                            <p-autoComplete #ac0 flex="85" placeholder="ถึง*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
                             <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
@@ -178,7 +178,7 @@
                         <div layout="row" layout-align="left start" style="width:100%;">
                             <!-- <md-input flex="100" color="primary" placeholder="เรื่อง" type="text" name="sendTitle" [(ngModel)]="sendTitle">
                             </md-input> -->
-                            <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="sendTitle" [(ngModel)]="sendTitle">
+                            <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="sendTitle" [(ngModel)]="sendTitle" required>
                             </md-textarea>
                         </div>
                         <div layout="column" layout-align="left start" style="width:100%;">
@@ -230,7 +230,7 @@
                         </div>
 
                         <div layout="row" layout-align="center start" style="padding-top:2rem;">
-                            <button md-raised-button [ngClass]="{'md-primary': !sendTo[0].length==0 && !blockUI}" [style.margin-right]="'5px'" [disabled]="sendTo[0].length==0 || blockUI" (click)="send()">ส่ง</button>
+                            <button md-raised-button [ngClass]="{'md-primary': !sendTo[0].length==0 && !sendTitle.length==0 && !blockUI}" [style.margin-right]="'5px'" [disabled]="sendTo[0].length==0 || sendTitle.length==0 || blockUI" (click)="send()">ส่ง</button>
                             <button md-raised-button [style.margin-right]="'5px'" [disabled]="blockUI" (click)="cancel()">ยกเลิก</button>
 
                         </div>
