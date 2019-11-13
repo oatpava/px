@@ -437,4 +437,15 @@ export class SarabanContentService {
     }
   }
 
+  updateSendFlag(content: SarabanContent): Observable<any> {
+    if (environment.production) {
+      return this._http.put(this._apiUrl + "/updateSendFlag", content, this._options)
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }

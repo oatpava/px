@@ -59,7 +59,7 @@ export class SarabanContent {
     wfContentText10: string
     wfContentInt01: number
     wfContentInt02: number
-    wfContentInt03: number
+    wfContentInt03: number//0=unsend,1=sent
     wfContentInt04: number
     wfContentInt05: number
     wfContentInt06: number
