@@ -467,14 +467,6 @@ export class AddSarabanContentComponent implements OnInit {
         this.bookNo_tmp = this.sarabanContent.wfContentBookNo
         this.bookNumber_tmp = this.sarabanContent.wfContentBookNumber
 
-        this.sarabanContent.wfContentFrom = this._paramSarabanService.structure.name
-        let parentKey: number[] = this._paramSarabanService.convertParentKey(this._paramSarabanService.structure.parentKey)
-        let node = this.findNode(this.structureTree, this._paramSarabanService.structure.id, false, parentKey)
-        if (node) {
-          this.sendTo[0].push(node)
-          this.selectedStructure[0].push(node)
-        }
-
         /////after create2
         this.sarabanContent.wfContentContentYear = this.year
         this.sarabanContent.wfContentBookYear = this.year
