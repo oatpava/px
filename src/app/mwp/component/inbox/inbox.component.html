@@ -86,10 +86,12 @@
                                             <p-dropdown [options]="status" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
                                         </template>
                                         <template pTemplate="body" let-row="rowData">
-                                            <i *ngIf="row.inboxOpenFlag!=1" [ngClass]="row.inboxOpenDateDefine.length>1 ? 'material-icons icon-define':'material-icons icon'" [title]="row.inboxOpenDateDefine.length>1 ? 'กำหนดเปิดอ่านภายใน '+row.inboxOpenDateDefine.substr(0, 10):'ยังไม่เปิดอ่าน'">markunread</i>
+                                            <i *ngIf="row.inboxOpenFlag!=1 && row.openDateDefineStatus==0" class="material-icons icon-unopen" title="ยังไม่เปิดอ่าน">markunread</i>
+                                            <i *ngIf="row.inboxOpenFlag!=1 && row.openDateDefineStatus==1" class="material-icons icon-define" [title]="'กำหนดเปิดอ่านภายใน '+row.inboxOpenDateDefine.substr(0, 10)">markunread</i>
+                                            <i *ngIf="row.inboxOpenFlag!=1 && row.openDateDefineStatus==2" class="material-icons icon-expire" [title]="'เลยกำหนดวันที่เปิดอ่าน '+row.inboxOpenDateDefine.substr(0, 10)">markunread</i>
                                             <i *ngIf="row.inboxOpenFlag==1" [ngClass]="row.letterStatus1==3 ? 'material-icons icon-flag':'material-icons icon-expire'" [title]="row.letterStatus1==3 ? 'เปิดอ่านแล้ว':'เปิดอ่านแล้วเกินกำนด'">drafts</i>                                                    
                                             <i *ngIf="row.inboxActionFlag!=1" [ngClass]="row.inboxActionDateDefine.length>1 ? 'material-icons icon-define':'material-icons icon'" [title]="row.inboxActionDateDefine.length>1 ? 'กำหนดมีความเคลื่อนไหวภายใน '+row.inboxActionDateDefine.substr(0, 10):'ยังไม่มีความเคลื่อนไหว'">assignment</i>
-                                            <i *ngIf="row.inboxActionFlag==1" [ngClass]="row.letterStatus2==3 ? 'material-icons icon-flag':'material-icons icon-expire'" [title]="row.letterStatus2==3 ? 'มีความเคลื่อนไหวแล้ว':'มีความเคลื่อนไหวแล้วเกินกำนด'">assignment_turned_in</i>                                                   
+                                            <i *ngIf="row.inboxActionFlag==1" [ngClass]="row.letterStatus2==3 ? 'material-icons icon-flag':'material-icons icon-expire'" [title]="row.letterStatus2==3 ? 'มีความเคลื่อนไหวแล้ว':'มีความเคลื่อนไหวแล้วเกินกำนด'">assignment_turned_in</i>                                                  
                                         </template>
                                     </p-column>
                                     <p-column field="inboxStr03" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">

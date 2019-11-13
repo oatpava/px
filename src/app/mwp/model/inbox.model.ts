@@ -49,4 +49,5 @@ export class Inbox {
     isFinished: boolean
     isCanceled: boolean
     inboxSpeed: number
+    openDateDefineStatus: number//0=ยังไม่เปิดอ่าน, 1=กำหนดเปิดอ่านภายใน inboxOpenDateDefine.substr(0, 10), 2=เลยกำหนดวันที่เปิดอ่าน inboxOpenDateDefine.substr(0, 10)
 }
