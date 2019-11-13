@@ -282,7 +282,9 @@ export class ListSarabanFolderComponent implements OnInit {
   }
 
   move() {
-    let dialogRef = this._dialog.open(DialogMoveFolderComponent)
+    let dialogRef = this._dialog.open(DialogMoveFolderComponent, {
+      height: '70%'
+    })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.msgs.push(dialogRef.componentInstance.msg)
