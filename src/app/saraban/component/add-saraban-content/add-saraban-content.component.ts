@@ -1911,7 +1911,7 @@ export class AddSarabanContentComponent implements OnInit {
     // tmp.cancelBy = 0
     // tmp.isKeeped = false
 
-    this._paramSarabanService.datas[0].push(content)
+    this._paramSarabanService.datas[0].unshift(content)
     this._paramSarabanService.listReturn[0].count++
     this._paramSarabanService.listReturn[0].all++
     this._paramSarabanService.searchFilters = null
