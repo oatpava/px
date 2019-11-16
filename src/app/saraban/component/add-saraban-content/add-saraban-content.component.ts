@@ -1973,12 +1973,21 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.editContentNo = false
     dialogRef.componentInstance.preBookNos = this.preBookNos
     dialogRef.componentInstance.preBookNoIndex = this.preBookNoIndex
+    if (this.mode == 'register') {
+      dialogRef.componentInstance.editBookNumber = true
+      dialogRef.componentInstance.bookNumber = this.sarabanContent.wfContentBookNumber
+    }
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result == 1) {//change preBookNo
         this.changePreBookNo = true
         this.preBookNoIndex = dialogRef.componentInstance.preBookNoIndex
         this.sarabanContent.wfContentBookPre = this.preBookNos[this.preBookNoIndex]
         this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.sarabanContent.wfContentContentYear)
+        this.bookNo_tmp = this.sarabanContent.wfContentBookNo
+      } else if (result == 2) {//changeBookNo
+        let bookNumber = dialogRef.componentInstance.bookNumber
+        this.sarabanContent.wfContentBookNumber = bookNumber
+        this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, bookNumber, this.sarabanContent.wfContentContentYear)
         this.bookNo_tmp = this.sarabanContent.wfContentBookNo
       }
     })

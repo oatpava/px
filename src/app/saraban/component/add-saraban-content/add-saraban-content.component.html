@@ -49,7 +49,7 @@
                             <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()">
                             </md-input>
                             <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
-                                <i *ngIf="!usePoint" class="material-icons contentNo" title="แก้ไขคำนำหน้าเลขที่หนังสือ" (click)="editBookNo()">mode_edit</i>
+                                <i *ngIf="!usePoint" class="material-icons contentNo" title="แก้ไขเลขที่หนังสือ" (click)="editBookNo()">mode_edit</i>
                             </span>
                             <span *ngIf="diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
                             </span>
