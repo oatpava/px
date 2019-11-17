@@ -238,10 +238,17 @@ export class InboxComponent implements OnInit {
   }
 
   select(inbox: Inbox) {
-    if (inbox.inboxOpenFlag != 1) {
-      this.setInboxOpenFlag(inbox)
+    if (inbox.openDateDefineStatus == 2) {
+      let dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = "แจ้งเตือน"
+      dialogRef.componentInstance.message = "คุณไม่มีสามารถเปิดหนังสือที่เลยเลยกำหนดวันที่เปิดอ่าน (" + inbox.inboxOpenDateDefine.substr(0, 10) + ")"
+      dialogRef.componentInstance.confirmation = false
     } else {
-      this.goToSaraban(inbox)
+      if (inbox.inboxOpenFlag != 1) {
+        this.setInboxOpenFlag(inbox)
+      } else {
+        this.goToSaraban(inbox)
+      }
     }
   }
 
