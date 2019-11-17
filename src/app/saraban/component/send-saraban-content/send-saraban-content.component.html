@@ -2,9 +2,9 @@
     <div layout-gt-md="row" layout-align-gt-md="center start">
         <div flex-gt-md style="word-wrap: break-word;">
 
-            <md-card style="margin:0px;">
+            <md-card class="dl-card">
                 <div *ngIf="!scanning" (click)="checkInput()">
-                    <md-card-title style="background: #8fc2f5;" layout="row" flex>
+                    <md-card-title class="dl-card-title" layout="row" flex>
                         <div>
                             <span class="md-headline">{{title}}</span>
                         </div>
@@ -14,7 +14,7 @@
                             <button *ngIf="scanned" md-icon-button title="สแกนไฟล์คำสั่งการ/คำเสนอแล้ว" disabled><i class="material-icons">playlist_add_check</i></button>
                         </div> -->
                     </md-card-title>
-                    <md-card-content style="margin:0px;">
+                    <md-card-content class="dl-card-content">
                         <div layout="row" layout-align="left start" style="align-items: center;">
                             <p-autoComplete #ac0 flex="85" placeholder="ถึง*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
