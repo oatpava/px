@@ -931,12 +931,12 @@ export class AddSarabanContentComponent implements OnInit {
                   (data) => {
                     this._loadingService.resolve('main')
                     //this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + sarabanContent.wfContentTitle, false)
-                    this.deleteParamData(sarabanContent.id, 'ลบ')
+                    this.deleteParamData(sarabanContent.id, true, true)
                   },
                   (err) => {
                     this._loadingService.resolve('main')
                     //this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + sarabanContent.wfContentTitle, false)
-                    this.deleteParamData(sarabanContent.id, 'ลบ')
+                    this.deleteParamData(sarabanContent.id, true, true)
                   })
             }
           })
@@ -992,12 +992,8 @@ export class AddSarabanContentComponent implements OnInit {
           this.msgs.push(this._paramSarabanService.msg)
           this._paramSarabanService.msg = null
           setTimeout(() => this.msgs = [], 3000)
+          this.deleteInBox(this.inboxId)
         }
-
-        // if (this._paramSarabanService.menuType == "inbox") {
-        //   this._paramSarabanService.reloadInbox = true
-        // }
-
       }
     })
   }
@@ -1874,7 +1870,7 @@ export class AddSarabanContentComponent implements OnInit {
       .deleteNoRecyc(id)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.deleteParamData(id, 'ลงทะเบียน')//for back to inbox
+        this.deleteParamData(id, false, true)//for back to inbox
       })
   }
 
@@ -1887,7 +1883,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.url = url
   }
 
-  deleteParamData(id: number, action: string) {
+  deleteParamData(id: number, isContent: boolean, backWithMsg: boolean) {
     let tmp = this._paramSarabanService.datas[0]
     let index = tmp.findIndex(x => x.id == id)
     tmp.splice(index, 1)
@@ -1901,7 +1897,13 @@ export class AddSarabanContentComponent implements OnInit {
       this._paramSarabanService.listReturn[1].count--
       this._paramSarabanService.listReturn[1].all--
     }
-    this.backWithMsg('success', action + 'สำเร็จ', 'คุณได้ทำการ' + action + 'หนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
+    if (backWithMsg) {
+      if (isContent) {
+        this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
+      } else {
+        this.backWithMsg('success', 'ลงทะเบียนสำเร็จ', 'คุณได้ทำการลงทะเบียนหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
+      }
+    }
   }
 
   pushParamData(content: SarabanContent) {
@@ -2179,6 +2181,18 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         this.setCancelParamData(content, true, false)
         this.backWithMsg('success', 'ย้ายหนังสือสำเร็จ', "คุณได้ทำการย้ายสือเรื่อง\n " + content.wfContentTitle, false)
+      })
+  }
+
+  deleteInBox(id: number) {
+    let tmp = new Inbox()
+    tmp.id = id
+    this._loadingService.register('main')
+    this._inboxService
+      .deleteInbox(tmp)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.deleteParamData(id, false, false)//for back to inbox
       })
   }
 
