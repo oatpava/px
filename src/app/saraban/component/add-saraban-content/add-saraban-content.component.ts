@@ -217,6 +217,7 @@ export class AddSarabanContentComponent implements OnInit {
       case (15): this.sendEmail(content); break
       case (17): this.reply(content); break
       //case (20): this.genBarcode(content.wfContentFolderId, content.id); break
+      case (24): this.move(content); break
     }
   }
 
@@ -371,8 +372,11 @@ export class AddSarabanContentComponent implements OnInit {
       .getSarabanMaxContentNo(folderId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        if (registerContent) this.setRegisterSarabanContent(folderId, registerContent, response.wfContentNumber)//booNo use old, new contentNo       
-        else this.setSarabanContent(folderId, response.wfContentYear, response.wfContentNumber)//bookNO=contenNo   
+        switch (this.mode) {
+          case 'add': this.setSarabanContent(folderId, response.wfContentYear, response.wfContentNumber); break//bookNO=contenNo
+          case 'register': this.setRegisterSarabanContent(folderId, registerContent, response.wfContentNumber); break//booNo use old, new contentNo
+          case 'move': this.setMoveContent(folderId, response.wfContentNumber); break
+        }
       })
   }
 
@@ -572,7 +576,6 @@ export class AddSarabanContentComponent implements OnInit {
         }
         this.sarabanContent.wfContentStr03 = registerContent.wfContentStr03
 
-        this.mode = "register"
         this.disable = false
 
         /////after create2
@@ -724,7 +727,7 @@ export class AddSarabanContentComponent implements OnInit {
     if (this.mode == "add") {
       workflow.workflowActionType = "N"
       workflow.workflowNote = this.folderName
-    } else if (this.mode == "register") {
+    } else if (this.mode == "register" || this.mode == 'move') {
       workflow.workflowActionType = "R"
       workflow.workflowNote = this.workflowFolderName
       workflow.linkId3 = this.sarabanContent_tmp.id
@@ -834,11 +837,14 @@ export class AddSarabanContentComponent implements OnInit {
     } else {//mode = register
       this._loadingService.register('main')
       this._sarabanContentService
-        .createSarabanContent(this.sarabanContent, this.preBookNoIndex,  this.sharedFolder)
+        .createSarabanContent(this.sarabanContent, this.preBookNoIndex, this.sharedFolder)
         .subscribe(response => {
           this._loadingService.resolve('main')
           this.sarabanContent.id = response.id
           this.createWorkflow()
+          if (this.folderId == this.sarabanContent.wfContentFolderId) {
+            this.pushParamData(response)
+          }
         })
     }
   }
@@ -846,13 +852,13 @@ export class AddSarabanContentComponent implements OnInit {
   createSarabanContentNoWorkflow(sharedFolder: SarabanFolder) {
     let tmp = Object.assign({}, this.sarabanContent)//clone obj with no refference
     tmp.wfContentFolderId = sharedFolder.id
-    tmp.wfContentContentNumber  = this.sharedContentNumber
+    tmp.wfContentContentNumber = this.sharedContentNumber
     tmp.wfContentContentPre = sharedFolder.wfFolderPreContentNo
-    tmp.wfContentContentNo = tmp.wfContentContentPre + ("000000" + tmp.wfContentContentNumber).substr(-6) + "/" + this.year        
+    tmp.wfContentContentNo = tmp.wfContentContentPre + ("000000" + tmp.wfContentContentNumber).substr(-6) + "/" + this.year
 
     this._loadingService.register('main')
     this._sarabanContentService
-      .createSarabanContent(tmp, 0,  this.sharedFolder)
+      .createSarabanContent(tmp, 0, this.sharedFolder)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.sarabanContent.wfContentBookNumber = response.wfContentContentNumber
@@ -923,12 +929,12 @@ export class AddSarabanContentComponent implements OnInit {
                   (data) => {
                     this._loadingService.resolve('main')
                     //this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + sarabanContent.wfContentTitle, false)
-                    this.deleteParamData(sarabanContent.id, true)
+                    this.deleteParamData(sarabanContent.id, 'ลบ')
                   },
                   (err) => {
                     this._loadingService.resolve('main')
                     //this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + sarabanContent.wfContentTitle, false)
-                    this.deleteParamData(sarabanContent.id, true)
+                    this.deleteParamData(sarabanContent.id, 'ลบ')
                   })
             }
           })
@@ -996,10 +1002,11 @@ export class AddSarabanContentComponent implements OnInit {
 
   register(sarabanContent: SarabanContent) {//mode add+edit
     let dialogRef = this._dialog.open(RegisterSarabanContentComponent, {
-      width: '80%', height: '90%'
+      width: '60%', height: '80%'
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.mode = "register"
         let registedFolderId = dialogRef.componentInstance.selectedFolder.wfFolderLinkFolderId
         this.getReserveNo(registedFolderId)
         this.getCanceledReserveNo(registedFolderId)
@@ -1265,7 +1272,7 @@ export class AddSarabanContentComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.sarabanContent.isCanceled = true
-        this.setCancelParamData(sarabanContent.wfDocumentId, true, allFlow)
+        this.setCancelParamData(sarabanContent, true, allFlow)
         this.backWithMsg('success', 'ยกเลิกหนังสือสำเร็จ', "คุณได้ทำการยกเลิกหนังสือเรื่อง\n " + sarabanContent.wfContentTitle, true)
       })
   }
@@ -1316,7 +1323,7 @@ export class AddSarabanContentComponent implements OnInit {
           .subscribe(response => {
             this._loadingService.resolve('main')
             this.sarabanContent.isCanceled = false
-            this.setCancelParamData(sarabanContent.wfDocumentId, false, allFlow)
+            this.setCancelParamData(sarabanContent, false, allFlow)
             this.backWithMsg('success', 'แก้ไขการยกเลิกหนังสือสำเร็จ', "คุณได้ทำการแก้ไขการยกเลิกเรื่องเสร็จของหนังสือเรื่อง\n " + sarabanContent.wfContentTitle, true)
           })
       })
@@ -1550,19 +1557,21 @@ export class AddSarabanContentComponent implements OnInit {
         if (this.useReserve) {
           this.updateReserveStatus(this.reservedContent)
         }
-        if (this.mode == "add") {
-          if (this.isMyWork) {
+        switch (this.mode) {
+          case 'add': {
+            if (this.isMyWork) this.genRegistedInfo(this.sarabanContent)
+            this._paramSarabanService.sarabanContentId = this.sarabanContent.id
+            this.backWithMsg('success', 'สร้างหนังสือสำเร็จ', 'คุณได้ทำการสร้างหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, true)
+          }; break
+          case 'register': {
             this.genRegistedInfo(this.sarabanContent)
-          }
-          this._paramSarabanService.sarabanContentId = this.sarabanContent.id
-          this.backWithMsg('success', 'สร้างหนังสือสำเร็จ', 'คุณได้ทำการสร้างหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, true)
-        } else if (this.mode == "register") {
-          this.genRegistedInfo(this.sarabanContent)
-          if (this._paramSarabanService.mwp.inboxIndex != null) {
-            this.deleteInBoxNoRecyc(this.inboxId)
-          } else {
-            this.backWithMsg('success', 'ลงทะเบียนสำเร็จ', 'คุณได้ทำการลงทะเบียนหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
-          }
+            if (this._paramSarabanService.mwp.inboxIndex != null) {
+              this.deleteInBoxNoRecyc(this.inboxId)
+            } else {
+              this.backWithMsg('success', 'ลงทะเบียนสำเร็จ', 'คุณได้ทำการลงทะเบียนหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
+            }
+          }; break
+          case 'move': this.createCancelWorkflowAfterMove(this.sarabanContent_tmp); break
         }
       })
   }
@@ -1866,7 +1875,7 @@ export class AddSarabanContentComponent implements OnInit {
       .deleteNoRecyc(id)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.deleteParamData(id, false)//for back to inbox
+        this.deleteParamData(id, 'ลงทะเบียน')//for back to inbox
       })
   }
 
@@ -1879,7 +1888,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.url = url
   }
 
-  deleteParamData(id: number, isContent: boolean) {
+  deleteParamData(id: number, action: string) {
     let tmp = this._paramSarabanService.datas[0]
     let index = tmp.findIndex(x => x.id == id)
     tmp.splice(index, 1)
@@ -1893,11 +1902,7 @@ export class AddSarabanContentComponent implements OnInit {
       this._paramSarabanService.listReturn[1].count--
       this._paramSarabanService.listReturn[1].all--
     }
-    if (isContent) {
-      this.backWithMsg('success', 'ลบหนังสือสำเร็จ', 'คุณได้ทำการลบหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
-    } else {
-      this.backWithMsg('success', 'ลงทะเบียนสำเร็จ', 'คุณได้ทำการลงทะเบียนหนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
-    }
+    this.backWithMsg('success', action + 'สำเร็จ', 'คุณได้ทำการ' + action + 'หนังสือเรื่อง\n ' + this.sarabanContent.wfContentTitle, false)
   }
 
   pushParamData(content: SarabanContent) {
@@ -1918,8 +1923,9 @@ export class AddSarabanContentComponent implements OnInit {
     this._paramSarabanService.searchFilters_tmp = null
   }
 
-  setCancelParamData(documentId: number, isCanceled: boolean, allFlow: boolean) {
+  setCancelParamData(content: SarabanContent, isCanceled: boolean, allFlow: boolean) {
     if (allFlow) {
+      let documentId = content.wfDocumentId
       this._paramSarabanService.datas[0].forEach(content => {
         if (content.wfDocumentId == documentId) {
           content.isCanceled = isCanceled
@@ -1933,10 +1939,11 @@ export class AddSarabanContentComponent implements OnInit {
         })
       }
     } else {
-      let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+      let contentId = content.id
+      let tmp = this._paramSarabanService.datas[0].find(content => content.id == contentId)
       tmp.isCanceled = isCanceled
       if (this._paramSarabanService.searchFilters) {
-        let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+        let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == contentId)
         tmp1.isCanceled = isCanceled
       }
     }
@@ -2054,6 +2061,116 @@ export class AddSarabanContentComponent implements OnInit {
       .updateSarabanContent(tmp, 0)
       .subscribe(response => {
         this._loadingService.resolve('main')
+      })
+  }
+
+  setContentDateStr() {
+    let dateTime = new Date()
+    this.year = dateTime.getFullYear() + 543
+    this.month = dateTime.getMonth() + 1
+    this.day = dateTime.getDate()
+
+    let tzoffset = dateTime.getTimezoneOffset() * 60000//timezone
+    this.sarabanContent.wfContentContentTime = (new Date(Date.now() - tzoffset)).toISOString().slice(11, 16)//"hh:mm"
+    this.time_str_tmp = this.time_str = (new Date(Date.now() - tzoffset)).toISOString().slice(11, 19)//"hh:mm:ss"
+    this.sarabanContent.wfContentContentDate = {
+      date: {
+        year: this.year,
+        month: this.month,
+        day: this.day
+      }
+    }
+    this.contentDate_str_tmp = this.contentDate_str = ("0" + this.day).slice(-2) + "/" + ("0" + this.month).slice(-2) + "/" + this.year//"dd/mm/yyyy"
+  }
+
+  move(content: SarabanContent) {
+    let dialogRef = this._dialog.open(RegisterSarabanContentComponent, {
+      width: '60%', height: '80%'
+    })
+    dialogRef.componentInstance.isRegister = false
+    dialogRef.componentInstance.title = 'เลือกแฟ้มทะเบียนเป้าหมาย'
+    dialogRef.componentInstance.currentFolderId = this.folderId
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.mode = 'move'
+        this.workflowFolderName = dialogRef.componentInstance.selectedFolder.wfFolderName
+        this.sarabanContent_tmp = content
+        this.sarabanContent = new SarabanContent()
+        this.sarabanContent = Object.assign({}, this.sarabanContent_tmp)
+        this.getSarabanLastNumber(dialogRef.componentInstance.selectedFolder.wfFolderLinkFolderId, null)
+      }
+    })
+  }
+
+  setMoveContent(folderId: number, contentNumber: number) {
+    this._loadingService.register('main')
+    this._sarabanService
+      .getSarabanFolder(folderId)
+      .subscribe(folder => {
+        this._loadingService.resolve('main')
+        this.folderBookNoType = folder.wfFolderBookNoType
+        if (folder.wfFolderPreBookNo) {
+          this.sarabanContent.wfContentContentPre = folder.wfFolderPreContentNo
+        } else {
+          this.sarabanContent.wfContentContentPre = ''
+        }
+        this.setContentDateStr()
+        this.sarabanContent.version = 1
+        this.sarabanContent.wfContentFolderId = folderId
+        this.sarabanContent.wfContentContentPre = (folder.wfFolderPreContentNo == null) ? '' : folder.wfFolderPreContentNo
+        this.sarabanContent.wfContentContentNumber = contentNumber
+        this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year
+        this.sarabanContent.wfContentContentYear = this.year
+        this.sarabanContent.wfContentContentDate = this.contentDate_str
+        this.sarabanContent.wfContentBookDate = this.bookDate_str
+        this.sarabanContent.workflowId = 0
+        this._loadingService.register('main')
+        this._sarabanContentService
+          .getSarabanMaxContentNo(folderId)
+          .subscribe(response => {
+            this._loadingService.resolve('main')
+            if (response.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
+              this.sarabanContent.wfContentContentNumber = response.wfContentNumber
+            }
+            this.createMoveContent()
+          })
+      })
+  }
+
+  createMoveContent() {
+    this._loadingService.register('main')
+    this._sarabanContentService
+      .createCopy(this.sarabanContent)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.sarabanContent.id = response.id
+        this.createWorkflow()
+      })
+  }
+
+  createCancelWorkflowAfterMove(content: SarabanContent) {
+    let workflow = new Workflow()
+    workflow.version = 1
+    workflow.linkId = content.wfDocumentId
+    workflow.linkId2 = content.id
+    workflow.linkId3 = 0//must set to 0 because effet to cancel all flow
+    workflow.workflowTitle = content.wfContentTitle
+    workflow.workflowDescription = 'ย้ายหนังสือ'
+    workflow.workflowNote = 'ไปยังแฟ้มทะเบียน ' + this.workflowFolderName
+    workflow.workflowActionType = "C"
+    workflow.workflowStr02 = content.wfContentDescription
+    workflow.workflowStr03 = content.wfContentContentNo
+    workflow.workflowStr04 = content.wfContentBookNo
+    workflow.workflowDate01 = this.bookDate_str
+    workflow.workflowDate02 = this.contentDate_str
+    this._loadingService.register('main')
+    this._workflowService
+      .createWorkflow(workflow)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.sarabanContent.isCanceled = true
+        this.setCancelParamData(content, true, false)
+        this.backWithMsg('success', 'ย้ายหนังสือสำเร็จ', "คุณได้ทำการย้ายสือเรื่อง\n " + content.wfContentTitle, false)
       })
   }
 

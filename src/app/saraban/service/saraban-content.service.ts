@@ -69,7 +69,7 @@ export class SarabanContentService {
   getMenus(menuType: string): Observable<Menu[]> {
     let menus: Menu[] = []
     if (menuType === "list-saraban") menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1])
-    else if (menuType === "saraban") menus.push(MENUS[15], MENUS[13], MENUS[11], MENUS[10], MENUS[9], MENUS[8], MENUS[7])
+    else if (menuType === "saraban") menus.push(MENUS[15], MENUS[13], MENUS[11], MENUS[10], MENUS[9], MENUS[8], MENUS[24], MENUS[7])
     else if (menuType === "saraban-finish") menus.push(MENUS[12])
     else if (menuType === "saraban-canceled") menus.push(MENUS[14])
     else if (menuType === "inbox") menus.push(MENUS[9], MENUS[17], MENUS[10])
@@ -97,6 +97,7 @@ export class SarabanContentService {
       if (contentAuth[5].auth) menus.push(MENUS[10])
       if (contentAuth[4].auth) menus.push(MENUS[9])
       if (contentAuth[3].auth) menus.push(MENUS[8])
+      menus.push(MENUS[24])
       if (contentAuth[2].auth) menus.push(MENUS[7])
     } else if (menuType === "saraban-finish") {
       menus.push(MENUS[12])
@@ -440,6 +441,17 @@ export class SarabanContentService {
   updateSendFlag(content: SarabanContent): Observable<any> {
     if (environment.production) {
       return this._http.put(this._apiUrl + "/updateSendFlag", content, this._options)
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
+  createCopy(content: SarabanContent): Observable<SarabanContent> {
+    if (environment.production) {
+      return this._http.post(this._apiUrl + "/createCopy", content, this._options)
         .map((response: Response) => {
           return response.json().data
         })
