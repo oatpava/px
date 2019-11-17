@@ -128,6 +128,7 @@ export class AddSarabanContentComponent implements OnInit {
   diableEditBookNo: boolean = false
 
   referenceContent: SarabanContent
+  registerAgain: boolean = false
 
   private isArchive: boolean
 
@@ -733,6 +734,7 @@ export class AddSarabanContentComponent implements OnInit {
       workflow.workflowActionType = "R"
       workflow.workflowNote = this.workflowFolderName
       workflow.linkId3 = this.sarabanContent_tmp.id
+      if (this.registerAgain) workflow.workflowStr01 = '1'
     }
     // if (this.hardCopyRecieved) {
     //   workflow.workflowNote += " [ได้รับแล้ว " + this.hardCopyDate_str + "]"
@@ -1358,6 +1360,7 @@ export class AddSarabanContentComponent implements OnInit {
             dialogRef.componentInstance.confirmation = true
             dialogRef.afterClosed().subscribe(result => {
               if (result) {
+                this.registerAgain = true
                 this.saveAction(action)
               }
             })
@@ -1993,8 +1996,10 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.editContentNo = false
     dialogRef.componentInstance.preBookNos = this.preBookNos
     dialogRef.componentInstance.preBookNoIndex = this.preBookNoIndex
-    dialogRef.componentInstance.editBookNumber = true
-    dialogRef.componentInstance.bookNumber = this.sarabanContent.wfContentBookNumber
+    if (this.mode == 'register') {
+      dialogRef.componentInstance.editBookNumber = true
+      dialogRef.componentInstance.bookNumber = this.sarabanContent.wfContentBookNumber
+    }
     dialogRef.afterClosed().subscribe(result => {
       if (result == 1) {//change preBookNo
         this.changePreBookNo = true
