@@ -1980,10 +1980,8 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.editContentNo = false
     dialogRef.componentInstance.preBookNos = this.preBookNos
     dialogRef.componentInstance.preBookNoIndex = this.preBookNoIndex
-    if (this.mode == 'register') {
-      dialogRef.componentInstance.editBookNumber = true
-      dialogRef.componentInstance.bookNumber = this.sarabanContent.wfContentBookNumber
-    }
+    dialogRef.componentInstance.editBookNumber = true
+    dialogRef.componentInstance.bookNumber = this.sarabanContent.wfContentBookNumber
     dialogRef.afterClosed().subscribe(result => {
       if (result == 1) {//change preBookNo
         this.changePreBookNo = true
