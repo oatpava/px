@@ -1004,6 +1004,7 @@ export class AddSarabanContentComponent implements OnInit {
     let dialogRef = this._dialog.open(RegisterSarabanContentComponent, {
       width: '60%', height: '80%'
     })
+    if (this._paramSarabanService.mwp.fromMwp) dialogRef.componentInstance.fromMWP = true
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.mode = "register"
