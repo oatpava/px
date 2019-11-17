@@ -471,12 +471,14 @@ export class AddSarabanContentComponent implements OnInit {
         this.bookNo_tmp = this.sarabanContent.wfContentBookNo
         this.bookNumber_tmp = this.sarabanContent.wfContentBookNumber
 
-        this.sarabanContent.wfContentFrom = this._paramSarabanService.structure.name
-        let parentKey: number[] = this._paramSarabanService.convertParentKey(this._paramSarabanService.structure.parentKey)
-        let node = this.findNode(this.structureTree, this._paramSarabanService.structure.id, false, parentKey)
-        if (node) {
-          this.sendTo[0].push(node)
-          this.selectedStructure[0].push(node)
+        if (sarabanFolder.wfContentType.id != 1) {
+          this.sarabanContent.wfContentFrom = this._paramSarabanService.structure.name
+          let parentKey: number[] = this._paramSarabanService.convertParentKey(this._paramSarabanService.structure.parentKey)
+          let node = this.findNode(this.structureTree, this._paramSarabanService.structure.id, false, parentKey)
+          if (node) {
+            this.sendTo[0].push(node)
+            this.selectedStructure[0].push(node)
+          }
         }
 
         /////after create2
@@ -502,7 +504,7 @@ export class AddSarabanContentComponent implements OnInit {
       .getSarabanFolder(folderId)
       .subscribe(sarabanFolder => {
         this._loadingService.resolve('main')
-
+        let isFoldertype1 = (sarabanFolder.wfContentType.id == 1)//ทะเบียนรับ
         this.folderBookNoType = sarabanFolder.wfFolderBookNoType
         if (sarabanFolder.wfFolderPreBookNo) {
           this.preBookNos = sarabanFolder.wfFolderPreBookNo.split(", ")
@@ -544,7 +546,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         this.sarabanContent.wfContentSpeed = registerContent.wfContentSpeed
         this.sarabanContent.wfContentSecret = registerContent.wfContentSecret
-        this.sarabanContent.wfContentFrom = registerContent.wfContentFrom
+        this.sarabanContent.wfContentFrom = (isFoldertype1) ? '' : registerContent.wfContentFrom
         this.sarabanContent.wfContentTo = registerContent.wfContentTo
         this.sarabanContent.wfContentTitle = registerContent.wfContentTitle
         this.sarabanContent.wfContentAttachment = registerContent.wfContentAttachment
@@ -569,7 +571,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentStr02 = registerContent.wfContentStr02
         this.sarabanContent.wfContentText03 = registerContent.wfContentText03
         this.sarabanContent.wfContentStr04 = registerContent.wfContentStr04
-        if (!this.isMyWork) this.prepareShowFromTo()
+        if (!this.isMyWork) this.prepareShowFromTo(!isFoldertype1)
         else {
           this.sarabanContent.wfContentInt01 = registerContent.wfContentInt01 //first content
           this.sarabanContent.wfContentStr01 = registerContent.wfContentStr01 //ES searchId
@@ -591,9 +593,9 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  prepareShowFromTo() {
+  prepareShowFromTo(showFrom: boolean) {
     this.sendTo = [[], [], []]
-    this.addNode(0, this.sarabanContent.wfContentFrom)
+    if (showFrom) this.addNode(0, this.sarabanContent.wfContentFrom)
     this.addNode(1, this.sarabanContent.wfContentTo)
     if (this.sarabanContent.wfContentText03) this.addNode(2, this.sarabanContent.wfContentText03)
   }
@@ -884,7 +886,7 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   edit() {
-    this.prepareShowFromTo()
+    this.prepareShowFromTo(true)
     this.getPreBookNo()
     this.mode = 'edit'
     this.title = 'แก้ไขหนังสือ'
