@@ -770,12 +770,8 @@ export class AddSarabanContentComponent implements OnInit {
         .subscribe(response => {
           this._loadingService.resolve('main')
           if (response.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
-            this.sarabanContent.wfContentBookNumber = response.wfContentNumber
+            this.sarabanContent.wfContentContentNumber = response.wfContentNumber
             this.sarabanContent.wfContentContentNo = response.wfContentNo
-            if (!this.sharedFolder) {
-              this.sarabanContent.wfContentBookNumber = response.wfContentNumber
-              this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
-            }
             this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
               + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
               + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
