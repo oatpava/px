@@ -1129,8 +1129,7 @@ export class AddSarabanContentComponent implements OnInit {
       .createWorkflow(workflow)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.sarabanContent.hasFinish = true
-        this.setFinishParamData(sarabanContent.wfDocumentId, true, allFlow)
+        this.setFinishParamData(sarabanContent, true, allFlow)
         if (this._paramSarabanService.inboxFlag.finish != 1) this.setInboxFinishFlag(sarabanContent.id)
         if (keep) {
           this.backWithMsg('success', 'ทำเรื่องเสร็จและจัดเก็บสำเร็จ', "คุณได้ทำเรื่องเสร็จและจัดเก็บเอกสารของหนังสือเรื่อง\n " + sarabanContent.wfContentTitle, true)
@@ -1188,8 +1187,7 @@ export class AddSarabanContentComponent implements OnInit {
           .cancelFinish(sarabanContent)
           .subscribe(response => {
             this._loadingService.resolve('main')
-            this.sarabanContent.hasFinish = false
-            this.setFinishParamData(sarabanContent.wfDocumentId, false, allFlow)
+            this.setFinishParamData(sarabanContent, false, allFlow)
             if (response == 0) {
               this._loadingService.register('main')
               this._documentService
@@ -1271,7 +1269,6 @@ export class AddSarabanContentComponent implements OnInit {
       .createWorkflow(workflow)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.sarabanContent.isCanceled = true
         this.setCancelParamData(sarabanContent, true, allFlow)
         this.backWithMsg('success', 'ยกเลิกหนังสือสำเร็จ', "คุณได้ทำการยกเลิกหนังสือเรื่อง\n " + sarabanContent.wfContentTitle, true)
       })
@@ -1322,7 +1319,6 @@ export class AddSarabanContentComponent implements OnInit {
           .unCancelContent(sarabanContent)
           .subscribe(response => {
             this._loadingService.resolve('main')
-            this.sarabanContent.isCanceled = false
             this.setCancelParamData(sarabanContent, false, allFlow)
             this.backWithMsg('success', 'แก้ไขการยกเลิกหนังสือสำเร็จ', "คุณได้ทำการแก้ไขการยกเลิกเรื่องเสร็จของหนังสือเรื่อง\n " + sarabanContent.wfContentTitle, true)
           })
@@ -1924,17 +1920,20 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   setCancelParamData(content: SarabanContent, isCanceled: boolean, allFlow: boolean) {
+    let status = isCanceled ? 3 : 1
     if (allFlow) {
       let documentId = content.wfDocumentId
       this._paramSarabanService.datas[0].forEach(content => {
         if (content.wfDocumentId == documentId) {
           content.isCanceled = isCanceled
+          content.status = status
         }
       })
       if (this._paramSarabanService.searchFilters) {
         this._paramSarabanService.datas[1].forEach(content => {
           if (content.wfDocumentId == documentId) {
             content.isCanceled = isCanceled
+            content.status = status
           }
         })
       }
@@ -1942,33 +1941,42 @@ export class AddSarabanContentComponent implements OnInit {
       let contentId = content.id
       let tmp = this._paramSarabanService.datas[0].find(content => content.id == contentId)
       tmp.isCanceled = isCanceled
+      tmp.status = status
       if (this._paramSarabanService.searchFilters) {
         let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == contentId)
         tmp1.isCanceled = isCanceled
+        tmp1.status = status
       }
     }
   }
 
-  setFinishParamData(documentId: number, isFinished: boolean, allFlow: boolean) {
+  setFinishParamData(content: SarabanContent, isFinished: boolean, allFlow: boolean) {
+    let status = isFinished ? 2 : 1
     if (allFlow) {
+      let documentId = content.wfDocumentId
       this._paramSarabanService.datas[0].forEach(content => {
         if (content.wfDocumentId == documentId) {
           content.hasFinish = isFinished
+          content.status = status
         }
       })
       if (this._paramSarabanService.searchFilters) {
         this._paramSarabanService.datas[1].forEach(content => {
           if (content.wfDocumentId == documentId) {
             content.hasFinish = isFinished
+            content.status = status
           }
         })
       }
     } else {
-      let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+      let contentId = content.id
+      let tmp = this._paramSarabanService.datas[0].find(content => content.id == contentId)
       tmp.hasFinish = isFinished
+      tmp.status = status
       if (this._paramSarabanService.searchFilters) {
-        let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+        let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == contentId)
         tmp1.hasFinish = isFinished
+        tmp1.status = status
       }
     }
   }
@@ -2166,7 +2174,6 @@ export class AddSarabanContentComponent implements OnInit {
       .createWorkflow(workflow)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.sarabanContent.isCanceled = true
         this.setCancelParamData(content, true, false)
         this.backWithMsg('success', 'ย้ายหนังสือสำเร็จ', "คุณได้ทำการย้ายสือเรื่อง\n " + content.wfContentTitle, false)
       })

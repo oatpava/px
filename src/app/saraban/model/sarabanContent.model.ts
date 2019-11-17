@@ -59,7 +59,7 @@ export class SarabanContent {
     wfContentText10: string
     wfContentInt01: number
     wfContentInt02: number
-    wfContentInt03: number//0=unsend,1=sent
+    wfContentInt03: number//0=unsend, 1=sent
     wfContentInt04: number
     wfContentInt05: number
     wfContentInt06: number
@@ -80,7 +80,7 @@ export class SarabanContent {
     hasFinish: boolean
     commandTypeName: string
     isCanceled: boolean
-    status: number
+    status: number//1=normal, 2=finished, 3=canceled
     numFileAttach: number
     finishByS: number
     cancelBy: number
