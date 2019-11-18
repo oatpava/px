@@ -2264,16 +2264,4 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
-  deleteInBox(id: number) {
-    let tmp = new Inbox()
-    tmp.id = id
-    this._loadingService.register('main')
-    this._inboxService
-      .deleteInbox(tmp)
-      .subscribe(response => {
-        this._loadingService.resolve('main')
-        this.deleteParamData(id, false, false)//for back to inbox
-      })
-  }
-
 }
