@@ -1,25 +1,21 @@
-<div layout-gt-sm="row" layout="column">
-    <div flex="100">
-        <md-card style="margin:0px;">
-            <md-card-title>
-                <span class="md-headline">เลือกแฟ้มที่จะลงทะเบียน</span>
-            </md-card-title>
-            <md-card-content>
-                <form style="width: 100%;" layout="column" class="input-Login" #registerContent="ngForm" layout-align="top center">
-                    <md-list>
-                        <template let-item let-last="last" ngFor [ngForOf]="shortCutSaraban">
-                            <md-list-item class="hover" (click)="selectShortcutFolder(item)">
-                                <md-icon md-list-avatar [ngStyle]="{'background': (item.wfContentType.id==1) ? '#008000' : (item.wfContentType.id==2) ? '#e65c00' : '#e60000',
-                                'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900'}">book</md-icon>
-                                <h3 md-line> {{item.wfFolderName}} </h3>
-                                <h4 md-line> {{item.wfFolderParentName}} </h4>
-                                <p md-line> {{item.wfFolderDetail}} </p>
-                            </md-list-item>
-                            <md-divider *ngIf="!last" md-inset></md-divider>
-                        </template>
-                    </md-list>
-                </form>
-            </md-card-content>
-        </md-card>
-    </div>
-</div>
+<md-card class="dl-card">
+    <md-card-title class="dl-card-title">
+        {{title}}
+    </md-card-title>
+    <md-card-content class="dl-card-content">
+        <md-list>
+            <template let-item let-last="last" ngFor [ngForOf]="shortCutSaraban">
+                <md-list-item class="hover" (click)="selectShortcutFolder(item)">
+                    <md-icon md-list-avatar
+                        [ngStyle]="{'background': (item.wfContentType.id==1) ? '#008000' : (item.wfContentType.id==2) ? '#e65c00' : '#e60000',
+                                'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900'}">book
+                    </md-icon>
+                    <h3 md-line> {{item.wfFolderName}} </h3>
+                    <h4 md-line> {{item.wfFolderParentName}} </h4>
+                    <p md-line> {{item.wfFolderDetail}} </p>
+                </md-list-item>
+                <md-divider md-inset></md-divider>
+            </template>
+        </md-list>
+    </md-card-content>
+</md-card>

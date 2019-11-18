@@ -19,6 +19,8 @@ export class DialogListReserveComponent implements OnInit {
 
   preBookNos: string[]
   preBookNoIndex: number = 0
+  editBookNumber: boolean = false
+  bookNumber: number
 
   constructor(
     public dialogRef: MdDialogRef<DialogListReserveComponent>

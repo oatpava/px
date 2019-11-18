@@ -4,6 +4,7 @@ import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
 import { TreeModule, TreeNode, Message } from 'primeng/primeng'
 import { MdDialog, MdDialogRef } from '@angular/material'
+import { Observable } from 'rxjs/Observable'
 
 import { DeleteDialogComponent } from '../../../../main/component/delete-dialog/delete-dialog.component'
 import { ConfirmDialogComponent } from '../../../../main/component/confirm-dialog/confirm-dialog.component'
@@ -119,12 +120,12 @@ export class AddStructureComponent implements OnInit {
 
             if (structure.parentId != 1) {//get folder type 3 of parent Structure to use folderId as parentFodlerId
               this._sarabanService
-              .listSarabanFoldersByStructureId(structure.parentId)
-              .subscribe(parentFolder => {
-                if (parentFolder.length > 0) this.createSarabanFolder(structure, parentFolder[0].id)
-                else this.createSarabanFolder(structure, 0)
-              })
-            } else this.createSarabanFolder(structure, 0)
+                .listSarabanFoldersByStructureId(structure.parentId)
+                .subscribe(parentFolder => {
+                  if (parentFolder.length > 0) this.createSarabanParentFolder(structure, parentFolder[0].id)
+                  else this.createSarabanParentFolder(structure, 0)
+                })
+            } else this.createSarabanParentFolder(structure, 0)
           })
       })
   }
@@ -258,57 +259,85 @@ export class AddStructureComponent implements OnInit {
     this._location.back()
   }
 
-  createSarabanFolder(structure: Structure, rootParentId: number): void {
-    let folder = new SarabanFolder()
-    folder.parentId = rootParentId
-    folder.wfFolderType = "T"
-    folder.wfFolderLinkId = structure.id
-    folder = this._sarabanService.changeBudgetYear(folder, false)
-    folder = this._sarabanService.changeBookNoType(folder)
+  createSarabanParentFolder(structure: Structure, rootParentId: number) {
+    let folder = new SarabanFolder({
+      parentId: rootParentId,
+      wfFolderType: 'T',
+      wfFolderLinkId: structure.id,
+      wfFolderName: structure.name
+    })
     folder.wfContentType.id = 3
     folder.wfContentType2.id = 1
-    folder.wfFolderName = structure.name
     this._sarabanService
       .createSarabanFolder(folder)
       .subscribe(response => {
-        let parentId = response.id
-        folder.parentId = parentId
-
-        folder.wfContentType.id = 1
-        folder.wfContentType2.id = 2
-        folder.wfFolderName = "ทะเบียนรับหนังสือภายใน"
-        folder.wfFolderDetail = "ทะเบียนรับ"
-        this._sarabanService
-          .createSarabanFolder(folder)
-          .subscribe(response => {
-            folder.wfContentType.id = 1
-            folder.wfContentType2.id = 3
-            folder.wfFolderName = "ทะเบียนรับหนังสือภายนอก"
-            folder.wfFolderDetail = "ทะเบียนรับ"
-            this._sarabanService
-              .createSarabanFolder(folder)
-              .subscribe(response => {
-                folder.wfContentType.id = 2
-                folder.wfContentType2.id = 2
-                folder.wfFolderName = "ทะเบียนส่งหนังสือภายใน"
-                folder.wfFolderDetail = "ทะเบียนส่ง"
-                this._sarabanService
-                  .createSarabanFolder(folder)
-                  .subscribe(response => {
-                    folder.wfContentType.id = 2
-                    folder.wfContentType2.id = 3
-                    folder.wfFolderName = "ทะเบียนส่งหนังสือภายนอก"
-                    folder.wfFolderDetail = "ทะเบียนรส่ง"
-                    this._sarabanService
-                      .createSarabanFolder(folder)
-                      .subscribe(response => {
-                        this.goBack()
-                      })
-                  })
-              })
-          })
+        this.createSarabanFolders(response)
       })
   }
 
+  createSarabanFolders(parentFolder: SarabanFolder) {
+    let folder12 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "ทะเบียนรับหนังสือภายใน",
+      wfFolderDetail: "ทะเบียนรับ"
+    })
+    folder12.wfContentType.id = 1
+    folder12.wfContentType2.id = 2
+
+    let folder13 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "ทะเบียนรับหนังสือภายนอก",
+      wfFolderDetail: "ทะเบียนรับ"
+    })
+    folder13.wfContentType.id = 1
+    folder13.wfContentType2.id = 3
+  
+
+    let folder22 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "ทะเบียนส่งหนังสือภายใน",
+      wfFolderDetail: "ทะเบียนส่ง"
+    })
+    folder22.wfContentType.id = 2
+    folder22.wfContentType2.id = 2
+
+    let folder23 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "ทะเบียนส่งหนังสือภายนอก",
+      wfFolderDetail: "ทะเบียนส่ง"
+    })
+    folder23.wfContentType.id = 2
+    folder23.wfContentType2.id = 3
+
+    let folder4 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "ทะเบียนหนังสือเวียน",
+      wfFolderDetail: "หนังสือเวียน"
+    })
+    folder4.wfContentType.id = 4
+    folder4.wfContentType2.id = 1
+
+    let tmp: any[] = [
+      this._sarabanService.createSarabanFolder(folder12),
+      this._sarabanService.createSarabanFolder(folder13),
+      this._sarabanService.createSarabanFolder(folder22),
+      this._sarabanService.createSarabanFolder(folder23),
+      this._sarabanService.createSarabanFolder(folder4),
+    ]
+    Observable.forkJoin(tmp)
+      .subscribe((res: any[]) => {
+        this.goBack()
+      })
+  }
 
 }
