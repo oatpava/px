@@ -53,4 +53,12 @@
             <button md-raised-button [ngClass]="'md-primary'" [style.margin-right]="'5px'" (click)="ok(1)">ตกลง</button>
         </div>
     </p-tabPanel>
+    <p-tabPanel *ngIf="editBookNumber" header="เลขที่หนังสือ" leftIcon="fa-list-ol">
+        <div layout="row" layout-align="left start">
+            <md-input flex type="number" min="1" [max]="999999" placeholder="เลขที่หนังสือ" name="เลขที่หนังสือ" [(ngModel)]="bookNumber"></md-input>
+        </div>
+        <div layout="row" layout-align="center start" style="padding-top:1rem;">
+            <button md-raised-button [ngClass]="{'md-primary': bookNumber}" [disabled]="!bookNumber" [style.margin-right]="'5px'" (click)="ok(2)">ตกลง</button>
+        </div>
+    </p-tabPanel>
 </p-tabView>

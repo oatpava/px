@@ -18,6 +18,10 @@ export class RegisterSarabanContentComponent implements OnInit {
   sarabanContentId: number
   shortCutSaraban: SarabanFolder[] = []
   selectedFolder: SarabanFolder
+  isRegister: boolean = true
+  title: String = 'เลือกแฟ้มที่จะลงทะเบียน'
+  currentFolderId: number
+  fromMWP: boolean = false
 
   constructor(
     private _route: ActivatedRoute,
@@ -41,11 +45,16 @@ export class RegisterSarabanContentComponent implements OnInit {
       .getSarabanFolderShortcuts()
       .subscribe(response => {
         this._loadingService.resolve('main')
-        response.forEach(folder => {
-          if (folder.wfContentType2.id != 5) {
-            this.shortCutSaraban.push(folder)
-          }
-        })
+        if (this.isRegister) {//register
+          this.shortCutSaraban = (!this.fromMWP) ?
+            response.filter(folder => folder.wfContentType2.id != 5) :
+            response.filter(folder => folder.wfContentType.id == 1 && folder.wfContentType2.id != 5)
+        } else {//move
+          this.shortCutSaraban = response.filter(folder =>
+            folder.wfContentType.id == 1 &&
+            folder.wfContentType2.id != 5 &&
+            folder.wfFolderLinkFolderId != this.currentFolderId)
+        }
       })
   }
 
@@ -53,6 +62,5 @@ export class RegisterSarabanContentComponent implements OnInit {
     this.selectedFolder = selectedFolder
     this.dialogRef.close(true)
   }
-
 
 }

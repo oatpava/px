@@ -216,5 +216,14 @@ export const MENUS: Menu[] = [
         icon: 'trending_flat',
         color: '#00aaff',
         nameEng: 'move'
+    },
+    {
+        version: 1,
+        id: 24,
+        type: '',
+        name: 'ย้ายหนังสือ',
+        icon: 'trending_flat',
+        color: '#248f24',
+        nameEng: 'move'
     }
 ]

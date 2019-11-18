@@ -468,6 +468,7 @@ export class SendSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         if (this.additional[4].checked) this.createSenderSide(sendWorkflow.id)//2-3.
         this.createreceiverSide(sendWorkflow.id)
+        this.updateSendFlag(this.sarabanContent)
       })
   }
 
@@ -1012,5 +1013,13 @@ export class SendSarabanContentComponent implements OnInit {
 
   }
 
+  updateSendFlag(content: SarabanContent) {
+    this._loadingService.register('main')
+    this._sarabanContentService
+      .updateSendFlag(content)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+    })
+  }
 
 }

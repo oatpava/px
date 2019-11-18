@@ -20,6 +20,7 @@ import { ListReturn } from '../../../main/model/listReturn.model'
 import { ReportSarabanComponent } from '../report-saraban/report-saraban.component'
 import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/dialog-warning.component'
 import { ReserveSarabanContentComponent } from '../reserveContentNo/reserve-saraban-content/reserve-saraban-content.component'
+import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
 
 // / means the root of the current drive;
 // ./ means the current directory;
@@ -475,6 +476,27 @@ export class ListSarabanContentComponent implements OnInit {
       this.msgs = []
       this.msgs.push({ severity: 'error', summary: 'ค้นหาด้วยบาร์โค้ด', detail: 'ข้อมูลผิดพลาด' })
     }
+  }
+
+  send(content: SarabanContent) {
+    this._paramSarabanService.isContent = true
+    this._paramSarabanService.sarabanContentId = content.id
+    let dialogRef = this._dialog.open(SendSarabanContentComponent, {
+      width: '65%', height: '90%'
+    })
+    dialogRef.componentInstance.mode = 'send'
+    dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + content.wfContentTitle
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        content.wfContentInt03 = 1
+        if (this._paramSarabanService.msg != null) {
+          this.msgs = []
+          this.msgs.push(this._paramSarabanService.msg)
+          this._paramSarabanService.msg = null
+          setTimeout(() => this.msgs = [], 3000)
+        }     
+      }
+    })
   }
 
 }
