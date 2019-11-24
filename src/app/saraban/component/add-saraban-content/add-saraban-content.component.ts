@@ -596,7 +596,8 @@ export class AddSarabanContentComponent implements OnInit {
 
   prepareShowFromTo(showFrom: boolean) {
     this.sendTo = [[], [], []]
-    if (showFrom) this.addNode(0, this.sarabanContent.wfContentFrom)
+    // if (showFrom) this.addNode(0, this.sarabanContent.wfContentFrom)
+    this.addNode(0, this.sarabanContent.wfContentFrom)
     this.addNode(1, this.sarabanContent.wfContentTo)
     if (this.sarabanContent.wfContentText03) this.addNode(2, this.sarabanContent.wfContentText03)
   }

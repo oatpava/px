@@ -238,18 +238,18 @@ export class InboxComponent implements OnInit {
   }
 
   select(inbox: Inbox) {
-    if (inbox.openDateDefineStatus == 2) {
-      let dialogRef = this._dialog.open(DialogWarningComponent)
-      dialogRef.componentInstance.header = "แจ้งเตือน"
-      dialogRef.componentInstance.message = "คุณไม่มีสามารถเปิดหนังสือที่เลยเลยกำหนดวันที่เปิดอ่าน (" + inbox.inboxOpenDateDefine.substr(0, 10) + ")"
-      dialogRef.componentInstance.confirmation = false
+    // if (inbox.openDateDefineStatus == 2) {
+    //   let dialogRef = this._dialog.open(DialogWarningComponent)
+    //   dialogRef.componentInstance.header = "แจ้งเตือน"
+    //   dialogRef.componentInstance.message = "คุณไม่มีสามารถเปิดหนังสือที่เลยเลยกำหนดวันที่เปิดอ่าน (" + inbox.inboxOpenDateDefine.substr(0, 10) + ")"
+    //   dialogRef.componentInstance.confirmation = false
+    // } else {
+    if (inbox.inboxOpenFlag != 1) {
+      this.setInboxOpenFlag(inbox)
     } else {
-      if (inbox.inboxOpenFlag != 1) {
-        this.setInboxOpenFlag(inbox)
-      } else {
-        this.goToSaraban(inbox)
-      }
+      this.goToSaraban(inbox)
     }
+    // }
   }
 
   goToSaraban(inbox: Inbox) {
