@@ -505,7 +505,6 @@ export class AddSarabanContentComponent implements OnInit {
       .getSarabanFolder(folderId)
       .subscribe(sarabanFolder => {
         this._loadingService.resolve('main')
-        let isFoldertype1 = (sarabanFolder.wfContentType.id == 1)//ทะเบียนรับ
         this.folderBookNoType = sarabanFolder.wfFolderBookNoType
         if (sarabanFolder.wfFolderPreBookNo) {
           this.preBookNos = sarabanFolder.wfFolderPreBookNo.split(", ")
@@ -547,7 +546,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         this.sarabanContent.wfContentSpeed = registerContent.wfContentSpeed
         this.sarabanContent.wfContentSecret = registerContent.wfContentSecret
-        this.sarabanContent.wfContentFrom = (isFoldertype1) ? '' : registerContent.wfContentFrom
+        this.sarabanContent.wfContentFrom = registerContent.wfContentFrom
         this.sarabanContent.wfContentTo = registerContent.wfContentTo
         this.sarabanContent.wfContentTitle = registerContent.wfContentTitle
         this.sarabanContent.wfContentAttachment = registerContent.wfContentAttachment
@@ -572,7 +571,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentStr02 = registerContent.wfContentStr02
         this.sarabanContent.wfContentText03 = registerContent.wfContentText03
         this.sarabanContent.wfContentStr04 = registerContent.wfContentStr04
-        if (!this.isMyWork) this.prepareShowFromTo(!isFoldertype1)
+        if (!this.isMyWork) this.prepareShowFromTo()
         else {
           this.sarabanContent.wfContentInt01 = registerContent.wfContentInt01 //first content
           this.sarabanContent.wfContentStr01 = registerContent.wfContentStr01 //ES searchId
@@ -594,7 +593,7 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  prepareShowFromTo(showFrom: boolean) {
+  prepareShowFromTo() {
     this.sendTo = [[], [], []]
     // if (showFrom) this.addNode(0, this.sarabanContent.wfContentFrom)
     this.addNode(0, this.sarabanContent.wfContentFrom)
@@ -885,7 +884,7 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   edit() {
-    this.prepareShowFromTo(true)
+    this.prepareShowFromTo()
     this.getPreBookNo()
     this.mode = 'edit'
     this.title = 'แก้ไขหนังสือ'
