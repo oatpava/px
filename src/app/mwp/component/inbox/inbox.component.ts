@@ -105,19 +105,32 @@ export class InboxComponent implements OnInit {
   }
 
   initial() {
+    this.getMenus()
+    this.setAssignedInboxs()
+  }
+
+  showRegistedInfo() {
     if (this._paramSarabanService.msg != null) {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "รายละเอียดการลงทะเบียน"
       dialogRef.componentInstance.message = this._paramSarabanService.tmp
       dialogRef.componentInstance.confirmation = false
+      dialogRef.componentInstance.inboxAfterRegister = true
       this._paramSarabanService.tmp = null
       this.msgs = []
       this.msgs.push(this._paramSarabanService.msg)
       this._paramSarabanService.msg = null
       setTimeout(() => this.msgs = [], 3000)
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if (result == 1) {
+            this.backToSaraban('backtoRegister')
+          } else {
+            this.backToSaraban('show')
+          }
+        }
+      })
     }
-    this.getMenus()
-    this.setAssignedInboxs()
   }
 
   setAssignedInboxs() {
@@ -163,6 +176,9 @@ export class InboxComponent implements OnInit {
         this.inboxs[index][0] = this._paramSarabanService.datas[0]
         this.listReturn[index][0] = this._paramSarabanService.listReturn[0]
         this.tableFirst[index][0] = this._paramSarabanService.tableFirst[0]
+      }
+      if (this._paramSarabanService.msg != null) {
+        this.showRegistedInfo()
       }
     }
   }
@@ -253,6 +269,7 @@ export class InboxComponent implements OnInit {
   }
 
   goToSaraban(inbox: Inbox) {
+    //this._paramSarabanService.inbox = inbox
     let searchedPath: string = ''
     let index = this.index
     let searched = this.searched[index]
@@ -277,6 +294,7 @@ export class InboxComponent implements OnInit {
     this._paramSarabanService.folderIcon = "move_to_inbox"
     this._paramSarabanService.pathOld = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
     this._paramSarabanService.path = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.inboxPath = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
     this._paramSarabanService.mwp = {
       fromMwp: true,
       isUser: this.inboxAssign[this.index].isUser,
@@ -284,6 +302,7 @@ export class InboxComponent implements OnInit {
       replyTo: inbox.inboxFrom,
       inboxIndex: this.index
     }
+    console.log('b4', this._paramSarabanService)
     if (inbox.workflowId > 0) {
       this._router.navigate(
         ['../', {
@@ -486,6 +505,19 @@ export class InboxComponent implements OnInit {
       this.msgs.push({ severity: 'error', summary: 'ค้นหาด้วยบาร์โค้ด', detail: 'ข้อมูลผิดพลาด' })
       setTimeout(() => this.msgs = [], 2000)
     }
+  }
+
+  backToSaraban(mode: string) {
+    this._paramSarabanService.mode = mode
+    this._paramSarabanService.pathOld = this._paramSarabanService.inboxPath
+    this._paramSarabanService.path = this._paramSarabanService.inboxPath
+    this._router.navigate(
+      ['../', {
+        outlets: {
+          contentCenter: ['addContent'],
+        }
+      }],
+      { relativeTo: this._route })
   }
 
 }

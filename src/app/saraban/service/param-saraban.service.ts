@@ -4,6 +4,8 @@ import { SarabanAuth } from '../model/sarabanAuth.model'
 import { Structure } from '../../setting/model/structure.model'
 import { ListReturn } from '../../main/model/listReturn.model'
 import { Subscription } from 'rxjs/Rx'
+import { SarabanContent } from '../model/sarabanContent.model'
+import { SarabanFolder } from '../model/sarabanFolder.model'
 
 @Injectable()
 export class ParamSarabanService {
@@ -57,6 +59,10 @@ export class ParamSarabanService {
   structureName: string
 
   ScanSubscription: Subscription
+
+  inboxPath: string
+  inboxRegistedContent: SarabanContent
+  inboxRegistedFolder: SarabanFolder
 
   setMode(mode: string) {
     this.mode = mode

@@ -194,6 +194,8 @@ export class AddSarabanContentComponent implements OnInit {
     } else if (this.mode == 'register') {//from myWork only
       this.isMyWork = true
       this.registerMyWork(this._paramSarabanService.sarabanContentId)
+    } else if (this.mode == 'backtoRegister') {//from mwp only
+      this.registerAfterDialogClose(this._paramSarabanService.inboxRegistedContent, this._paramSarabanService.inboxRegistedFolder)
     }
 
     if (this._paramSarabanService.msg != null) {
@@ -314,7 +316,12 @@ export class AddSarabanContentComponent implements OnInit {
           let userId: number = 0
           if (this._paramSarabanService.mwp.isUser) userId = this._paramSarabanService.mwp.id
           else structureId = this._paramSarabanService.mwp.id
-          this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null          
+          // if (this._paramSarabanService.inboxRegisted) {
+          //       this.register(this._paramSarabanService.inboxRegisted)
+          // }else {
+          //   this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
+          // }     
+          this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
         } else {
           this.getMenus(this._paramSarabanService.contentAuth)
         }
@@ -1003,48 +1010,53 @@ export class AddSarabanContentComponent implements OnInit {
     if (this._paramSarabanService.mwp.fromMwp) dialogRef.componentInstance.fromMWP = true
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.mode = "register"
-        let registedFolderId = dialogRef.componentInstance.selectedFolder.wfFolderLinkFolderId
-        this.getReserveNo(registedFolderId)
-        this.getCanceledReserveNo(registedFolderId)
-        this.title = "ลงทะเบียน [" + dialogRef.componentInstance.selectedFolder.wfFolderName + "]"
-        this.workflowFolderName = dialogRef.componentInstance.selectedFolder.wfFolderName
-
-        this.sarabanContent_tmp = sarabanContent
-        this.sarabanContent = new SarabanContent()
-        this.sarabanContent.wfContentDate01 = this._paramSarabanService.getStringDate(new Date())
-        //เชคส่งภายนอก
-        if (dialogRef.componentInstance.selectedFolder.wfContentType.id == 2 && dialogRef.componentInstance.selectedFolder.wfContentType2.id == 3) {
-          //alert
-          //get shared folder
-          this._loadingService.register('main')
-          this._sarabanService
-            .listByContentTypeId("T", 2, 4, 0)//ทะเบียนส่งกลาง
-            .subscribe(response => {
-              this._loadingService.resolve('main')
-              if (response.length > 0) {
-                this.openDialogWarning(false, "แจ้งเตือน", "ลงทะเบียนหนังสือในทะเบียนส่งหนังสือภายนอก\nหนังสือจะใช้เลขทะเบียนจากทะเบียนกลาง")
-                this.sharedFolder = response[0]
-
-                this._loadingService.register('main')
-                this._sarabanContentService
-                  .getSarabanMaxContentNo(this.sharedFolder.id)
-                  .subscribe(response => {
-                    this._loadingService.resolve('main')
-                    this.sharedContentNumber = response.wfContentNumber
-                    this.getSarabanLastNumber(registedFolderId, this.sarabanContent_tmp)
-                  })
-              } else {
-                this.openDialogWarning(false, "แจ้งเตือน", "ลงทะเบียนหนังสือในทะเบียนส่งหนังสือภายนอก\nไม่มีทะเบียนกลาง หนังสือจะใช้เลขทะเบียนจากทะเบียนที่เลือกลงทะเบียน")
-                this.getSarabanLastNumber(registedFolderId, this.sarabanContent_tmp)
-              }
-            })
-        } else {
-          this.getSarabanLastNumber(dialogRef.componentInstance.selectedFolder.wfFolderLinkFolderId, this.sarabanContent_tmp)
-        }
-        this.diableEditBookNo = (dialogRef.componentInstance.selectedFolder.wfContentType.id == 1) ? false : true
+        this._paramSarabanService.inboxRegistedFolder = dialogRef.componentInstance.selectedFolder
+        this.registerAfterDialogClose(sarabanContent, dialogRef.componentInstance.selectedFolder)
       }
     })
+  }
+
+  registerAfterDialogClose(sarabanContent: SarabanContent, folder: SarabanFolder) {
+    this.mode = "register"
+    let registedFolderId = folder.wfFolderLinkFolderId
+    this.getReserveNo(registedFolderId)
+    this.getCanceledReserveNo(registedFolderId)
+    this.title = "ลงทะเบียน [" + folder.wfFolderName + "]"
+    this.workflowFolderName = folder.wfFolderName
+
+    this.sarabanContent_tmp = sarabanContent
+    this.sarabanContent = new SarabanContent()
+    this.sarabanContent.wfContentDate01 = this._paramSarabanService.getStringDate(new Date())
+    //เชคส่งภายนอก
+    if (folder.wfContentType.id == 2 && folder.wfContentType2.id == 3) {
+      //alert
+      //get shared folder
+      this._loadingService.register('main')
+      this._sarabanService
+        .listByContentTypeId("T", 2, 4, 0)//ทะเบียนส่งกลาง
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          if (response.length > 0) {
+            this.openDialogWarning(false, "แจ้งเตือน", "ลงทะเบียนหนังสือในทะเบียนส่งหนังสือภายนอก\nหนังสือจะใช้เลขทะเบียนจากทะเบียนกลาง")
+            this.sharedFolder = response[0]
+
+            this._loadingService.register('main')
+            this._sarabanContentService
+              .getSarabanMaxContentNo(this.sharedFolder.id)
+              .subscribe(response => {
+                this._loadingService.resolve('main')
+                this.sharedContentNumber = response.wfContentNumber
+                this.getSarabanLastNumber(registedFolderId, this.sarabanContent_tmp)
+              })
+          } else {
+            this.openDialogWarning(false, "แจ้งเตือน", "ลงทะเบียนหนังสือในทะเบียนส่งหนังสือภายนอก\nไม่มีทะเบียนกลาง หนังสือจะใช้เลขทะเบียนจากทะเบียนที่เลือกลงทะเบียน")
+            this.getSarabanLastNumber(registedFolderId, this.sarabanContent_tmp)
+          }
+        })
+    } else {
+      this.getSarabanLastNumber(folder.wfFolderLinkFolderId, this.sarabanContent_tmp)
+    }
+    this.diableEditBookNo = (folder.wfContentType.id == 1) ? false : true
   }
 
   finish(sarabanContent: SarabanContent) {
@@ -1539,7 +1551,12 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentStr04 += '' + this.sendTo[2][i].data.userType
       }
     }
-
+    //for inbox bact to register
+    if (this._paramSarabanService.mwp.fromMwp) {
+      let tmp = new SarabanContent()
+      Object.assign(tmp, this.sarabanContent)
+      this._paramSarabanService.inboxRegistedContent = tmp
+    }
   }
 
   updateCreate() {
@@ -1573,6 +1590,7 @@ export class AddSarabanContentComponent implements OnInit {
   genRegistedInfo(content: SarabanContent) {
     let bookNo: String = (content.wfContentBookNo == null) ? '' : content.wfContentBookNo
     this._paramSarabanService.tmp = 'เลขทะเบียน: ' + content.wfContentContentNo + '<br>เลขที่หนังสือ: ' + bookNo + '<br>วันที่: ' + content.wfContentContentDate + '    เวลา:' + content.wfContentContentTime
+    this._paramSarabanService.sarabanContentId = content.id
   }
 
   getReserveNo(folderId: number) {
