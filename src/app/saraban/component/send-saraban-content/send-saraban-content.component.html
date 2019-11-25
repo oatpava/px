@@ -183,7 +183,7 @@
                         </div>
                         <div layout="column" layout-align="left start" style="width:100%;">
                             <span style="font-size:11.5px;color:#a8a8a8; padding-bottom:5px;">เพื่อ</span>
-                            <p-autoComplete #acProcess placeholder="ดำเนินการ" [(ngModel)]="sendNote" [suggestions]="filteredProcesses" (completeMethod)="processFilter($event)" [dropdown]="true" (onDropdownClick)="handleDropdown($event)" class="p-autocomplete" [style]="{'width':'100%'}"
+                            <p-autoComplete #acProcess [(ngModel)]="sendNote" [suggestions]="filteredProcesses" (completeMethod)="processFilter($event)" [dropdown]="true" (onDropdownClick)="handleDropdown($event)" class="p-autocomplete" [style]="{'width':'100%'}"
                                 [inputStyle]="{'width':'100%'}" required>
                             </p-autoComplete>
                         </div>
