@@ -45,6 +45,15 @@
                 <div *ngIf="folder.searchField[2]" layout="row" layout-align="left start" class="searchFilter">
                     <md-input flex placeholder="เลขทะเบียน" name="contentNo" [(ngModel)]="searchFilters.wfContentContentNo"></md-input>
                 </div>
+                <md-select *ngIf="folder.searchField[2]" class="searchFilter" style="width:100%; padding-top:10px; padding-bottom:10px;" placeholder="ช่วงเวลา" name="contentTimeRange" [(ngModel)]="searchFilters.contentTimeRange">
+                    <md-option [value]="0">ทั้งหมด</md-option>
+                    <md-option [value]="1">06.00 น. - 09.00 น.</md-option>
+                    <md-option [value]="2">09.00 น. - 12.00 น.</md-option>
+                    <md-option [value]="3">12.00 น. - 15.00 น.</md-option>
+                    <md-option [value]="3">15.00 น. - 18.00 น.</md-option>
+                    <md-option [value]="3">18.00 น. - 21.00 น.</md-option>
+                    <md-option [value]="3">21.00 น. - 06.00 น.</md-option>
+                </md-select>
                 <div *ngIf="folder.searchField[3]" layout="row" layout-align="left start" class="searchFilter">
                     <md-input flex="50" type="number" placeholder="ลำดับเลขทะเบียนจาก" name="startContenNo" [(ngModel)]="searchFilters.wfContentStartContentNo"></md-input>
                     <md-input flex="50" type="number" placeholder="ลำดับเลขทะเบียนถึง" name="endContenNo" [(ngModel)]="searchFilters.wfContentEndContentNo"></md-input>

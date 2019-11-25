@@ -10,6 +10,7 @@ export class DialogWarningComponent implements OnInit {
   header: string = "ยืนยันการลบข้อมูล"
   message: string = "คุณต้องการลบข้อมูลใช่ หรือ ไม่"
   confirmation: boolean = true
+  inboxAfterRegister: boolean = false
 
   constructor(
     public dialogRef: MdDialogRef<DialogWarningComponent>
@@ -23,6 +24,10 @@ export class DialogWarningComponent implements OnInit {
   }
   cancel(): void {
     this.dialogRef.close(false);
+  }
+
+  go(num: number) {
+    this.dialogRef.close(num);
   }
 
 }

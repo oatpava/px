@@ -12,13 +12,13 @@
                 <h4 md-line>{{item?.createdDate.substr(0,16)}}</h4>
                 <p md-line>{{item?.createdName}}</p>
                 <div *ngIf="hoverEdit==item.id && (auth[item.secrets] || viewOnly)" class="block-icon-Option">
-                    <button *ngIf="item.canView" md-icon-button title="ดูรูป" (click)="viewImage(item)"><md-icon >image</md-icon></button>
-                    <button md-icon-button title="ดู" (click)="view(item)"><md-icon >pageview</md-icon></button>
+                    <button *ngIf="item.canView" md-icon-button title="ดูเอกสาร" (click)="viewImage(item)"><md-icon >image</md-icon></button>
+                    <button md-icon-button title="ดูและแก้ไข" (click)="view(item)"><md-icon >pageview</md-icon></button>
                     <button md-icon-button title="ทำสำเนา" (click)="download(item)"><md-icon>file_download</md-icon></button>
                     <button *ngIf="!viewOnly" md-icon-button title="ลบ" (click)="delete(item)" [ngClass]="{'no-auth': !item.owner}" [disabled]="!item.owner"><md-icon>delete</md-icon></button>
                 </div>
                 <div *ngIf="hoverEdit==item.id && !auth[item.secrets] && !viewOnly" class="block-icon-Option no-auth">
-                    <button md-icon-button title="ดู" disabled><md-icon >pageview</md-icon></button>
+                    <button md-icon-button title="ดูและแก้ไข" disabled><md-icon >pageview</md-icon></button>
                     <button md-icon-button title="ทำสำเนา" disabled><md-icon>file_download</md-icon></button>
                     <button md-icon-button title="ลบ" disabled><md-icon>delete</md-icon></button>
                 </div>
@@ -28,12 +28,12 @@
                 <h4 md-line class="no-auth">{{child?.createdDate.substr(0,16)}}</h4>
                 <p md-line class="no-auth">{{child?.createdName}}</p>
                 <div *ngIf="hoverEdit==child.id && (auth[item.secrets] || viewOnly)" class="block-icon-Option">
-                    <button *ngIf="item.canView" md-icon-button title="ดูรูป" (click)="viewImage(item)"><md-icon >image</md-icon></button>
-                    <button md-icon-button title="ดู" (click)="view(child)"><md-icon >pageview</md-icon></button>
+                    <button *ngIf="item.canView" md-icon-button title="ดูเอกสาร" (click)="viewImage(item)"><md-icon >image</md-icon></button>
+                    <button md-icon-button title="ดูและแก้ไข" (click)="view(child)"><md-icon >pageview</md-icon></button>
                     <button md-icon-button title="ทำสำเนา" (click)="download(child)"><md-icon>file_download</md-icon></button>
                 </div>
                 <div *ngIf="hoverEdit==child.id && !auth[item.secrets] && !viewOnly" class="block-icon-Option no-auth">
-                    <button md-icon-button title="ดู" disabled><md-icon >pageview</md-icon></button>
+                    <button md-icon-button title="ดูและแก้ไข" disabled><md-icon >pageview</md-icon></button>
                     <button md-icon-button title="ทำสำเนา" disabled><md-icon>file_download</md-icon></button>
                 </div>
             </md-list-item>

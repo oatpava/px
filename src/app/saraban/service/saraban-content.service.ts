@@ -427,7 +427,7 @@ export class SarabanContentService {
     }
   }
 
-  checkBookNo(content: SarabanContent): Observable<boolean> {
+  checkBookNo(content: SarabanContent): Observable<SarabanContent> {
     if (environment.production) {
       return this._http.post(this._apiUrl + "/checkBookNo", content, this._options)
         .map((response: Response) => {

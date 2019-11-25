@@ -419,7 +419,7 @@ export class SendSarabanContentComponent implements OnInit {
     //9. create WFCc
     //10. create inboxBCc
 
-    let action: string = (this.mode == "reply") ? 'ตอบกลับ' : 'ส่ง'
+    let action: string = (this.mode == "reply") ? 'คืนเรื่อง' : 'ส่ง'
     let type: string = (this.isContent) ? 'หนังสือ' : 'เอกสารส่วนตัว'
     this._paramSarabanService.msg = {
       severity: 'success',

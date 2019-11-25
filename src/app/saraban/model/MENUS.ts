@@ -158,7 +158,7 @@ export const MENUS: Menu[] = [
         version: 1,
         id: 17,
         type: '',
-        name: 'ตอบกลับ',
+        name: 'คืนเรื่อง',
         icon: 'reply',
         color: '#0063e6',
         nameEng: 'replyContent'

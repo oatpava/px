@@ -29,7 +29,11 @@
     <p [innerHTML]="message"></p>
 </div>
 <md-divider></md-divider>
-<div class="bottomboxDialog" align="right">
+<div *ngIf="!inboxAfterRegister" class="bottomboxDialog" align="right">
     <button *ngIf="!confirmation" md-raised-button color="primary" (click)="ok()">ตกลง</button>
     <button *ngIf="confirmation" md-raised-button color="primary" (click)="ok()">ยืนยัน</button>
+</div>
+<div *ngIf="inboxAfterRegister" class="bottomboxDialog" align="right">
+    <button md-raised-button color="warn" (click)="go(1)">กลับ</button>
+    <button md-raised-button color="primary" (click)="go(2)">รายละเอียดหนังสือ</button>
 </div>
