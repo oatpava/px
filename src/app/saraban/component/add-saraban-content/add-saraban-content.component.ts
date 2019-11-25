@@ -989,7 +989,7 @@ export class AddSarabanContentComponent implements OnInit {
       width: '60%', height: '90%'
     })
     dialogRef.componentInstance.mode = 'reply'
-    dialogRef.componentInstance.title = 'ตอบกลับหนังสือ: ' + sarabanContent.wfContentTitle
+    dialogRef.componentInstance.title = 'คืนเรื่องหนังสือ: ' + sarabanContent.wfContentTitle
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (this._paramSarabanService.msg != null) {
