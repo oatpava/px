@@ -134,7 +134,7 @@
                         </md-textarea>
                         <div layout="row" layout-align="left start" style="margin-top:1rem; margin-bottom:2rem;width:100%;">
                             <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
-                            <md-checkbox style="width:25%;" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" [disabled]="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
+                            <md-checkbox style="width:25%;" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()" [disabled]="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
                             <span *ngIf="hardCopyRecieved" style="width:15%;"><b>วันที่ : </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}</span>
                             <span *ngIf="hardCopyRecieved"><b>เวลา : </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
                         </div>

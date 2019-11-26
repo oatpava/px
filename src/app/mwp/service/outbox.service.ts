@@ -118,4 +118,15 @@ export class OutboxService {
     }
   }
 
+  updateSendnote(outBox: Outbox): Observable<Outbox> {
+    if (environment.production) {
+      return this._http.put(this._apiUrl, outBox, this._options)
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }
