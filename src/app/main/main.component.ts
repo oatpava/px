@@ -24,6 +24,7 @@ import { LoginService } from '../login/login.service'
 import { DialogInstructionComponent } from './component/dialog-instruction/dialog-instruction.component'
 import { Message } from 'primeng/primeng';
 import { ConfirmDialogComponent } from './component/confirm-dialog/confirm-dialog.component'
+import { DialogWarningComponent } from '../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 
 @Component({
   selector: 'app-main',
@@ -80,8 +81,9 @@ export class MainComponent implements OnInit {
       icon: 'settings',
     }
   ]
-  userProfile: UserProfile
-
+  userProfile: UserProfile = new UserProfile()
+  userProfiles: UserProfile[] = []
+  index: number = 0
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -96,18 +98,26 @@ export class MainComponent implements OnInit {
     this.appName = environment.appName
     this.appNameEng = environment.appNameEng
     this.appAcronym = environment.appAcronym
-    this.userProfile = new UserProfile()
+    this.userProfiles = this._paramSarabanService.userProfiles
+    this.userProfile = this._paramSarabanService.userProfiles[0]
+    this._paramSarabanService.userProfileIndex = 0
   }
 
   ngOnInit() {
-    //console.log('MainComponent',this.routes)
+    console.log('MainComponent', this.userProfiles)
     this.setTimeOut()
     this.loadDefaultModule('mwps', { t: new Date().getTime() })
-    this.getUserProfile()
+    this.prepareUserProfile()
     //this.showInstructionDialog()
     if (this.appAcronym !== 'demo') {
       this.sidenavTitle = this.appName + ' (' + this.appAcronym + ')'
     }
+    //**//
+    // if (this._paramSarabanService.isArchive) {
+    //   this.archiveHeader = '(ระบบฐานข้อมูลเอกสารเก่า)'
+    //   this._loginService
+    //     .changeSetapiUrl()
+    // }
   }
 
   loadDefaultModule(defaultModule: string, params: Object) {
@@ -156,10 +166,10 @@ export class MainComponent implements OnInit {
         // this._loginService
         //   .changeapiUrl()
         this._router.navigate(['/login'])
-        setTimeout(()=>{    //<<<---    using ()=> syntax
+        setTimeout(() => {    //<<<---    using ()=> syntax
           window.location.reload()
-     }, 500);
-        
+        }, 500);
+
       }
     })
   }
@@ -170,29 +180,16 @@ export class MainComponent implements OnInit {
     window.open(url);
   }
 
-  getUserProfile() {
-    this._userProfileService
-      .getUserProfile(-1, '1.0')
-      .subscribe(response => {
-        console.log('getUserProfile', response)
-        this.userProfile = response as UserProfile
-        this._paramSarabanService.userId = this.userProfile.id
-        this._paramSarabanService.userName = this.userProfile.fullName
-        this._paramSarabanService.structure = this.userProfile.structure
-        this._paramSarabanService.structureId = this.userProfile.structure.id
-        this._paramSarabanService.structureName = this.userProfile.structure.name
-        this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
-        if (this.userProfile.userProfileType.id != 1 && this.userProfile.userProfileType.id != 3) {
-          this.routes = this.routes.filter(route => route.title != 'ส่วนงานผู้ดูแลระบบ')
-        }
-        //**//
-        // if (this._paramSarabanService.isArchive) {
-        //   this.archiveHeader = '(ระบบฐานข้อมูลเอกสารเก่า)'
-        //   this._loginService
-        //     .changeSetapiUrl()
-        // }
-
-      })
+  prepareUserProfile() {
+    this._paramSarabanService.userId = this.userProfile.id
+    this._paramSarabanService.userName = this.userProfile.fullName
+    this._paramSarabanService.structure = this.userProfile.structure
+    this._paramSarabanService.structureId = this.userProfile.structure.id
+    this._paramSarabanService.structureName = this.userProfile.structure.name
+    this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
+    if (this.userProfile.userProfileType.id != 1 && this.userProfile.userProfileType.id != 3) {
+      this.routes = this.routes.filter(route => route.title != 'ส่วนงานผู้ดูแลระบบ')
+    }
   }
 
   settingProfile() {
@@ -258,6 +255,37 @@ export class MainComponent implements OnInit {
     let dialogRef = this._dialog.open(DialogInstructionComponent, {
       //width: '40%',
     })
+  }
+
+  listUserProfile(userId: number) {
+    this._userProfileService
+      .getUserProfilesByUserId(userId)
+      .subscribe(response => {
+
+      })
+  }
+
+  swapUserProfile(index: number) {
+    if (index != this.index) {
+      let dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = "ยืนยันการสลับผู้ใช้งาน"
+      dialogRef.componentInstance.message = "คุณต้องการลับไปที่ผู้ใช้งาน '" + this.userProfiles[index].fullName + "' ดำเนินการต่อใช่ หรือ ไม่"
+      dialogRef.componentInstance.confirmation = true
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.index = index
+          this.userProfile = this.userProfiles[index]
+          this._paramSarabanService.userProfileIndex = 0
+          this._paramSarabanService.userId = this.userProfile.id
+          this._paramSarabanService.userName = this.userProfile.fullName
+          this._paramSarabanService.structure = this.userProfile.structure
+          this._paramSarabanService.structureId = this.userProfile.structure.id
+          this._paramSarabanService.structureName = this.userProfile.structure.name
+          this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
+          this.loadDefaultModule('mwps', { t: new Date().getTime() })
+        }
+      })
+    }
   }
 
 }

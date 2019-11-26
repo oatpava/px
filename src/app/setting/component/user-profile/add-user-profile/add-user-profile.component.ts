@@ -108,7 +108,6 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.userId)
     console.log('AddUserProfileComponent')
     this._route.params
       .subscribe((params: Params) => {
@@ -153,7 +152,6 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   getUserProfileType = () => {
-    console.log('getUserProfileType')
     this._masterDataService
       .getMasterDatas('userProfileTypes')
       .subscribe(response => {
@@ -167,7 +165,6 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   getPosition() {
-    console.log('getPosition')
     this._masterDataService
       .getMasterDatas('positions')
       .subscribe(response => {
@@ -181,12 +178,10 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   getPositionType() {
-    console.log('getPositionType')
     this._masterDataService
       .getMasterDatas('positionTypes/types')
       .subscribe(response => {
         this.positionTypes = response as PositionType[]
-        console.log(this.positionTypes)
         // if (this.userId !== 0){
         //   this.getUserProfilesByUserId(this.userId)
         // }
@@ -211,12 +206,12 @@ export class AddUserProfileComponent implements OnInit {
   // }
 
   getUserProfilesByUserId(userId: number) {
-    console.log(userId)
+    console.log('userId', userId)
     this._loadingService.register('main')
     this._userProfileService
-      .getUserProfilesByUserId(userId, '1.1')
+      .getUserProfilesByUserId(userId)
       .subscribe(response => {
-        console.log(response)
+        console.log('userProfiles', response)
         // this.userProfileList.length = 0
         this.userProfileList = []
         // this.userProfileList = response as UserProfile[]
@@ -230,7 +225,6 @@ export class AddUserProfileComponent implements OnInit {
           }
           this.userProfileList.push(new UserProfile(userProfileL[i]))
         }
-
         this._loadingService.resolve('main')
       })
   }
@@ -364,9 +358,11 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   cancelCreateProfile() {
+    console.log('xxxx',this.toggleCommand)
     this.toggleAddProfile = !this.toggleAddProfile
     this.toggleCommand = !this.toggleCommand
     // this.toggleListProfile = !this.toggleListProfile
+    console.log('xxxx',this.toggleCommand)
   }
 
   updateProfile(updateProfile: UserProfile) {
@@ -379,7 +375,6 @@ export class AddUserProfileComponent implements OnInit {
     this._userProfileService
       .checkUserCode(updateProfile.code, updateProfile.id)
       .subscribe(response => {
-        console.log(response)
         //check Code
         if (response.result) {
           this.alertMessage.emit(true)

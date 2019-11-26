@@ -121,7 +121,7 @@ export class AddSarabanFolderComponent implements OnInit {
         this._loadingService.resolve('main')
         this.contentTypes = response as ContentType[]
         if (this.isFolder) {
-          this.contentTypes = this.contentTypes.filter(ct => ct.id < 4)
+          this.contentTypes = this.contentTypes.filter(ct => ct.id < 5)
         } else {
           this.contentTypes = this.contentTypes.filter(ct => ct.id == 4)
           //this.sarabanFolder.wfContentType.id = 4
@@ -235,10 +235,11 @@ export class AddSarabanFolderComponent implements OnInit {
       this.sarabanFolder.wfContentType2.id = 1
       this.sarabanFolder.wfFolderDetail = ''
     } else if (typeId == 4) {
-      this.showType2 = true
-      this.sarabanFolder.wfFolderDetail = this.contentTypes[0].contentTypeName
-      this.sarabanFolder.wfContentType2.id = null
-      this.getContentType2(typeId)
+      this.showType2 = false
+      // this.sarabanFolder.wfFolderDetail = this.contentTypes[0].contentTypeName
+      // this.sarabanFolder.wfContentType2.id = null
+      // this.getContentType2(typeId)
+      this.sarabanFolder.wfContentType2.id = 1
     } else {
       this.showType2 = true
       this.sarabanFolder.wfFolderDetail = this.contentTypes[typeId - 1].contentTypeName
@@ -257,6 +258,8 @@ export class AddSarabanFolderComponent implements OnInit {
         // if (type2Id == null) this.sarabanFolder.wfFolderName = this.contentTypes[0].contentTypeName
         // this.sarabanFolder.wfFolderName = this.contentTypes[0].contentTypeName + this.contentTypes2[type2Id - 1].wfContentType2Name
         // this.sarabanFolder.wfFolderDetail = this.contentTypes[0].contentTypeName
+        this.sarabanFolder.wfFolderName = 'ทะเบียนหนังสือเวียน'
+        this.sarabanFolder.wfFolderDetail = 'หนังสือเวียน'
       } else {
         if (type2Id == null) this.sarabanFolder.wfFolderName = this.contentTypes[typeId - 1].contentTypeName + "หนังสือ"
         else this.sarabanFolder.wfFolderName = this.contentTypes[typeId - 1].contentTypeName + "หนังสือ" + this.contentTypes2[type2Id - 1].wfContentType2Name

@@ -6,6 +6,7 @@ import { ListReturn } from '../../main/model/listReturn.model'
 import { Subscription } from 'rxjs/Rx'
 import { SarabanContent } from '../model/sarabanContent.model'
 import { SarabanFolder } from '../model/sarabanFolder.model'
+import { UserProfile } from '../../shared'
 
 @Injectable()
 export class ParamSarabanService {
@@ -63,6 +64,9 @@ export class ParamSarabanService {
   inboxPath: string
   inboxRegistedContent: SarabanContent
   inboxRegistedFolder: SarabanFolder
+
+  userProfiles: UserProfile[]
+  userProfileIndex: number
 
   setMode(mode: string) {
     this.mode = mode
