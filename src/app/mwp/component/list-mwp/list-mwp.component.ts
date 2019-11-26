@@ -47,7 +47,7 @@ export class ListMwpComponent implements OnInit {
     console.log('ListMwpComponent')
     this._route.params
       .subscribe((params: Params) => {
-        if (!this._paramSarabanService.isArchive) {
+        if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId!=1) {
           this.getUserProfileFolders()
           this.getShortcutSarabanFolders()
         }
