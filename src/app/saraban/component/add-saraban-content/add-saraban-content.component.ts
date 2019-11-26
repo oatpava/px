@@ -2117,6 +2117,57 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
+  keep(sarabanContent: SarabanContent, note: string, description: string, finishDate_str: string, allFlow: boolean) {
+    let dialogRef = this._dialog.open(KeepSarabanContentComponent, {
+      width: '60%',
+    })
+    dialogRef.componentInstance.contentNo = sarabanContent.wfContentContentNo
+    dialogRef.componentInstance.title = sarabanContent.wfContentTitle
+    dialogRef.componentInstance.user = this._paramSarabanService.userName
+    dialogRef.afterClosed().subscribe(result => {
+      if (dialogRef.componentInstance.keeped) {
+        let document = new Document()
+        document.id = sarabanContent.wfDocumentId
+        document.documentTypeId = 4
+        document.documentName = sarabanContent.wfContentTitle
+        document.documentFolderId = dialogRef.componentInstance.selectedFolder.data.folder.id
+        document.createdDate = dialogRef.componentInstance.keepDate
+
+        if (dialogRef.componentInstance.expireDate != null) document.documentExpireDate = dialogRef.componentInstance.expireDate
+        document.documentInt01 = sarabanContent.id
+        document.documentText01 = sarabanContent.wfContentContentNo
+        document.documentText02 = sarabanContent.wfContentTitle
+        document.documentText03 = dialogRef.componentInstance.description
+
+        this.msgs = []
+        this.msgs.push({ severity: 'info', summary: 'กำลังดำเนินการ', detail: 'ระบบกำลังทำเรื่องจัดเก็บ กรุณารอสักครู่' })
+        this._loadingService.register('main')
+        this._documentService
+          .updateCreateDocument(document)
+          .subscribe(
+            (data) => {
+              this._loadingService.resolve('main')
+              this.createFinishWorkflow(
+                sarabanContent,
+                note,
+                description,
+                finishDate_str,
+                true,
+                allFlow)
+            }, (err) => {
+              this._loadingService.resolve('main')
+              let dialogRef = this._dialog.open(DialogWarningComponent)
+              dialogRef.componentInstance.header = "แจ้งเตือน"
+              dialogRef.componentInstance.message = "ไม่สามารถจัดเก็บเอกสาร เนื่องจากระบบจัดเก็บเอกสารมีปัญหา"
+              dialogRef.componentInstance.confirmation = false
+              dialogRef.afterClosed().subscribe(result => {
+                this.backWithMsg('error', 'ทำเรื่องเสร็จและจัดเก็บไม่สำเร็จ', '', false)
+              })
+            })
+      }
+    })
+  }
+
   setContentDateStr() {
     let dateTime = new Date()
     this.year = dateTime.getFullYear() + 543
@@ -2238,56 +2289,7 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  keep(sarabanContent: SarabanContent, note: string, description: string, finishDate_str: string, allFlow: boolean) {
-    let dialogRef = this._dialog.open(KeepSarabanContentComponent, {
-      width: '60%',
-    })
-    dialogRef.componentInstance.contentNo = sarabanContent.wfContentContentNo
-    dialogRef.componentInstance.title = sarabanContent.wfContentTitle
-    dialogRef.componentInstance.user = this._paramSarabanService.userName
-    dialogRef.afterClosed().subscribe(result => {
-      if (dialogRef.componentInstance.keeped) {
-        let document = new Document()
-        document.id = sarabanContent.wfDocumentId
-        document.documentTypeId = 4
-        document.documentName = sarabanContent.wfContentTitle
-        document.documentFolderId = dialogRef.componentInstance.selectedFolder.data.folder.id
-        document.createdDate = dialogRef.componentInstance.keepDate
 
-        if (dialogRef.componentInstance.expireDate != null) document.documentExpireDate = dialogRef.componentInstance.expireDate
-        document.documentInt01 = sarabanContent.id
-        document.documentText01 = sarabanContent.wfContentContentNo
-        document.documentText02 = sarabanContent.wfContentTitle
-        document.documentText03 = dialogRef.componentInstance.description
-
-        this.msgs = []
-        this.msgs.push({ severity: 'info', summary: 'กำลังดำเนินการ', detail: 'ระบบกำลังทำเรื่องจัดเก็บ กรุณารอสักครู่' })
-        this._loadingService.register('main')
-        this._documentService
-          .updateCreateDocument(document)
-          .subscribe(
-            (data) => {
-              this._loadingService.resolve('main')
-              this.createFinishWorkflow(
-                sarabanContent,
-                note,
-                description,
-                finishDate_str,
-                true,
-                allFlow)
-            }, (err) => {
-              this._loadingService.resolve('main')
-              let dialogRef = this._dialog.open(DialogWarningComponent)
-              dialogRef.componentInstance.header = "แจ้งเตือน"
-              dialogRef.componentInstance.message = "ไม่สามารถจัดเก็บเอกสาร เนื่องจากระบบจัดเก็บเอกสารมีปัญหา"
-              dialogRef.componentInstance.confirmation = false
-              dialogRef.afterClosed().subscribe(result => {
-                this.backWithMsg('error', 'ทำเรื่องเสร็จและจัดเก็บไม่สำเร็จ', '', false)
-              })
-            })
-      }
-    })
-  }
 
   onHardCopyRecievedCheck() {
     if (this.mode == 'edit') this.hardCopyRecievedUpdate = true
