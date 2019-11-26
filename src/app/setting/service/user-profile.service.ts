@@ -117,7 +117,7 @@ export class UserProfileService {
     }
   }
 
-  getUserProfilesByUserId(userId: number, version: string): Observable<UserProfile[]> {
+  getUserProfilesByUserId(userId: number): Observable<UserProfile[]> {
     // console.log('getUserProfilebyuserId waiting use rest. - O')
     if (environment.production) {
       let params = new URLSearchParams()

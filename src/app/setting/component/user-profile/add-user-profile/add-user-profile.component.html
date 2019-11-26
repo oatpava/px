@@ -7,22 +7,22 @@
             <md-list-item *ngFor="let upl of userProfileList; let i=index;" class="listProfile hover" (mouseover)="showEdit=i" (mouseleave)="showEdit=-1">
                 <md-icon md-list-avatar>person</md-icon>
                 <h3 md-line>{{upl.fullName}}
-                    <md-icon *ngIf="upl.defaultSelect === 0" class="md-18" style="vertical-align: bottom;">grade</md-icon>
+                    <!-- <md-icon *ngIf="upl.defaultSelect === 0" class="md-18" style="vertical-align: bottom;">grade</md-icon> -->
                 </h3>
                 <h5 md-line>ตำแหน่ง : {{upl.position?.name}}</h5>
                 <p md-line>หน่วยงาน : {{upl.structure?.name}}</p>
                 <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="editProfile(upl)">
                     <md-icon alt="แก้ไข">edit</md-icon>
                 </button>
-                <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="setDefaultProfile(upl)">
+                <!-- <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="setDefaultProfile(upl)">
                     <md-icon alt="ใช้เป็นค่าเริ่มต้น">grade</md-icon>
-                </button>
+                </button> -->
                 <button hide-gt-md md-icon-button (click)="editProfile(upl)">
                     <md-icon alt="แก้ไข">edit</md-icon>
                 </button>
-                <button hide-gt-md md-icon-button (click)="setDefaultProfile(upl)">
+                <!-- <button hide-gt-md md-icon-button (click)="setDefaultProfile(upl)">
                     <md-icon alt="ใช้เป็นค่าเริ่มต้น">grade</md-icon>
-                </button>
+                </button> -->
             </md-list-item>
         </md-list>
     </md-card-content>

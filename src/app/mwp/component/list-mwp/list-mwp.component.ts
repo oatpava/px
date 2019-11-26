@@ -57,7 +57,7 @@ export class ListMwpComponent implements OnInit {
   getUserProfileFolders(): void {
     this._loadingService.register('main')
     this._mwpService
-      .getUserProfileFolders()
+      .getUserProfileFolderByUserProfileIds(this._paramSarabanService.userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.mwps = response as Mwp[]
@@ -67,7 +67,7 @@ export class ListMwpComponent implements OnInit {
   getShortcutSarabanFolders(): void {
     this._loadingService.register('main')
     this._sarabanService
-      .getSarabanFolderShortcuts()
+      .listShortcutsByUserProfileId(this._paramSarabanService.userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.shortCutSaraban = response
