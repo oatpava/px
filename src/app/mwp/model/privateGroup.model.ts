@@ -6,7 +6,7 @@ export class PrivateGroup {
     ownerId: number
     groupName: string
     listUser: PrivateGroupUser[]
-    type: number
+    groupType: number
 
     constructor(values: Object = {}) {
         this.version = 1
@@ -14,7 +14,7 @@ export class PrivateGroup {
         this.ownerId = 0,
         this.groupName = '',
         this.listUser = null,
-        this.type = 0,
+        this.groupType = 0,
         Object.assign(this, values)
     }
 }
