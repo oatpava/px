@@ -37,7 +37,7 @@ export class AddPrivateGroupComponent implements OnInit {
     this.isAddMode = true
     this.type = this._paramSarabanService.tmp
     this.mode = this._paramSarabanService.tmp2
-    this.privateGroup = new PrivateGroup({ ownerId: this._paramSarabanService.userId, type: 0 })
+    this.privateGroup = new PrivateGroup({ ownerId: this._paramSarabanService.userId })
     this.privateGroupUser = new PrivateGroupUser({ privateGroupId: this._paramSarabanService.tmp_i, userId: 0, userType: 2 })
     this.listOutsider = []
     this.listButton = { hidden: true, index: null }

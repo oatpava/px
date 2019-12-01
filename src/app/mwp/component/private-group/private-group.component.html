@@ -63,7 +63,7 @@
     <div *ngIf="isGroupSelected" class="menuList" [tdToggle]="!menuOver">
         <button md-fab color="accent" title="เพิ่มผู้ใช้ภายนอก" (click)="add('ผู้ใช้ภายนอก', selectedGroup.data.id)"><md-icon>person_add</md-icon></button>
     </div>
-    <div *ngIf="!isGroupSelected && !isNewNodeSelected" class="menuList" [tdToggle]="!menuOver">
+    <div *ngIf="!isParentSelected && !isGroupSelected && !isNewNodeSelected" class="menuList" [tdToggle]="!menuOver">
         <button md-fab color="accent" style="background:red;" title="ลบ" (click)="delete('ผู้ใข้', selectedGroup)"><md-icon>delete</md-icon></button>
     </div>
     <div *ngIf="isOutsideGroupUserSelected" class="menuList" [tdToggle]="!menuOver">

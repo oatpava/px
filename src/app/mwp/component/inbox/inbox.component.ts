@@ -124,7 +124,7 @@ export class InboxComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           if (result == 1) {
-            this.backToSaraban('backtoRegister')
+            //this.backToSaraban('backtoRegister')
           } else {
             this.backToSaraban('show')
           }
