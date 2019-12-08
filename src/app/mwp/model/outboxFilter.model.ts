@@ -8,6 +8,7 @@ export class OutboxFilter {
     outboxNote: string
     outboxDescription: string
     outboxStr04: string
+    outboxStr03: string
 
     constructor(values: Object = {}) {
         this.version = 1
@@ -19,6 +20,7 @@ export class OutboxFilter {
         this.outboxNote = ''
         this.outboxDescription = ''
         this.outboxStr04 = ''
+        this.outboxStr03 = ''
         Object.assign(this, values)
     }
 }

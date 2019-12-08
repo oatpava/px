@@ -273,16 +273,21 @@ export class MainComponent implements OnInit {
       dialogRef.componentInstance.confirmation = true
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.index = index
-          this.userProfile = this.userProfiles[index]
-          this._paramSarabanService.userProfileIndex = 0
-          this._paramSarabanService.userId = this.userProfile.id
-          this._paramSarabanService.userName = this.userProfile.fullName
-          this._paramSarabanService.structure = this.userProfile.structure
-          this._paramSarabanService.structureId = this.userProfile.structure.id
-          this._paramSarabanService.structureName = this.userProfile.structure.name
-          this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
-          this.loadDefaultModule('mwps', { t: new Date().getTime() })
+          this._loginService
+            .swapUserProfile(this.userProfiles[index])
+            .subscribe(response => {
+              this.index = index
+              this.userProfile = this.userProfiles[index]
+              this._paramSarabanService.userProfileIndex = 0
+              this._paramSarabanService.userId = this.userProfile.id
+              this._paramSarabanService.userName = this.userProfile.fullName
+              this._paramSarabanService.structure = this.userProfile.structure
+              this._paramSarabanService.structureId = this.userProfile.structure.id
+              this._paramSarabanService.structureName = this.userProfile.structure.name
+              this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
+              this.loadDefaultModule('mwps', { t: new Date().getTime() })
+            })
+
         }
       })
     }

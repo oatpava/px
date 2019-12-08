@@ -289,6 +289,9 @@ export class SarabanContentService {
 
   report1_2(jobType: string, folderId: number, filters: SarabanContentFilter): Observable<SarabanContent[]> {
     if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('dir=asc'))
+      this._options.search = params  
       return this._http.post(this._apiUrl + '/report1_2/' + jobType + '/' + folderId, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
@@ -300,6 +303,9 @@ export class SarabanContentService {
 
   report101314(jobType: string, folderId: number, actionType: string, filters: SarabanContentFilter): Observable<SarabanContent[]> {
     if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('dir=asc'))
+      this._options.search = params      
       return this._http.post(this._apiUrl + '/report101314/' + jobType + '/' + folderId + '/' + actionType, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
@@ -322,6 +328,9 @@ export class SarabanContentService {
 
   report56(jobType: string, folderId: number, filters: SarabanContentFilter, userId: number): Observable<any> {
     if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('dir=asc'))
+      this._options.search = params      
       return this._http.post(this._apiUrl + '/report56/' + jobType + '/' + folderId + '/' + userId, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
