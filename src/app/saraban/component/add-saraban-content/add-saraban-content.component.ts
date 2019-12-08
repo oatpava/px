@@ -4,6 +4,7 @@ import { TdLoadingService } from '@covalent/core'
 import { IMyOptions } from 'mydatepicker'
 import { Message, TreeNode, AutoComplete } from 'primeng/primeng'
 import { MdDialog } from '@angular/material'
+import { Observable } from 'rxjs/Observable'
 
 import { PxService } from '../../../main/px.service'
 import { SarabanContentService } from '../../service/saraban-content.service'
@@ -37,6 +38,7 @@ import { SarabanFileAttachComponent } from '../saraban-file-attach/saraban-file-
 import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
 import { SendEmailComponent } from '../send-email/send-email.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
+import { Outbox } from '../../../mwp/model/outbox.model'
 
 
 @Component({
@@ -129,6 +131,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   referenceContent: SarabanContent
   registerAgain: boolean = false
+  hardCopyRecievedUpdate: boolean = false
 
   private isArchive: boolean
 
@@ -779,6 +782,8 @@ export class AddSarabanContentComponent implements OnInit {
           if (response.wfContentNumber != this.sarabanContent.wfContentContentNumber) {
             this.sarabanContent.wfContentContentNumber = response.wfContentNumber
             this.sarabanContent.wfContentContentNo = response.wfContentNo
+            this.sarabanContent.wfContentBookNumber = response.wfContentNumber
+            this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
             this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
               + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
               + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
@@ -1418,6 +1423,7 @@ export class AddSarabanContentComponent implements OnInit {
           let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
           if (tmp1) tmp1 = Object.assign({}, response)
         }
+        if (this.hardCopyRecievedUpdate) this.updateSendNote(response)
         this.show('แก้ไข')
       })
   }
@@ -2214,6 +2220,38 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         this.deleteParamData(id, false, false)//for back to inbox
       })
+  }
+
+  onHardCopyRecievedCheck() {
+    if (this.mode == 'edit') this.hardCopyRecievedUpdate = true
+  }
+
+  updateSendNote(content: SarabanContent) {
+    let tmp: any[] = []
+    let note = ' (แก้ไขได้รับแล้ว ' + content.wfContentDate01.substr(0, 10) + ' ' + content.wfContentDate01.substr(11, 5) + ')'
+    let outboxs = this.outboxs.filter(outbox => outbox.linkId2 == content.id)
+    outboxs.forEach(outbox => {
+      outbox.outboxNote += note
+      tmp.push(this._outboxService.updateSendnote(outbox))
+      this._loadingService.register('main')
+      this._inboxService
+        .getInboxsByWorkflowId(outbox.workflowId)
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          let inboxs = response
+          inboxs.forEach(inbox => {
+            inbox.inboxNote += note
+            tmp.push(this._inboxService.updateSendnote(inbox))
+
+            this._loadingService.register('main')
+            Observable.forkJoin(tmp)
+              .subscribe((res: any[]) => {
+                this._loadingService.resolve('main')
+                this.hardCopyRecievedUpdate = false
+              })
+          })
+        })
+    })
   }
 
 }

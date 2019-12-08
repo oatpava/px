@@ -188,4 +188,18 @@ export class InboxService {
     }
   }
 
+  updateSendnote(newInbox: Inbox): Observable<Inbox> {
+    if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('version=1.0'))
+      this._options.search = params
+      return this._http.post(this._apiUrl, newInbox, this._options)
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }

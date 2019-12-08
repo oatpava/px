@@ -85,23 +85,19 @@ export class UserComponent implements OnInit {
       .subscribe((params: Params) => {
         this.mode = params['mode']
         this.modeTitle = params['modeTitle']
-        console.log('mode = ' + this.mode)
         this.structureId = +params['structureId']
-        console.log('this.structureId = ' + this.structureId)
         this._structureService.getStructure('1', Number(this.structureId))
           .subscribe(response => {
-            console.log(response)
             this.structureName = 'หน่วยงาน : ' + response.name
           })
         if (this.mode === 'add') {
           this.structureId = +params['structureId']
-          console.log('this.structureId = ' + this.structureId)
           this.userId = 0
         } else if (this.mode === 'edit') {
           this.userId = +params['userId']
-          console.log('this.userId = ' + this.userId)
           this.getUser(this.userId)
           this.toggleAddUser = false
+          this.toggleCommand = false
         }
       })
   }
