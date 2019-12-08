@@ -1369,8 +1369,9 @@ export class AddSarabanContentComponent implements OnInit {
           if (response) {
             let dialogRef = this._dialog.open(DialogWarningComponent)
             dialogRef.componentInstance.header = "แจ้งเตือน"
-            dialogRef.componentInstance.message = "เลขที่หนังสือ '" + response.wfContentBookNo + "' นี้มีในระบบแล้ว วันที่ "
-              + response.createdDate.substring(0, 10) + "\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
+            dialogRef.componentInstance.message = "เลขที่หนังสือ '" + response.wfContentBookNo +
+              "' ลงวันที่ " + response.createdDate.substring(0, 10) + " นี้มีในระบบแล้ว "
+              + "\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
             dialogRef.componentInstance.confirmation = true
             dialogRef.afterClosed().subscribe(result => {
               if (result) {
