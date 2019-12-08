@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions, URLSearchParams} from '@angular/http'
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../environments/environment'
 import 'rxjs/Rx'
 import { Observable } from 'rxjs/Observable'
@@ -10,6 +10,7 @@ import { LoggerService } from '../main/logger.service'
 
 import { User } from '../setting/model/user.model'
 import { USERS } from '../setting/model/user-mock'
+import { UserProfile } from '../shared'
 
 @Injectable()
 export class LoginService {
@@ -22,7 +23,7 @@ export class LoginService {
     this._apiUrlLogin = environment.apiServer + environment.apiName + '/v1/users'
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-  //  this._options = new RequestOptions({ headers: this._headers })
+    //  this._options = new RequestOptions({ headers: this._headers })
   }
 
   // changeSetapiUrl() {
@@ -102,7 +103,7 @@ export class LoginService {
       params.set('q', this.pxService.encrypt('api_key=praXis'))
       this._options.search = params
       return this._http.put(this._apiUrl + '/userName', user, this._options)
-      // return this._http.put(this._apiUrl + '/userName/'+ user.name, user, this._options)
+        // return this._http.put(this._apiUrl + '/userName/'+ user.name, user, this._options)
         .map((response: Response) => {
           let result = response.json()
           // return response.json().data.result
@@ -158,7 +159,7 @@ export class LoginService {
   getParmUserChange(username: String, user: User): Observable<any> {
     this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
     if (environment.production) {
-       console.log(this._headers)
+      console.log(this._headers)
       return this._http.put(this._apiUrl + '/changePass/' + username, user, { headers: this._headers })
         .map((response: Response) => {
           let result = response.json()
@@ -201,11 +202,23 @@ export class LoginService {
     if (environment.production) {
       return this._http.get(this._apiUrlLogin + '/getMocktoken', { headers: this._headers })
         .map((response: Response) => {
-            localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
           return response.json().data.result
         })
         .catch(this.loggerService.handleError)
     } else {
+    }
+  }
+
+  swapUserProfile(userProfile: UserProfile): Observable<any> {
+    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    if (environment.production) {
+      return this._http.post(this._apiUrl + '/swapUserProfile', userProfile, { headers: this._headers })
+        .map((response: Response) => {
+          localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          return this.pxService.verifyResponseArray(response)
+        })
+        .catch(this.loggerService.handleError)
     }
   }
 
