@@ -4,6 +4,7 @@
 /dist
 /tmp
 dist.7z
+dist.zip
 
 # dependencies
 /node_modules/*

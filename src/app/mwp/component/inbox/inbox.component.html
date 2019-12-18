@@ -121,7 +121,7 @@
                                             <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxFrom}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="inboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                    <p-column field="inboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'145px', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxStr04}}</span>
                                             <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxStr04}}</span>      

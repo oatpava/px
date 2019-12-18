@@ -6,6 +6,7 @@ import { MdDialog } from '@angular/material'
 import { MwpService } from '../../service/mwp.service'
 import { SarabanService } from '../../../saraban/service/saraban.service'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
+import { InboxService } from '../../service/inbox.service'
 
 import { Mwp } from '../../model/mwp.model'
 import { SarabanFolder } from '../../../saraban/model/sarabanFolder.model'
@@ -16,13 +17,14 @@ import { DialogInstructionComponent } from '../../../main/component/dialog-instr
   selector: 'app-list-mwp',
   templateUrl: './list-mwp.component.html',
   styleUrls: ['./list-mwp.component.styl'],
-  providers: [MwpService, SarabanService]
+  providers: [MwpService, SarabanService, InboxService]
 })
 export class ListMwpComponent implements OnInit {
   mwps: Mwp[]
   shortCutSaraban: SarabanFolder[]
   listMenu: string = 'menu'
   ModeSearch: boolean = true
+  inboxAmount: number = 0
 
   constructor(
     private _route: ActivatedRoute,
@@ -31,7 +33,8 @@ export class ListMwpComponent implements OnInit {
     private _mwpService: MwpService,
     private _sarabanService: SarabanService,
     private _dialog: MdDialog,
-    private _paramSarabanService: ParamSarabanService
+    private _paramSarabanService: ParamSarabanService,
+    private _inboxService: InboxService
   ) {
     this._paramSarabanService.pathOld = null
     this._paramSarabanService.path = null
@@ -50,6 +53,7 @@ export class ListMwpComponent implements OnInit {
         if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId!=1) {
           this.getUserProfileFolders()
           this.getShortcutSarabanFolders()
+          this.getStructureInboxs()
         }
       })
   }
@@ -157,6 +161,16 @@ export class ListMwpComponent implements OnInit {
 
   showInstructionDialog() {
     let dialogRef = this._dialog.open(DialogInstructionComponent)
+  }
+
+  getStructureInboxs() {
+    this._loadingService.register('main')
+    this._inboxService
+      .getStructureInboxs(this._paramSarabanService.structureId, 0, 1)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.inboxAmount = response.listReturn.all
+      })
   }
 
 }
