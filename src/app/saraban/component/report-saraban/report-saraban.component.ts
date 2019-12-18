@@ -58,22 +58,27 @@ export class ReportSarabanComponent implements OnInit {
 
   showReport(report: Report, dontShowReportList: boolean) {
     let params = new URLSearchParams()
-    if (report.parameters[0] != null) {//get date params
+    if (report.parameters[0] != null || report.showDir) {//get date params
       let dialogRef = this._dialog.open(ReportComponent, {
-        width: '40%'
+        //width: '40%'
       })
       if (report.parameters[3] != null) dialogRef.componentInstance.showEmsField = true
+      if (!report.parameters[0]) dialogRef.componentInstance.showDate = false
+      if (report.showDir) dialogRef.componentInstance.showDir = true
       dialogRef.afterClosed().subscribe(result => {
-        this.paramValue[0] = dialogRef.componentInstance.startDate_str
-        this.paramValue[1] = dialogRef.componentInstance.endDate_str
-        this.paramValue[3] = dialogRef.componentInstance.ems
-        for (let i = 0; i < report.parameters.length; i++) {
-          if (report.parameters[i] != null) {
-            params.set(report.parameters[i], this.paramValue[i])
-          }
+        if (result) {
+          this.paramValue[0] = dialogRef.componentInstance.startDate_str
+          this.paramValue[1] = dialogRef.componentInstance.endDate_str
+          this.paramValue[3] = dialogRef.componentInstance.ems
+          for (let i = 0; i < report.parameters.length; i++) {
+            if (report.parameters[i] != null) {
+              params.set(report.parameters[i], this.paramValue[i])
+            }
+          }      console.log('xxx', dialogRef.componentInstance.dir)
+
+          if (report.useTempTable) this.deleteTempTable(report, dialogRef.componentInstance.dir)
+          else this._pxService.report(report.url, this.reportType, params)
         }
-        if (report.useTempTable) this.deleteTempTable(report)
-        else this._pxService.report(report.url, this.reportType, params)
       })
     } else {
       if (!report.useTempTable) {
@@ -84,7 +89,7 @@ export class ReportSarabanComponent implements OnInit {
         }
         this._pxService.report(report.url, this.reportType, params)
       } else {
-        this.deleteTempTable(report)
+        this.deleteTempTable(report, 'desc')
       }
       if (dontShowReportList) {
         setTimeout(() => {//must set timeout cause dialog thrown detexhChanged() => error
@@ -96,17 +101,17 @@ export class ReportSarabanComponent implements OnInit {
     }
   }
 
-  deleteTempTable(report: Report) {
+  deleteTempTable(report: Report, dir: string) {
     this._loadingService.register('main')
     this._sarabanContentService
       .deleteTempTable(report.url)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.genTempTable(report)
+        this.genTempTable(report, dir)
       })
   }
 
-  genTempTable(report: Report) {//call service to fill temptable
+  genTempTable(report: Report, dir: string) {//call service to fill temptable
     let params = new URLSearchParams()
     params.set("jobType", report.url)
     params.set("createdBy", '' + this._paramSarabanService.userId)
@@ -115,7 +120,7 @@ export class ReportSarabanComponent implements OnInit {
     if (this.menuType == "list-saraban") {
       if (report.id < 5) {
         this._sarabanContentService
-          .report1_2(report.url, +this.paramValue[2], this.searchModel)
+          .report1_2(report.url, +this.paramValue[2], this.searchModel, dir)
           .subscribe(response => {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
@@ -125,7 +130,7 @@ export class ReportSarabanComponent implements OnInit {
         if (report.id == 11) actionType = "F"
         else if (report.id == 12) actionType = "C"
         this._sarabanContentService
-          .report101314(report.url, +this.paramValue[2], actionType, this.searchModel)
+          .report101314(report.url, +this.paramValue[2], actionType, this.searchModel, dir)
           .subscribe(response => {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
@@ -140,14 +145,14 @@ export class ReportSarabanComponent implements OnInit {
       })
       if (report.id == 6) {
         this._sarabanContentService
-          .report56(report.url, +this.paramValue[2], tmp, 0)
+          .report56(report.url, +this.paramValue[2], tmp, 0, dir)
           .subscribe(response => {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
           })
       } else if (report.id == 7) {
         this._sarabanContentService
-          .report56(report.url, +this.paramValue[2], tmp, +this.paramValue[4])
+          .report56(report.url, +this.paramValue[2], tmp, +this.paramValue[4], dir)
           .subscribe(response => {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
@@ -155,7 +160,7 @@ export class ReportSarabanComponent implements OnInit {
       } else if (report.id == 16) {
         tmp.wfContentStr03 = this.paramValue[3]
         this._sarabanContentService
-          .report1_2(report.url, -1, tmp)
+          .report1_2(report.url, -1, tmp, dir)
           .subscribe(response => {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)

@@ -7,7 +7,8 @@ export const REPORTS: Report[] = [
         url: '',
         parameters: [null, null, null, null, null],//['startDate', 'endDate', 'folderId', 'linkId', 'userId']
         useTempTable: false,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 1,
@@ -15,7 +16,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_1_2_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false        
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 2,
@@ -23,7 +25,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_1_2_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 3,
@@ -31,7 +34,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_1_2_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 4,
@@ -39,7 +43,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_1_2_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 5,
@@ -47,7 +52,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_4_ORC',
         parameters: [null, null, null, 'linkId', null],
         useTempTable: false,
-        showInputDialog: false
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 6,
@@ -55,15 +61,17 @@ export const REPORTS: Report[] = [
         url: 'saraban_5_ORC',
         parameters: ['startDate', 'endDate', 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: true 
-    }, 
+        showInputDialog: true,
+        showDir: true
+    },
     {
         id: 7,
         name: 'รายงานสถิติการดำเนินงานของเจ้าหน้าที่',//6 :date, userId //list-folder
         url: 'saraban_6_ORC',
         parameters: ['startDate', 'endDate', 'folderId', null, 'userId'],
         useTempTable: true,
-        showInputDialog: true 
+        showInputDialog: true,
+        showDir: true
     },
     {
         id: 8,
@@ -71,7 +79,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_10_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 9,
@@ -79,7 +88,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_11_ORC',
         parameters: [null, null, 'sName', 'uOutboxId', 'sOutboxId'],
         useTempTable: false,
-        showInputDialog: false
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 10,
@@ -87,15 +97,17 @@ export const REPORTS: Report[] = [
         url: 'saraban_12_ORC',
         parameters: [null, null, 'sName', null, 'userId'],
         useTempTable: false,
-        showInputDialog: false
+        showInputDialog: false,
+        showDir: false
     },
     {
-        id: 11, 
+        id: 11,
         name: 'รายงานสถานะการดำเนินงานหนังสือ-เรื่องเสร็จ',//13 :date, folderId //list-saraban
         url: 'saraban_13_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 12,
@@ -103,7 +115,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_14_ORC',
         parameters: [null, null, 'folderId', null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: true
     },
     {
         id: 13,
@@ -111,7 +124,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_inbox',
         parameters: [null, null, null, null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 14,
@@ -119,7 +133,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_outbox',
         parameters: [null, null, null, null, null],
         useTempTable: true,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 15,
@@ -127,7 +142,8 @@ export const REPORTS: Report[] = [
         url: 'saraban_barcode',
         parameters: [null, null, 'folderId', 'contentId', null],
         useTempTable: false,
-        showInputDialog: false 
+        showInputDialog: false,
+        showDir: false
     },
     {
         id: 16,
@@ -135,6 +151,7 @@ export const REPORTS: Report[] = [
         url: 'saraban_1_2_ORC',
         parameters: ['startDate', 'endDate', null, 'str03', null],
         useTempTable: true,
-        showInputDialog: true 
+        showInputDialog: true,
+        showDir: true
     }
 ]
