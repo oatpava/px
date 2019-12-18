@@ -785,8 +785,8 @@ export class AddSarabanContentComponent implements OnInit {
             this.sarabanContent.wfContentBookNumber = response.wfContentNumber
             this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
             this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
-              + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
-              + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
+              + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
+              + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
           }
 
           if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
@@ -1605,7 +1605,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   genRegistedInfo(content: SarabanContent) {
     let bookNo: String = (content.wfContentBookNo == null) ? '' : content.wfContentBookNo
-    this._paramSarabanService.tmp = 'เลขทะเบียน: ' + content.wfContentContentNo + '<br>เลขที่หนังสือ: ' + bookNo + '<br>วันที่: ' + content.wfContentContentDate + '    เวลา:' + content.wfContentContentTime
+    this._paramSarabanService.tmp = 'เลขทะเบียน: ' + content.wfContentContentNo + '\nเลขที่หนังสือ: ' + bookNo + '\nวันที่: ' + content.wfContentContentDate + '    เวลา:' + content.wfContentContentTime
     this._paramSarabanService.sarabanContentId = content.id
   }
 
