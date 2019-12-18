@@ -41,6 +41,9 @@
                     <md-input flex placeholder="เรื่อง" name="title" [(ngModel)]="searchFilters[index].inboxTitle"></md-input>
                 </div>
                 <div layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="เลขทะเบียน" name="contentNo" [(ngModel)]="searchFilters[index].inboxStr03"></md-input>
+                </div>
+                <div layout="row" layout-align="left start" class="searchFilter">
                     <md-input flex placeholder="เลขที่หนังสือ" name="bookNo" [(ngModel)]="searchFilters[index].inboxStr04"></md-input>
                 </div>
                 <div layout="column" layout-align="left start" class="searchFilter">
@@ -118,7 +121,7 @@
                                             <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxFrom}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="inboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                    <p-column field="inboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'145px', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled && !row.isFinished || row.inboxOpenFlag!=1">{{row.inboxStr04}}</span>
                                             <span *ngIf="row.inboxOpenFlag==1 && row.isFinished" style="color:lightgrey;">{{row.inboxStr04}}</span>      
@@ -155,7 +158,7 @@
                                     </p-column>
                                     <p-column header="" [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'top'}">
                                         <template pTemplate="body" let-row="rowData">
-                                            <button md-icon-button title="ลบรายการ" (click)="deleteInbox(row)"><i class="material-icons">delete</i></button>    
+                                            <button md-icon-button color="primary" title="ลบรายการ" (click)="deleteInbox(row)"><i class="material-icons">delete</i></button>    
                                         </template>
                                     </p-column>
                                 </p-dataTable>

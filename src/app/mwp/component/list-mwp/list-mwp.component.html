@@ -30,6 +30,7 @@
                                 <md-icon md-list-avatar class="hover" *ngIf="item.userProfileFolderType==='Z'"  style="background: #802b00; color: white;" (click)="selectFolder(item)">delete</md-icon>
                                 <md-icon md-list-avatar class="hover" *ngIf="item.userProfileFolderType==='W'"  style="background: #e6b800; color: white;" (click)="selectFolder(item)">folder_open</md-icon>                                
                                 <h3 md-line class="hover" (click)="selectFolder(item)"> {{item.userProfileFolderName}} </h3>
+                                <h4 *ngIf="item.userProfileFolderType==='I'" md-line class="hover" (click)="selectFolder(item)"> จำนวนเรื่องค้างรับ {{inboxAmount}} รายการ</h4>
                                 <p md-line class="hover" (click)="selectFolder(item)"> {{item.userProfileFolderDetail}} </p>
                             </md-list-item>
                         <md-divider md-inset></md-divider>

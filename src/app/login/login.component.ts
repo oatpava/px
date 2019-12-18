@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     // private _userService: UserService,
     // private _userProfileService: UserProfileService,
   ) {
-    this.user = new User()
+    this.user = new User({ version: 1.1 })
     this._paramSarabanService.isArchive = false
     this.logo = 'assets/logo/' + environment.appAcronym + '.png'
   }
@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit {
     this._loginService
       .checkLogin(user)
       .subscribe(response => {
+        console.log('xxx', response)
         this._paramSarabanService.userProfiles = response.message
         this._loadingService.resolve('main')
         if (response.data.result) {

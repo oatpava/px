@@ -8,6 +8,7 @@ export class InboxFilter {
     inboxNote: string
     inboxDescription: string
     inboxStr04: string
+    inboxStr03: string
 
     constructor(values: Object = {}) {
         this.userId = 0
@@ -19,6 +20,7 @@ export class InboxFilter {
         this.inboxNote = ''
         this.inboxDescription = ''
         this.inboxStr04 = ''
+        this.inboxStr03 = ''
         Object.assign(this, values)
     }
 }
