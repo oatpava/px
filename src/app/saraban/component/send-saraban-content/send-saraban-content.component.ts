@@ -906,7 +906,7 @@ export class SendSarabanContentComponent implements OnInit {
             .createPrivateGroup(new PrivateGroup({
               ownerId: this._paramSarabanService.userId,
               groupName: 'รายการโปรดของ ' + this._paramSarabanService.userName,
-              type: 1
+              groupType: 1
             }))
             .subscribe(response => {
               this._loadingService.resolve('main')
