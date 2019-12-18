@@ -59,7 +59,7 @@
 
         <div class="body-showCenter">
             <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
-                <div flex-gt-md="95">
+                <div flex-gt-md="100">
                     <md-list>
 
                         <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
@@ -106,7 +106,7 @@
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxTo}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="outboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                    <p-column field="outboxStr04" header="เลขที่หนังสือ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'145px', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled">{{row.outboxStr04}}</span>
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxStr04}}</del></span>   
