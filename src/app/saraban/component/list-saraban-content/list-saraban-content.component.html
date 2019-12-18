@@ -122,7 +122,12 @@
                                 <p-column header="สถานะ" [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'top'}">
                                     <template pTemplate="body" let-row="rowData">
                                         <button *ngIf="row.wfContentInt03==0" md-icon-button title="ยังไม่ส่งหนังสือ" (click)="send(row)" [disabled]="row.status!=1"><i class="material-icons">send</i></button> 
-                                        <button *ngIf="row.wfContentInt03==1" md-icon-button title="ส่งหนังสือแล้ว" (click)="send(row)" [disabled]="row.status!=1"><i class="material-icons sent">send</i></button>                                                                                                  
+                                        <button *ngIf="row.wfContentInt03==1" md-icon-button title="ส่งหนังสือแล้ว" (click)="send(row)" [disabled]="row.status!=1"><i class="material-icons sent">send</i></button> 
+                                    </template>
+                                </p-column>
+                                <p-column header="เอกสารแนบ" [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'top'}">
+                                    <template pTemplate="body" let-row="rowData">
+                                        <button *ngIf="row.numFileAttach>0" md-icon-button title="{{row.numFileAttach}} รายการ" disabled><i class="material-icons">attach_file</i></button> 
                                     </template>
                                 </p-column>
                                 <p-column field="wfContentContentNo" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'115px', 'vertical-align':'top'}">
