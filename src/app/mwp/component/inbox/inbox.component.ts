@@ -110,27 +110,28 @@ export class InboxComponent implements OnInit {
   }
 
   showRegistedInfo() {
-    if (this._paramSarabanService.msg != null) {
-      let dialogRef = this._dialog.open(DialogWarningComponent)
-      dialogRef.componentInstance.header = "รายละเอียดการลงทะเบียน"
-      dialogRef.componentInstance.message = this._paramSarabanService.tmp
-      dialogRef.componentInstance.confirmation = false
-      dialogRef.componentInstance.inboxAfterRegister = true
-      this._paramSarabanService.tmp = null
-      this.msgs = []
-      this.msgs.push(this._paramSarabanService.msg)
-      this._paramSarabanService.msg = null
-      setTimeout(() => this.msgs = [], 3000)
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          if (result == 1) {
-            //this.backToSaraban('backtoRegister')
-          } else {
-            this.backToSaraban('show')
-          }
+    let dialogRef = this._dialog.open(DialogWarningComponent)
+    dialogRef.componentInstance.header = "รายละเอียดการลงทะเบียน"
+    dialogRef.componentInstance.message = this._paramSarabanService.tmp
+    dialogRef.componentInstance.confirmation = false
+    dialogRef.componentInstance.inboxAfterRegister = true
+    this._paramSarabanService.tmp = null
+    this.msgs = []
+    this.msgs.push(this._paramSarabanService.msg)
+    this._paramSarabanService.msg = null
+    setTimeout(() => this.msgs = [], 3000)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result == 1) {
+          //this.backToSaraban('backtoRegister')
+        } else {
+          this.backToSaraban('show')
+          this._paramSarabanService.registedFolder = null
         }
-      })
-    }
+      } else {
+        this._paramSarabanService.registedFolder = null
+      }
+    })
   }
 
   setAssignedInboxs() {

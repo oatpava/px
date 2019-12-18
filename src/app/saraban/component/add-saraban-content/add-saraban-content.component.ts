@@ -197,9 +197,10 @@ export class AddSarabanContentComponent implements OnInit {
     } else if (this.mode == 'register') {//from myWork only
       this.isMyWork = true
       this.registerMyWork(this._paramSarabanService.sarabanContentId)
-    } else if (this.mode == 'backtoRegister') {//from mwp only
-      this.registerAfterDialogClose(this._paramSarabanService.inboxRegistedContent, this._paramSarabanService.inboxRegistedFolder)
     }
+    // else if (this.mode == 'backtoRegister') {//from mwp only
+    //   this.registerAfterDialogClose(this._paramSarabanService.registedContent, this._paramSarabanService.registedFolder)
+    // }
 
     if (this._paramSarabanService.msg != null) {
       this.msgs = []
@@ -970,11 +971,13 @@ export class AddSarabanContentComponent implements OnInit {
           setTimeout(() => this.msgs = [], 3000)
         }
         this.getProcesses(sarabanContent.wfDocumentId, 0)
-        let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        if (tmp) tmp.wfContentInt03 = 1
-        if (this._paramSarabanService.searchFilters) {
-          let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          if (tmp1) tmp1.wfContentInt03 = 1
+        if (this._paramSarabanService.datas) {
+          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+          if (tmp) tmp.wfContentInt03 = 1
+          if (this._paramSarabanService.searchFilters) {
+            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+            if (tmp1) tmp1.wfContentInt03 = 1
+          }
         }
       } else {
         if (dialogRef.componentInstance.scanned) {
@@ -1022,7 +1025,7 @@ export class AddSarabanContentComponent implements OnInit {
     if (this._paramSarabanService.mwp.fromMwp) dialogRef.componentInstance.fromMWP = true
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this._paramSarabanService.inboxRegistedFolder = dialogRef.componentInstance.selectedFolder
+        this._paramSarabanService.registedFolder = dialogRef.componentInstance.selectedFolder
         this.registerAfterDialogClose(sarabanContent, dialogRef.componentInstance.selectedFolder)
       }
     })
@@ -1425,11 +1428,13 @@ export class AddSarabanContentComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.bookDate_str = response.wfContentBookDate.substr(0, 10)
-        let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        if (tmp) Object.assign(tmp, response)
-        if (this._paramSarabanService.searchFilters) {
-          let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          if (tmp1) Object.assign(tmp1, response)
+        if (this._paramSarabanService.datas) {
+          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+          if (tmp) Object.assign(tmp, response)
+          if (this._paramSarabanService.searchFilters) {
+            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+            if (tmp1) Object.assign(tmp1, response)
+          }
         }
         if (this.hardCopyRecievedUpdate) this.updateSendNote(response)
         this.show('แก้ไข')
@@ -1567,12 +1572,12 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentStr04 += '' + this.sendTo[2][i].data.userType
       }
     }
-    //for inbox bact to register
-    if (this._paramSarabanService.mwp.fromMwp) {
-      let tmp = new SarabanContent()
-      Object.assign(tmp, this.sarabanContent)
-      this._paramSarabanService.inboxRegistedContent = tmp
-    }
+    // //for inbox bact to register
+    // if (this._paramSarabanService.mwp.fromMwp) {
+    //   let tmp = new SarabanContent()
+    //   Object.assign(tmp, this.sarabanContent)
+    //   this._paramSarabanService.registedContent = tmp
+    // }
   }
 
   updateCreate() {
@@ -1917,18 +1922,20 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   deleteParamData(id: number, isContent: boolean, backWithMsg: boolean) {
-    let tmp = this._paramSarabanService.datas[0]
-    let index = tmp.findIndex(x => x.id == id)
-    tmp.splice(index, 1)
-    this._paramSarabanService.listReturn[0].count--
-    this._paramSarabanService.listReturn[0].all--
+    if (this._paramSarabanService.datas) {
+      let tmp = this._paramSarabanService.datas[0]
+      let index = tmp.findIndex(x => x.id == id)
+      tmp.splice(index, 1)
+      this._paramSarabanService.listReturn[0].count--
+      this._paramSarabanService.listReturn[0].all--
 
-    if (this._paramSarabanService.searchFilters) {
-      let tmp1 = this._paramSarabanService.datas[1]
-      let index = tmp1.findIndex(x => x.id == id)
-      tmp1.splice(index, 1)
-      this._paramSarabanService.listReturn[1].count--
-      this._paramSarabanService.listReturn[1].all--
+      if (this._paramSarabanService.searchFilters) {
+        let tmp1 = this._paramSarabanService.datas[1]
+        let index = tmp1.findIndex(x => x.id == id)
+        tmp1.splice(index, 1)
+        this._paramSarabanService.listReturn[1].count--
+        this._paramSarabanService.listReturn[1].all--
+      }
     }
     if (backWithMsg) {
       if (isContent) {
@@ -1962,35 +1969,38 @@ export class AddSarabanContentComponent implements OnInit {
     content.hasFinish = hasFinish
     content.isCanceled = isCanceled
     content.status = status
-    if (allFlow) {
-      this._paramSarabanService.datas[0].forEach(tmp => {
-        if (tmp.wfDocumentId == content.wfDocumentId) {
-          tmp.hasFinish = hasFinish
-          tmp.isCanceled = isCanceled
-          tmp.status = status
-          tmp.numFileAttach = content.numFileAttach
-        }
-      })
-      if (this._paramSarabanService.searchFilters) {
-        this._paramSarabanService.datas[1].forEach(tmp1 => {
-          if (tmp1.wfDocumentId == content.wfDocumentId) {
-            tmp1.hasFinish = hasFinish
-            tmp1.isCanceled = isCanceled
-            tmp1.status = status
-            tmp1.numFileAttach = content.numFileAttach
+
+    if (this._paramSarabanService.datas) {
+      if (allFlow) {
+        this._paramSarabanService.datas[0].forEach(tmp => {
+          if (tmp.wfDocumentId == content.wfDocumentId) {
+            tmp.hasFinish = hasFinish
+            tmp.isCanceled = isCanceled
+            tmp.status = status
+            tmp.numFileAttach = content.numFileAttach
           }
         })
-      }
-    } else {
-      let tmp = this._paramSarabanService.datas[0].find(x => x.id == content.id)
-      tmp.hasFinish = hasFinish
-      tmp.isCanceled = isCanceled
-      tmp.status = status
-      if (this._paramSarabanService.searchFilters) {
-        let tmp1 = this._paramSarabanService.datas[1].find(x => x.id == content.id)
-        tmp1.hasFinish = hasFinish
-        tmp1.isCanceled = isCanceled
-        tmp1.status = status
+        if (this._paramSarabanService.searchFilters) {
+          this._paramSarabanService.datas[1].forEach(tmp1 => {
+            if (tmp1.wfDocumentId == content.wfDocumentId) {
+              tmp1.hasFinish = hasFinish
+              tmp1.isCanceled = isCanceled
+              tmp1.status = status
+              tmp1.numFileAttach = content.numFileAttach
+            }
+          })
+        }
+      } else {
+        let tmp = this._paramSarabanService.datas[0].find(x => x.id == content.id)
+        tmp.hasFinish = hasFinish
+        tmp.isCanceled = isCanceled
+        tmp.status = status
+        if (this._paramSarabanService.searchFilters) {
+          let tmp1 = this._paramSarabanService.datas[1].find(x => x.id == content.id)
+          tmp1.hasFinish = hasFinish
+          tmp1.isCanceled = isCanceled
+          tmp1.status = status
+        }
       }
     }
   }

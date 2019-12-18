@@ -62,8 +62,8 @@ export class ParamSarabanService {
   ScanSubscription: Subscription
 
   inboxPath: string
-  inboxRegistedContent: SarabanContent
-  inboxRegistedFolder: SarabanFolder
+  //registedContent: SarabanContent
+  registedFolder: SarabanFolder
 
   userProfiles: UserProfile[]
   userProfileIndex: number
