@@ -119,6 +119,7 @@ export class MainComponent implements OnInit {
     //   this._loginService
     //     .changeSetapiUrl()
     // }
+    this.getSarabanParam()
   }
 
   loadDefaultModule(defaultModule: string, params: Object) {
@@ -230,7 +231,7 @@ export class MainComponent implements OnInit {
     this._settingService.getParams('TIMEOUT')
       .subscribe(Response => {
         if (Response != null) {
-          console.log(Response.paramValue)
+          console.log('timeout after ' + Response.paramValue + 's.')
           this._idle.setTimeout(Number(Response.paramValue));
         } else {
           console.log(100)
@@ -292,6 +293,31 @@ export class MainComponent implements OnInit {
         }
       })
     }
+  }
+
+  getSarabanParam() {
+    this._settingService.getParams('CONTENTFORMAT')
+      .subscribe(response => {
+        if (response != null) {
+          this._paramSarabanService.contentNoFormat = this.genN0Format(+response.paramValue)
+        }
+      })
+
+    this._settingService.getParams('BOOKNOFORMAT')
+      .subscribe(response => {
+        this._paramSarabanService.bookNoFormat = this.genN0Format(+response.paramValue)
+      })
+
+    this._settingService.getParams('ORDERFORMAT')
+      .subscribe(response => {
+        this._paramSarabanService.orderNoFormat = this.genN0Format(+response.paramValue)
+      })
+  }
+
+  genN0Format(num: number): string {
+    let tmp: string = ''
+    for (let i = 0; i < num; i++) tmp += '0'
+    return tmp
   }
 
 }

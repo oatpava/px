@@ -62,6 +62,9 @@ export class AddSarabanContentComponent implements OnInit {
   title: string
   mode: string
   sarabanContent: SarabanContent
+  contentNoFormat: string
+  bookNoFormat: string
+  orderFormat: string
   sarabanContent_tmp: SarabanContent
   sarabanSpeeds: SarabanSpeed[]
   sarabanSecrets: SarabanSecret[]
@@ -173,6 +176,9 @@ export class AddSarabanContentComponent implements OnInit {
     private _sarabanReserveContentService: SarabanReserveContentService,
   ) {
     this.sarabanContent = new SarabanContent()
+    this.contentNoFormat = this._paramSarabanService.contentNoFormat
+    this.bookNoFormat = this._paramSarabanService.bookNoFormat
+    this.orderFormat = this._paramSarabanService.orderNoFormat
     this.mode = this._paramSarabanService.mode
     this.inboxId = this._paramSarabanService.inboxId
     this.folderId = this._paramSarabanService.folderId
@@ -447,9 +453,9 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.isOrderFolder = true
-          this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560               
+          this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + this.year//001/2560               
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year          
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + this.year//praxis00001/2560 pre+no+/year          
         }
 
         let tzoffset = dateTime.getTimezoneOffset() * 60000//timezone
@@ -532,9 +538,9 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
-          this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560 
+          this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + this.year//001/2560 
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + this.year//praxis00001/2560 pre+no+/year
         }
 
         let tzoffset = dateTime.getTimezoneOffset() * 60000//timezone
@@ -872,7 +878,7 @@ export class AddSarabanContentComponent implements OnInit {
     tmp.wfContentFolderId = sharedFolder.id
     tmp.wfContentContentNumber = this.sharedContentNumber
     tmp.wfContentContentPre = sharedFolder.wfFolderPreContentNo
-    tmp.wfContentContentNo = tmp.wfContentContentPre + ("000000" + tmp.wfContentContentNumber).substr(-6) + "/" + this.year
+    tmp.wfContentContentNo = tmp.wfContentContentPre + (this.contentNoFormat + tmp.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + this.year
 
     this._loadingService.register('main')
     this._sarabanContentService
@@ -2079,8 +2085,8 @@ export class AddSarabanContentComponent implements OnInit {
     let bookNo: string = ''
     switch (folderBookNoType) {
       case (0): bookNo = ""; break
-      case (1): bookNo = bookPre + "/" + ("000000" + bookNumber).substr(-6); break//praxis/00001
-      case (2): bookNo = bookPre + "/" + ("000000" + bookNumber).substr(-6) + "/" + year; break//praxis/00001/2560
+      case (1): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
+      case (2): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
     }
     return bookNo
   }
@@ -2153,7 +2159,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentFolderId = folderId
         this.sarabanContent.wfContentContentPre = (folder.wfFolderPreContentNo == null) ? '' : folder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
-        this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year
+        this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + this.year//praxis00001/2560 pre+no+/year
         this.sarabanContent.wfContentContentYear = this.year
         this.sarabanContent.wfContentContentDate = this.contentDate_str
         this.sarabanContent.wfContentBookDate = this.bookDate_str
