@@ -770,8 +770,8 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  checkContentNo(folderId: number) {
-    if (this.useReserve || this.usePoint) {//no check last
+  checkContentNo(folderId: number) {//duplicate
+    if (this.useReserve || this.usePoint) {
       if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
       else this.createSarabanContent(null)
     } else {
@@ -785,18 +785,20 @@ export class AddSarabanContentComponent implements OnInit {
             this.sarabanContent.wfContentContentNo = response.wfContentNo
             this.sarabanContent.wfContentBookNumber = response.wfContentNumber
             this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
-            this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
+            this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะใช้เลขถัดไปคือ " + response.wfContentNumber
               + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
               + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
+          } else {
+            if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
+            else this.createSarabanContent(null)
           }
-
-          if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
-          else this.createSarabanContent(null)
         })
     }
   }
 
   createSarabanContent(sharedContent: SarabanContent) {//add || register
+    this.prepareTo()
+    this.prepareDate(this.sarabanContent.wfContentBookDate)
     if (this.mode == "add") {
       let document = new Document()
       document.documentTypeId = 4//***** */
@@ -863,6 +865,8 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   createSarabanContentNoWorkflow(sharedFolder: SarabanFolder) {
+    this.prepareTo()
+    this.prepareDate(this.sarabanContent.wfContentBookDate)
     let tmp = new SarabanContent()
     Object.assign(tmp, this.sarabanContent)//clone obj with no refference
     tmp.wfContentFolderId = sharedFolder.id
@@ -1408,9 +1412,6 @@ export class AddSarabanContentComponent implements OnInit {
   saveAction(action: string) {
     this.msgs = []
     this.msgs.push(this._paramSarabanService.genWaitngMsg(action))
-
-    this.prepareTo()
-    this.prepareDate(this.sarabanContent.wfContentBookDate)//format date to "dd/mm/yyyy"<th>
     if (this.isOrderFolder) {
       this.createSarabanContent(null)
     } else {
