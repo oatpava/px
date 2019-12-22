@@ -225,32 +225,31 @@ export class MainComponent implements OnInit {
   }
 
   setTimeOut() {
-    // sets an idle timeout of 5 seconds, for testing purposes.
-    this._idle.setIdle(5);
-    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
     this._settingService.getParams('TIMEOUT')
       .subscribe(Response => {
+        // sets an idle timeout of 5 seconds, for testing purposes.
+        this._idle.setIdle(5);
+        // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
         if (Response != null) {
           console.log('timeout after ' + Response.paramValue + 's.')
           this._idle.setTimeout(Number(Response.paramValue));
         } else {
-          console.log(100)
-          this._idle.setTimeout(15000);
+          this._idle.setTimeout(6000);
         }
+        // idle.setTimeout(300);
+        // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+        this._idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+        // this._idle.onTimeoutWarning.subscribe((countdown: number) => {
+        //   // console.log('TimeoutWarning: ' + countdown);
+        // });
+        this._idle.onTimeout.subscribe(() => {
+          // console.log('Timeout');
+          this._dialog.open(AlertLogOffComponent);
+          localStorage.clear();
+          this._router.navigate(['/basic', { sessionExpirate: 'true' }]);
+        });
+        this._idle.watch();
       });
-    // idle.setTimeout(300);
-    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
-    this._idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    this._idle.onTimeoutWarning.subscribe((countdown: number) => {
-      // console.log('TimeoutWarning: ' + countdown);
-    });
-    this._idle.onTimeout.subscribe(() => {
-      // console.log('Timeout');
-      this._dialog.open(AlertLogOffComponent);
-      localStorage.clear();
-      this._router.navigate(['/basic', { sessionExpirate: 'true' }]);
-    });
-    this._idle.watch();
   }
 
   showInstructionDialog() {
