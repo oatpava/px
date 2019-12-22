@@ -187,7 +187,7 @@ export class SarabanContentService {
 
   getReportList(menuType: string, folderType: number): Observable<Report[]> {
     let reports: Report[] = []
-    if (menuType === "list-saraban") reports.push(REPORTS[folderType], REPORTS[8], REPORTS[11], REPORTS[12])
+    if (menuType === "list-saraban") reports.push(REPORTS[folderType], REPORTS[8], REPORTS[11], REPORTS[12], REPORTS[17])
     else if (menuType === "workflow") reports.push(REPORTS[5])
     else if (menuType === "list-folder") (folderType == 0) ? reports.push(REPORTS[6], REPORTS[7]) : reports.push(REPORTS[6], REPORTS[7], REPORTS[16])
     else if (menuType === "inbox") reports.push(REPORTS[13], REPORTS[9])
@@ -287,11 +287,11 @@ export class SarabanContentService {
     }
   }
 
-  report1_2(jobType: string, folderId: number, filters: SarabanContentFilter): Observable<SarabanContent[]> {
+  report1_2(jobType: string, folderId: number, filters: SarabanContentFilter, dir: string): Observable<SarabanContent[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('dir=asc'))
-      this._options.search = params  
+      params.set('q', this.pxService.encrypt('dir=' + dir))
+      this._options.search = params
       return this._http.post(this._apiUrl + '/report1_2/' + jobType + '/' + folderId, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
@@ -301,11 +301,11 @@ export class SarabanContentService {
     }
   }
 
-  report101314(jobType: string, folderId: number, actionType: string, filters: SarabanContentFilter): Observable<SarabanContent[]> {
+  report101314(jobType: string, folderId: number, actionType: string, filters: SarabanContentFilter, dir: string): Observable<SarabanContent[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('dir=asc'))
-      this._options.search = params      
+      params.set('q', this.pxService.encrypt('dir=' + dir))
+      this._options.search = params
       return this._http.post(this._apiUrl + '/report101314/' + jobType + '/' + folderId + '/' + actionType, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
@@ -326,11 +326,11 @@ export class SarabanContentService {
     }
   }
 
-  report56(jobType: string, folderId: number, filters: SarabanContentFilter, userId: number): Observable<any> {
+  report56(jobType: string, folderId: number, filters: SarabanContentFilter, userId: number, dir: string): Observable<any> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('dir=asc'))
-      this._options.search = params      
+      params.set('q', this.pxService.encrypt('dir=' + dir))
+      this._options.search = params
       return this._http.post(this._apiUrl + '/report56/' + jobType + '/' + folderId + '/' + userId, filters, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
@@ -463,6 +463,20 @@ export class SarabanContentService {
       return this._http.post(this._apiUrl + "/createCopy", content, this._options)
         .map((response: Response) => {
           return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
+  report17(jobType: string, folderId: number, filters: SarabanContentFilter, dir: string): Observable<SarabanContent[]> {
+    if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('dir=' + dir))
+      this._options.search = params
+      return this._http.post(this._apiUrl + '/report17/' + jobType + '/' + folderId, filters, this._options)
+        .map((response: Response) => {
+          return this.pxService.verifyResponseArray(response.json().data)
         })
         .catch(this.loggerService.handleError)
     } else {

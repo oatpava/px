@@ -5,4 +5,5 @@ export class Report {
     parameters: string[]
     useTempTable: boolean
     showInputDialog: boolean
+    showDir: boolean
 }

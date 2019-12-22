@@ -165,6 +165,9 @@ export class ListSarabanContentComponent implements OnInit {
         this.listReturn[0] = this._paramSarabanService.listReturn[0]
         this.tableFirst[0] = this._paramSarabanService.tableFirst[0]
       }
+      if (this._paramSarabanService.registedFolder != null && this._paramSarabanService.tmp != null) {
+        this.showRegistedInfo()
+      }
     }
   }
 
@@ -178,6 +181,9 @@ export class ListSarabanContentComponent implements OnInit {
         this.listReturn[this.searched] = response.listReturn
         this.tableFirst[this.searched] = 0
         this.loaded = true
+        if (this._paramSarabanService.registedFolder != null && this._paramSarabanService.tmp != null) {
+          this.showRegistedInfo()
+        }
       })
   }
 
@@ -494,9 +500,55 @@ export class ListSarabanContentComponent implements OnInit {
           this.msgs.push(this._paramSarabanService.msg)
           this._paramSarabanService.msg = null
           setTimeout(() => this.msgs = [], 3000)
-        }     
+        }
       }
     })
+  }
+
+  showRegistedInfo() {
+    let dialogRef = this._dialog.open(DialogWarningComponent)
+    dialogRef.componentInstance.header = "รายละเอียดการลงทะเบียน"
+    dialogRef.componentInstance.message = this._paramSarabanService.tmp
+    dialogRef.componentInstance.confirmation = false
+    dialogRef.componentInstance.inboxAfterRegister = true
+    this._paramSarabanService.tmp = null
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result == 2) {
+        this.returnToRegistedContent(this._paramSarabanService.registedFolder)
+      }
+      this._paramSarabanService.registedFolder = null
+    })
+  }
+
+  returnToRegistedContent(registedFolder: SarabanFolder) {
+    this._paramSarabanService.pathOld = null
+    this._paramSarabanService.path = null
+    this._paramSarabanService.searchFilters = null
+    this._paramSarabanService.searchFilters_tmp = null
+    this._paramSarabanService.datas = null
+    this._paramSarabanService.tableFirst = null
+    this._paramSarabanService.listReturn = null
+    this._paramSarabanService.barcodeFilter = null
+
+    if (registedFolder.wfFolderParentName == null) registedFolder.wfFolderParentName = ""
+    this._paramSarabanService.folderId = registedFolder.wfFolderLinkFolderId
+    this._paramSarabanService.folderName = registedFolder.wfFolderName
+    this._paramSarabanService.folderParentName = registedFolder.wfFolderParentName
+    this._paramSarabanService.folderIcon = "list"
+    this._paramSarabanService.folderType = this._paramSarabanService
+      .getFolderType(registedFolder.wfContentType.id, registedFolder.wfContentType2.id)
+
+    this._paramSarabanService.mode = "show"
+    this._paramSarabanService.menuType = "saraban"
+    this._paramSarabanService.pathOld = registedFolder.wfFolderParentName + ' - ' + registedFolder.wfFolderName
+    this._paramSarabanService.path = registedFolder.wfFolderParentName + ' - ' + registedFolder.wfFolderName
+    this._router.navigate(
+      ['../', {
+        outlets: {
+          contentCenter: ['addContent_s']
+        }
+      }],
+      { relativeTo: this._route })
   }
 
 }

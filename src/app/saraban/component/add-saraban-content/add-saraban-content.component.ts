@@ -62,6 +62,9 @@ export class AddSarabanContentComponent implements OnInit {
   title: string
   mode: string
   sarabanContent: SarabanContent
+  contentNoFormat: string
+  bookNoFormat: string
+  orderFormat: string
   sarabanContent_tmp: SarabanContent
   sarabanSpeeds: SarabanSpeed[]
   sarabanSecrets: SarabanSecret[]
@@ -173,6 +176,9 @@ export class AddSarabanContentComponent implements OnInit {
     private _sarabanReserveContentService: SarabanReserveContentService,
   ) {
     this.sarabanContent = new SarabanContent()
+    this.contentNoFormat = this._paramSarabanService.contentNoFormat
+    this.bookNoFormat = this._paramSarabanService.bookNoFormat
+    this.orderFormat = this._paramSarabanService.orderNoFormat
     this.mode = this._paramSarabanService.mode
     this.inboxId = this._paramSarabanService.inboxId
     this.folderId = this._paramSarabanService.folderId
@@ -197,9 +203,10 @@ export class AddSarabanContentComponent implements OnInit {
     } else if (this.mode == 'register') {//from myWork only
       this.isMyWork = true
       this.registerMyWork(this._paramSarabanService.sarabanContentId)
-    } else if (this.mode == 'backtoRegister') {//from mwp only
-      this.registerAfterDialogClose(this._paramSarabanService.inboxRegistedContent, this._paramSarabanService.inboxRegistedFolder)
     }
+    // else if (this.mode == 'backtoRegister') {//from mwp only
+    //   this.registerAfterDialogClose(this._paramSarabanService.registedContent, this._paramSarabanService.registedFolder)
+    // }
 
     if (this._paramSarabanService.msg != null) {
       this.msgs = []
@@ -446,9 +453,9 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.isOrderFolder = true
-          this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560               
+          this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + this.year//001/2560               
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year          
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + this.year//praxis00001/2560 pre+no+/year          
         }
 
         let tzoffset = dateTime.getTimezoneOffset() * 60000//timezone
@@ -531,9 +538,9 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentContentPre = (sarabanFolder.wfFolderPreContentNo == null) ? '' : sarabanFolder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
-          this.sarabanContent.wfContentContentNo = ("000" + this.sarabanContent.wfContentContentNumber).substr(-3) + "/" + this.year//001/2560 
+          this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + this.year//001/2560 
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + this.year//praxis00001/2560 pre+no+/year
         }
 
         let tzoffset = dateTime.getTimezoneOffset() * 60000//timezone
@@ -769,8 +776,8 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  checkContentNo(folderId: number) {
-    if (this.useReserve || this.usePoint) {//no check last
+  checkContentNo(folderId: number) {//duplicate
+    if (this.useReserve || this.usePoint) {
       if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
       else this.createSarabanContent(null)
     } else {
@@ -784,18 +791,20 @@ export class AddSarabanContentComponent implements OnInit {
             this.sarabanContent.wfContentContentNo = response.wfContentNo
             this.sarabanContent.wfContentBookNumber = response.wfContentNumber
             this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.year)
-            this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะทำการสร้างหนังสือโดยใช้เลขถัดไปคือ " + response.wfContentNumber
-              + "<br>เลขทะเบียน: " + this.sarabanContent.wfContentContentNo
-              + "<br>เลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
+            this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะใช้เลขถัดไปคือ " + response.wfContentNumber
+              + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
+              + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
+          } else {
+            if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
+            else this.createSarabanContent(null)
           }
-
-          if (this.sharedFolder) this.createSarabanContentNoWorkflow(this.sharedFolder)
-          else this.createSarabanContent(null)
         })
     }
   }
 
   createSarabanContent(sharedContent: SarabanContent) {//add || register
+    this.prepareTo()
+    this.prepareDate(this.sarabanContent.wfContentBookDate)
     if (this.mode == "add") {
       let document = new Document()
       document.documentTypeId = 4//***** */
@@ -862,12 +871,14 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   createSarabanContentNoWorkflow(sharedFolder: SarabanFolder) {
+    this.prepareTo()
+    this.prepareDate(this.sarabanContent.wfContentBookDate)
     let tmp = new SarabanContent()
     Object.assign(tmp, this.sarabanContent)//clone obj with no refference
     tmp.wfContentFolderId = sharedFolder.id
     tmp.wfContentContentNumber = this.sharedContentNumber
     tmp.wfContentContentPre = sharedFolder.wfFolderPreContentNo
-    tmp.wfContentContentNo = tmp.wfContentContentPre + ("000000" + tmp.wfContentContentNumber).substr(-6) + "/" + this.year
+    tmp.wfContentContentNo = tmp.wfContentContentPre + (this.contentNoFormat + tmp.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + this.year
 
     this._loadingService.register('main')
     this._sarabanContentService
@@ -970,11 +981,13 @@ export class AddSarabanContentComponent implements OnInit {
           setTimeout(() => this.msgs = [], 3000)
         }
         this.getProcesses(sarabanContent.wfDocumentId, 0)
-        let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        if (tmp) tmp.wfContentInt03 = 1
-        if (this._paramSarabanService.searchFilters) {
-          let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          if (tmp1) tmp1.wfContentInt03 = 1
+        if (this._paramSarabanService.datas) {
+          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+          if (tmp) tmp.wfContentInt03 = 1
+          if (this._paramSarabanService.searchFilters) {
+            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+            if (tmp1) tmp1.wfContentInt03 = 1
+          }
         }
       } else {
         if (dialogRef.componentInstance.scanned) {
@@ -1022,7 +1035,7 @@ export class AddSarabanContentComponent implements OnInit {
     if (this._paramSarabanService.mwp.fromMwp) dialogRef.componentInstance.fromMWP = true
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this._paramSarabanService.inboxRegistedFolder = dialogRef.componentInstance.selectedFolder
+        this._paramSarabanService.registedFolder = dialogRef.componentInstance.selectedFolder
         this.registerAfterDialogClose(sarabanContent, dialogRef.componentInstance.selectedFolder)
       }
     })
@@ -1405,9 +1418,6 @@ export class AddSarabanContentComponent implements OnInit {
   saveAction(action: string) {
     this.msgs = []
     this.msgs.push(this._paramSarabanService.genWaitngMsg(action))
-
-    this.prepareTo()
-    this.prepareDate(this.sarabanContent.wfContentBookDate)//format date to "dd/mm/yyyy"<th>
     if (this.isOrderFolder) {
       this.createSarabanContent(null)
     } else {
@@ -1425,11 +1435,13 @@ export class AddSarabanContentComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.bookDate_str = response.wfContentBookDate.substr(0, 10)
-        let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-        if (tmp) Object.assign(tmp, response)
-        if (this._paramSarabanService.searchFilters) {
-          let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-          if (tmp1) Object.assign(tmp1, response)
+        if (this._paramSarabanService.datas) {
+          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+          if (tmp) Object.assign(tmp, response)
+          if (this._paramSarabanService.searchFilters) {
+            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+            if (tmp1) Object.assign(tmp1, response)
+          }
         }
         if (this.hardCopyRecievedUpdate) this.updateSendNote(response)
         this.show('แก้ไข')
@@ -1567,12 +1579,12 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentStr04 += '' + this.sendTo[2][i].data.userType
       }
     }
-    //for inbox bact to register
-    if (this._paramSarabanService.mwp.fromMwp) {
-      let tmp = new SarabanContent()
-      Object.assign(tmp, this.sarabanContent)
-      this._paramSarabanService.inboxRegistedContent = tmp
-    }
+    // //for inbox bact to register
+    // if (this._paramSarabanService.mwp.fromMwp) {
+    //   let tmp = new SarabanContent()
+    //   Object.assign(tmp, this.sarabanContent)
+    //   this._paramSarabanService.registedContent = tmp
+    // }
   }
 
   updateCreate() {
@@ -1605,7 +1617,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   genRegistedInfo(content: SarabanContent) {
     let bookNo: String = (content.wfContentBookNo == null) ? '' : content.wfContentBookNo
-    this._paramSarabanService.tmp = 'เลขทะเบียน: ' + content.wfContentContentNo + '<br>เลขที่หนังสือ: ' + bookNo + '<br>วันที่: ' + content.wfContentContentDate + '    เวลา:' + content.wfContentContentTime
+    this._paramSarabanService.tmp = 'เลขทะเบียน: ' + content.wfContentContentNo + '\nเลขที่หนังสือ: ' + bookNo + '\nวันที่: ' + content.wfContentContentDate + '    เวลา:' + content.wfContentContentTime
     this._paramSarabanService.sarabanContentId = content.id
   }
 
@@ -1917,18 +1929,20 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   deleteParamData(id: number, isContent: boolean, backWithMsg: boolean) {
-    let tmp = this._paramSarabanService.datas[0]
-    let index = tmp.findIndex(x => x.id == id)
-    tmp.splice(index, 1)
-    this._paramSarabanService.listReturn[0].count--
-    this._paramSarabanService.listReturn[0].all--
+    if (this._paramSarabanService.datas) {
+      let tmp = this._paramSarabanService.datas[0]
+      let index = tmp.findIndex(x => x.id == id)
+      tmp.splice(index, 1)
+      this._paramSarabanService.listReturn[0].count--
+      this._paramSarabanService.listReturn[0].all--
 
-    if (this._paramSarabanService.searchFilters) {
-      let tmp1 = this._paramSarabanService.datas[1]
-      let index = tmp1.findIndex(x => x.id == id)
-      tmp1.splice(index, 1)
-      this._paramSarabanService.listReturn[1].count--
-      this._paramSarabanService.listReturn[1].all--
+      if (this._paramSarabanService.searchFilters) {
+        let tmp1 = this._paramSarabanService.datas[1]
+        let index = tmp1.findIndex(x => x.id == id)
+        tmp1.splice(index, 1)
+        this._paramSarabanService.listReturn[1].count--
+        this._paramSarabanService.listReturn[1].all--
+      }
     }
     if (backWithMsg) {
       if (isContent) {
@@ -1962,35 +1976,38 @@ export class AddSarabanContentComponent implements OnInit {
     content.hasFinish = hasFinish
     content.isCanceled = isCanceled
     content.status = status
-    if (allFlow) {
-      this._paramSarabanService.datas[0].forEach(tmp => {
-        if (tmp.wfDocumentId == content.wfDocumentId) {
-          tmp.hasFinish = hasFinish
-          tmp.isCanceled = isCanceled
-          tmp.status = status
-          tmp.numFileAttach = content.numFileAttach
-        }
-      })
-      if (this._paramSarabanService.searchFilters) {
-        this._paramSarabanService.datas[1].forEach(tmp1 => {
-          if (tmp1.wfDocumentId == content.wfDocumentId) {
-            tmp1.hasFinish = hasFinish
-            tmp1.isCanceled = isCanceled
-            tmp1.status = status
-            tmp1.numFileAttach = content.numFileAttach
+
+    if (this._paramSarabanService.datas) {
+      if (allFlow) {
+        this._paramSarabanService.datas[0].forEach(tmp => {
+          if (tmp.wfDocumentId == content.wfDocumentId) {
+            tmp.hasFinish = hasFinish
+            tmp.isCanceled = isCanceled
+            tmp.status = status
+            tmp.numFileAttach = content.numFileAttach
           }
         })
-      }
-    } else {
-      let tmp = this._paramSarabanService.datas[0].find(x => x.id == content.id)
-      tmp.hasFinish = hasFinish
-      tmp.isCanceled = isCanceled
-      tmp.status = status
-      if (this._paramSarabanService.searchFilters) {
-        let tmp1 = this._paramSarabanService.datas[1].find(x => x.id == content.id)
-        tmp1.hasFinish = hasFinish
-        tmp1.isCanceled = isCanceled
-        tmp1.status = status
+        if (this._paramSarabanService.searchFilters) {
+          this._paramSarabanService.datas[1].forEach(tmp1 => {
+            if (tmp1.wfDocumentId == content.wfDocumentId) {
+              tmp1.hasFinish = hasFinish
+              tmp1.isCanceled = isCanceled
+              tmp1.status = status
+              tmp1.numFileAttach = content.numFileAttach
+            }
+          })
+        }
+      } else {
+        let tmp = this._paramSarabanService.datas[0].find(x => x.id == content.id)
+        tmp.hasFinish = hasFinish
+        tmp.isCanceled = isCanceled
+        tmp.status = status
+        if (this._paramSarabanService.searchFilters) {
+          let tmp1 = this._paramSarabanService.datas[1].find(x => x.id == content.id)
+          tmp1.hasFinish = hasFinish
+          tmp1.isCanceled = isCanceled
+          tmp1.status = status
+        }
       }
     }
   }
@@ -2068,8 +2085,8 @@ export class AddSarabanContentComponent implements OnInit {
     let bookNo: string = ''
     switch (folderBookNoType) {
       case (0): bookNo = ""; break
-      case (1): bookNo = bookPre + "/" + ("000000" + bookNumber).substr(-6); break//praxis/00001
-      case (2): bookNo = bookPre + "/" + ("000000" + bookNumber).substr(-6) + "/" + year; break//praxis/00001/2560
+      case (1): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
+      case (2): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
     }
     return bookNo
   }
@@ -2142,7 +2159,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentFolderId = folderId
         this.sarabanContent.wfContentContentPre = (folder.wfFolderPreContentNo == null) ? '' : folder.wfFolderPreContentNo
         this.sarabanContent.wfContentContentNumber = contentNumber
-        this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + ("000000" + this.sarabanContent.wfContentContentNumber).substr(-6) + "/" + this.year//praxis00001/2560 pre+no+/year
+        this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + this.year//praxis00001/2560 pre+no+/year
         this.sarabanContent.wfContentContentYear = this.year
         this.sarabanContent.wfContentContentDate = this.contentDate_str
         this.sarabanContent.wfContentBookDate = this.bookDate_str

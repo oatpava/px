@@ -1,14 +1,19 @@
 <div style="padding:24px;">
-    <h3 md-dialog-title>ช่วงวันที่ของข้อมูล</h3>
+    <h3 md-dialog-title>การแสดงข้อมูลรายงาน</h3>
     <md-dialog-content style="height: 200px;">
-        <div layout="column" layout-align="left start" class="searchFilter">
-            <b>จากวันที่ :</b>
-            <my-date-picker flex [options]="myDatePickerOptions_start" (dateChanged)="startDate_str = onDateChanged($event);" locale="th" name="startDate" [(ngModel)]="startDate">
+        <div  *ngIf="showDir" layout="row" layout-align="left start" class="searchFilter">
+            <b>ลำดับเลขทะเบียน:</b>
+            <input type="radio" style="margin-left: 1rem" value="desc" name="dir" [(ngModel)]="dir">มากไปน้อย
+            <input type="radio" style="margin-left: 1rem" value="asc" name="dir" [(ngModel)]="dir">น้อยไปมาก
+        </div>
+        <div *ngIf="showDate" layout="row" layout-align="left start" class="searchFilter">
+            <b>จากวันที่:</b>
+            <my-date-picker flex style="margin-left: 1rem" [options]="myDatePickerOptions_start" (dateChanged)="startDate_str = onDateChanged($event);" locale="th" name="startDate" [(ngModel)]="startDate">
             </my-date-picker>
         </div>
-        <div layout="column" layout-align="left start" class="searchFilter">
-            <b>ถึงวันที่ :</b>
-            <my-date-picker flex [options]="myDatePickerOptions_end" (dateChanged)="endDate_str = onDateChanged($event);" locale="th" name="endDate" [(ngModel)]="endDate">
+        <div *ngIf="showDate" layout="row" layout-align="left start" class="searchFilter">
+            <b>ถึงวันที่:</b>
+            <my-date-picker flex style="margin-left: 1rem" [options]="myDatePickerOptions_end" (dateChanged)="endDate_str = onDateChanged($event);" locale="th" name="endDate" [(ngModel)]="endDate">
             </my-date-picker>
         </div>
         <div *ngIf="showEmsField" layout="column" layout-align="left start" class="searchFilter">

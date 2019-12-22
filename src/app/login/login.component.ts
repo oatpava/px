@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
     this._loginService
       .checkLogin(user)
       .subscribe(response => {
-        console.log('xxx', response)
+        console.log('login', response)
         this._paramSarabanService.userProfiles = response.message
         this._loadingService.resolve('main')
         if (response.data.result) {

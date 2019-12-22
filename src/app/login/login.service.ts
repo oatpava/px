@@ -215,7 +215,10 @@ export class LoginService {
     if (environment.production) {
       return this._http.post(this._apiUrl + '/swapUserProfile', userProfile, { headers: this._headers })
         .map((response: Response) => {
-          localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          // console.log('xxx', response.headers.get('px-auth-token'))
+          localStorage.removeItem('px-auth-token')
+          // localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          localStorage.setItem('px-auth-token', response.json().data)
           return this.pxService.verifyResponseArray(response)
         })
         .catch(this.loggerService.handleError)

@@ -48,29 +48,22 @@
                                                     <span md-prefix>
                                                         <md-icon>person</md-icon>
                                                     </span>
-                                                    <input md-input type="text" placeholder="ชื่อผู้ใช้" name="username" [(ngModel)]="user.name" focused required>
+                                                    <input md-input type="text" style="margin-right:24px" placeholder="ชื่อผู้ใช้" name="username" [(ngModel)]="user.name" focused required>
                                                 </md-input-container>
                                             </div>
                                             <div layout="row">
-                                                <!-- //**//-->
-                                                <!-- <md-input-container class="setWidth" *ngIf="!showPassword">
-                                                    <span md-prefix>
-                                                        <md-icon class="hover" title="แสดงรหัสผ่าน" (click)="showPassword=true;">remove_red_eye</md-icon>
-                                                    </span>
-                                                    <input md-input type="password" placeholder="รหัสผ่าน" class="" name="passwords" [(ngModel)]="user.passwords" required>
-                                                </md-input-container>
-                                                <md-input-container class="setWidth" *ngIf="showPassword">
-                                                    <span md-prefix>
-                                                        <md-icon class="hover" title="ไม่แสดงรหัสผ่าน" (click)="showPassword=false;">visibility_off</md-icon>
-                                                    </span>
-                                                    <input md-input type="text" placeholder="รหัสผ่าน" class="" name="passwords2" [(ngModel)]="user.passwords" required>
-                                                </md-input-container> -->
-                                                <!-- //**//-->
                                                 <md-input-container class="setWidth">
                                                     <span md-prefix>
                                                         <md-icon>lock</md-icon>
                                                     </span>
-                                                    <input md-input type="password" placeholder="รหัสผ่าน" name="passwords" [(ngModel)]="user.passwords" required>
+                                                    <div layout="row" *ngIf="!showPassword">
+                                                        <input md-input type="password" placeholder="รหัสผ่าน" name="passwords" [(ngModel)]="user.passwords" required>
+                                                        <md-icon class="hover" title="แสดงรหัสผ่าน" (click)="showPassword=true;">remove_red_eye</md-icon>
+                                                    </div>
+                                                    <div layout="row" *ngIf="showPassword">
+                                                        <input md-input type="text" placeholder="รหัสผ่าน" name="passwords2" [(ngModel)]="user.passwords" required>
+                                                        <md-icon class="hover" title="ไม่แสดงรหัสผ่าน" (click)="showPassword=false;">visibility_off</md-icon>
+                                                    </div>
                                                 </md-input-container>
                                             </div>
                                         </div>
