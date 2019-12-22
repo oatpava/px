@@ -33,6 +33,20 @@
     </md-card-title>
     <md-card-content class="push-bottom-none">
         <form #addUserProfileform="ngForm" [tdToggle]="formAddProfile">
+            <div layout="row" llayout-xs="column" layout-margin>
+                <md-input-container style="width:100%;">
+                    <input md-input type="text" placeholder="หน่วยงาน" name="structure" [(ngModel)]="userProfile.structure.name" required disabled>
+                </md-input-container>
+                <button *ngIf="!toggleAddProfile && userProfile.id==0" md-icon-button (click)="dialog=true">
+                    <md-icon>supervisor_account</md-icon>
+                </button>
+            </div>
+            <p-dialog [(visible)]="dialog" [responsive]="true">
+                <p-header>
+                    <span>โครงสร้างหน่วยงาน</span>
+                </p-header>
+                <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)"></p-tree>
+            </p-dialog>
             <div layout="row" layout-xs="column" layout-margin>
                 <div flex="100" flex-xs="100">
                     <md-input-container style="width:100%;">
