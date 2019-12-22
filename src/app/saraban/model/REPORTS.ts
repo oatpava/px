@@ -153,5 +153,14 @@ export const REPORTS: Report[] = [
         useTempTable: true,
         showInputDialog: true,
         showDir: true
+    },
+    {
+        id: 17,
+        name: 'รายงานแฟ้มทะเบียนรวมทั้งหมด',
+        url: 'saraban_1_2_ORC',
+        parameters: [null, null, 'folderId', null, null],
+        useTempTable: true,
+        showInputDialog: false,
+        showDir: true
     }
 ]

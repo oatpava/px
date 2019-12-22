@@ -5,7 +5,7 @@ export const environment = {
   appName: '',
   appNameEng: '',
   appAcronym: '', //login logo .png(200*200px), icon .svg, default is 'demo'
-  reportServer: 'http://172.28.1.10:8080/jasperserver/flow.html?',
+  reportServer: 'http://192.168.1.106:85/jasperserver/flow.html?',
   reportSite: '',
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',

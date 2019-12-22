@@ -74,8 +74,7 @@ export class ReportSarabanComponent implements OnInit {
             if (report.parameters[i] != null) {
               params.set(report.parameters[i], this.paramValue[i])
             }
-          }      console.log('xxx', dialogRef.componentInstance.dir)
-
+          }
           if (report.useTempTable) this.deleteTempTable(report, dialogRef.componentInstance.dir)
           else this._pxService.report(report.url, this.reportType, params)
         }
@@ -125,7 +124,7 @@ export class ReportSarabanComponent implements OnInit {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
           })
-      } else {
+      } else if (report.id != 17) {
         let actionType: string = "X"
         if (report.id == 11) actionType = "F"
         else if (report.id == 12) actionType = "C"
@@ -135,6 +134,13 @@ export class ReportSarabanComponent implements OnInit {
             this._loadingService.resolve('main')
             this._pxService.report(report.url, this.reportType, params)
           })
+      } else {
+        this._sarabanContentService
+        .report17(report.url, +this.paramValue[2], this.searchModel, dir)
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          this._pxService.report(report.url, this.reportType, params)
+        })
       }
     } else if (this.menuType == "list-folder") {
       let tmp = new SarabanContentFilter({
