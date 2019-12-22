@@ -134,22 +134,22 @@ export class UserProfileService {
     }
   }
 
-  getOneUserProfilesByUserId(userId: number, version: string): Observable<UserProfile> {
-    // console.log('getUserProfilebyuserId waiting use rest. - O')
-    if (environment.production) {
-      let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0'))
-      this._options.search = params
-      return this._http.get(this._apiUrl + '/v1/userProfiles/user/' + userId, this._options)
-        .map((response: Response) => {
-          return response.json().data
-        })
-        .catch(this.loggerService.handleError)
-    } else {
-      // return this.pxService.createObservable(USERPROFILES)
-      return this.pxService.createObservable(USERPROFILES.filter(userProfile => userProfile.user.id === userId))
-    }
-  }
+  // getOneUserProfilesByUserId(userId: number, version: string): Observable<UserProfile> {
+  //   // console.log('getUserProfilebyuserId waiting use rest. - O')
+  //   if (environment.production) {
+  //     let params = new URLSearchParams()
+  //     params.set('q', this.pxService.encrypt('version=1.0'))
+  //     this._options.search = params
+  //     return this._http.get(this._apiUrl + '/v1/userProfiles/user/' + userId, this._options)
+  //       .map((response: Response) => {
+  //         return response.json().data
+  //       })
+  //       .catch(this.loggerService.handleError)
+  //   } else {
+  //     // return this.pxService.createObservable(USERPROFILES)
+  //     return this.pxService.createObservable(USERPROFILES.filter(userProfile => userProfile.user.id === userId))
+  //   }
+  // }
 
   getDefaultUserProfilesByUserId(userId: number, version: string): Observable<UserProfile> {
     // console.log('getUserProfilebyuserId waiting use rest. - O')
@@ -296,22 +296,22 @@ export class UserProfileService {
     return newUser
   }
 
-  createOtherUserProfile(newUserProfile: UserProfile): Observable<UserProfile> {
-    // console.log('createUserProfile waiting use rest. - O')
-    // console.log(newUserProfile)
-    if (environment.production) {
-      return this._http.post(this._apiUrl + '/v1/userProfiles/' + newUserProfile.user.id + '/userProfile', newUserProfile, this._options)
-        .map((response: Response) => {
-          return response.json().data
-        })
-        .catch(this.loggerService.handleError)
-    } else {
-      let lastId = USERPROFILES.length
-      newUserProfile.id = ++lastId
-      USERPROFILES.push(newUserProfile)
-      return this.pxService.createObservable(newUserProfile)
-    }
-  }
+  // createOtherUserProfile(newUserProfile: UserProfile): Observable<UserProfile> {
+  //   // console.log('createUserProfile waiting use rest. - O')
+  //   // console.log(newUserProfile)
+  //   if (environment.production) {
+  //     return this._http.post(this._apiUrl + '/v1/userProfiles/' + newUserProfile.user.id + '/userProfile', newUserProfile, this._options)
+  //       .map((response: Response) => {
+  //         return response.json().data
+  //       })
+  //       .catch(this.loggerService.handleError)
+  //   } else {
+  //     let lastId = USERPROFILES.length
+  //     newUserProfile.id = ++lastId
+  //     USERPROFILES.push(newUserProfile)
+  //     return this.pxService.createObservable(newUserProfile)
+  //   }
+  // }
 
   changeUserProfile(updateUserProfile: UserProfile): Observable<UserProfile> {
     if (environment.production) {

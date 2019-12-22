@@ -4,6 +4,7 @@
             <md-list-item style="width: 100%; padding: 0px 0px; margin-top: 64px;">
                 <md-icon md-list-avatar [style.font-size]="'50px'">account_circle</md-icon>
                 <h4 md-line style="color:white;"><span class="text-wrap">{{userProfile.fullName}}</span></h4>
+                <h5 md-line style="color:white;"><span class="text-wrap">{{userProfile.structure.name}}</span></h5>
                 <p md-line style="color:white;">{{userProfile.position?.name}}</p>
                 <p md-line style="color:white;">{{userProfile.email}}</p>
             </md-list-item>
@@ -36,18 +37,6 @@
             <md-menu #personProfiles="mdMenu">
                 <td-menu>
                     <div>
-                        <div layout="column" style="width: 100%; padding: 0px 0px;">
-                            <md-list *ngFor="let userProfile of userProfiles; let i = index;" style="padding:0;">
-                                <md-list-item class="hover" (click)="swapUserProfile(i)" [title]="(index!=i)? 'สลับผู้ใช้งาน':''"
-                                [ngStyle]="{'background': (index==i)? 'lightgrey':'', 'cursor': (index==i)? 'not-allowed':''}">
-                                    <md-icon md-list-avatar [style.font-size]="'50px'">account_circle</md-icon>
-                                    <h4 md-line><span class="text-wrap">{{userProfile.fullName}}</span></h4>
-                                    <p md-line>{{userProfile.position?.name}}</p>
-                                    <p md-line>{{userProfile.email}}</p>
-                                </md-list-item>
-                                <md-divider md-inset></md-divider>
-                            </md-list>
-                        </div>
                         <div layout="row" layout-align="space-between start">
                             <div><button md-button color="primary" (click)="openDialogChangePassword();">
                                     <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
@@ -56,6 +45,20 @@
                                     <md-icon>exit_to_app</md-icon>ออกจากระบบ
                                 </button></div>
                         </div>
+                        <div layout="column" style="width: 100%; padding: 0px 0px;">
+                            <md-list *ngFor="let userProfile of userProfiles; let i = index;" style="padding:0;">
+                                <md-list-item class="hover" (click)="swapUserProfile(i)" [title]="(index!=i)? 'สลับผู้ใช้งาน':''"
+                                [ngStyle]="{'background': (index==i)? 'lightgrey':'', 'cursor': (index==i)? 'not-allowed':''}">
+                                    <md-icon md-list-avatar [style.font-size]="'50px'">account_circle</md-icon>
+                                    <h4 md-line><span class="text-wrap">{{userProfile.fullName}}</span></h4>
+                                    <h5 md-line><span class="text-wrap">{{userProfile.structure.name}}</span></h5>
+                                    <p md-line>{{userProfile.position?.name}}</p>
+                                    <p md-line>{{userProfile.email}}</p>
+                                </md-list-item>
+                                <md-divider md-inset></md-divider>
+                            </md-list>
+                        </div>
+                       
                     </div>
                 </td-menu>
             </md-menu>
@@ -90,6 +93,7 @@
             <span hide show-gt-md>
                 <span style="margin-right: 20px; display: grid;">
                     <span style="font-size: 15px"> {{userProfile.fullName}} </span>
+                    <span style="font-size: 15px"> {{userProfile.structure.name}} </span>
                     <span style="font-size: small"> {{userProfile.position?.name}} </span>
                 </span>
             </span>

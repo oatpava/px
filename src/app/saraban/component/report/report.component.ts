@@ -15,6 +15,9 @@ export class ReportComponent implements OnInit {
 
   showEmsField: boolean = false
   ems: string = null
+  showDate: boolean = true
+  showDir: boolean = false
+  dir: string = 'desc'
 
   private myDatePickerOptions_start: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',

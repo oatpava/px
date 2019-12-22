@@ -89,7 +89,8 @@ export class SendSarabanContentComponent implements OnInit {
       selectionTxtFontSize: '14px',
       openSelectorOnInputClick: true,
       showSelectorArrow: false,
-      openSelectorTopOfInput: false
+      openSelectorTopOfInput: false,
+      disableUntil: null
     },
     {
       dateFormat: "มีความเคลื่อนไหวภายใน: " + "dd/mm/yyyy",
@@ -195,6 +196,8 @@ export class SendSarabanContentComponent implements OnInit {
 
   prepareInitialDate() {
     let date = new Date()
+    this.myDatePickerOptions[0].disableUntil = { year: date.getFullYear() + 543, month: date.getMonth() + 1, day: date.getDate() - 1 }
+
     date.setDate(date.getDate() + 1)
     let year = date.getFullYear() + 543
     let month = date.getMonth() + 1
@@ -1021,7 +1024,7 @@ export class SendSarabanContentComponent implements OnInit {
       .updateSendFlag(content)
       .subscribe(response => {
         this._loadingService.resolve('main')
-    })
+      })
   }
 
 }

@@ -13,6 +13,7 @@ import { UserProfileService } from '../../../service/user-profile.service'
 import { StructureService } from '../../../service/structure.service'
 import { MasterDataService } from '../../../service/master-data.service'
 import { InboxService } from '../../../../mwp/service/inbox.service'
+import { ParamSarabanService } from '../../../../saraban/service/param-saraban.service'
 
 import { User } from '../../../model/user.model'
 import { UserProfile } from '../../../model/user-profile.model'
@@ -79,6 +80,9 @@ export class AddUserProfileComponent implements OnInit {
   //     showSelectorArrow: false,
   //     componentDisabled: false
   // }
+  dialog: boolean = false
+  structureTree: TreeNode[] = []
+  selectedStructure: TreeNode = null
 
   constructor(
     private _route: ActivatedRoute,
@@ -90,6 +94,7 @@ export class AddUserProfileComponent implements OnInit {
     private _pxService: PxService,
     private _structureService: StructureService,
     private _masterDataService: MasterDataService,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.userProfile = new UserProfile({
@@ -105,6 +110,7 @@ export class AddUserProfileComponent implements OnInit {
     // })
     // this.userResult = new User()
     // console.log(this.userId)
+    Object.assign(this.structureTree, this._paramSarabanService.structureTree)
   }
 
   ngOnInit() {
@@ -234,6 +240,11 @@ export class AddUserProfileComponent implements OnInit {
     this.toggleCommand = !this.toggleCommand
     this.userProfile = new UserProfile()
     this.modeProfile = 'add'
+    let node = this.findNode(this.structureTree, this.structureId)
+    if (node) {
+      this.selectedStructure = node
+      this.userProfile.structure = node.data.profile
+    }
   }
 
   // getProfileForEdit(userProfileId: number, version: string){
@@ -265,38 +276,36 @@ export class AddUserProfileComponent implements OnInit {
   createProfile(addUserProfiles: UserProfile) {
     //check Code
     // if (!this.isValid) {
-      this._userProfileService
-        .checkUserCode(addUserProfiles.code, 0)
-        .subscribe(response => {
-          console.log(response)
-          //check Code
-          if (response.result) {
-            this.alertMessage.emit(true)
-          } else {
+    this._userProfileService
+      .checkUserCode(addUserProfiles.code, 0)
+      .subscribe(response => {
+        //check Code
+        if (response.result) {
+          this.alertMessage.emit(true)
+        } else {
 
-            this.userProfile.user.id = this.userId
-            this.userProfile.fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName
-            this.userProfile.fullNameEng = this.userProfile.firstNameEng + ' ' + this.userProfile.lastNameEng
-            this.userProfile.structure.id = this.structureId
-            // this.userProfile.user = this._userProfileService.convertDateFormat(new User(this.user))
-            console.log('createProfile', this.userProfile)
-            this._loadingService.register('main')
-            // this.userProfileList.push(new UserProfile(this.userProfile))
-            this._userProfileService
-              .createUserProfile(this.userProfile)
-              .subscribe(response => {
-                this.userProfileList.push(new UserProfile(this.userProfile))
-                // this.getUserProfilesByUserId(this.user.id)
-                this.toggleAddProfile = !this.toggleAddProfile
-                this.toggleCommand = !this.toggleCommand
-                // this.toggleListProfile = false
-                // this.getUserProfilebyuserId(this.userId)
-                let userProfile = response as UserProfile
-                this.createUserProfileFolder(userProfile)
-              })
-          }
-          //check Code
-        })
+          this.userProfile.user.id = this.userId
+          this.userProfile.fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName
+          this.userProfile.fullNameEng = this.userProfile.firstNameEng + ' ' + this.userProfile.lastNameEng
+          // this.userProfile.user = this._userProfileService.convertDateFormat(new User(this.user))
+          console.log('createProfile', this.userProfile)
+          this._loadingService.register('main')
+          // this.userProfileList.push(new UserProfile(this.userProfile))
+          this._userProfileService
+            .createUserProfile(this.userProfile)
+            .subscribe(response => {
+              this.userProfileList.push(response)
+              // this.getUserProfilesByUserId(this.user.id)
+              this.toggleAddProfile = !this.toggleAddProfile
+              this.toggleCommand = !this.toggleCommand
+              // this.toggleListProfile = false
+              // this.getUserProfilebyuserId(this.userId)
+              let userProfile = response as UserProfile
+              this.createUserProfileFolder(userProfile)
+            })
+        }
+        //check Code
+      })
     // }
   }
 
@@ -358,43 +367,41 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   cancelCreateProfile() {
-    console.log('xxxx',this.toggleCommand)
     this.toggleAddProfile = !this.toggleAddProfile
     this.toggleCommand = !this.toggleCommand
     // this.toggleListProfile = !this.toggleListProfile
-    console.log('xxxx',this.toggleCommand)
   }
 
   updateProfile(updateProfile: UserProfile) {
     //check Code
-    if(updateProfile.userProfileType.id === 3 && updateProfile.idCard == null){
+    if (updateProfile.userProfileType.id === 3 && updateProfile.idCard == null) {
       this.isValid = true
     }
-    
+
     if (!this.isValid) {
-    this._userProfileService
-      .checkUserCode(updateProfile.code, updateProfile.id)
-      .subscribe(response => {
-        //check Code
-        if (response.result) {
-          this.alertMessage.emit(true)
-        } else {
-          this._loadingService.register('main')
-          // setTimeout(() => {
-          this._userProfileService
-            .updateUserProfile(updateProfile)
-            .subscribe(response => {
-              this.alertMessageUser.emit(true)
-              this.getUserProfilesByUserId(updateProfile.user.id)
-              this.toggleAddProfile = !this.toggleAddProfile
-              this.toggleCommand = false
-              this.toggleListProfile = false
-            })
-          this._loadingService.resolve('main')
-          // }, 2000);
-        }
-      })
-    }else{
+      this._userProfileService
+        .checkUserCode(updateProfile.code, updateProfile.id)
+        .subscribe(response => {
+          //check Code
+          if (response.result) {
+            this.alertMessage.emit(true)
+          } else {
+            this._loadingService.register('main')
+            // setTimeout(() => {
+            this._userProfileService
+              .updateUserProfile(updateProfile)
+              .subscribe(response => {
+                this.alertMessageUser.emit(true)
+                this.getUserProfilesByUserId(updateProfile.user.id)
+                this.toggleAddProfile = !this.toggleAddProfile
+                this.toggleCommand = false
+                this.toggleListProfile = false
+              })
+            this._loadingService.resolve('main')
+            // }, 2000);
+          }
+        })
+    } else {
       this.alertMessageUser.error(true)
     }
   }
@@ -419,5 +426,56 @@ export class AddUserProfileComponent implements OnInit {
 
   genFormat(event: any) {
     console.log('event : ', event)
+  }
+
+  nodeSelect(event) {
+    let node = event.node
+    console.log('xxx', node)
+    if (!event.node.leaf) {
+      if (this.userProfile.structure.id === node.id) {
+        this.userProfile.structure = new Structure({
+          id: 0,
+          name: '',
+          shortName: '',
+          detail: '',
+          code: ''
+        })
+        this.selectedStructure = null
+      } else {
+        // this.userProfile.structure.name = event.node.label
+        // this.userProfile.structure.id = event.id
+        this.userProfile.structure = node.data.profile
+        console.log(this.userProfile)
+      }
+    } else {
+      this.selectedStructure = null
+      this.msgs = []
+      this.msgs.push({ severity: 'warn', summary: 'เลือกได้เฉพาะหน่วยงานเท่านั้น', detail: node.label })
+    }
+  }
+
+  findNode(tree: TreeNode[], id: number): any {
+    let node = null
+    for (let i = 0; i < tree.length; i++) {
+      let tmp = this.findNodeRecursive(tree[i], id)
+      if (tmp) {
+        node = tmp; break
+      }
+    }
+    return node
+  }
+  findNodeRecursive(node: TreeNode, id: number): any {
+    if (!node.leaf && node.data.id === id) {
+      return node
+    } else if (node.children) {
+      let res = null
+      for (let i = 0; i < node.children.length; i++) {
+        if (res == null) {
+          res = this.findNodeRecursive(node.children[i], id)
+        }
+      }
+      return res
+    }
+    return null
   }
 }

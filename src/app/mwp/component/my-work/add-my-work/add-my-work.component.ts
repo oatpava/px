@@ -403,7 +403,7 @@ export class AddMyWorkComponent implements OnInit {
     } else {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "แจ้งเตือน"
-      dialogRef.componentInstance.message = "ไม่สามารถสแกนไฟล์เอกสาร เนื่องจากเอกสารส่วนตัวนี้ยังไม่ถูกสร้าง<br><br>กดปุ่ม 'บันทึก' เพื่อทำการสร้างเอกสารส่วนตัว"
+      dialogRef.componentInstance.message = "ไม่สามารถสแกนไฟล์เอกสาร เนื่องจากเอกสารส่วนตัวนี้ยังไม่ถูกสร้าง\n\nกดปุ่ม 'บันทึก' เพื่อทำการสร้างเอกสารส่วนตัว"
       dialogRef.componentInstance.confirmation = false
     }
   }

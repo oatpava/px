@@ -10,6 +10,10 @@ import { UserProfile } from '../../shared'
 
 @Injectable()
 export class ParamSarabanService {
+  contentNoFormat: string = '000000'
+  bookNoFormat: string = '000000'
+  orderNoFormat: string = '000'
+
   tmp: string
   tmp2: string
   tmp_i: number
@@ -62,8 +66,8 @@ export class ParamSarabanService {
   ScanSubscription: Subscription
 
   inboxPath: string
-  inboxRegistedContent: SarabanContent
-  inboxRegistedFolder: SarabanFolder
+  //registedContent: SarabanContent
+  registedFolder: SarabanFolder
 
   userProfiles: UserProfile[]
   userProfileIndex: number
