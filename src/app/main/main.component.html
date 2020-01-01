@@ -38,12 +38,28 @@
                 <td-menu>
                     <div>
                         <div layout="row" layout-align="space-between start">
-                            <div><button md-button color="primary" (click)="openDialogChangePassword();">
-                                    <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
-                                </button></div>
-                            <div><button md-button color="accent" (click)="logOut()">
-                                    <md-icon>exit_to_app</md-icon>ออกจากระบบ
-                                </button></div>
+                            <button flex="50" md-button color="primary" title="เปิดไฟล์ภาพผ่านระบบ" (click)="downloadPluginFileAttach()">
+                                <md-icon>get_app</md-icon>ปลั๊กอินไฟล์ภาพ
+                            </button>
+                            <button flex="50" md-button color="primary" title="Twain ไดร์เวอร์สแกน" (click)="downloadPluginScan()">
+                                <md-icon>get_app</md-icon>ปลั๊กอินสแกน
+                            </button>
+                        </div>
+                        <div layout="row" layout-align="space-between start">
+                            <button flex="50" md-button color="primary" (click)="downloadSetupManual()">
+                                <md-icon>description</md-icon>คู่มือการติดตั้ง
+                            </button>
+                            <button flex="50" md-button color="primary" (click)="downloadUserManual()">
+                                <md-icon>description</md-icon>คู่มือการใช้งาน
+                            </button>
+                        </div>
+                        <div layout="row" layout-align="space-between start">
+                            <button flex="50" md-button color="primary" (click)="openDialogChangePassword();">
+                               <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
+                            </button>
+                            <button flex="50" md-button color="accent" (click)="logOut()">
+                                <md-icon>exit_to_app</md-icon>ออกจากระบบ
+                            </button>
                         </div>
                         <div layout="column" style="width: 100%; padding: 0px 0px;">
                             <md-list *ngFor="let userProfile of userProfiles; let i = index;" style="padding:0;">
@@ -59,7 +75,7 @@
                             </md-list>
                         </div>
                        
-                    </div>
+                    </div >
                 </td-menu>
             </md-menu>
             <div hide-gt-md>

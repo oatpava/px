@@ -318,4 +318,20 @@ export class MainComponent implements OnInit {
     return tmp
   }
 
+  downloadPluginFileAttach() {
+    window.open('plugIn-view.exe')
+  }
+
+  downloadPluginScan() {
+    window.open('plugIn-twain.exe')
+  }
+
+  downloadSetupManual() {
+    window.open('manual-setup.pdf')
+  }
+
+  downloadUserManual() {
+    window.open('manual-user.pdf')
+  }
+
 }
