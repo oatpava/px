@@ -19,7 +19,11 @@
                             <p-autoComplete #ac0 flex="85" placeholder="ถึง*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
-                            <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
+                            <div layout="row" layout-align="space-between start">
+                                <button md-icon-button title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
+                                <button md-icon-button title="รายการโปรด" [mdMenuTriggerFor]="menu1"><md-icon>star</md-icon></button>
+                                <button md-icon-button title="กลุ่มส่วนตัว" (click)="showPgDialog(0);"><md-icon>person_pin</md-icon></button>
+                            </div>
                             <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
                                 <p-header>
                                     <md-checkbox color="primary" [(ngModel)]="allCheck[0]" (change)="checkAll(0)">
@@ -44,21 +48,17 @@
                                     </template>
                                 </p-tree>
                             </p-dialog>
-
-                            <button md-icon-button flex="5" title="รายการโปรด" [mdMenuTriggerFor]="menu1"><md-icon>star</md-icon></button>
                             <md-menu #menu1="mdMenu">
                                 <button *ngIf="structureTree_favorite.length==0" md-menu-item>
-                                        <md-icon>error_outline</md-icon>                                     
-                                        <span>ไม่มีรายการโปรด</span>
-                                    </button>
+                                    <md-icon>error_outline</md-icon>
+                                    <span>ไม่มีรายการโปรด</span>
+                                </button>
                                 <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 0)">
-                                            <md-icon *ngIf="!favouriteNodeAdded[0][i+1]">add</md-icon>
-                                            <md-icon *ngIf="favouriteNodeAdded[0][i+1]">remove</md-icon>
-                                            <span>{{node.label}}</span>
-                                    </button>
+                                    <md-icon *ngIf="!favouriteNodeAdded[0][i+1]">add</md-icon>
+                                    <md-icon *ngIf="favouriteNodeAdded[0][i+1]">remove</md-icon>
+                                    <span>{{node.label}}</span>
+                                </button>
                             </md-menu>
-
-                            <button md-icon-button flex="5" title="กลุ่มส่วนตัว" (click)="showPgDialog(0);"><md-icon>person_pin</md-icon></button>
                             <p-dialog [(visible)]="dialogPg[0]" [responsive]="true">
                                 <p-header>
                                     <span>ถึง</span>
@@ -72,8 +72,11 @@
                             <p-autoComplete #ac1 flex="85" placeholder="สำเนา" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
-
-                            <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(1);"><md-icon>person_add</md-icon></button>
+                            <div layout="row" layout-align="space-between start">
+                                <button md-icon-button title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(1);"><md-icon>person_add</md-icon></button>
+                                <button md-icon-button title="รายการโปรด" [mdMenuTriggerFor]="menu3"><md-icon>star</md-icon></button>
+                                <button md-icon-button title="กลุ่มส่วนตัว" (click)="showPgDialog(1);"><md-icon>person_pin</md-icon></button>
+                            </div>
                             <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
                                 <p-header>
                                     <md-checkbox color="primary" [(ngModel)]="allCheck[1]" (change)="checkAll(1)">
@@ -98,21 +101,17 @@
                                     </template>
                                 </p-tree>
                             </p-dialog>
-
-                            <button md-icon-button flex="5" title="รายการโปรด" [mdMenuTriggerFor]="menu3"><md-icon>star</md-icon></button>
                             <md-menu #menu3="mdMenu">
                                 <button *ngIf="structureTree_favorite.length==0" md-menu-item>
-                                        <md-icon>error_outline</md-icon>                                     
-                                        <span>ไม่มีรายการโปรด</span>
-                                    </button>
+                                    <md-icon>error_outline</md-icon>                                     
+                                    <span>ไม่มีรายการโปรด</span>
+                                </button>
                                 <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 1)">
-                                        <md-icon *ngIf="!favouriteNodeAdded[1][i+1]">add</md-icon>
-                                        <md-icon *ngIf="favouriteNodeAdded[1][i+1]">remove</md-icon>
-                                        <span>{{node.label}}</span>
-                                    </button>
+                                    <md-icon *ngIf="!favouriteNodeAdded[1][i+1]">add</md-icon>
+                                    <md-icon *ngIf="favouriteNodeAdded[1][i+1]">remove</md-icon>
+                                    <span>{{node.label}}</span>
+                                </button>
                             </md-menu>
-
-                            <button md-icon-button flex="5" title="กลุ่มส่วนตัว" (click)="showPgDialog(1);"><md-icon>person_pin</md-icon></button>
                             <p-dialog [(visible)]="dialogPg[1]" [responsive]="true">
                                 <p-header>
                                     <span>สำเนา</span>
@@ -126,8 +125,11 @@
                             <p-autoComplete #ac2 flex="85" placeholder="สำเนาลับ" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
                             </p-autoComplete>
-
-                            <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(2);"><md-icon>person_add</md-icon></button>
+                            <div layout="row" layout-align="space-between start">
+                                <button md-icon-button title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(2);"><md-icon>person_add</md-icon></button>
+                                <button md-icon-button title="รายการโปรด" [mdMenuTriggerFor]="menu5"><md-icon>star</md-icon></button>
+                                <button md-icon-button title="กลุ่มส่วนตัว" (click)="showPgDialog(2);"><md-icon>person_pin</md-icon></button>
+                            </div>
                             <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
                                 <p-header>
                                     <md-checkbox color="primary" [(ngModel)]="allCheck[2]" (change)="checkAll(2)">
@@ -152,21 +154,17 @@
                                     </template>
                                 </p-tree>
                             </p-dialog>
-
-                            <button md-icon-button flex="5" title="รายการโปรด" [mdMenuTriggerFor]="menu5"><md-icon>star</md-icon></button>
                             <md-menu #menu5="mdMenu">
                                 <button *ngIf="structureTree_favorite.length==0" md-menu-item>
-                                        <md-icon>error_outline</md-icon>                                     
-                                        <span>ไม่มีรายการโปรด</span>
-                                    </button>
+                                    <md-icon>error_outline</md-icon>                                     
+                                    <span>ไม่มีรายการโปรด</span>
+                                </button>
                                 <button md-menu-item *ngFor="let node of structureTree_favorite; let i = index;" (click)="favoriteNodeSelect(node, i+1, 2)">
-                                        <md-icon *ngIf="!favouriteNodeAdded[2][i+1]">add</md-icon>
-                                        <md-icon *ngIf="favouriteNodeAdded[2][i+1]">remove</md-icon>
-                                        <span>{{node.label}}</span>
-                                    </button>
+                                    <md-icon *ngIf="!favouriteNodeAdded[2][i+1]">add</md-icon>
+                                    <md-icon *ngIf="favouriteNodeAdded[2][i+1]">remove</md-icon>
+                                    <span>{{node.label}}</span>
+                                </button>
                             </md-menu>
-
-                            <button md-icon-button flex="5" title="กลุ่มส่วนตัว" (click)="showPgDialog(2);"><md-icon>person_pin</md-icon></button>
                             <p-dialog [(visible)]="dialogPg[2]" [responsive]="true">
                                 <p-header>
                                     <span>สำเนาลับ</span>
