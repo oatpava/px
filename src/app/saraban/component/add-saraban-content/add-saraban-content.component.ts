@@ -86,7 +86,7 @@ export class AddSarabanContentComponent implements OnInit {
   contentDate_str_tmp: string
   bookDate_str: string
   msgs: Message[] = []
-  path: String
+  path: String = ''
 
   //outboxs: Outbox[]
   outboxs: any[]
@@ -967,9 +967,11 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   send(sarabanContent: SarabanContent) {
-    let dialogRef = this._dialog.open(SendSarabanContentComponent, {
-      width: '65%', height: '90%'
-    })
+    let dialogRef = (window.innerWidth < 960) ?
+      this._dialog.open(SendSarabanContentComponent) :
+      this._dialog.open(SendSarabanContentComponent, {
+        width: '80%', height: '90%'
+      })
     dialogRef.componentInstance.mode = 'send'
     dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + sarabanContent.wfContentTitle
     dialogRef.afterClosed().subscribe(result => {
