@@ -44,11 +44,11 @@ export class LoginComponent implements OnInit {
     private _paramSarabanService: ParamSarabanService,
   ) {
     this.logo = 'assets/logo/' + environment.appAcronym + '.png'
+    this._paramSarabanService.isArchive = false
   }
 
   ngOnInit() {
     localStorage.removeItem('px-auth-token')
-    this._paramSarabanService.isArchive = false
   }
 
   checkLogin(user: User): void {
