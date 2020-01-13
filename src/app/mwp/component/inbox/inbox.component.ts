@@ -126,7 +126,6 @@ export class InboxComponent implements OnInit {
           //this.backToSaraban('backtoRegister')
         } else {
           this.backToSaraban('show')
-          this._paramSarabanService.registedFolder = null
         }
       } else {
         this._paramSarabanService.registedFolder = null
@@ -303,7 +302,6 @@ export class InboxComponent implements OnInit {
       replyTo: inbox.inboxFrom,
       inboxIndex: this.index
     }
-    console.log('b4', this._paramSarabanService)
     if (inbox.workflowId > 0) {
       this._router.navigate(
         ['../', {
@@ -512,6 +510,7 @@ export class InboxComponent implements OnInit {
     this._paramSarabanService.mode = mode
     this._paramSarabanService.pathOld = this._paramSarabanService.inboxPath
     this._paramSarabanService.path = this._paramSarabanService.inboxPath
+    this._paramSarabanService.menuType = "saraban"
     this._router.navigate(
       ['../', {
         outlets: {
