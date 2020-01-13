@@ -90,7 +90,7 @@ export class SarabanContentService {
       }
       (contentAuth[1].auth) ? menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[1])
     } else if (menuType === "saraban") {
-      menus.push(MENUS[20])
+      //menus.push(MENUS[20])
       if (contentAuth[14].auth) menus.push(MENUS[15])
       if (contentAuth[8].auth) menus.push(MENUS[13])
       if (contentAuth[6].auth) menus.push(MENUS[11])
@@ -104,10 +104,10 @@ export class SarabanContentService {
     } else if (menuType === "saraban-canceled") {
       menus.push(MENUS[14])
     } else if (menuType === "inbox") {//no check auth
-      menus.push(MENUS[20])
+      //menus.push(MENUS[20])
       menus.push(MENUS[9], MENUS[17], MENUS[10])
     } else if (menuType === "outbox") {//no check auth
-      menus.push(MENUS[20])
+      //menus.push(MENUS[20])
       menus.push(MENUS[9])
       menus.push(MENUS[10])
     }
