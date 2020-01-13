@@ -63,7 +63,7 @@
                         </div>
                         <div layout="row" layout-align="left start" style="width: 100%;">
                             <div style="width:50%;">
-                                <md-select style="margin-top:15px; margin-bottom:10px;" placeholder="ความเร่งด่วน" [(ngModel)]="sarabanContent.wfContentSpeed" name="wfContentSpeed">
+                                <md-select style="margin-top:15px; margin-bottom:10px;" placeholder="ชั้นเร่งด่วน" [(ngModel)]="sarabanContent.wfContentSpeed" name="wfContentSpeed">
                                     <md-option *ngFor="let sarabanSpeed of sarabanSpeeds" [value]="sarabanSpeed.id">
                                         {{sarabanSpeed.sarabanSpeedName}}
                                     </md-option>
@@ -186,7 +186,7 @@
                                 <span><b>ลงวันที่ : </b>{{bookDate_str}}</span>
                             </div>
                             <div layout="row">
-                                <span style="width:50%;"><b>ความเร่งด่วน : </b>{{sarabanContent.wfContentSpeedStr}}</span>
+                                <span style="width:50%;"><b>ชั้นเร่งด่วน : </b>{{sarabanContent.wfContentSpeedStr}}</span>
                                 <span style="width:50%;"><b>ชั้นความลับ : </b>{{sarabanContent.wfContentSecretStr}}</span>
                             </div>
                             <div style="margin-top:1rem; margin-bottom:0.2rem;">

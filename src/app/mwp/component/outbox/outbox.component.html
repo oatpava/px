@@ -91,7 +91,7 @@
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxStr03}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="outboxSpeed" header="ค.เร่งด่วน" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'95px', 'text-align':'center', 'vertical-align':'top'}">
+                                    <p-column field="outboxSpeed" header="ชั้นเร่งด่วน" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':' 100px', 'text-align':'center', 'vertical-align':'top'}">
                                         <template pTemplate="filter" let-col>
                                              <p-dropdown [options]="speed" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
                                         </template>
