@@ -331,7 +331,12 @@ export class AddSarabanContentComponent implements OnInit {
           // }else {
           //   this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
           // }     
-          this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
+          if (this._paramSarabanService.registedFolder == null) {
+            this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
+          } else {
+            this.getContentAuth(this._paramSarabanService.registedFolder.wfFolderLinkFolderId, structureId, userId)
+            this._paramSarabanService.registedFolder = null
+          }
         } else {
           this.getMenus(this._paramSarabanService.contentAuth)
         }
@@ -2257,6 +2262,17 @@ export class AddSarabanContentComponent implements OnInit {
           })
         })
     })
+  }
+
+  getContentAuth(folderId: number, structureId: number, userId: number) {
+    this._loadingService.register('main')
+    this._sarabanService
+      .getContentAuth(folderId, structureId, userId)
+      .subscribe(response => {
+        console.log('get cta bbay', response)
+        this._loadingService.resolve('main')
+        this.getMenus(response)
+      })
   }
 
 }

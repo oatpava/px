@@ -2,10 +2,8 @@ import { Component, OnInit, trigger, state, animate, transition, style } from '@
 import { Router } from '@angular/router'
 import { TdLoadingService } from '@covalent/core'
 import { MdDialog } from '@angular/material'
-
 import { LoginService } from './login.service'
 import { User } from '../setting/model/user.model'
-
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component'
 import { ErrorPasswordComponent } from './error-password/error-password.component'
 import { AlertMessageComponent } from './alert-message/alert-message.component'
@@ -14,26 +12,14 @@ import { DialogCircularNoticeComponent } from '../saraban/component/circular-not
 import { ParamSarabanService } from '../saraban/service/param-saraban.service'
 import { environment } from '../../environments/environment'
 
-import { UserService } from '../setting/service/user.service'
-import { UserProfileService } from '../setting/service/user-profile.service'
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.styl'],
-  providers: [LoginService,],
-  // providers: [LoginService, UserService, UserProfileService,],
-  animations: [
-    trigger('visibleTrigger', [
-      state('visible', style({ opacity: '1' })),
-      transition('void => *', [style({ opacity: '0' }), animate('200ms 300ms')]),
-      transition('* => void', [animate('200ms', style({ opacity: '0' }))])
-    ])
-  ],
+  providers: [LoginService]
 })
 export class LoginComponent implements OnInit {
-  user: User
-  selectHover: boolean = false
+  user: User = new User({ version: 1.1 })
   titles: any[] = [
     {
       id: 1,
@@ -56,17 +42,13 @@ export class LoginComponent implements OnInit {
     private _loginService: LoginService,
     private _dialog: MdDialog,
     private _paramSarabanService: ParamSarabanService,
-    // private _userService: UserService,
-    // private _userProfileService: UserProfileService,
   ) {
-    this.user = new User({ version: 1.1 })
-    this._paramSarabanService.isArchive = false
     this.logo = 'assets/logo/' + environment.appAcronym + '.png'
+    this._paramSarabanService.isArchive = false
   }
 
   ngOnInit() {
     localStorage.removeItem('px-auth-token')
-    this._paramSarabanService.isArchive = false
   }
 
   checkLogin(user: User): void {
@@ -115,7 +97,6 @@ export class LoginComponent implements OnInit {
             }
             this.errorCount = 0
           }
-          // console.log(this.errorCount)
         }
       })
   }
@@ -139,7 +120,7 @@ export class LoginComponent implements OnInit {
   }
 
   openDialogforgotPassword(): void {
-    let dialogRef = this._dialog.open(ForgotPasswordComponent, {
+    this._dialog.open(ForgotPasswordComponent, {
       width: '40%',
     });
   }
