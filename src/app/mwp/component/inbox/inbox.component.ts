@@ -18,7 +18,7 @@ import { ListReturn } from '../../../main/model/listReturn.model'
 import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 import { ReportSarabanComponent } from '../../../saraban/component/report-saraban/report-saraban.component'
 
-const limit: number = 20
+const limit: number = 10
 @Component({
   selector: 'app-inbox',
   templateUrl: './inbox.component.html',
