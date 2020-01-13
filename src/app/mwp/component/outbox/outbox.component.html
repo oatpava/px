@@ -85,7 +85,7 @@
                                             <button md-icon-button color="primary" title="สถานะการส่ง" (click)="cancelSend(row)"><i class="material-icons">send</i></button>                                                 
                                         </template>
                                     </p-column>
-                                    <p-column field="outboxStr03" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'95px', 'vertical-align':'top'}">
+                                    <p-column field="outboxStr03" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'145px', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled">{{row.outboxStr03}}</span>
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxStr03}}</del></span>   
@@ -118,13 +118,13 @@
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxTitle}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="outboxSendDate" header="วันและเวลาที่ส่ง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+                                    <p-column field="outboxSendDate" header="วันเวลาที่ส่ง" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'100px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled">{{row.outboxSendDate}}</span>
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxSendDate}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="outboxNote" header="ข้อความ/การปฏิบัติ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'15%', 'vertical-align':'top'}">
+                                    <p-column field="outboxNote" header="การปฏิบัติ" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'15%', 'vertical-align':'top'}">
                                         <template pTemplate="body" let-row="rowData">
                                             <span *ngIf="!row.isCanceled">{{row.outboxNote}}</span>
                                             <span *ngIf="row.isCanceled" style="color:lightgrey;"><del>{{row.outboxNote}}</del></span>   

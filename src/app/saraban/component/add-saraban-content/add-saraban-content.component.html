@@ -140,11 +140,11 @@
                         </md-textarea>
                         <md-textarea rows="3" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
                         </md-textarea>
-                        <div layout="row" layout-align="left start" style="margin-top:1rem; margin-bottom:2rem;width:100%;">
-                            <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
-                            <md-checkbox style="width:25%;" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()" [disabled]="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
-                            <span *ngIf="hardCopyRecieved" style="width:15%;"><b>วันที่ : </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}</span>
-                            <span *ngIf="hardCopyRecieved"><b>เวลา : </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
+                        <div layout="row" flex-gt-md="100" layout-align="left start" style="margin-top:1rem; margin-bottom: 2rem; align-items: center;">
+                            <span flex="50"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                            <md-checkbox flex="23" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()" [disabled]="hardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
+                            <span *ngIf="hardCopyRecieved" flex="20"><b>วันที่ : </b>{{sarabanContent.wfContentDate01.substr(0, 10)}}</span>
+                            <span *ngIf="hardCopyRecieved" flex="7"><b>เวลา : </b>{{sarabanContent.wfContentDate01.substr(11, 5)}}</span>
                         </div>
                         <div layout="row" layout-align="center start" style="width: 100%; color:black;" [style.margin-top]="'15px'">
                             <button *ngIf="mode=='add'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0" [style.margin-right]="'5px'"
