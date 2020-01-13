@@ -130,7 +130,7 @@
                                         <button *ngIf="row.numFileAttach>0" md-icon-button title="{{row.numFileAttach}} รายการ" disabled><i class="material-icons">attach_file</i></button> 
                                     </template>
                                 </p-column>
-                                <p-column field="wfContentContentNo" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'115px', 'vertical-align':'top'}">
+                                <p-column field="wfContentContentNo" header="เลขทะเบียน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'115px', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                     <template pTemplate="body" let-row="rowData">   
                                         <span *ngIf="!row.hasFinish && !row.isCanceled">{{row.wfContentContentNo}}</span>
                                         <span *ngIf="row.hasFinish" style="color:lightgrey;">{{row.wfContentContentNo}}</span>
