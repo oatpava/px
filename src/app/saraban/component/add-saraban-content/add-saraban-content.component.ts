@@ -135,6 +135,7 @@ export class AddSarabanContentComponent implements OnInit {
   referenceContent: SarabanContent
   registerAgain: boolean = false
   hardCopyRecievedUpdate: boolean = false
+  disabledHardCopyRecieved: boolean = false
 
   private isArchive: boolean
 
@@ -343,6 +344,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         if (this.sarabanContent.wfContentDate01.length > 0) {
           this.hardCopyRecieved = true
+          this.disabledHardCopyRecieved = true
         } else {
           this.hardCopyRecieved = false
           this.sarabanContent.wfContentDate01 = this._paramSarabanService.getStringDateTime(new Date())
