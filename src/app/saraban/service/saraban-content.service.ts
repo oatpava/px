@@ -134,11 +134,10 @@ export class SarabanContentService {
     return this.pxService.createObservable(SARABANSECRETS)
   }
 
-  createSarabanContent(newContent: SarabanContent, preBookNoIndex: number, sharedFolder: SarabanFolder): Observable<SarabanContent> {
+  createSarabanContent(newContent: SarabanContent, preBookNoIndex: number): Observable<SarabanContent> {
     if (environment.production) {////check id login db or not
-      let sharedFolderId: number = (sharedFolder) ? sharedFolder.id : 0
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('preBookNoIndex=' + preBookNoIndex + '&sharedFolderId=' + sharedFolderId))
+      params.set('q', this.pxService.encrypt('preBookNoIndex=' + preBookNoIndex))
       this._options.search = params
       return this._http.post(this._apiUrl, newContent, this._options)
         .map((response: Response) => {
@@ -248,17 +247,6 @@ export class SarabanContentService {
       return this._http.post(this._apiUrl + '/email', email, this._options)
         .map((response: Response) => {
           return response.json()
-        })
-        .catch(this.loggerService.handleError)
-    } else {
-    }
-  }
-
-  createSarabanContent2(newContent: SarabanContent): Observable<SarabanContent> {
-    if (environment.production) {
-      return this._http.post(this._apiUrl + "/create2", newContent, this._options)
-        .map((response: Response) => {
-          return response.json().data
         })
         .catch(this.loggerService.handleError)
     } else {
