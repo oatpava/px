@@ -205,19 +205,19 @@ export class MainComponent implements OnInit {
     })
   }
 
-  openDialogChangePassword(): void {
-    let dialogRef = this._dialog.open(ChangePasswordComponent, {
-      width: '40%',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        let dialogAlert = this._dialog.open(AlertMessageComponent, {
-          width: '40%',
-        });
-        dialogAlert.componentInstance.message = 'กรุณาเข้าระบบใหม่'
-      }
-    });
-  }
+  // openDialogChangePassword(): void {
+  //   let dialogRef = this._dialog.open(ChangePasswordComponent, {
+  //     width: '40%',
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       let dialogAlert = this._dialog.open(AlertMessageComponent, {
+  //         width: '40%',
+  //       });
+  //       dialogAlert.componentInstance.message = 'กรุณาเข้าระบบใหม่'
+  //     }
+  //   });
+  // }
 
   goBack() {
     this._location.back()
@@ -252,7 +252,7 @@ export class MainComponent implements OnInit {
   }
 
   showInstructionDialog() {
-    let dialogRef = this._dialog.open(DialogInstructionComponent, {
+    this._dialog.open(DialogInstructionComponent, {
       //width: '40%',
     })
   }
