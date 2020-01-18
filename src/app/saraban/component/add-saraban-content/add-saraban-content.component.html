@@ -50,7 +50,7 @@
                             <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
                         </div>
                         <div layout="row" style="font-size: 16px; align-items: baseline;">
-                            <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()">
+                            <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()" required>
                             </md-input>
                             <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
                                 <i *ngIf="!usePoint" class="material-icons contentNo" [title]="mode=='register' ? 'แก้ไขเลขที่หนังสือ' : 'แก้ไขคำนำหน้าเลขที่หนังสือ'" (click)="editBookNo()">mode_edit</i>
@@ -149,9 +149,13 @@
                             </div>
                         </div>
                         <div layout="row" layout-align="center start" style="width: 100%; color:black;" [style.margin-top]="'15px'">
-                            <button *ngIf="mode=='add'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0" [style.margin-right]="'5px'"
+                            <button *ngIf="mode=='add'" md-raised-button 
+                                [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0&&sarabanContent.wfContentBookNo.length>0}" 
+                                [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0||sarabanContent.wfContentBookNo.length==0" [style.margin-right]="'5px'"
                                 (click)="save('สร้างหนังสือ')">บันทึก</button>
-                            <button *ngIf="mode=='register'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0"
+                            <button *ngIf="mode=='register'" md-raised-button 
+                                [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0&&sarabanContent.wfContentBookNo.length>0}" 
+                                [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0||sarabanContent.wfContentBookNo.length==0"
                                 [style.margin-right]="'5px'" (click)="save('ลงทะเบียนหนังสือ')">ลงทะเบียน</button>
                             <button *ngIf="mode=='edit'" md-raised-button [ngClass]="{'md-primary': sendTo[0].length!=0&&sendTo[1].length!=0&&sarabanContent.wfContentTitle.length>0}" [disabled]="sendTo[0].length==0||sendTo[1].length==0||sarabanContent.wfContentTitle.length==0" [style.margin-right]="'5px'"
                                 (click)="update()">แก้ไขและบันทึก</button>
