@@ -111,6 +111,7 @@ export * from '../saraban/component/circular-notice/add-circular-notice/add-circ
 export * from '../saraban/component/add-saraban-content/dialog-view/dialog-view.component'
 export * from '../saraban/component/barcode.component'
 export * from '../saraban/component/list-saraban-folder/dialog-move-folder/dialog-move-folder.component'
+export * from '../saraban/component/add-saraban-content/dialog-record/dialog-record.component'
 
 export * from '../saraban/component/report/report.component'
 

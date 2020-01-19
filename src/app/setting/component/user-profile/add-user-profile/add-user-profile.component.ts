@@ -83,6 +83,8 @@ export class AddUserProfileComponent implements OnInit {
   dialog: boolean = false
   structureTree: TreeNode[] = []
   selectedStructure: TreeNode = null
+  showUserProfileList: boolean = true
+  title = ''
 
   constructor(
     private _route: ActivatedRoute,
@@ -245,6 +247,8 @@ export class AddUserProfileComponent implements OnInit {
       this.selectedStructure = node
       this.userProfile.structure = node.data.profile
     }
+    this.showUserProfileList = false
+    this.title = 'สร้างรายละเอียดผู้ใช้งาน'
   }
 
   // getProfileForEdit(userProfileId: number, version: string){
@@ -302,6 +306,7 @@ export class AddUserProfileComponent implements OnInit {
               // this.getUserProfilebyuserId(this.userId)
               let userProfile = response as UserProfile
               this.createUserProfileFolder(userProfile)
+              this.showUserProfileList = true
             })
         }
         //check Code
@@ -364,12 +369,15 @@ export class AddUserProfileComponent implements OnInit {
     this.toggleCommand = true
     this.modeProfile = 'edit'
     this.userProfile = updateProfile
+    this.showUserProfileList = false
+    this.title = 'แก้ไขรายละเอียดผู้ใช้งาน: ' + updateProfile.fullName
   }
 
   cancelCreateProfile() {
     this.toggleAddProfile = !this.toggleAddProfile
     this.toggleCommand = !this.toggleCommand
     // this.toggleListProfile = !this.toggleListProfile
+    this.showUserProfileList = true
   }
 
   updateProfile(updateProfile: UserProfile) {
@@ -391,13 +399,14 @@ export class AddUserProfileComponent implements OnInit {
             this._userProfileService
               .updateUserProfile(updateProfile)
               .subscribe(response => {
+                this._loadingService.resolve('main')
                 this.alertMessageUser.emit(true)
                 this.getUserProfilesByUserId(updateProfile.user.id)
                 this.toggleAddProfile = !this.toggleAddProfile
                 this.toggleCommand = false
                 this.toggleListProfile = false
+                this.showUserProfileList = true
               })
-            this._loadingService.resolve('main')
             // }, 2000);
           }
         })

@@ -185,7 +185,8 @@ export class SendSarabanContentComponent implements OnInit {
           this.sendNote2 = (this.sarabanContent.wfContentDate01.length > 0) ? 'ได้รับเอกสารตัวจริงแล้ว ' + response.wfContentDate01.substr(0, 10) + ' ' + response.wfContentDate01.substr(11, 5) : 'รอเอกสารตัวจริง'
           if (this._paramSarabanService.mwp.fromMwp) {
             if (this.mode == 'reply') {
-              this.prepareShowTo(this._paramSarabanService.mwp.replyTo)
+              //this.prepareShowTo(this._paramSarabanService.mwp.replyTo)
+              this._paramSarabanService.lastSendTo.forEach(node => this.prepareShowToLastSending(node))
             }
           } else {
             //this.prepareShowTo(response.wfContentTo)//ghb
@@ -527,6 +528,7 @@ export class SendSarabanContentComponent implements OnInit {
   }
 
   createreceiverSide(workflowId: number) {
+    this._paramSarabanService.lastSendTo = this.sendTo[0]
     for (let i = 0; i < this.sendTo[0].length; i++) {//use for instead foreach, for create wfTo in order of sendTo[x][i]
       if (this.sendTo[0][i].leaf) {//user
         this._loadingService.register('main')
@@ -731,7 +733,7 @@ export class SendSarabanContentComponent implements OnInit {
           let node: TreeNode
           let parentKey: number[]
           switch (response.userType) {
-            case 0:
+            case 0://user
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
               node = this.findNode(this.structureTree, response.data.id, true, parentKey)
               if (node) {
@@ -742,7 +744,7 @@ export class SendSarabanContentComponent implements OnInit {
                 this.favouriteNodeAdded[0][node.data.favIndex] = true
               }
               ; break
-            case 1:
+            case 1://structure
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
               node = this.findNode(this.structureTree, response.data.id, false, parentKey)
               if (node) {
@@ -753,7 +755,7 @@ export class SendSarabanContentComponent implements OnInit {
                 this.favouriteNodeAdded[0][node.data.favIndex] = true
               }
               ; break
-            default: ; break
+            default: ; break//3: external
           }
         })
     })
@@ -1025,6 +1027,23 @@ export class SendSarabanContentComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
       })
+  }
+
+  prepareShowToLastSending(lastNode: TreeNode) {
+    let lastNodeData = lastNode.data
+    let node: TreeNode
+    let parentKey: number[]
+    if (lastNodeData.userType == 1) {
+        parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
+        node = this.findNode(this.structureTree, lastNodeData.id, false, parentKey)
+        if (node) {
+          this.sendTo[0].push(node)
+          this.selectedStructure[0].push(node)
+
+          this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
+          this.favouriteNodeAdded[0][node.data.favIndex] = true
+        }
+      }
   }
 
 }

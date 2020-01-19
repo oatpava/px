@@ -176,7 +176,8 @@ import {
     AuthAdminComponent,
     DialogViewComponent,
     //BarcodeComponent,
-    DialogMoveFolderComponent
+    DialogMoveFolderComponent,
+    DialogRecordComponent
    // LocationHistory,
     // AuthGuard
 } from './shared';
@@ -331,7 +332,8 @@ import {
         AuthAdminComponent,
         DialogViewComponent,
         //BarcodeComponent,
-        DialogMoveFolderComponent
+        DialogMoveFolderComponent,
+        DialogRecordComponent
     ],
     imports: [
         BrowserModule,

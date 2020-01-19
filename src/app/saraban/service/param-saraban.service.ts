@@ -71,6 +71,7 @@ export class ParamSarabanService {
 
   userProfiles: UserProfile[]
   userProfileIndex: number
+  lastSendTo: TreeNode[] = []
 
   setMode(mode: string) {
     this.mode = mode
