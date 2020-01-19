@@ -1800,7 +1800,7 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  setAuth(auths: SarabanAuth[]) {//wf, fa, ano, prn, dl
+  setAuth(auths: SarabanAuth[]) {//wf, fa, move, prn, dl
     this.auth[0] = auths[9].auth
     this.auth[1] = auths[10].auth
     this.auth[2] = auths[11].auth
