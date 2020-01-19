@@ -769,7 +769,7 @@ export class AddSarabanContentComponent implements OnInit {
             this.sarabanContent.wfContentContentNumber = response.wfContentNumber
             this.sarabanContent.wfContentContentNo = response.wfContentNo
             this.sarabanContent.wfContentBookNumber = response.wfContentNumber
-            this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, response.wfContentYear)
+            if (this.folderBookNoType != 0) this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, response.wfContentYear)
             this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะใช้เลขถัดไปคือ " + response.wfContentNumber
               + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
               + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
