@@ -39,7 +39,7 @@ import { SendSarabanContentComponent } from '../send-saraban-content/send-saraba
 import { SendEmailComponent } from '../send-email/send-email.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
 import { Outbox } from '../../../mwp/model/outbox.model'
-
+import { DialogRecordComponent } from './dialog-record/dialog-record.component'
 
 @Component({
   selector: 'app-add-saraban-content',
@@ -2114,7 +2114,7 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
-  setMoveContent(folderId: number, contentYear:number, contentNumber: number) {
+  setMoveContent(folderId: number, contentYear: number, contentNumber: number) {
     this._loadingService.register('main')
     this._sarabanService
       .getSarabanFolder(folderId)
@@ -2235,10 +2235,30 @@ export class AddSarabanContentComponent implements OnInit {
     this._sarabanService
       .getContentAuth(folderId, structureId, userId)
       .subscribe(response => {
-        console.log('get cta bbay', response)
         this._loadingService.resolve('main')
         this.getMenus(response)
       })
+  }
+
+  openDialogContentRecord() {
+    let dialogRef = this._dialog.open(DialogRecordComponent, {
+      width: '80%', height: '90%'
+    })
+    dialogRef.componentInstance.addMode = false
+    dialogRef.componentInstance.contentId = this.sarabanContent.id
+  }
+
+  addContentRecord() {
+    let dialogRef = this._dialog.open(DialogRecordComponent, {
+      width: '40%'
+    })
+    dialogRef.componentInstance.addMode = true
+    dialogRef.componentInstance.contentId = this.sarabanContent.id
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.openDialogContentRecord()
+      }
+    })
   }
 
 }

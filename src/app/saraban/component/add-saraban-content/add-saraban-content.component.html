@@ -273,6 +273,27 @@
                     <md-card-content>
                         <td-expansion-panel>
                             <template td-expansion-panel-header>
+                                        บันทึกปฏิบัติงาน
+                                    </template>
+                            <td-expansion-summary>
+                                <md-list>
+                                    <md-list-item (click)="openDialogContentRecord()">
+                                        <md-icon md-list-avatar>subject</md-icon>
+                                        <p md-line>รายการบันทึกปฏิบัติงาน</p>
+                                    </md-list-item>
+                                    <md-list-item (click)="addContentRecord()">
+                                        <md-icon md-list-avatar>playlist_add</md-icon>
+                                        <p md-line>เพิ่มบันทึกปฏิบัติงาน</p>
+                                    </md-list-item>
+                                </md-list>
+                            </td-expansion-summary>
+                        </td-expansion-panel>
+                    </md-card-content>
+                </md-card>
+                <md-card style="margin-left: 5px; margin-right: 5px;">
+                    <md-card-content>
+                        <td-expansion-panel>
+                            <template td-expansion-panel-header>
                                         ขั้นตอนการดำเนินการ
                                     </template>
                             <td-expansion-summary>

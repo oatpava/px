@@ -134,7 +134,8 @@ import {
     AddCircularNoticeComponent,
     AuthAdminComponent,
     DialogViewComponent,
-    DialogMoveFolderComponent
+    DialogMoveFolderComponent,
+    DialogRecordComponent
 } from './shared'
 
 const routes: Routes = [
@@ -204,6 +205,7 @@ const routes: Routes = [
             { path: 'cancelSendDialog', component: DialogCancelSendComponent, outlet: 'center' },
             { path: 'DialogView', component: DialogViewComponent, outlet: 'center' },
             { path: 'MoveFolder', component: DialogMoveFolderComponent, outlet: 'center' },
+            { path: 'record', component: DialogRecordComponent, outlet: 'center' },
             {
                 path: 'folders', component: FolderComponent, outlet: 'center',
                 children: [
