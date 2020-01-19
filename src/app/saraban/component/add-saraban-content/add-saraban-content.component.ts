@@ -537,8 +537,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
         this.sarabanContent.wfContentBookPoint = 0
         this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, contentYear)
-        this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
-        this.bookDate_str = this.contentDate_str
+        this.sarabanContent.wfContentBookDate = registerContent.wfContentBookDate
 
         this.sarabanContent.wfContentSpeed = registerContent.wfContentSpeed
         this.sarabanContent.wfContentSecret = registerContent.wfContentSecret
