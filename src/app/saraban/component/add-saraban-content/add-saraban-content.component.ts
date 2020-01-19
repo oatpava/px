@@ -531,7 +531,7 @@ export class AddSarabanContentComponent implements OnInit {
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + contentYear//001/2560 
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + contentYear//praxis00001/2560 pre+no+/year
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + contentYear//praxis00001/2560 pre+no+/year
         }
         this.sarabanContent.wfContentBookPre = this.preBookNos[0]
         this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
