@@ -684,9 +684,10 @@ export class AddSarabanContentComponent implements OnInit {
     updateContent.id = this.sarabanContent.id
     updateContent.version = 1
     updateContent.wfContentFolderId = this.sarabanContent.wfContentFolderId
-    updateContent.wfContentContentNo = this.sarabanContent.wfContentContentNo
-    updateContent.wfContentContentDate = this.sarabanContent.wfContentContentDate
-    updateContent.wfContentContentTime = this.sarabanContent.wfContentContentTime
+    updateContent.wfContentBookPre = this.sarabanContent.wfContentBookPre
+    updateContent.wfContentBookNumber = this.sarabanContent.wfContentBookNumber
+    updateContent.wfContentBookPoint = this.sarabanContent.wfContentBookPoint
+    updateContent.wfContentBookYear = this.sarabanContent.wfContentBookYear
     updateContent.wfContentBookNo = this.sarabanContent.wfContentBookNo
     updateContent.wfContentBookDate = this.sarabanContent.wfContentBookDate
 
