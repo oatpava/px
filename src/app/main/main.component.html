@@ -38,7 +38,7 @@
                 <td-menu>
                     <div>
                         <div layout="row" layout-align="space-between start">
-                            <div><button md-button color="primary" (click)="openDialogChangePassword();">
+                            <div *ngIf="!useAD"><button md-button color="primary" (click)="openDialogChangePassword();">
                                     <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
                                 </button></div>
                             <div><button md-button color="accent" (click)="logOut()">
