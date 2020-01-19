@@ -2058,8 +2058,8 @@ export class AddSarabanContentComponent implements OnInit {
     let bookNo: string = ''
     switch (folderBookNoType) {
       case (0): bookNo = ""; break
-      case (1): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
-      case (2): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
+      case (1): bookNo = bookPre + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
+      case (2): bookNo = bookPre + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
     }
     return bookNo
   }
