@@ -1,5 +1,5 @@
 <p-tabView *ngIf="editContentNo">
-    <p-tabPanel header="แทรกเลข" leftIcon="fa-external-link">
+    <p-tabPanel *ngIf="!disableInsert" header="แทรกเลข" leftIcon="fa-external-link">
         <div layout="row" layout-align="left start">
             <md-input flex type="number" min="1" [max]="lastNumber" placeholder="แทรกหมายเลขทะเบียน (1 - {{lastNumber}})" name="เลขทะเบียน" [(ngModel)]="insertAt" (change)="checkRange()"></md-input>
         </div>

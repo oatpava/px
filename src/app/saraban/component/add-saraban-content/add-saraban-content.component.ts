@@ -1614,6 +1614,7 @@ export class AddSarabanContentComponent implements OnInit {
     let dialogRef = this._dialog.open(DialogListReserveComponent, {
       width: '40%',
     })
+    dialogRef.componentInstance.disableInsert = (this.mode == 'register') ? true : false
     dialogRef.componentInstance.lastNumber = this.sarabanContent.wfContentContentNumber - 1
     dialogRef.componentInstance.reserveNos = this.reserveNos
     dialogRef.componentInstance.canceledReserveNos = this.canceledReserveNos

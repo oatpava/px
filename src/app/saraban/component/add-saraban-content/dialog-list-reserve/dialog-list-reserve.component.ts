@@ -14,7 +14,7 @@ export class DialogListReserveComponent implements OnInit {
   reserveNos: SarabanReserveContent[]
   canceledReserveNos: SarabanReserveContent[]
   selectedRow: any
-  
+  disableInsert: boolean = false
   insertAt: number
 
   preBookNos: string[]
