@@ -132,11 +132,11 @@
                         </md-textarea>
                         <md-textarea rows="3" style="width: 100%;" placeholder="อ้างถึง" type="text" name="wfContentReference" [(ngModel)]="sarabanContent.wfContentReference">
                         </md-textarea>
-                        <md-textarea rows="3" style="width: 100%;" placeholder="สิ่งที่ส่งมาด้วย" type="text" name="wfContentAttachment" [(ngModel)]="sarabanContent.wfContentAttachment">
+                        <md-textarea rows="5" style="width: 100%;" placeholder="สิ่งที่ส่งมาด้วย" type="text" name="wfContentAttachment" [(ngModel)]="sarabanContent.wfContentAttachment">
                         </md-textarea>
-                        <md-textarea rows="3" style="width: 100%;" placeholder="การปฏิบัติ" type="text" name="wfContentText01" [(ngModel)]="sarabanContent.wfContentText01">
+                        <md-textarea rows="5" style="width: 100%;" placeholder="การปฏิบัติ" type="text" name="wfContentText01" [(ngModel)]="sarabanContent.wfContentText01">
                         </md-textarea>
-                        <md-textarea rows="3" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
+                        <md-textarea rows="5" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
                         </md-textarea>
                         <div layout="row" flex-gt-md="100" layout-align="left start" style="margin-top:1rem; margin-bottom: 2rem; align-items: center;">
                             <span flex="50"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
@@ -212,13 +212,13 @@
                                 <span *ngIf="sarabanContent.wfContentInt02!=0" style="word-wrap: break-word;"><b>อ้างถึง : </b><a class="link" (click)="openViewDialog(sarabanContent.wfContentInt02)">{{sarabanContent.wfContentReference}}</a></span>
                             </div>
                             <div style="margin-bottom:0.2rem;">
-                                <span style="word-wrap: break-word;"><b>สิ่งที่ส่งมาด้วย : </b>{{sarabanContent.wfContentAttachment}}</span>
+                                <span class="show-enter"><b>สิ่งที่ส่งมาด้วย : </b>{{sarabanContent.wfContentAttachment}}</span>
                             </div>
                             <div style="margin-bottom:0.2rem;">
-                                <span style="word-wrap: break-word;"><b>การปฏิบัติ : </b>{{sarabanContent.wfContentText01}}</span>
+                                <span class="show-enter"><b>การปฏิบัติ : </b>{{sarabanContent.wfContentText01}}</span>
                             </div>
                             <div style="margin-bottom:0.2rem;">
-                                <span style="word-wrap: break-word;"><b>หมายเหตุ : </b>{{sarabanContent.wfContentDescription}}</span>
+                                <span class="show-enter"><b>หมายเหตุ : </b>{{sarabanContent.wfContentDescription}}</span>
                             </div>
                             <div style="margin-top:1rem;" layout="row">
                                 <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
