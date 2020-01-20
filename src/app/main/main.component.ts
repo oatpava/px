@@ -85,6 +85,8 @@ export class MainComponent implements OnInit {
   userProfile: UserProfile = new UserProfile()
   userProfiles: UserProfile[] = []
   index: number = 0
+  useAD: boolean = false
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -120,6 +122,7 @@ export class MainComponent implements OnInit {
     //     .changeSetapiUrl()
     // }
     this.getSarabanParam()
+    this.checkAD()
   }
 
   loadDefaultModule(defaultModule: string, params: Object) {
@@ -317,6 +320,13 @@ export class MainComponent implements OnInit {
     let tmp: string = ''
     for (let i = 0; i < num; i++) tmp += '0'
     return tmp
+  }
+
+  checkAD() {
+    this._settingService.getParams('USE_AD')
+      .subscribe(response => {
+        if (response.paramValue == 'Y') this.useAD = true
+      })
   }
 
 }

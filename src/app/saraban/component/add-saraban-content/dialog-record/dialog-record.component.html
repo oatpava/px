@@ -1,0 +1,45 @@
+<p-dataTable *ngIf="!addMode" #dt [value]="records" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+  <p-header>
+      <div layout="row" layout-align="space-between start">
+          <div></div>
+          <div layout="column" style="word-wrap: break-word; word-break: break-all; white-space: normal;">
+              <span>รายการบันทึกปฏิบัติงาน</span>
+              <!-- <span>{{contentTitle}}</span> -->
+          </div>
+          <div></div>
+      </div>
+  </p-header>
+  <p-column [sortable]="true" [style]="{'width':'40px', 'text-align':'center', 'vertical-align':'top'}">
+      <template pTemplate="body" let-i="rowIndex+1">   
+          <span>{{i}}</span>
+      </template>
+  </p-column>
+  <p-column field="description" header="รายละเอียด" [sortable]="false" [style]="{'width':'70%', 'vertical-align':'top'}">
+  </p-column>
+  <p-column field="createdDate" header="วันที่" [sortable]="false" [style]="{'width':'140px', 'text-align':'center', 'vertical-align':'top'}">
+    <template pTemplate="body" let-row="rowData">   
+        <span>{{row.createdDate}}</span>
+    </template>
+</p-column>
+  <p-column field="creator" header="ผู้บันทึก" [sortable]="false" [style]="{'width':'15%', 'vertical-align':'top'}">
+  </p-column>
+</p-dataTable>
+
+<md-card *ngIf="addMode" style="margin:0px;">
+  <md-card-title>
+      <span class="md-headline">เพิ่มบันทึกปฏิบัติงาน</span>
+  </md-card-title>
+  <md-card-content>
+      <form layout="column" class="finish" #form="ngForm" layout-align="top center">
+          <div layout="column" layout-align="center start " style="width: 100%;">
+              <span>วันที่บันทึก: {{dateTime}}</span>
+          </div>
+          <div layout="row" layout-align="center start" style="width: 100%;padding-top: 0.2rem;">
+              <md-textarea flex rows="5" placeholder="รายละเอียด" [(ngModel)]="record.description" name="description" required></md-textarea>
+          </div>
+      </form>
+      <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
+          <button md-raised-button md-ripple color="primary" [disabled]="!form.form.valid" (click)="createRecord()" [style.margin-right]="'5px'">บันทึก</button>
+      </div>
+  </md-card-content>
+</md-card>

@@ -39,7 +39,7 @@ import { SendSarabanContentComponent } from '../send-saraban-content/send-saraba
 import { SendEmailComponent } from '../send-email/send-email.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
 import { Outbox } from '../../../mwp/model/outbox.model'
-
+import { DialogRecordComponent } from './dialog-record/dialog-record.component'
 
 @Component({
   selector: 'app-add-saraban-content',
@@ -531,14 +531,13 @@ export class AddSarabanContentComponent implements OnInit {
         if (sarabanFolder.wfContentType2.id == 5) {//ทะเบียนคำสั่งเลข3หลัก
           this.sarabanContent.wfContentContentNo = (this.orderFormat + this.sarabanContent.wfContentContentNumber).substr(-this.orderFormat.length) + "/" + contentYear//001/2560 
         } else {
-          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat) + "/" + contentYear//praxis00001/2560 pre+no+/year
+          this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + contentYear//praxis00001/2560 pre+no+/year
         }
         this.sarabanContent.wfContentBookPre = this.preBookNos[0]
         this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
         this.sarabanContent.wfContentBookPoint = 0
         this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, contentYear)
-        this.sarabanContent.wfContentBookDate = this.sarabanContent.wfContentContentDate
-        this.bookDate_str = this.contentDate_str
+        this.sarabanContent.wfContentBookDate = registerContent.wfContentBookDate
 
         this.sarabanContent.wfContentSpeed = registerContent.wfContentSpeed
         this.sarabanContent.wfContentSecret = registerContent.wfContentSecret
@@ -685,9 +684,10 @@ export class AddSarabanContentComponent implements OnInit {
     updateContent.id = this.sarabanContent.id
     updateContent.version = 1
     updateContent.wfContentFolderId = this.sarabanContent.wfContentFolderId
-    updateContent.wfContentContentNo = this.sarabanContent.wfContentContentNo
-    updateContent.wfContentContentDate = this.sarabanContent.wfContentContentDate
-    updateContent.wfContentContentTime = this.sarabanContent.wfContentContentTime
+    updateContent.wfContentBookPre = this.sarabanContent.wfContentBookPre
+    updateContent.wfContentBookNumber = this.sarabanContent.wfContentBookNumber
+    updateContent.wfContentBookPoint = this.sarabanContent.wfContentBookPoint
+    updateContent.wfContentBookYear = this.sarabanContent.wfContentBookYear
     updateContent.wfContentBookNo = this.sarabanContent.wfContentBookNo
     updateContent.wfContentBookDate = this.sarabanContent.wfContentBookDate
 
@@ -769,7 +769,7 @@ export class AddSarabanContentComponent implements OnInit {
             this.sarabanContent.wfContentContentNumber = response.wfContentNumber
             this.sarabanContent.wfContentContentNo = response.wfContentNo
             this.sarabanContent.wfContentBookNumber = response.wfContentNumber
-            this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, response.wfContentYear)
+            if (this.folderBookNoType != 0) this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, response.wfContentYear)
             this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะใช้เลขถัดไปคือ " + response.wfContentNumber
               + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
               + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
@@ -1614,6 +1614,7 @@ export class AddSarabanContentComponent implements OnInit {
     let dialogRef = this._dialog.open(DialogListReserveComponent, {
       width: '40%',
     })
+    dialogRef.componentInstance.disableInsert = (this.mode == 'register') ? true : false
     dialogRef.componentInstance.lastNumber = this.sarabanContent.wfContentContentNumber - 1
     dialogRef.componentInstance.reserveNos = this.reserveNos
     dialogRef.componentInstance.canceledReserveNos = this.canceledReserveNos
@@ -1800,7 +1801,7 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  setAuth(auths: SarabanAuth[]) {//wf, fa, ano, prn, dl
+  setAuth(auths: SarabanAuth[]) {//wf, fa, move, prn, dl
     this.auth[0] = auths[9].auth
     this.auth[1] = auths[10].auth
     this.auth[2] = auths[11].auth
@@ -2058,8 +2059,8 @@ export class AddSarabanContentComponent implements OnInit {
     let bookNo: string = ''
     switch (folderBookNoType) {
       case (0): bookNo = ""; break
-      case (1): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
-      case (2): bookNo = bookPre + "/" + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
+      case (1): bookNo = bookPre + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length); break//praxis/00001
+      case (2): bookNo = bookPre + (this.bookNoFormat + bookNumber).substr(-this.bookNoFormat.length) + "/" + year; break//praxis/00001/2560
     }
     return bookNo
   }
@@ -2114,7 +2115,7 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
-  setMoveContent(folderId: number, contentYear:number, contentNumber: number) {
+  setMoveContent(folderId: number, contentYear: number, contentNumber: number) {
     this._loadingService.register('main')
     this._sarabanService
       .getSarabanFolder(folderId)
@@ -2235,10 +2236,30 @@ export class AddSarabanContentComponent implements OnInit {
     this._sarabanService
       .getContentAuth(folderId, structureId, userId)
       .subscribe(response => {
-        console.log('get cta bbay', response)
         this._loadingService.resolve('main')
         this.getMenus(response)
       })
+  }
+
+  openDialogContentRecord() {
+    let dialogRef = this._dialog.open(DialogRecordComponent, {
+      width: '80%', height: '90%'
+    })
+    dialogRef.componentInstance.addMode = false
+    dialogRef.componentInstance.contentId = this.sarabanContent.id
+  }
+
+  addContentRecord() {
+    let dialogRef = this._dialog.open(DialogRecordComponent, {
+      width: '40%'
+    })
+    dialogRef.componentInstance.addMode = true
+    dialogRef.componentInstance.contentId = this.sarabanContent.id
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.openDialogContentRecord()
+      }
+    })
   }
 
 }

@@ -97,7 +97,7 @@ export class SarabanContentService {
       if (contentAuth[5].auth) menus.push(MENUS[10])
       if (contentAuth[4].auth) menus.push(MENUS[9])
       if (contentAuth[3].auth) menus.push(MENUS[8])
-      menus.push(MENUS[24])
+      if (contentAuth[11].auth) menus.push(MENUS[24])
       if (contentAuth[2].auth) menus.push(MENUS[7])
     } else if (menuType === "saraban-finish") {
       menus.push(MENUS[12])
