@@ -34,7 +34,18 @@ export class SarabanRecordService {
 
     listByContentId(contentId): Observable<ContentRecord[]> {
         if (environment.production) {
-            return this._http.get(this._apiUrl + "/list/" + contentId, this._options)
+            return this._http.get(this._apiUrl + "/listByContentId/" + contentId, this._options)
+                .map((response: Response) => {
+                    return response.json().data
+                })
+                .catch(this.loggerService.handleError)
+        } else {
+        }
+    }
+
+    listByDocumentId(documentId): Observable<ContentRecord[]> {
+        if (environment.production) {
+            return this._http.get(this._apiUrl + "/listByDocumentId/" + documentId, this._options)
                 .map((response: Response) => {
                     return response.json().data
                 })

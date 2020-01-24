@@ -13,6 +13,7 @@ import { ParamSarabanService } from '../../../service/param-saraban.service'
 export class DialogRecordComponent implements OnInit {
   addMode: boolean = false
   contentId: number = 0
+  documentId: number = 0
   record = new ContentRecord()
   records: ContentRecord[] = []
   dateTime: string = ''
@@ -28,6 +29,7 @@ export class DialogRecordComponent implements OnInit {
       this.getRecords()
     } else {
       this.record.contentId = this.contentId
+      this.record.documentId = this.documentId
       this.dateTime = this._paramSarabanService.getStringDateTime(new Date()).substr(0, 16)
     }
   }
@@ -38,7 +40,7 @@ export class DialogRecordComponent implements OnInit {
 
   getRecords() {
     this._recordService
-      .listByContentId(this.contentId)
+      .listByDocumentId(this.documentId)
       .subscribe(reponse => {
         this.records = reponse
       })
