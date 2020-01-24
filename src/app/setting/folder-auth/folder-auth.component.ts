@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { SarabanService } from '../../saraban/service/saraban.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
+import { StructureService } from '../../setting/component/structure/structure.service'
 
 import { SarabanFolder } from '../../saraban/model/sarabanFolder.model'
 
@@ -13,7 +14,7 @@ import { SarabanFolder } from '../../saraban/model/sarabanFolder.model'
   selector: 'app-folder-auth',
   templateUrl: './folder-auth.component.html',
   styleUrls: ['./folder-auth.component.styl'],
-  providers: [SarabanService]
+  providers: [SarabanService, StructureService]
 })
 export class FolderAuthComponent implements OnInit {
   listButton: { hidden: boolean, index: number } = { hidden: true, index: null }
@@ -39,12 +40,48 @@ export class FolderAuthComponent implements OnInit {
     private _loadingService: TdLoadingService,
     private _location: Location,
     private _sarabanService: SarabanService,
-    private _paramSarabanService: ParamSarabanService
+    private _paramSarabanService: ParamSarabanService,
+    private _structureService: StructureService
   ) { }
 
   ngOnInit() {
-    this.structureTree = this._paramSarabanService.structureTree
+    this.initialStructurTree()
     this.getFolders()
+  }
+
+  initialStructurTree() {
+    Observable.forkJoin(
+      this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', 1),
+      this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', 1)
+    ).subscribe((response: Array<any>) => {
+      response[0].forEach(structure => {
+        let node = this._paramSarabanService.genParentNode(structure, null)
+        this.structureTree.push(node)
+      })
+      response[1].forEach(user => {
+        let node = this._paramSarabanService.genNode(user, null)
+        this.structureTree.push(node)
+      })
+    })
+  }
+
+  loadNode(event) {
+    let node = event.node
+    if (!node.leaf) {
+      Observable.forkJoin(
+        this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
+        this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
+      ).subscribe((response: Array<any>) => {
+        response[0].forEach(structure => {
+          let tmp = this._paramSarabanService.genParentNode(structure, node)
+          node.children.push(tmp)
+        })
+        response[1].forEach(user => {
+          let tmp = this._paramSarabanService.genNode(user, node)
+          node.children.push(tmp)
+        })
+      })
+    }
   }
 
   getFolders() {

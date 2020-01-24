@@ -45,8 +45,44 @@ export class InboxAuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.ownerTree = this._paramSarabanService.structureTree
-    this.userToAssignTree = this._paramSarabanService.structureTree
+    this.initialStructurTree()
+  }
+
+  initialStructurTree() {
+    Observable.forkJoin(
+      this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', 1),
+      this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', 1)
+    ).subscribe((response: Array<any>) => {
+      response[0].forEach(structure => {
+        let node = this._paramSarabanService.genParentNode(structure, null)
+        this.ownerTree.push(node)
+        this.userToAssignTree.push(node)
+      })
+      response[1].forEach(user => {
+        let node = this._paramSarabanService.genNode(user, null)
+        this.ownerTree.push(node)
+        this.userToAssignTree.push(node)
+      })
+    })
+  }
+
+  loadNode(event) {
+    let node = event.node
+    if (!node.leaf) {
+      Observable.forkJoin(
+        this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
+        this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
+      ).subscribe((response: Array<any>) => {
+        response[0].forEach(structure => {
+          let tmp = this._paramSarabanService.genParentNode(structure, node)
+          node.children.push(tmp)
+        })
+        response[1].forEach(user => {
+          let tmp = this._paramSarabanService.genNode(user, node)
+          node.children.push(tmp)
+        })
+      })
+    }
   }
 
   nodeSelect(event) {

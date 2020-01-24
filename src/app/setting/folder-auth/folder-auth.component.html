@@ -20,7 +20,7 @@
                     เจ้าหน้าที่
                 </md-card-title>
                 <md-card-content class="content">
-                    <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedUser" (onNodeSelect)="selectStructure($event)"></p-tree>
+                    <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedUser" (onNodeSelect)="selectStructure($event)" (onNodeExpand)="loadNode($event)"></p-tree>
                 </md-card-content>
             </md-card>
             <md-card *ngIf="isUserSelected">
