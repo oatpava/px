@@ -166,4 +166,28 @@ export class ParamSarabanService {
     }
   }
 
+  genParentNode(structure: any, parentNode: TreeNode): TreeNode {
+    let child: TreeNode[] = []
+    return {
+      label: structure.name,
+      icon: "fa-tag",
+      leaf: false,
+      data: { id: structure.id, userType: 1, name: structure.name, profile: structure, default: false, fav: false, fguId: 0, favIndex: 0 },
+      parent: parentNode,
+      children: child
+    }
+  }
+
+  genNode(user: any, parentNode: TreeNode): TreeNode {
+    let child: TreeNode[] = []
+    return {
+      label: user.fullName,
+      icon: "fa-user",
+      leaf: true,
+      data: { id: user.id, userType: 0, name: user.fullName, profile: user, default: false, fav: false, fguId: 0, favIndex: 0 },
+      parent: parentNode,
+      children: child
+    }
+  }
+
 }
