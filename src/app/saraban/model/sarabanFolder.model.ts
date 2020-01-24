@@ -34,6 +34,7 @@ export class SarabanFolder {
     wfFolderByBudgetYear: number
     wfFolderTypeYearExpire: string
     wfFolderNumYearExpire: number
+    shareBookNo: number
     //NIE
     auth: boolean[]
     searchField: boolean[]
@@ -71,6 +72,7 @@ export class SarabanFolder {
         this.wfFolderByBudgetYear = 0
         this.wfFolderTypeYearExpire = null
         this.wfFolderNumYearExpire = 0
+        this.shareBookNo = 0
         
         //this.auth = [true, true, true, true, true]
         this.searchField = [true, true, true, true, true, true, true, true, true, true, true, true, true, true]

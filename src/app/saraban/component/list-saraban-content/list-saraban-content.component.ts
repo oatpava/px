@@ -416,7 +416,7 @@ export class ListSarabanContentComponent implements OnInit {
       .getSarabanFolder(fodlerId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.folder = response
+        this._paramSarabanService.folder = this.folder = response
         if (response.wfContentType.id == 1) {
           if (response.wfContentType2.id == 2) {
             this.folderType = 1

@@ -17,7 +17,6 @@ import { SarabanFolder } from '../../model/sarabanFolder.model'
 export class RegisterSarabanContentComponent implements OnInit {
   sarabanContentId: number
   shortCutSaraban: SarabanFolder[] = []
-  selectedFolder: SarabanFolder
   isRegister: boolean = true
   title: String = 'เลือกแฟ้มที่จะลงทะเบียน'
   currentFolderId: number
@@ -59,8 +58,13 @@ export class RegisterSarabanContentComponent implements OnInit {
   }
 
   selectShortcutFolder(selectedFolder: SarabanFolder) {
-    this.selectedFolder = selectedFolder
-    this.dialogRef.close(true)
+    this._loadingService.register('main')
+    this._sarabanService
+      .getSarabanFolder(selectedFolder.wfFolderLinkFolderId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.dialogRef.close(response)
+      })
   }
 
 }

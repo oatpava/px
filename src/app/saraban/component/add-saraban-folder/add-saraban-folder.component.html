@@ -116,20 +116,23 @@
                                         </p-header>
                                         <p-tree [value]="structureTree" selectionMode="single" [(selection)]="selectedStructure" (onNodeSelect)="nodeSelect($event)"></p-tree>
                                     </p-dialog>
-                                    <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%;">
-                                        <div layout="column" layout-align="left start" style="font-size:14px; padding-top: 15px; padding-right: 10px;">
+                                    <div *ngIf="isFolder" layout="row" flex-gt-md="100" layout-align="left start" style="align-items: center;">
+                                        <div flex="50" layout="row" layout-align="space-between start" style="font-size:14px; padding-top: 16px; padding-right: 16px; align-items: center;">
                                             กำหนดวันหมดอายุ :
-                                        </div>
-                                        <div layout="column" layout-align="left start">
-                                            <md-input-container flex>
+                                            <md-input-container>
                                                 <input md-input type="text" placeholder="จำนวน" name="wfFolderNumYearExpire" [(ngModel)]="sarabanFolder.wfFolderNumYearExpire">
                                             </md-input-container>
-                                        </div>
-                                        <div layout="column" layout-align="right start" style="padding-top: 7px;">
-                                            <md-select style="width: 100%" name="wfFolderTypeYearExpire" [(ngModel)]="sarabanFolder.wfFolderTypeYearExpire" placeholder="ประเภท">
+                                            <md-select name="wfFolderTypeYearExpire" [(ngModel)]="sarabanFolder.wfFolderTypeYearExpire" placeholder="ประเภท">
                                                 <md-option *ngFor="let listWfFolderTypeYearExpire of listWfFolderTypeYearExpires" [value]="listWfFolderTypeYearExpire.value"> {{listWfFolderTypeYearExpire.viewValue}}
                                                 </md-option>
                                             </md-select>
+                                        </div>
+                                        <div flex="50" *ngIf="(sarabanFolder.wfContentType.id==1 || sarabanFolder.wfContentType.id==2) && sarabanFolder.wfContentType2.id!=3" style="padding-left: 16px;">
+                                            เลขที่หนังสือส่งภายนอก : 
+                                            <md-radio-group name="shareBookNo" [(ngModel)]="sarabanFolder.shareBookNo">
+                                                <md-radio-button [value]="0" style="padding-left: 1rem;">ปกติ</md-radio-button>
+                                                <md-radio-button [value]="1" style="padding-left: 1rem;">ใช้เลขส่วนกลาง</md-radio-button>
+                                            </md-radio-group>
                                         </div>
                                     </div>
                                     <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%; align-items: center;">
