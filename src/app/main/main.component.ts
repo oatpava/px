@@ -273,7 +273,7 @@ export class MainComponent implements OnInit {
     if (index != this.index) {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "ยืนยันการสลับผู้ใช้งาน"
-      dialogRef.componentInstance.message = "คุณต้องการลับไปที่ผู้ใช้งาน '" + this.userProfiles[index].fullName + "' ดำเนินการต่อใช่ หรือ ไม่"
+      dialogRef.componentInstance.message = "คุณต้องการสลับไปที่ผู้ใช้งาน '" + this.userProfiles[index].fullName + "' ดำเนินการต่อใช่ หรือ ไม่"
       dialogRef.componentInstance.confirmation = true
       dialogRef.afterClosed().subscribe(result => {
         if (result) {

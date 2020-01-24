@@ -107,20 +107,18 @@ export class UserComponent implements OnInit {
   }
 
   createUser = (createUser: User) => {
-    // this.userResult = createUser
     this._loadingService.register('main')
     this._userService
       .checkUserNameExist('1.0', createUser.name)
       .subscribe(response => {
-        console.log(response)
         if (!response) {
           this._userService
             .createUser(createUser)
             .subscribe(response => {
+              this._loadingService.resolve('main')
               this.userId = response.id
               this.userResult = response as User
               this.toggleEditUser()
-              this._loadingService.resolve('main')
             })
         } else {
           this._loadingService.resolve('main')
