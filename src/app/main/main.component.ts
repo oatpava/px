@@ -138,7 +138,10 @@ export class MainComponent implements OnInit {
   selectModule(moduleId: number, moduleName: string) {
     let param = {}
     switch (moduleId) {
-      case (2): param = { parentId: 0 }; break;
+      case (2): param = { 
+        parentId: 0,
+        path: 'ทะเบียนส่วนกลาง' 
+      }; break;
       case (3): param = {
         parentId: 1,
         folderType: 'A',

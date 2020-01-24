@@ -121,6 +121,8 @@ export class ListMwpComponent implements OnInit {
 
   selectShortcutFolder(selectFolder: SarabanFolder) {
     if (selectFolder.wfFolderParentName == null) selectFolder.wfFolderParentName = ""
+    this._paramSarabanService.pathOld = ''
+    this._paramSarabanService.path = selectFolder.wfFolderParentName + ' - ' + selectFolder.wfFolderName
     this._paramSarabanService.folderId = selectFolder.wfFolderLinkFolderId
     this._paramSarabanService.folderName = selectFolder.wfFolderName
     this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName

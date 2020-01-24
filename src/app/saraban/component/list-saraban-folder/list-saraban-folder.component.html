@@ -1,8 +1,9 @@
 <div layout="column" flex>
     <div class="bgc-blue-700" [style.color]="'#fff'" layout="row" flex>
-        <button md-icon-button (click)="goBack()" *ngIf="parentId>0">
+        <button *ngIf="parentId>0" md-icon-button (click)="goBack()">
             <md-icon>arrow_back</md-icon>
         </button>
+        <button *ngIf="parentId==0" md-icon-button disabled></button>
         <button md-icon-button disabled>
           <md-icon>{{icon}}</md-icon>
         </button>

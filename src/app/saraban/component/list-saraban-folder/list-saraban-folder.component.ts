@@ -71,11 +71,15 @@ export class ListSarabanFolderComponent implements OnInit {
       .subscribe((params: Params) => {
         if (!isNaN(params['parentId'])) {
           this.parentId = +params['parentId']
+          this._paramSarabanService.path = this.path = params['path']
         } else {
           this.parentId = this._paramSarabanService.folderId
+          this._paramSarabanService.path = this.path = 'ทะเบียนส่วนกลาง'
         }
         if (this.parentId == -1) {
           this.isFolder = false
+          this.path = 'หนังสือเวียน'
+          this.icon = 'chrome_reader_mode'
           this.getCircularNoticesWithAuth()
           this.getAuthMenus('circularNotice', new SarabanAuth({ auth: false }), false)
         } else {
@@ -100,9 +104,6 @@ export class ListSarabanFolderComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.sarabanFolder = response
-        this.path = 'หนังสือเวียน'
-        this.icon = 'chrome_reader_mode'
-        this._paramSarabanService.path = this.path
       })
   }
 
@@ -113,12 +114,8 @@ export class ListSarabanFolderComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.sarabanFolder = response
-        if (this.parentId == 0) {
-          this.path = 'ทะเบียนส่วนกลาง'
-          this._paramSarabanService.path = this.path
-        } else {
-          this.path = this._paramSarabanService.path
-        }
+
+        
       })
   }
 
@@ -139,6 +136,7 @@ export class ListSarabanFolderComponent implements OnInit {
         this._router.navigate(
           ['.', {
             parentId: selectFolder.id,
+            path: this._paramSarabanService.path
           }],
           { relativeTo: this._route })
       } else if (selectFolder.wfContentType.id == 4) {
