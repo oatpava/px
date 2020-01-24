@@ -13,6 +13,7 @@ export class ParamSarabanService {
   contentNoFormat: string = '000000'
   bookNoFormat: string = '000000'
   orderNoFormat: string = '000'
+  shareBookNo: boolean = true
   folder: SarabanFolder
 
   tmp: string

@@ -127,13 +127,6 @@
                                                 </md-option>
                                             </md-select>
                                         </div>
-                                        <div flex="50" *ngIf="(sarabanFolder.wfContentType.id==1 || sarabanFolder.wfContentType.id==2) && sarabanFolder.wfContentType2.id!=3" style="padding-left: 16px;">
-                                            เลขที่หนังสือส่งภายนอก : 
-                                            <md-radio-group name="shareBookNo" [(ngModel)]="sarabanFolder.shareBookNo">
-                                                <md-radio-button [value]="0" style="padding-left: 1rem;">ปกติ</md-radio-button>
-                                                <md-radio-button [value]="1" style="padding-left: 1rem;">ใช้เลขส่วนกลาง</md-radio-button>
-                                            </md-radio-group>
-                                        </div>
                                     </div>
                                     <div *ngIf="isFolder" layout="row" layout-align="left start" style="width: 100%; align-items: center;">
                                         <span style="padding-right: 0.5rem;">กำหนดฟิลดิ์สำหรับค้นหาหนังสือ :</span>

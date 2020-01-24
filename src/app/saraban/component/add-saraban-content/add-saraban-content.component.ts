@@ -248,7 +248,7 @@ export class AddSarabanContentComponent implements OnInit {
     this.getCanceledReserveNo(folderId)
 
     //เชคส่งภายนอก
-    if (this._paramSarabanService.folderType == 4 && folder.shareBookNo) {
+    if (this._paramSarabanService.folderType == 4 && this._paramSarabanService.shareBookNo) {
       console.log('folderType=4 => sharedFolder && sharebookNo')
       this._loadingService.register('main')
       this._sarabanService
@@ -993,18 +993,13 @@ export class AddSarabanContentComponent implements OnInit {
     if (this._paramSarabanService.mwp.fromMwp) dialogRef.componentInstance.fromMWP = true
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this._sarabanService
-          .getSarabanFolder(sarabanContent.wfContentFolderId)
-          .subscribe(response => {
-            this._paramSarabanService.registedFolder = result
-            this._paramSarabanService.folder = response
-            this.registerAfterDialogClose(sarabanContent, result, response)
-          })
+        this._paramSarabanService.registedFolder = result
+        this.registerAfterDialogClose(sarabanContent, result)
       }
     })
   }
 
-  registerAfterDialogClose(sarabanContent: SarabanContent, registedFolder: SarabanFolder, folder: SarabanFolder) {
+  registerAfterDialogClose(sarabanContent: SarabanContent, registedFolder: SarabanFolder) {
     this.mode = "register"
     this.getReserveNo(registedFolder.id)
     this.getCanceledReserveNo(registedFolder.id)
@@ -1016,7 +1011,7 @@ export class AddSarabanContentComponent implements OnInit {
     this.sarabanContent = new SarabanContent()
     this.sarabanContent.wfContentDate01 = this._paramSarabanService.getStringDate(new Date())
     //เชคส่งภายนอก
-    if (registedFolder.wfContentType.id == 2 && registedFolder.wfContentType2.id == 3 && folder.shareBookNo) {
+    if (registedFolder.wfContentType.id == 2 && registedFolder.wfContentType2.id == 3 && this._paramSarabanService.shareBookNo) {
       //alert
       //get shared folder
       this._loadingService.register('main')

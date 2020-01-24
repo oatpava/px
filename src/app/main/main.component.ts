@@ -307,12 +307,23 @@ export class MainComponent implements OnInit {
 
     this._settingService.getParams('BOOKNOFORMAT')
       .subscribe(response => {
-        this._paramSarabanService.bookNoFormat = this.genN0Format(+response.paramValue)
+        if (response != null) {
+          this._paramSarabanService.bookNoFormat = this.genN0Format(+response.paramValue)
+        }
       })
 
     this._settingService.getParams('ORDERFORMAT')
       .subscribe(response => {
-        this._paramSarabanService.orderNoFormat = this.genN0Format(+response.paramValue)
+        if (response != null) {
+          this._paramSarabanService.orderNoFormat = this.genN0Format(+response.paramValue)
+        }
+      })
+
+    this._settingService.getParams('SHAREBOOKNO')
+      .subscribe(response => {
+        if (response != null) {
+          if (response.paramValue != 'Y') this._paramSarabanService.shareBookNo = false
+        }
       })
   }
 
@@ -325,7 +336,9 @@ export class MainComponent implements OnInit {
   checkAD() {
     this._settingService.getParams('USE_AD')
       .subscribe(response => {
-        if (response.paramValue == 'Y') this.useAD = true
+        if (response != null) {
+          if (response.paramValue == 'Y') this.useAD = true
+        }
       })
   }
 
