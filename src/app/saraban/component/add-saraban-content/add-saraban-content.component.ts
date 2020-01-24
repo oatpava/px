@@ -480,7 +480,7 @@ export class AddSarabanContentComponent implements OnInit {
     if (folder.wfContentType.id != 1) {
       this.sarabanContent.wfContentFrom = this._paramSarabanService.structure.name
       let parentKey: number[] = this._paramSarabanService.convertParentKey(this._paramSarabanService.structure.parentKey)
-      let node = this.findNode(this.structureTree, this._paramSarabanService.structure.id, false, parentKey)
+      let node = this._paramSarabanService.findNode(this.structureTree, this._paramSarabanService.structure.id, false, parentKey)
       if (node) {
         this.sendTo[0].push(node)
         this.selectedStructure[0].push(node)
@@ -626,7 +626,7 @@ export class AddSarabanContentComponent implements OnInit {
           switch (response.userType) {
             case 0:
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this.findNode(this.structureTree, response.data.id, true, parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
               if (node) {
                 this.sendTo[num].push(node)
                 this.selectedStructure[num].push(node)
@@ -636,7 +636,7 @@ export class AddSarabanContentComponent implements OnInit {
               ; break
             case 1:
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this.findNode(this.structureTree, response.data.id, false, parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
               if (node) {
                 this.sendTo[num].push(node)
                 this.selectedStructure[num].push(node)
@@ -1725,31 +1725,6 @@ export class AddSarabanContentComponent implements OnInit {
       return res
     }
     return null
-  }
-
-  findNode(tree: TreeNode[], id: number, isUser: boolean, parentKey: number[]): any {
-    let node = null
-    let tmp = this.findNodeRecursive(tree.find(node => node.data.id == parentKey[1]), id, isUser, parentKey, parentKey.length - 1, 1)
-    if (tmp) {
-      node = tmp
-    }
-    return node
-  }
-
-  findNodeRecursive(node: TreeNode, id: number, isUser: boolean, parentKey: number[], level: number, currentLevel: number): any {
-    if (currentLevel != level) {
-      currentLevel++
-      let childNode = node.children.find(child => (child.data.id == parentKey[currentLevel] && child.leaf == false))
-      return this.findNodeRecursive(childNode, id, isUser, parentKey, level, currentLevel)
-    } else {
-      let result = null
-      if (isUser) {
-        result = node.children.find(child => (child.data.id == id && child.leaf == true))
-      } else {
-        result = node
-      }
-      return result
-    }
   }
 
   nodeSelect(event, num: number) {

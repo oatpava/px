@@ -141,4 +141,29 @@ export class ParamSarabanService {
     }
   }
 
+  findNode(tree: TreeNode[], id: number, isUser: boolean, parentKey: number[]): any {
+    let node = null
+    let tmp = this.findNodeRecursive(tree.find(node => node.data.id == parentKey[1]), id, isUser, parentKey, parentKey.length - 1, 1)
+    if (tmp) {
+      node = tmp
+    }
+    return node
+  }
+  
+  private findNodeRecursive(node: TreeNode, id: number, isUser: boolean, parentKey: number[], level: number, currentLevel: number): any {
+    if (currentLevel != level) {
+      currentLevel++
+      let childNode = node.children.find(child => (child.data.id == parentKey[currentLevel] && child.leaf == false))
+      return this.findNodeRecursive(childNode, id, isUser, parentKey, level, currentLevel)
+    } else {
+      let result = null
+      if (isUser) {
+        result = node.children.find(child => (child.data.id == id && child.leaf == true))
+      } else {
+        result = node
+      }
+      return result
+    }
+  }
+
 }
