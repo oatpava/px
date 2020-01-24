@@ -104,8 +104,8 @@ export class ListSarabanContentComponent implements OnInit {
   ) {
     this.year = new Date().getFullYear() + 543
     this.folderId = this._paramSarabanService.folderId
-    this.path[0] = this._paramSarabanService.folderParentName + ' - ' + this._paramSarabanService.folderName
-    this.path[1] = this._paramSarabanService.folderParentName + ' - ' + this._paramSarabanService.folderName + ' / ผลการค้นหา'
+    this.path[0] = this._paramSarabanService.path
+    this.path[1] = this._paramSarabanService.path + ' / ผลการค้นหา'
     this.folder = new SarabanFolder()
     this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
     this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
@@ -245,6 +245,7 @@ export class ListSarabanContentComponent implements OnInit {
       this.reset()
     }
     else {
+      this._paramSarabanService.path = this._paramSarabanService.pathOld
       this._location.back()
     }
   }
@@ -416,7 +417,7 @@ export class ListSarabanContentComponent implements OnInit {
       .getSarabanFolder(fodlerId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.folder = response
+        this._paramSarabanService.folder = this.folder = response
         if (response.wfContentType.id == 1) {
           if (response.wfContentType2.id == 2) {
             this.folderType = 1

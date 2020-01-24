@@ -330,30 +330,7 @@ export class SendSarabanContentComponent implements OnInit {
       this.sendTo[num].push(node)
     }
   }
-
-  findNode(tree: TreeNode[], id: number, isUser: boolean, parentKey: number[]): any {
-    let node = null
-    let tmp = this.findNodeRecursive(tree.find(node => node.data.id == parentKey[1]), id, isUser, parentKey, parentKey.length - 1, 1)
-    if (tmp) {
-      node = tmp
-    }
-    return node
-  }
-  findNodeRecursive(node: TreeNode, id: number, isUser: boolean, parentKey: number[], level: number, currentLevel: number): any {
-    if (currentLevel != level) {
-      currentLevel++
-      let childNode = node.children.find(child => (child.data.id == parentKey[currentLevel] && child.leaf == false))
-      return this.findNodeRecursive(childNode, id, isUser, parentKey, level, currentLevel)
-    } else {
-      let result = null
-      if (isUser) {
-        result = node.children.find(child => (child.data.id == id && child.leaf == true))
-      } else {
-        result = node
-      }
-      return result
-    }
-  }
+  
 
 
   onDateChanged(event, num: number) {
@@ -735,7 +712,7 @@ export class SendSarabanContentComponent implements OnInit {
           switch (response.userType) {
             case 0://user
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this.findNode(this.structureTree, response.data.id, true, parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
               if (node) {
                 this.sendTo[0].push(node)
                 this.selectedStructure[0].push(node)
@@ -746,7 +723,7 @@ export class SendSarabanContentComponent implements OnInit {
               ; break
             case 1://structure
               parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this.findNode(this.structureTree, response.data.id, false, parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
               if (node) {
                 this.sendTo[0].push(node)
                 this.selectedStructure[0].push(node)
@@ -823,7 +800,7 @@ export class SendSarabanContentComponent implements OnInit {
     let selectedNode = event.node.data
     if (selectedNode.userType != -1) {
       if (selectedNode.userType != 2) {
-        let node = this.findNode(this.structureTree, selectedNode.id, selectedNode.isUser, selectedNode.parentKey)
+        let node = this._paramSarabanService.findNode(this.structureTree, selectedNode.id, selectedNode.isUser, selectedNode.parentKey)
         this.sendTo[num].push(node)
         this.selectedStructure[num].push(node)
         this.favouriteNodeAdded[num][node.data.favIndex] = true
@@ -837,7 +814,7 @@ export class SendSarabanContentComponent implements OnInit {
         if (pgu.data.userType != 2) {
           this.selectedGroup[num].push(pgu)
 
-          let node = this.findNode(this.structureTree, pgu.data.id, pgu.data.isUser, pgu.data.parentKey)
+          let node = this._paramSarabanService.findNode(this.structureTree, pgu.data.id, pgu.data.isUser, pgu.data.parentKey)
           if (!this.sendTo[num].find(x => x === node)) {
             this.sendTo[num].push(node)
             this.selectedStructure[num].push(node)
@@ -850,7 +827,7 @@ export class SendSarabanContentComponent implements OnInit {
   groupUnSelect(event, num: number) {
     let selectedNode = event.node.data
     if (selectedNode.userType != -1) {
-      let node = this.findNode(this.structureTree, selectedNode.id, selectedNode.isUser, selectedNode.parentKey)
+      let node = this._paramSarabanService.findNode(this.structureTree, selectedNode.id, selectedNode.isUser, selectedNode.parentKey)
       this.sendTo[num] = this.sendTo[num].filter(x => x !== node)
       this.selectedStructure[num] = this.selectedStructure[num].filter(x => x !== node)
       this.favouriteNodeAdded[num][node.data.favIndex] = false
@@ -859,7 +836,7 @@ export class SendSarabanContentComponent implements OnInit {
         if (pgu.data.userType != 2) {
           setTimeout(() => this.selectedGroup[num] = this.selectedGroup[num].filter(x => x !== pgu), 1)
 
-          let node = this.findNode(this.structureTree, pgu.data.id, pgu.data.isUser, pgu.data.parentKey)
+          let node = this._paramSarabanService.findNode(this.structureTree, pgu.data.id, pgu.data.isUser, pgu.data.parentKey)
           this.sendTo[num] = this.sendTo[num].filter(x => x !== node)
           this.selectedStructure[num] = this.selectedStructure[num].filter(x => x !== node)
           this.favouriteNodeAdded[num][node.data.favIndex] = false
@@ -897,7 +874,7 @@ export class SendSarabanContentComponent implements OnInit {
             for (let j = 0; j < favouriteGroup.listUser.length; j++) {
               let pgu: PrivateGroupUser = favouriteGroup.listUser[j]
               let parentKey = this._paramSarabanService.convertParentKey(pgu.structure.parentKey)
-              let node = this.findNode(this.structureTree, pgu.userId, (pgu.userType == 0), parentKey)
+              let node = this._paramSarabanService.findNode(this.structureTree, pgu.userId, (pgu.userType == 0), parentKey)
               node.data.fav = true
               node.data.fguId = pgu.id
               node.data.favIndex = j + 1
@@ -1035,7 +1012,7 @@ export class SendSarabanContentComponent implements OnInit {
     let parentKey: number[]
     if (lastNodeData.userType == 1) {
         parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
-        node = this.findNode(this.structureTree, lastNodeData.id, false, parentKey)
+        node = this._paramSarabanService.findNode(this.structureTree, lastNodeData.id, false, parentKey)
         if (node) {
           this.sendTo[0].push(node)
           this.selectedStructure[0].push(node)

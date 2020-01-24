@@ -44,6 +44,7 @@ export class ListMwpComponent implements OnInit {
     this._paramSarabanService.tableFirst = null
     this._paramSarabanService.listReturn = null
     this._paramSarabanService.barcodeFilter = null
+    this._paramSarabanService.folder = null
   }
 
   ngOnInit() {
@@ -120,6 +121,8 @@ export class ListMwpComponent implements OnInit {
 
   selectShortcutFolder(selectFolder: SarabanFolder) {
     if (selectFolder.wfFolderParentName == null) selectFolder.wfFolderParentName = ""
+    this._paramSarabanService.pathOld = ''
+    this._paramSarabanService.path = selectFolder.wfFolderParentName + ' - ' + selectFolder.wfFolderName
     this._paramSarabanService.folderId = selectFolder.wfFolderLinkFolderId
     this._paramSarabanService.folderName = selectFolder.wfFolderName
     this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName

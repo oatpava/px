@@ -13,6 +13,8 @@ export class ParamSarabanService {
   contentNoFormat: string = '000000'
   bookNoFormat: string = '000000'
   orderNoFormat: string = '000'
+  shareBookNo: boolean = true
+  folder: SarabanFolder
 
   tmp: string
   tmp2: string
@@ -137,6 +139,55 @@ export class ParamSarabanService {
       } else {
         return 3//ส่ง null
       }
+    }
+  }
+
+  findNode(tree: TreeNode[], id: number, isUser: boolean, parentKey: number[]): any {
+    let node = null
+    let tmp = this.findNodeRecursive(tree.find(node => node.data.id == parentKey[1]), id, isUser, parentKey, parentKey.length - 1, 1)
+    if (tmp) {
+      node = tmp
+    }
+    return node
+  }
+  
+  private findNodeRecursive(node: TreeNode, id: number, isUser: boolean, parentKey: number[], level: number, currentLevel: number): any {
+    if (currentLevel != level) {
+      currentLevel++
+      let childNode = node.children.find(child => (child.data.id == parentKey[currentLevel] && child.leaf == false))
+      return this.findNodeRecursive(childNode, id, isUser, parentKey, level, currentLevel)
+    } else {
+      let result = null
+      if (isUser) {
+        result = node.children.find(child => (child.data.id == id && child.leaf == true))
+      } else {
+        result = node
+      }
+      return result
+    }
+  }
+
+  genParentNode(structure: any, parentNode: TreeNode): TreeNode {
+    let child: TreeNode[] = []
+    return {
+      label: structure.name,
+      icon: "fa-tag",
+      leaf: false,
+      data: { id: structure.id, userType: 1, name: structure.name, profile: structure, default: false, fav: false, fguId: 0, favIndex: 0 },
+      parent: parentNode,
+      children: child
+    }
+  }
+
+  genNode(user: any, parentNode: TreeNode): TreeNode {
+    let child: TreeNode[] = []
+    return {
+      label: user.fullName,
+      icon: "fa-user",
+      leaf: true,
+      data: { id: user.id, userType: 0, name: user.fullName, profile: user, default: false, fav: false, fguId: 0, favIndex: 0 },
+      parent: parentNode,
+      children: child
     }
   }
 
