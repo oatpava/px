@@ -2273,6 +2273,7 @@ export class AddSarabanContentComponent implements OnInit {
     })
     dialogRef.componentInstance.addMode = false
     dialogRef.componentInstance.contentId = this.sarabanContent.id
+    dialogRef.componentInstance.documentId = this.sarabanContent.wfDocumentId
   }
 
   addContentRecord() {
@@ -2281,6 +2282,7 @@ export class AddSarabanContentComponent implements OnInit {
     })
     dialogRef.componentInstance.addMode = true
     dialogRef.componentInstance.contentId = this.sarabanContent.id
+    dialogRef.componentInstance.documentId = this.sarabanContent.wfDocumentId
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.openDialogContentRecord()
