@@ -2,6 +2,7 @@ export class ContentRecord {
     id: number
     createdDate: string
     contentId: number
+    documentId: number
     description: string
     creator: string
 
@@ -9,6 +10,7 @@ export class ContentRecord {
         this.id = 0,
         this.createdDate = '',
         this.contentId = 0,
+        this.documentId = 0,
         this.description = ''
         this.creator = ''
         
