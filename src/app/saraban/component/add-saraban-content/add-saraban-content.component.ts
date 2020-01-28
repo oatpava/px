@@ -335,7 +335,7 @@ export class AddSarabanContentComponent implements OnInit {
           if (this._paramSarabanService.registedFolder == null) {
             this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
           } else {
-            this.getContentAuth(this._paramSarabanService.registedFolder.wfFolderLinkFolderId, structureId, userId)
+            this.getContentAuth(this._paramSarabanService.registedFolder.id, structureId, userId)
             this._paramSarabanService.registedFolder = null
           }
         } else {
