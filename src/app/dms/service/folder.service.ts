@@ -47,13 +47,7 @@ export class FolderService {
     getFolders(parentId: number): Observable<Folder[]> {
         // console.log('-- getFolders service --')
         let params = new URLSearchParams()
-        params.set('version', '1')
-        params.set('offset', '0')
-        params.set('limit', '100')
-        params.set('sort', 'createdDate')
-        params.set('dir', 'asc')
-        params.set('folderId', '' + parentId)
-        params.set('t', '' + new Date().getTime())
+        params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=asc&offset=0&limit=100&folderId=' + parentId))
         if (environment.production) {
             this._options.search = params
             return this._http.get(this._apiUrl + '/v1/dmsFolder', this._options)
@@ -100,8 +94,7 @@ export class FolderService {
 
     getFolder(folderId: number): Observable<Folder> {
         let params = new URLSearchParams()
-        params.set('version', '1.0')
-        params.set('t', '' + new Date().getTime())
+        params.set('q', this.pxService.encrypt('version=1.0'))
         if (environment.production) {
             return this._http.get(this._apiUrl + '/v1/dmsFolder/' + folderId, this._options)
                 .map((response: Response) => {
@@ -115,13 +108,7 @@ export class FolderService {
 
     getFoldersWithAuth(parentId: number): Observable<Folder[]> {
         let params = new URLSearchParams()
-        params.set('version', '1')
-        params.set('offset', '0')
-        params.set('limit', '1000')
-        params.set('sort', 'createdDate')
-        params.set('dir', 'desc')
-        params.set('folderId', '' + parentId)
-        params.set('t', '' + new Date().getTime())
+        params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + parentId))
         if (environment.production) {
             this._options.search = params
             return this._http.get(this._apiUrl + '/v1/dmsFolder/auth', this._options)
@@ -436,13 +423,7 @@ export class FolderService {
     getFolders2(parentId: number) {
         // console.log('-- getFolders service --')
         let params = new URLSearchParams()
-        params.set('version', '1')
-        params.set('offset', '0')
-        params.set('limit', '100')
-        params.set('sort', 'createdDate')
-        params.set('dir', 'asc')
-        params.set('folderId', '' + parentId)
-        params.set('t', '' + new Date().getTime())
+        params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=asc&offset=0&limit=100&folderId=' + parentId))
         if (environment.production) {
             this._options.search = params
             return this._http.get(this._apiUrl + '/v1/dmsFolder/folderAndDoc/' + parentId, this._options)
@@ -460,8 +441,7 @@ export class FolderService {
 
         if (environment.production) {
             let params = new URLSearchParams()
-            params.set('version', '1')
-            params.set('t', '' + new Date().getTime())
+            params.set('q', this.pxService.encrypt('version=1.0'))
             return this._http.get(this._apiUrl + '/v1/dmsFolder/getWfdocType', this._options)
                 .map((response: Response) => {
                     // return this.pxService.verifyResponseArray(response.json().folder)
@@ -480,8 +460,7 @@ export class FolderService {
         console.log('submoduleCode',submoduleCode)
         if (environment.production) {
             let params = new URLSearchParams()
-            params.set('version', '1')
-            params.set('t', '' + new Date().getTime())
+            params.set('q', this.pxService.encrypt('version=1.0'))
             return this._http.get(this._apiUrl + '/v1/dmsFolder/listSubmoduleUserAuthOfChildByStructureIdFromTree/' + structureId + '/' + folderId + '/' + submoduleCode, this._options)
                 .map((response: Response) => {
                     return response.json()
@@ -496,8 +475,7 @@ export class FolderService {
     addAuth(structureId: number, userProfileId: number, submoduleAuthId: number, linkId: number, authority: string) {
         if (environment.production) {
             let params = new URLSearchParams()
-            params.set('version', '1')
-            params.set('t', '' + new Date().getTime())
+            params.set('q', this.pxService.encrypt('version=1.0'))
             return this._http.get(this._apiUrl + '/v1/dmsFolder/createSubmoduleUserAuth/' + structureId + '/' + userProfileId + '/' + submoduleAuthId + '/' + linkId + '/' + authority, this._options)
                 .map((response: Response) => {
                     return response.json()
@@ -511,8 +489,7 @@ export class FolderService {
     updateAuth(id: number, structureId: number, userProfileId: number, submoduleAuthId: number, linkId: number, authority: string) {
         if (environment.production) {
             let params = new URLSearchParams()
-            params.set('version', '1')
-            params.set('t', '' + new Date().getTime())
+            params.set('q', this.pxService.encrypt('version=1.0'))
             return this._http.get(this._apiUrl + '/v1/dmsFolder/updateSubmoduleUserAuth/' + id + '/' + structureId + '/' + userProfileId + '/' + submoduleAuthId + '/' + linkId + '/' + authority, this._options)
                 .map((response: Response) => {
                     return response.json()
