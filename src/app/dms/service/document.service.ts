@@ -39,13 +39,7 @@ export class DocumentService {
   getDocuments(folderId: number): Observable<Document[]> {
     // console.log('getDocuments waiting use rest. - O')
     let params = new URLSearchParams()
-    params.set('version', '1.0')
-    params.set('offset', '0')
-    params.set('limit', '1000')
-    params.set('sort', 'createdDate')
-    params.set('dir', 'desc')
-    params.set('folderId', '' + folderId)
-    params.set('t', ''+new Date().getTime())
+    params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + folderId))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/folder/' + folderId, this._options)
@@ -61,13 +55,7 @@ export class DocumentService {
   getDocumentsExp(folderId: number): Observable<Document[]> {
     // console.log('getDocuments waiting use rest. - O')
     let params = new URLSearchParams()
-    params.set('version', '1.0')
-    params.set('offset', '0')
-    params.set('limit', '1000')
-    params.set('sort', 'createdDate')
-    params.set('dir', 'desc')
-    params.set('folderId', '' + folderId)
-    params.set('t', ''+new Date().getTime())
+    params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + folderId))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/exp/' + folderId, this._options)
@@ -100,7 +88,7 @@ export class DocumentService {
   getDocument(docId: number): Observable<Document> {
     // console.log('getDocument waiting use rest. - '+docId)
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/' + docId, this._options)
         .map((response: Response) => {
@@ -326,7 +314,7 @@ export class DocumentService {
   getUserprofile(userprofileId: string): Observable<any> {
     console.log('getDocument waiting use rest. - O')
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     let intuser = Number(userprofileId)
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/userProfiles/' + intuser, this._options)
@@ -346,7 +334,7 @@ export class DocumentService {
   getDocumentByDoctype(docId: number, folderId: number): Observable<Document[]> {
     // console.log('getDocumentByDoctype. - '+docId)
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/DocTypeId/' + docId + '/' + folderId, this._options)
         .map((response: Response) => {
@@ -363,7 +351,7 @@ export class DocumentService {
   getDocumentByDoctype2(wfTypeId: number, folderId: number): Observable<Document[]> {
     // console.log('getDocumentByDoctype. - '+docId)
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/listDocByWfDocTypeId/' + wfTypeId + '/' + folderId, this._options)
         .map((response: Response) => {
@@ -379,7 +367,7 @@ export class DocumentService {
 
   createAdocument(folderId: number,CustomerName: string, ProjectName: string): Observable<Document> {
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/createADocument/' + folderId+'/'+CustomerName+'/'+ProjectName, this._options)
         .map((response: Response) => {
@@ -397,7 +385,7 @@ export class DocumentService {
   updateAdocument(docId: number, attackName: string, wfTypeId: number, flowId: number, typeCode: string, typeName: string): Observable<Document> {
     console.log('---- updateAdocument -----')
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/createADocument/' + docId + '/' + attackName + '/' + wfTypeId + '/' + typeCode + '/' + typeName + '/' + flowId, this._options)
         .map((response: Response) => {
@@ -478,13 +466,7 @@ export class DocumentService {
 
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('version', '1.0')
-      params.set('offset', '0')
-      params.set('limit', '1000')
-      params.set('sort', 'createdDate')
-      params.set('dir', 'asc')
-
-
+      params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=asc&offset=0&limit=1000'))
       return this._http.post(this._apiUrl + '/v1/dmsDocuments/searchDocumentWithDocType/'+docTyped+'/'+isWfType, newDataSearch, this._options)
         .map((response: Response) => {
           return response.json().data as Document[]
@@ -548,7 +530,7 @@ export class DocumentService {
   moveDocument(listdocId: String , folderId:number) {
     // console.log('getDocument waiting use rest. - '+docId)
     let params = new URLSearchParams()
-    params.set('version', '1.0')
+    params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/' + listdocId+'/'+folderId, this._options)
         .map((response: Response) => {
@@ -565,7 +547,7 @@ export class DocumentService {
   getUserProfile(userProfileId: number,version: string): Observable<UserProfile>{
     // console.log('getUserProfile waiting use rest. - O',USERPROFILES,userProfileId)
     let params = new URLSearchParams()
-    params.set('version', version)
+    params.set('q', this.pxService.encrypt('version=' + version))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/userProfiles/' + userProfileId, this._options)
