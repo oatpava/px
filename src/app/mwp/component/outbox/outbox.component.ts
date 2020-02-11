@@ -24,7 +24,7 @@ import { DialogWarningComponent } from '../../../saraban/component/add-saraban-c
 import { FinishSarabanContentComponent } from '../../../saraban/component/finish-saraban-content/finish-saraban-content.component'
 import { ReportSarabanComponent } from '../../../saraban/component/report-saraban/report-saraban.component'
 
-const limit: number = 20
+const limit: number = 10
 @Component({
   selector: 'app-outbox',
   templateUrl: './outbox.component.html',
