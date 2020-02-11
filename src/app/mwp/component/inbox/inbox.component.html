@@ -11,7 +11,7 @@
         </div>
         <!-- <barcode [barcodeFilter]="barcodeFilter[index]" (search)="searchBarcode($event)" (onUnselect)="reset()"></barcode> -->
         <div hide show-gt-md layout="row" style="margin-left:auto; margin-right:1rem; align-items: center;">
-            <span style="margin-right:1rem;">เลือกข้อมูลเข้า</span>
+            <span style="margin-right:1rem;">เลือกหนังสือเข้า</span>
             <p-dropdown [options]="inboxAssign" [style]="{'width':'30rem'}" [(ngModel)]="index" (onChange)="switchInbox($event.value)"></p-dropdown>
         </div>
 
@@ -74,7 +74,7 @@
                                         <div layout="row" layout-align="space-between start">
                                             <div></div>
                                             <div>
-                                                <span>รายการข้อมูลเข้า</span>
+                                                <span>รายการหนังสือเข้า</span>
                                             </div>
                                             <div>
                                                 <button (click)="resetDataTable()"><i class="fa fa-refresh"></i></button>
@@ -104,7 +104,7 @@
                                             <span *ngIf="row.inboxOpenFlag==1 && row.isCanceled" style="color:lightgrey;"><del>{{row.inboxStr03}}</del></span>   
                                         </template>
                                     </p-column>
-                                    <p-column field="inboxSpeed" header="ค.เร่งด่วน" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'95px', 'text-align':'center', 'vertical-align':'top'}">
+                                    <p-column field="inboxSpeed" header="ชั้นเร่งด่วน" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'width':'100px', 'text-align':'center', 'vertical-align':'top'}">
                                         <template pTemplate="filter" let-col>
                                              <p-dropdown [options]="speed" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter" appendTo="body"></p-dropdown> 
                                         </template>

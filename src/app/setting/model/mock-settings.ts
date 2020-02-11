@@ -135,7 +135,7 @@ export const SETTINGS: Setting[] = [
       },
       {
         childId: 52,//2,
-        childName: 'กำหนดสิทธิ์ข้อมูลเข้า',
+        childName: 'กำหนดสิทธิ์หนังสือเข้า',
         childIcon: 'lock_outline',
         subSetting: 'setting-permission-input-structure',
       },

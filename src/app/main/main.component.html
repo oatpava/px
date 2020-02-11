@@ -38,13 +38,33 @@
                 <td-menu>
                     <div>
                         <div layout="row" layout-align="space-between start">
-                            <div *ngIf="!useAD"><button md-button color="primary" (click)="openDialogChangePassword();">
-                                    <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
-                                </button></div>
-                            <div><button md-button color="accent" (click)="logOut()">
-                                    <md-icon>exit_to_app</md-icon>ออกจากระบบ
-                                </button></div>
+                            <button flex="50" md-button color="primary" title="เปิดไฟล์ภาพผ่านระบบ" (click)="downloadPluginFileAttach()">
+                                <md-icon>get_app</md-icon>ปลั๊กอินไฟล์ภาพ
+                            </button>
+                            <button flex="50" md-button color="primary" title="Twain ไดร์เวอร์สแกน" (click)="downloadPluginScan()">
+                                <md-icon>get_app</md-icon>ปลั๊กอินสแกน
+                            </button>
                         </div>
+                        <div layout="row" layout-align="space-between start">
+                            <button flex="50" md-button color="primary" (click)="downloadSetupManual()">
+                                <md-icon>description</md-icon>คู่มือการติดตั้ง
+                            </button>
+                            <button flex="50" md-button color="primary" (click)="downloadUserManual()">
+                                <md-icon>description</md-icon>คู่มือการใช้งาน
+                            </button>
+                        </div>
+                        <div *ngIf="!useAD" layout="row" layout-align="space-between start">
+                            <button flex="50" md-button color="primary" (click)="openDialogChangePassword();">
+                                <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
+                            </button>
+                            <button flex="50" md-button color="accent" style="width: 100%;" (click)="logOut()">
+                                <md-icon>exit_to_app</md-icon>ออกจากระบบ
+                            </button>
+                        </div>   
+                        <button *ngIf="useAD" md-button color="accent" style="width: 100%;" (click)="logOut()">
+                            <md-icon>exit_to_app</md-icon>ออกจากระบบ
+                        </button> 
+                        <md-divider md-inset></md-divider> 
                         <div layout="column" style="width: 100%; padding: 0px 0px;">
                             <md-list *ngFor="let userProfile of userProfiles; let i = index;" style="padding:0;">
                                 <md-list-item class="hover" (click)="swapUserProfile(i)" [title]="(index!=i)? 'สลับผู้ใช้งาน':''"
@@ -79,7 +99,7 @@
                         <template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
                             <a md-list-item>
                                 <md-icon md-list-avatar>today</md-icon>
-                                <h4 md-line><span class="text-wrap">ข้อมูลเข้า : หน่วยงานพัฒนาสังคมและการศึกษาภายในองค์กร</span></h4>
+                                <h4 md-line><span class="text-wrap">หนังสือเข้า : หน่วยงานพัฒนาสังคมและการศึกษาภายในองค์กร</span></h4>
                                 <p md-line>22 minutes ago</p>
                             </a>
                             <md-divider *ngIf="!last"></md-divider>

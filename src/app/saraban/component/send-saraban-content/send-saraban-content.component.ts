@@ -77,6 +77,7 @@ export class SendSarabanContentComponent implements OnInit {
   sendNoteAll: string = ''
   processes: string[] = []
   filteredProcesses: string[]
+  workflowDetail: string = ''
 
   private myDatePickerOptions: IMyOptions[] = [
     {
@@ -435,6 +436,7 @@ export class SendSarabanContentComponent implements OnInit {
     workflow.workflowActionType = (this.mode == 'send') ? "S" : "A"
     workflow.workflowNote = this.sendNoteAll
     workflow.workflowDescription = this.sendDescription
+    workflow.workflowDetail = this.workflowDetail
 
     workflow.workflowStr02 = this.sarabanContent.wfContentDescription
     workflow.workflowStr03 = this.sarabanContent.wfContentContentNo

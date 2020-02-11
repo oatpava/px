@@ -62,13 +62,12 @@ export class MainComponent implements OnInit {
       route: this._mainUrl + 'sarabans',
       icon: 'class',
     },
-    //**//
-    // {
-    //   id: 3,
-    //   title: 'ระบบจัดเก็บเอกสารฯ',
-    //   route: this._mainUrl + 'folders',
-    //   icon: 'dashboard',
-    // },
+    {
+      id: 3,
+      title: 'ระบบจัดเก็บเอกสารฯ',
+      route: this._mainUrl + 'folders',
+      icon: 'dashboard',
+    },
     // {
     //   id: 4,
     //   title: 'หนังสือเวียน',
@@ -259,7 +258,7 @@ export class MainComponent implements OnInit {
   }
 
   showInstructionDialog() {
-    let dialogRef = this._dialog.open(DialogInstructionComponent, {
+    this._dialog.open(DialogInstructionComponent, {
       //width: '40%',
     })
   }
@@ -334,6 +333,22 @@ export class MainComponent implements OnInit {
     let tmp: string = ''
     for (let i = 0; i < num; i++) tmp += '0'
     return tmp
+  }
+
+  downloadPluginFileAttach() {
+    window.open('plugIn-view.exe')
+  }
+
+  downloadPluginScan() {
+    window.open('plugIn-twain.exe')
+  }
+
+  downloadSetupManual() {
+    window.open('manual-setup.pdf')
+  }
+
+  downloadUserManual() {
+    window.open('manual-user.pdf')
   }
 
   checkAD() {

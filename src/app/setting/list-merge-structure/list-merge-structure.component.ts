@@ -245,9 +245,9 @@ export class ListMergeStructureComponent implements OnInit {
     console.log('gen I ', structure)
     return new StructureFolder({
       structureId: structure.id,
-      structureFolderName: 'กล่องข้อมูลเข้า',
+      structureFolderName: 'กล่องหนังสือเข้า',
       structureFolderType: 'I',
-      structureFolderDetail: 'ข้อมูลเข้าของ ' + structure.name
+      structureFolderDetail: 'หนังสือเข้าของ ' + structure.name
     })
   }
 
@@ -255,9 +255,9 @@ export class ListMergeStructureComponent implements OnInit {
     console.log('gen O ', structure)
     return new StructureFolder({
       structureId: structure.id,
-      structureFolderName: 'กล่องข้อมูลออก',
+      structureFolderName: 'กล่องหนังสือออก',
       structureFolderType: 'O',
-      structureFolderDetail: 'ข้อมูลออกของ ' + structure.name
+      structureFolderDetail: 'หนังสือออกของ ' + structure.name
     })
   }
 

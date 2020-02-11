@@ -58,8 +58,7 @@ export class AddDocumentComponent implements OnInit {
   uploader: FileUploader = new FileUploader({})
 
   uploaderUpdate: FileUploader = new FileUploader({})
-  fileAttachs: FileAttach[] = []
-  fileAttachs2: FileAttach[] = []
+  fileAttachs: any[] = []
 
   hasBaseDropZoneOver: boolean = false
   fileAttachRemoved: FileAttach[] = []
@@ -452,6 +451,7 @@ export class AddDocumentComponent implements OnInit {
             console.log('temp', temp)
             console.log('datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
+            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             // this._loadingService.resolve('main')
           })
       })
@@ -518,6 +518,7 @@ export class AddDocumentComponent implements OnInit {
           console.log('temp', temp)
           console.log('datafileAttach', datafileAttach)
           this.fileAttachs = datafileAttach
+          this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
           // this._loadingService.resolve('main')
         })
 
@@ -777,6 +778,7 @@ export class AddDocumentComponent implements OnInit {
           console.log('--- updateAtt temp', temp)
           console.log('--- updateAtt datafileAttach', datafileAttach)
           this.fileAttachs = datafileAttach
+          this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
           this._loadingService.resolve('main')
           // this.subscription.unsubscribe();
         })
@@ -897,6 +899,7 @@ export class AddDocumentComponent implements OnInit {
             console.log('--- updateAtt temp', temp)
             console.log('--- updateAtt datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
+            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             this._loadingService.resolve('main')
             this.subscription.unsubscribe();
           })
@@ -1005,6 +1008,7 @@ export class AddDocumentComponent implements OnInit {
             console.log('--- updateAtt temp', temp)
             console.log('--- updateAtt datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
+            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             this._loadingService.resolve('main')
             this.subscription.unsubscribe();
           })
@@ -1017,8 +1021,12 @@ export class AddDocumentComponent implements OnInit {
     });
   }
 
-
-
+  checkViewByFileType(type: string): boolean {
+    let result: boolean = false
+    if (type == '.PDF' || type == '.TIF' || type == '.TIFF' || type == '.JPG' || type == '.PNG') {
+      result = true
+    }
+    return result
+  }
 
 }
-
