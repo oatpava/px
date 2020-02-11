@@ -29,7 +29,7 @@ export class PermissionInputStructureComponent implements OnInit {
     userList: Structure[]
     dataList: Structure[]
     iconHeader: string = 'lock_outline'
-    title: string = 'กำหนดสิทธิ์ข้อมูลเข้า'
+    title: string = 'กำหนดสิทธิ์หนังสือเข้า'
     nodes = [
         {
             "id": 1,

@@ -7,7 +7,7 @@
           <md-icon>lock_outline</md-icon>
         </button>
         <div flex class="menu-showLabel">
-            <span>กำหนดสิทธิ์ข้อมูลเข้า</span>
+            <span>กำหนดสิทธิ์หนังสือเข้า</span>
         </div>
     </div>
 </div>
@@ -17,7 +17,7 @@
         <div layout="column" flex="40">
             <md-card *ngIf="!isOwnerSelected">
                 <md-card-title class="title">
-                    เลือกกล่องข้อมูลเข้าที่ต้องการกำหนดสิทธิ์
+                    เลือกกล่องหนังสือเข้าที่ต้องการกำหนดสิทธิ์
                 </md-card-title>
                 <md-card-content class="content">
                     <p-tree [value]="ownerTree" selectionMode="single" [(selection)]="selectedOwner" (onNodeSelect)="selectOwner($event)" (onNodeExpand)="loadNode($event)"></p-tree>
@@ -26,8 +26,8 @@
             <md-card *ngIf="isOwnerSelected">
                 <md-card-title class="title">
                     <div layout="column">
-                        <span *ngIf="!selectedOwner.leaf">กำหนดสิทธิ์ข้อมูลเข้าของ [{{selectedOwner.data.profile.name}}]</span>
-                        <span *ngIf="selectedOwner.leaf">กำหนดสิทธิ์ข้อมูลเข้าของ [{{selectedOwner.data.profile.fullName}}]</span>
+                        <span *ngIf="!selectedOwner.leaf">กำหนดสิทธิ์หนังสือเข้าของ [{{selectedOwner.data.profile.name}}]</span>
+                        <span *ngIf="selectedOwner.leaf">กำหนดสิทธิ์หนังสือเข้าของ [{{selectedOwner.data.profile.fullName}}]</span>
                         <span>เลือกผู้ใช้งานที่ต้องการให้สิทธิ์</span>
                         <!-- <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
                         <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span> -->
@@ -43,7 +43,7 @@
             <md-card>
                 <md-card-title class="title">
                     <div layout="column">
-                        <span>ผู้ที่มีสิทธิ์ในกล่องข้อมูลเข้าของ</span>
+                        <span>ผู้ที่มีสิทธิ์ในกล่องหนังสือเข้าของ</span>
                         <span *ngIf="!selectedOwner.leaf">[{{selectedOwner.data.profile.name}}]</span>
                         <span *ngIf="selectedOwner.leaf">[{{selectedOwner.data.profile.fullName}}]</span>
                     </div>

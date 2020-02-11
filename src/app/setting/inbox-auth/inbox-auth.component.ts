@@ -192,7 +192,7 @@ export class InboxAuthComponent implements OnInit {
               this.msgs = []
               this.msgs.push({
                 severity: 'success',
-                summary: 'แก้ไขสิทธิ์ข้อมูลเข้าสำเร็จ',
+                summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
                 detail: ''
               })
             })
@@ -210,7 +210,7 @@ export class InboxAuthComponent implements OnInit {
             this.msgs = []
             this.msgs.push({
               severity: 'success',
-              summary: 'กำหนดสิทธิ์ข้อมูลเข้าสำเร็จ',
+              summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
               detail: assignedInbox.label
             })
           })

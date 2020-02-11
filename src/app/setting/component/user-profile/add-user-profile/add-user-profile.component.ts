@@ -318,9 +318,9 @@ export class AddUserProfileComponent implements OnInit {
     //create Inbox 
     let userProfileFolder = new UserProfileFolder({
       userProfileId: userProfile.id,
-      userProfileFolderName: 'กล่องข้อมูลเข้า',
+      userProfileFolderName: 'กล่องหนังสือเข้า',
       userProfileFolderType: 'I',
-      userProfileFolderDetail: 'ข้อมูลเข้าของ ' + userProfile.fullName
+      userProfileFolderDetail: 'หนังสือเข้าของ ' + userProfile.fullName
     })
     this._userProfileService
       .createUserProfileFolder(userProfileFolder)
@@ -328,9 +328,9 @@ export class AddUserProfileComponent implements OnInit {
         //create OutBox, 
         userProfileFolder = new UserProfileFolder({
           userProfileId: userProfile.id,
-          userProfileFolderName: 'กล่องข้อมูลออก',
+          userProfileFolderName: 'กล่องหนังสือออก',
           userProfileFolderType: 'O',
-          userProfileFolderDetail: 'ข้อมูลออกของ ' + userProfile.fullName
+          userProfileFolderDetail: 'หนังสือออกของ ' + userProfile.fullName
         })
         this._userProfileService
           .createUserProfileFolder(userProfileFolder)

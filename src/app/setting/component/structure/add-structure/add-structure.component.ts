@@ -100,18 +100,18 @@ export class AddStructureComponent implements OnInit {
   createStructureFolders(structure: Structure) {
     let structureFolder = new StructureFolder({
       structureId: structure.id,
-      structureFolderName: 'กล่องข้อมูลเข้า',
+      structureFolderName: 'กล่องหนังสือเข้า',
       structureFolderType: 'I',
-      structureFolderDetail: 'ข้อมูลเข้าของ ' + structure.name
+      structureFolderDetail: 'หนังสือเข้าของ ' + structure.name
     })
     this._structureService
       .createStructureFolder(structureFolder)
       .subscribe(response => {
         structureFolder = new StructureFolder({
           structureId: structure.id,
-          structureFolderName: 'กล่องข้อมูลออก',
+          structureFolderName: 'กล่องหนังสือออก',
           structureFolderType: 'O',
-          structureFolderDetail: 'ข้อมูลออกของ ' + structure.name
+          structureFolderDetail: 'หนังสือออกของ ' + structure.name
         })
         this._structureService
           .createStructureFolder(structureFolder)
@@ -180,8 +180,8 @@ export class AddStructureComponent implements OnInit {
 
   updateStructureFolders(structure: Structure) {
     if (this.structure.name !== structure.name) {
-      this.structureFolders[0].structureFolderDetail = 'ข้อมูลเข้าของ ' + structure.name
-      this.structureFolders[1].structureFolderDetail = 'ข้อมูลออกของ ' + structure.name
+      this.structureFolders[0].structureFolderDetail = 'หนังสือเข้าของ ' + structure.name
+      this.structureFolders[1].structureFolderDetail = 'หนังสือออกของ ' + structure.name
       this._structureService
         .upDateStructureFolder(this.structureFolders[0])
         .subscribe(response => {
