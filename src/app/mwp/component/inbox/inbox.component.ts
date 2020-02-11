@@ -292,9 +292,9 @@ export class InboxComponent implements OnInit {
     this._paramSarabanService.folderId = null
     this._paramSarabanService.folderName = "หนังสือเข้า"
     this._paramSarabanService.folderIcon = "move_to_inbox"
-    this._paramSarabanService.pathOld = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
-    this._paramSarabanService.path = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
-    this._paramSarabanService.inboxPath = 'ข้อมูลเข้า: ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.pathOld = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.path = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.inboxPath = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
     this._paramSarabanService.mwp = {
       fromMwp: true,
       isUser: this.inboxAssign[this.index].isUser,

@@ -52,7 +52,7 @@
                             <button flex="50" md-button color="primary" (click)="downloadUserManual()">
                                 <md-icon>description</md-icon>คู่มือการใช้งาน
                             </button>
-                        </div> 
+                        </div>
                         <div *ngIf="!useAD" layout="row" layout-align="space-between start">
                             <button flex="50" md-button color="primary" (click)="openDialogChangePassword();">
                                 <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
@@ -64,7 +64,7 @@
                         <button *ngIf="useAD" md-button color="accent" style="width: 100%;" (click)="logOut()">
                             <md-icon>exit_to_app</md-icon>ออกจากระบบ
                         </button> 
-                        <md-divider md-inset></md-divider>                    
+                        <md-divider md-inset></md-divider> 
                         <div layout="column" style="width: 100%; padding: 0px 0px;">
                             <md-list *ngFor="let userProfile of userProfiles; let i = index;" style="padding:0;">
                                 <md-list-item class="hover" (click)="swapUserProfile(i)" [title]="(index!=i)? 'สลับผู้ใช้งาน':''"
