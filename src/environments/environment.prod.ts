@@ -5,15 +5,15 @@ export const environment = {
   appName: '',
   appNameEng: '',
   appAcronym: '', //login logo .png(200*200px), icon .svg, default is 'demo'
-  reportServer: 'http://192.168.1.106:85/jasperserver/flow.html?',
+  reportServer: 'http://127.0.0.1:85/jasperserver/flow.html?',
   reportSite: '',
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',
   //ng build --prod -bh /praxticol8_ghb/
-  //apiServer: 'http://172.28.1.10:8080',
   apiServer: 'http://127.0.0.1:8080',
   apiName: '/pxservice-ghb/api',
   plugIn: 'http://127.0.0.1:82',
-  url: 'http://172.28.1.10/praxticol8_ghb/#'
+  url: 'http://127.0.0.1/praxticol8_ghb/#',
+  DMS: false
 };
 

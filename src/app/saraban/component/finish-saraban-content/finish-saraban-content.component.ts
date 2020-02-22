@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { IMyOptions } from 'mydatepicker'
 import { MdDialogRef } from '@angular/material'
-
-import { KeepSarabanContentComponent } from '../keep-saraban-content/keep-saraban-content.component'
+import { environment } from '../../../../environments/environment'
 
 @Component({
   selector: 'app-finish-saraban-content',
@@ -19,6 +18,7 @@ export class FinishSarabanContentComponent implements OnInit {
   finishDate_str: string
   keep: boolean = false
   numFileAttach: number = 0
+  readonly dmsModule = environment.DMS
 
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
