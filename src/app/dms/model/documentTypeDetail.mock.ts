@@ -21,7 +21,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         documentTypeDetailDefault: "DetailDefault",
         documentTypeDetailLookup: 0,
         documentTypeDetailColumnWidth: 200,
-        documentTypeDetailAlignment: "Y"
+        documentTypeDetailAlignment: "Y",
+        order: 1
     },
     {
         "version": 1,
@@ -43,7 +44,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 2
     },
     {
         version: 1,
@@ -65,7 +67,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 3
     },
     {
         version: 1,
@@ -87,7 +90,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 4
     },
     {
         version: 1,
@@ -109,7 +113,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 5
     },
     {
         version: 1,
@@ -131,7 +136,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 6
     },
 
     {
@@ -154,7 +160,8 @@ export const DOCUMENTTYPEDETAIL1: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 7
     }
 
 ]
@@ -181,7 +188,8 @@ export const DOCUMENTTYPEDETAIL2: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 7
     },
     {
         version: 1,
@@ -203,7 +211,8 @@ export const DOCUMENTTYPEDETAIL2: DocumentTypeDetail[] = [
         "documentTypeDetailDefault": "DetailDefault",
         "documentTypeDetailLookup": 0,
         "documentTypeDetailColumnWidth": 200,
-        "documentTypeDetailAlignment": "Y"
+        "documentTypeDetailAlignment": "Y",
+        "order": 8
     }
 
 ]

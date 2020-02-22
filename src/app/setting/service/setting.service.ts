@@ -28,10 +28,12 @@ export class SettingService {
 
   getSettings(): Observable<Setting[]> {
     console.log('getSettings waiting use rest. - O')
+    let modules = SETTINGS
+    if (!environment.DMS) modules = modules.filter(x => x.type != 'DMS')
     if (environment.production) {
-      return this.pxService.createObservable(SETTINGS)
+      return this.pxService.createObservable(modules)
     } else {
-      return this.pxService.createObservable(SETTINGS)
+      return this.pxService.createObservable(modules)
     }
   }
 

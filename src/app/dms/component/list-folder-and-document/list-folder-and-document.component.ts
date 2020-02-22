@@ -30,6 +30,13 @@ import { LevelBar } from '../../model/level-bar.model';
 import { ParamDmsService } from '../../service/param-dms.service'
 import { Level } from '../../model/level.model';
 import { environment } from '../../../../environments/environment'
+import { IPageChangeEvent } from '@covalent/paging'
+
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
+import { ListReturn } from '../../../main/model/listReturn.model';
+
+const offset: number = 0
+const limit: number = 20
 @Component({
   selector: 'app-list-folder-and-document',
   templateUrl: './list-folder-and-document.component.html',
@@ -99,6 +106,9 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   typeSearchInput: string = 'a'
 
+  listReturn: ListReturn
+  
+
   typeSearchInputData: any[] = [
     { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
   ]
@@ -130,10 +140,11 @@ export class ListFolderAndDocumentComponent implements OnInit {
     private _dialog: MdDialog,
     private _pxService: PxService,
     private _paramDms: ParamDmsService,
-
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.parentId = 1
     this.disableBack = false
+    this.listReturn = new ListReturn()
   }
 
   ngOnInit() {
@@ -200,14 +211,15 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getFolders(parentId: number): void {
-    // console.log('-- getFolders star--')
-    // console.log('this.parentId = ', this.parentId)
+    console.log('-- getFolders star--' , parentId)
+    console.log('this.parentId = ', this.parentId)
 
 
     this._loadingService.register('main')
     this._folderService
       // .getFolders(parentId) // with out auth?
-      .getFoldersWithAuth(parentId)//with auth
+      // .getFoldersWithAuth(parentId)//with auth
+      .getFoldersWithAuthlazy(parentId,0,25)
       .subscribe(response => {
         this.folders = response as Folder[]
         console.log('-- this.folders--', this.folders)
@@ -218,6 +230,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
         this._loadingService.resolve('main')
 
+      })
+
+      this._folderService
+      .countAll(parentId)
+      .subscribe(response => {
+        this.projectAll = response
       })
 
 
@@ -878,7 +896,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
         this.documentTypeDetails = response as any[]
-        // console.log(this.documentTypeDetails)
+        console.log('documentTypeDetails = ',this.documentTypeDetails)
         // for (let dtd of this.documentTypeDetails) {
         // if(dtd.dmsFieldMap == 'createdBy'){
         //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
@@ -967,11 +985,13 @@ export class ListFolderAndDocumentComponent implements OnInit {
   getDocuments(folderId: number): void {
     this.datas = []
     this._documentService
-      .getDocuments(folderId)
+      .getDocuments(folderId,offset,limit)
       .subscribe(response => {
-        this.datas = response as Document[]
-        this.allData = response as Document[]
+        this.datas = response.data as Document[]
+        this.allData = response.data as Document[]
+        this.listReturn = response.listReturn
 
+        console.log('this.listReturn - ',this.listReturn )
         for (let i = 0; i < this.allData.length; i++) {
           this.flagCheck[i] = false
         }
@@ -1105,6 +1125,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
   getDocumentTypeDetailDoc(documentTypeId: number): void {//หัว columns
     this.columns = []
     // this._loadingService.register('main')
+    this.columns.push({ name: 'count', label: 'ลำดับ', })
     this._documentTypeDetailService
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
@@ -1117,6 +1138,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
           this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
         }
         this.widthSize = this.columns.length * 250
+        this.columns.push({ name: 'borrowStatus', label: 'ยืม-คืน', })
         // console.log('this.widthSize -- ', this.widthSize)
       })
 
@@ -1195,6 +1217,14 @@ export class ListFolderAndDocumentComponent implements OnInit {
           if (i.menuFunction == 'docRe') {
             this.authDocRe = true
           }
+        }
+
+        //oat-add
+        if (this._paramSarabanService.isArchive) {
+          this.authEditFolder = false
+          this.authAddDoc = false
+          this.createFolder = false
+          this.authDelDoc = false
         }
 
         if (!this.createFolder) {
@@ -1289,6 +1319,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
   listFolderTree() {
     console.log('-- listFolderTree --')
     let listDocId = this.getDataForSave()
+    console.log('listDocId - ',listDocId)
     let dialogRef = this._dialog.open(DialogListFolderComponent, {
       width: '50%',
     })
@@ -1449,6 +1480,91 @@ export class ListFolderAndDocumentComponent implements OnInit {
   lvBarBack(data: any) {
     console.log('lvBarBack = ', data)
     window.location.href = data.levelUrl;
+  }
+
+  fromRow:number
+  projectAll:number = 1000
+  currentPage:number
+  pageSize:number
+  dataPageIng:any ={
+    offset:0,
+    limit:25
+  }
+  page(pagingEvent: IPageChangeEvent): void {
+    console.log(pagingEvent)
+    this.fromRow = pagingEvent.fromRow
+    this.currentPage = pagingEvent.page
+    this.pageSize = pagingEvent.pageSize
+    this.dataPageIng = {
+      offset: pagingEvent.fromRow,
+      limit: pagingEvent.toRow
+    }
+
+    this._loadingService.register('main')
+    this._folderService
+      .getFoldersWithAuthlazy(this.parentId,pagingEvent.fromRow-1,this.pageSize)
+      .subscribe(response => {
+        this.folders = response as Folder[]
+        console.log('this.folders - ',this.folders)
+        this._loadingService.resolve('main')
+        })
+
+      
+
+      
+    
+  }
+
+  loadMoreContents(){
+    console.log('--loadMoreContents--')
+    this.allCheck  =false
+    this._documentService
+      .getDocuments(this.parentId,this.listReturn.count,limit)
+      .subscribe(response => {
+        // this.datas = response.data as Document[]
+        // this.allData = response.data as Document[]
+        this.listReturn = response.listReturn
+
+        this.datas = this.datas.concat(response.data)
+        this.allData = this.allData.concat(response.data)
+
+        // console.log('this.listReturn - ',this.listReturn )
+        for (let i = 0; i < this.allData.length; i++) {
+          this.flagCheck[i] = false
+        }
+        // console.log('this.datas', this.datas)
+      })
+
+
+  }
+  allCheck:any
+  checkAll2(event: any) {
+    console.log('checkAll2 -- ',this.allCheck)
+    for (let i = 0; i < this.flagCheck.length; i++) {
+      this.flagCheck[i] = event.checked
+    }
+    this.checkBox = false
+    for (let entry of this.flagCheck) {
+
+      if (entry) {
+        this.checkBox = true
+        break
+      }
+    }
+
+  }
+  select(index, data, boolean) {
+
+    this.flagCheck[index] = boolean.checked
+    this.checkBox = false
+    for (let entry of this.flagCheck) {
+
+      if (entry) {
+        this.checkBox = true
+        break
+      }
+    }
+
   }
 
 

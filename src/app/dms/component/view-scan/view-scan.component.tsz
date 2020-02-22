@@ -1,0 +1,216 @@
+// / <reference path="./Resources/dynamsoft.webtwain.initiate.js" />
+import { Component, OnInit } from '@angular/core';
+
+Dynamsoft.WebTwainEnv.Containers = [{ ContainerId: 'dwtcontrolContainer', Width: '220px', Height: '620px' }, { ContainerId: 'dwtcontrolContainerLargeViewer', Width: '750px', Height: '620px' }];
+// Dynamsoft.WebTwainEnv.Containers = [{ ContainerId: 'dwtcontrolContainer', Width: '120px', Height: '350px' }, { ContainerId: 'dwtcontrolContainerLargeViewer', Width: '270px', Height: '350px' }];
+Dynamsoft.WebTwainEnv.ProductKey = '2F7499F5E5AFF6512B0D4D1334766AB9CB541BD01C818AA0D52A144D9F693EB7703A059A068F20A18F0605250F73BE94CD70B8B4AB0AD2F6BD96E4694E5017F59945A6A0D25E017AA1D4CB9AD27A39CF1E8E071EB2EF440EBFB5E0E61AAD0F56C394ABBF29900210041AE260205954E38D';
+
+Dynamsoft.WebTwainEnv.Trial = false;
+Dynamsoft.WebTwainEnv.ActiveXInstallWithCAB = false;
+Dynamsoft.WebTwainEnv.Debug = false;
+Dynamsoft.WebTwainEnv.ResourcesPath = './Resources';
+/*Dynamsoft Code*/
+@Component({
+	selector: 'app-view-scan',
+	// templateUrl: './view-scan.component.html',
+	template: '<div id="info" style="display:none; padding:20px 30px; width: 350px; border: solid 1px #e7e7e7;">The <strong>PDF Rasterizer</strong> is not installed on this PC'+
+			'<br />Please click the button below to get it installed<p>'+
+			'<button (click)="downloadPDFR();">Install PDF Rasterizer</button>'+
+			'</p><i><strong>The installation is a one-time process</strong> <br />'+
+			'It might take some time depending on your network.</i></div>'+
+			'<br /><select [(ngModel)]="selectedTwainSource" ><option *ngFor="let source of twainSources" [ngValue]="source">{{source.name}}</option></select>'+
+			'<button (click)="AcquireImage();">Start Scan</button><button (click)="BrowseImage();">Load Images</button><div id="dwtcontrolContainer"></div><div id="dwtcontrolContainerLargeViewer"></div>'
+	// styleUrls: ['./view-scan.component.styl']
+})
+export class ViewScanComponent  {
+
+	CurrentPath = null;
+	hidden: boolean = true
+	zoomIn: number = 1.2;
+	zoomOut: number = 1.2;
+
+	constructor(
+	) {
+
+
+
+
+		console.log('----constructor DynamicWebTwain dms-----')
+		var a = Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', this.OnWebTwainReady)
+		console.log('Dynamsoft', Dynamsoft)
+		console.log('Dynamsoft.WebTwainEnv', Dynamsoft.WebTwainEnv)
+		console.log(a)
+		DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer') // create a thumbnail
+		DWObjectLargeViewer = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainerLargeViewer')
+		console.log('DWObject', DWObject)
+		console.log('DWObjectLargeViewer', DWObjectLargeViewer)
+		console.log('----constructor DynamicWebTwain dms end-----')
+
+	}
+
+	ngOnInit() {
+		console.log('----ngOnInit DynamicWebTwain dms----')
+		
+	}
+
+	OnWebTwainReady() {
+		console.log('---OnWebTwainReady dms-----')
+		var _this = this;
+		DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer') // create a thumbnail
+		DWObjectLargeViewer = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainerLargeViewer') // create a large viewer
+		//DWObject.IfAllowLocalCache = true;
+
+
+		console.log('DWObject', DWObject)
+		console.log('DWObjectLargeViewer', DWObjectLargeViewer)
+
+
+		DWObject.SetViewMode(1, 5)
+		DWObjectLargeViewer.SetViewMode(1, 1) // This is actually the default setting 
+		DWObjectLargeViewer.MaxImagesInBuffer = 1 // Set it to hold one image only
+		DWObject.RegisterEvent("OnMouseClick", showThumbnailView)
+
+		DWObject.RegisterEvent('OnPostTransfer', showThumbnailView)
+
+		function showThumbnailView() {
+			var index = DWObject.CurrentImageIndexInBuffer;
+			DWObject.CopyToClipboard(index) // Copy the image you just clicked on to the clipboard
+			DWObjectLargeViewer.LoadDibFromClipboard() // Load the same image from clipboard into the large viewer
+		}
+		console.log('---OnWebTwainReady dms end-----')
+	}
+	showScan() {
+		this.hidden = !this.hidden
+	}
+
+	ShowThumbnailView() {
+		console.log('ShowThumbnailView');
+		var index = DWObject.CurrentImageIndexInBuffer;
+		DWObject.CopyToClipboard(index) // Copy the image you just clicked on to the clipboard
+		DWObjectLargeViewer.LoadDibFromClipboard() // Load the same image from clipboard into the large viewer
+	}
+
+	AcquireImage() {
+
+
+		console.log('--- 1 ---')
+		console.log('Dynamsoft', Dynamsoft)
+		console.log('DWObject', DWObject)
+		console.log('DWObjectLargeViewer', DWObjectLargeViewer)
+
+		if (DWObject) {
+			DWObject.IfDisableSourceAfterAcquire = true
+			DWObject.SelectSource()
+			DWObject.OpenSource() // You should customize the settings after opening a source
+			DWObject.IfFeederEnabled = true // Use the document feeder to scan in batches 
+			DWObject.IfDuplexEnabled = false // Scan in Simplex mode (only 1 side of the page) 
+			DWObject.PixelType = EnumDWT_PixelType.TWPT_GRAY // Scan pages in GRAY 
+			DWObject.Resolution = 200 // Scan pages in 200 DPI
+			DWObject.AcquireImage()
+		}
+	}
+
+	BrowseImage() {
+		if (DWObject) {
+			DWObject.IfShowFileDialog = true;
+			DWObject.LoadImageEx("", EnumDWT_ImageType.IT_ALL, BrowseImageSuccess, BrowseImageFail);
+		}
+
+		function BrowseImageSuccess() {
+			var index = DWObject.CurrentImageIndexInBuffer;
+			DWObject.CopyToClipboard(index) // Copy the image you just clicked on to the clipboard
+			DWObjectLargeViewer.LoadDibFromClipboard() // Load the same image from clipboard into the large viewer
+		}
+
+		function BrowseImageFail(errorCode, errorString) {
+			console.log(errorString);
+		}
+	}
+
+	EditImage() {
+		if (DWObjectLargeViewer) {
+			DWObjectLargeViewer.ShowImageEditor();
+		}
+	}
+
+	RotateImage() {
+		if (DWObject) {
+			//DWObject.Rotate(0,45,true); //rotate the 1st image in the buffer by 45 degrees
+			DWObject.RotateLeft(DWObject.CurrentImageIndexInBuffer);
+		}
+		if (DWObjectLargeViewer) {
+			DWObjectLargeViewer.RotateLeft(DWObjectLargeViewer.CurrentImageIndexInBuffer);
+		}
+	}
+
+	SaveToBMP() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAsBMP("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToJPEG() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAsJPEG("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToPNG() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAsPNG("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToTIFF() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAsTIFF("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToPDF() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAsPDF("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToMultiTIFF() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAllAsMultiPageTIFF("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	SaveToMultiPDF() {
+		DWObject.IfShowFileDialog = true;
+		DWObject.SaveAllAsPDF("", DWObject.CurrentImageIndexInBuffer);
+	}
+
+	zoomInFunction() {
+		if (DWObjectLargeViewer) {
+
+			//  console.log("Zoom in = "+this.zoomIn);
+			DWObjectLargeViewer.SetViewMode(-1, -1);  // Zoom is valid only when the view mode is set to -1 by -1.
+			DWObjectLargeViewer.Zoom = DWObject.Zoom * this.zoomIn;  // Zoom in
+			//            DWObjectLargeViewer.Zoom = DWObject.Zoom / 1.2;  // Zoom out
+			this.zoomOut = 1.2;
+			this.zoomIn = this.zoomIn + 0.2;
+		}
+	};
+
+	zoomOutFunction() {
+		if (DWObjectLargeViewer) {
+
+			// console.log("Zoom out = "+this.zoomOut);
+			DWObjectLargeViewer.SetViewMode(-1, -1);  // Zoom is valid only when the view mode is set to -1 by -1.
+			//            DWObjectLargeViewer.Zoom = DWObject.Zoom * 1.2;  // Zoom in
+			DWObjectLargeViewer.Zoom = DWObject.Zoom / this.zoomOut;  // Zoom out
+			this.zoomIn = 1.2;
+			this.zoomOut = this.zoomOut + 0.2;
+		}
+	};
+
+
+}
+declare var Dynamsoft;
+declare var EnumDWT_PixelType;
+declare var EnumDWT_ImageType;
+declare var DWObject;
+declare var DWObjectLargeViewer;
+
+export interface TwainSourceDms {
+	idx: number;
+	name: string;
+}

@@ -4,6 +4,7 @@ import { PxService } from '../../../main/px.service'
 
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload'
 import * as FileSaver from 'file-saver'
+import * as es6printJS from "print-js";
 
 import { MdDialog } from '@angular/material'
 
@@ -165,11 +166,12 @@ export class FileAttachSarabanComponent implements OnInit {
 
   download(fileAttach: FileAttach) {
     let tmp = new FileAttach(fileAttach)
-    //tmp.fileAttachName = tmp.fileAttachName + tmp.fileAttachType.toLowerCase()
-    this._pxService
-      .downloadFileAttach(tmp)
-    // .subscribe(response => {
-    // })
+    if (fileAttach.fileAttachType == '.PDF') {
+      es6printJS(fileAttach.url, "pdf");
+    } else {
+      this._pxService
+        .downloadFileAttach(tmp)
+    }
   }
 
   delete(fileAttach: any) {

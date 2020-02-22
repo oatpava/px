@@ -39,6 +39,7 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
     { name: 'dmsField', label: 'ฟิลด์' },
     { name: 'dmsType', label: 'ชนิด' },
     { name: 'documentTypeDetailName', label: 'ตั้งชื่อ' },
+    { name: 'order', label: 'ลำดับ' },
     { name: 'documentTypeDetailView', label: 'แสดงรายชื่อ' },
     { name: 'documentTypeDetailSearch', label: 'ค้นหา' },
     { name: 'documentTypeDetailEdit', label: 'ใช้คีย์ข้อมูล' },
@@ -114,10 +115,10 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
     this._docTypeDetailService
       .getDocumentTypeDetail(documentTypeId)
       .subscribe(response => {
+        console.log('oldData response - ',response)
         oldData = response as DocumentTypeDetail[]
         this.oldData = oldData
-        // console.log('--- oldData ---')
-        // console.log(oldData)
+    
 
         this.ctrDataForTable(this.oldData, this.dmsFields);
         this.oldData.length === this.allData.length ? this.checkBoxAll = true : this.checkBoxAll = false;
@@ -133,6 +134,8 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
     this._dmsFieldService
       .getDmsFields()
       .subscribe(response => {
+        console.log('-response- ',response)
+        console.log('-oldData- ',this.oldData)
         this.dmsFields = response as DmsField[]
         if (this.documentTypeId != undefined) {
           this.getDocumentTypeDetialByDocumentTypeId(this.documentTypeId);
@@ -145,7 +148,8 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
   }
 
   ctrDataForTable(documentTypeDetails: DocumentTypeDetail[], allDmsFields: DmsField[]) {
-    console.log('--- ctrDataForTable ---')
+    console.log('--- ctrDataForTable ---',documentTypeDetails)
+    console.log('--- ctrDataForTable ---',allDmsFields)
     let newDocTypeDetail: DocumentTypeDetail[] = []
     for (let i = 0; i < allDmsFields.length; i++) {
       let docTypeDetail = documentTypeDetails.filter(detail => detail.dmsFieldId == allDmsFields[i].id);
@@ -216,6 +220,7 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
         let newDetail = new DocumentTypeDetail
         newDetail.dmsFieldId = allDmsFields[i].id
         newDetail.documentTypeDetailName = '';
+        newDetail.order = '';
         newDetail.documentTypeDetailView = '';
         newDetail.documentTypeDetailSearch = '';
         newDetail.documentTypeDetailEdit = '';
@@ -233,7 +238,7 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
 
   save() {  //insert
     console.log('---save insert---')
-    // console.log(this.allData)
+  
     let docId = 0;
     this._docTypeDetailService
       .createDocumentType(this.documentType)
@@ -284,7 +289,7 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
           if (i.dmsFieldId == 30) {
             i.documentTypeDetailLookup = this.outLookVarchar10
           }
-
+          console.log(i)
           this._docTypeDetailService
             .createDocumentTypeDetail(docType.id, i)
             .subscribe(response => {
@@ -398,6 +403,10 @@ export class DmsDocumentTypeDetailComponent implements OnInit {
 
   onKey(index: number, event: any) {
     this.allData[index].documentTypeDetailName = event.target.value
+  }
+
+  onKey2(index: number, event: any) {
+    this.allData[index].order = event.target.value
   }
 
   clickSave(index: number, checkbox: any) {

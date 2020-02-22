@@ -1,5 +1,5 @@
 export const environment = {
-  buildDate: '2020-01-28',
+  buildDate: '2020-02-22',
   key: '42444678902180239428358646519815165132078951561321646432131696998878616',
   production: true,
   appName: 'สำนักงานธนานุเคราะห์',
@@ -13,5 +13,6 @@ export const environment = {
   apiServer: 'http://10.10.59.24:82',
   apiName: '/pxservice-pawn/api',
   plugIn: 'http://10.10.59.24:83',
-  url: 'http://10.10.59.24/praxticol8_pawn/#'
+  url: 'http://10.10.59.24/praxticol8_pawn/#',
+  DMS: false
 };
