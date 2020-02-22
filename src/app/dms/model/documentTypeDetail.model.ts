@@ -20,4 +20,5 @@ export class DocumentTypeDetail
   documentTypeDetailLookup: number
   documentTypeDetailColumnWidth: number
   documentTypeDetailAlignment: string
+  order: any
 }

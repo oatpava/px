@@ -38,7 +38,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
 import { EmailComponent } from '../email/email.component'
-
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 @Component({
   selector: 'app-add-document',
   templateUrl: './add-document.component.html',
@@ -58,7 +58,8 @@ export class AddDocumentComponent implements OnInit {
   uploader: FileUploader = new FileUploader({})
 
   uploaderUpdate: FileUploader = new FileUploader({})
-  fileAttachs: any[] = []
+  fileAttachs: FileAttach[] = []
+  fileAttachs2: FileAttach[] = []
 
   hasBaseDropZoneOver: boolean = false
   fileAttachRemoved: FileAttach[] = []
@@ -163,6 +164,7 @@ export class AddDocumentComponent implements OnInit {
     private _documentFileService: DocumentFileService,
     private _folderService: FolderService,
     private _dialog: MdDialog,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.folderId = 0
@@ -362,8 +364,8 @@ export class AddDocumentComponent implements OnInit {
 
         }
         if (this.dmsDocument.documentExpireDate == "") {
-          console.log('this.folderTypeExpire  -',this.folderTypeExpire )
-          console.log('this.folderTypeExpireNumber  -',this.folderTypeExpireNumber )
+          console.log('this.folderTypeExpire  -', this.folderTypeExpire)
+          console.log('this.folderTypeExpireNumber  -', this.folderTypeExpireNumber)
 
           if (this.folderTypeExpireNumber != undefined && this.folderTypeExpire != undefined) {
 
@@ -378,12 +380,12 @@ export class AddDocumentComponent implements OnInit {
               if (this.folderTypeExpire == 'Y') {
                 this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543 + this.folderTypeExpireNumber), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
               }
-            } 
+            }
             // else {
 
             //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
             // }
-          } 
+          }
           // else {
           //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
           // }
@@ -451,7 +453,6 @@ export class AddDocumentComponent implements OnInit {
             console.log('temp', temp)
             console.log('datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
-            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             // this._loadingService.resolve('main')
           })
       })
@@ -518,7 +519,6 @@ export class AddDocumentComponent implements OnInit {
           console.log('temp', temp)
           console.log('datafileAttach', datafileAttach)
           this.fileAttachs = datafileAttach
-          this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
           // this._loadingService.resolve('main')
         })
 
@@ -778,7 +778,6 @@ export class AddDocumentComponent implements OnInit {
           console.log('--- updateAtt temp', temp)
           console.log('--- updateAtt datafileAttach', datafileAttach)
           this.fileAttachs = datafileAttach
-          this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
           this._loadingService.resolve('main')
           // this.subscription.unsubscribe();
         })
@@ -795,7 +794,7 @@ export class AddDocumentComponent implements OnInit {
     tempFileAtt.fileAttachType = data.fileAttachType
     tempFileAtt.linkType = data.linkType
     tempFileAtt.linkId = data.linkId
-    // tempFileAtt.fileSize = data.fileSize
+    // tempFileAtt.fileAttachSize = data.fileAttachSize
     tempFileAtt.thumbnailUrl = data.thumbnailUrl
     tempFileAtt.url = data.url
     tempFileAtt.urlNoName = data.urlNoName
@@ -836,6 +835,15 @@ export class AddDocumentComponent implements OnInit {
           if (i.menuFunction == 'sec4Df') { this.authDocfileSecrets = 4 }
 
 
+        }
+
+        //oat-add
+        if (this._paramSarabanService.isArchive) {
+          this.authEditDoc = false
+          this.authDelDoc = false
+          this.authCreDocFile = false
+          this.authEditDocFile = false
+          this.authDelDocFile = false
         }
 
 
@@ -899,7 +907,6 @@ export class AddDocumentComponent implements OnInit {
             console.log('--- updateAtt temp', temp)
             console.log('--- updateAtt datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
-            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             this._loadingService.resolve('main')
             this.subscription.unsubscribe();
           })
@@ -962,13 +969,12 @@ export class AddDocumentComponent implements OnInit {
     // let url = 'http://192.168.1.8/scan/?'
     let url = temp + '/scan/?'
     let mode = 'add'
-    let linkType = 'dms'
     let fileAttachName = 'Document'
     let secret = 1
     let documentId = this.documentId
     let urlNoName = ''
     localStorage.setItem('scan', 'uncomplete')
-    window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName, 'scan', "height=600,width=1000")
+    window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName, 'scan', "height=600,width=1000")
     const timer = TimerObservable.create(3000, 10000);
     this.subscription = timer.subscribe(t => {
       this.tick = '' + t;
@@ -1008,7 +1014,6 @@ export class AddDocumentComponent implements OnInit {
             console.log('--- updateAtt temp', temp)
             console.log('--- updateAtt datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
-            this.fileAttachs.forEach(fileAttach => fileAttach.canView = this.checkViewByFileType(fileAttach.fileAttachType))
             this._loadingService.resolve('main')
             this.subscription.unsubscribe();
           })
@@ -1021,12 +1026,8 @@ export class AddDocumentComponent implements OnInit {
     });
   }
 
-  checkViewByFileType(type: string): boolean {
-    let result: boolean = false
-    if (type == '.PDF' || type == '.TIF' || type == '.TIFF' || type == '.JPG' || type == '.PNG') {
-      result = true
-    }
-    return result
-  }
+
+
 
 }
+

@@ -40,7 +40,6 @@ export class FolderService {
         this._options = new RequestOptions({ headers: this._headers })
 
         let params = new URLSearchParams()
-        params.set('t', '' + new Date().getTime())
         this._options.search = params
     }
 
@@ -107,6 +106,7 @@ export class FolderService {
     }
 
     getFoldersWithAuth(parentId: number): Observable<Folder[]> {
+        //this._apiUrl = environment.apiServerHome + environment.apiNameHome
         let params = new URLSearchParams()
         params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + parentId))
         if (environment.production) {
@@ -455,9 +455,6 @@ export class FolderService {
     }
 
     listSubmoduleUserAuthOfChildByStructureIdFromTree(structureId: number, folderId: number, submoduleCode: string) {
-        console.log('structureId',structureId)
-        console.log('folderId',folderId)
-        console.log('submoduleCode',submoduleCode)
         if (environment.production) {
             let params = new URLSearchParams()
             params.set('q', this.pxService.encrypt('version=1.0'))
@@ -502,7 +499,7 @@ export class FolderService {
 
     getMenu(folderId: number) {
         // console.log('reOrder')
-
+        //this._apiUrl = environment.apiServerHome + environment.apiNameHome
         if (environment.production) {
             return this._http.get(this._apiUrl + '/v1/dmsFolder/listMenu/' + folderId, this._options)
                 .map((response: Response) => {
@@ -557,6 +554,38 @@ export class FolderService {
                 .catch(this.loggerService.handleError)
         } else {
             return this.pxService.createObservable(FOLDERS1.filter(folder => folder.folderParentId === 1))
+        }
+    }
+
+
+    getFoldersWithAuthlazy(parentId: number, offset: number, limit: number): Observable<Folder[]> {
+        
+        let params = new URLSearchParams()
+        params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=' + offset + '&limit=' + limit + '&folderId=' + parentId))
+        if (environment.production) {
+            this._options.search = params
+            return this._http.get(this._apiUrl + '/v1/dmsFolder/authLazy', this._options)
+                .map((response: Response) => {
+                    return this.pxService.verifyResponseArray(response.json().data)
+                })
+                .catch(this.loggerService.handleError)
+        } else {
+            return this.pxService.createObservable(FOLDERS1.filter(folder => folder.id === parentId)[0])
+        }
+    }
+
+    countAll(parentId: number) {
+        let params = new URLSearchParams()
+        params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&folderId=' + parentId))
+        if (environment.production) {
+            this._options.search = params
+            return this._http.get(this._apiUrl + '/v1/dmsFolder/countAll', this._options)
+                .map((response: Response) => {
+                    return this.pxService.verifyResponseArray(response.json().data)
+                })
+                .catch(this.loggerService.handleError)
+        } else {
+            return this.pxService.createObservable(FOLDERS1.filter(folder => folder.id === parentId)[0])
         }
     }
 
