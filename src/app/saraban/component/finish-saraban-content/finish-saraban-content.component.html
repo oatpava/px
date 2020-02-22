@@ -19,7 +19,7 @@
         </form>
         <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
             <button md-raised-button md-ripple color="primary" [disabled]="!finishContent.form.valid" (click)="finish(false)" [style.margin-right]="'5px'">{{mode}}</button>
-            <button *ngIf="mode=='เรื่องเสร็จ' && numFileAttach>0" md-raised-button md-ripple color="accent" [disabled]="!finishContent.form.valid" (click)="finish(true)" [style.margin-right]="'5px'">เรื่องเสร็จและจัดเก็บ</button>
+            <button *ngIf="dmsModule && mode=='เรื่องเสร็จ' && numFileAttach>0" md-raised-button md-ripple color="accent" [disabled]="!finishContent.form.valid" (click)="finish(true)" [style.margin-right]="'5px'">เรื่องเสร็จและจัดเก็บ</button>
         </div>
     </md-card-content>
 </md-card>

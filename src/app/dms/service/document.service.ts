@@ -36,15 +36,15 @@ export class DocumentService {
     // ''+new Date().getTime()
   }
 
-  getDocuments(folderId: number): Observable<Document[]> {
+  getDocuments(folderId: number,offset:any,limit:any): Observable<any> {
     // console.log('getDocuments waiting use rest. - O')
     let params = new URLSearchParams()
-    params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + folderId))
+    params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=' + offset + '&limit=' + limit + '&folderId=' + folderId))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/folder/' + folderId, this._options)
         .map((response: Response) => {
-          return this.pxService.verifyResponseArray(response.json().data)
+          return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
     } else {
@@ -55,7 +55,13 @@ export class DocumentService {
   getDocumentsExp(folderId: number): Observable<Document[]> {
     // console.log('getDocuments waiting use rest. - O')
     let params = new URLSearchParams()
-    params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=0&limit=1000&folderId=' + folderId))
+    params.set('version', '1.0')
+    params.set('offset', '0')
+    params.set('limit', '1000')
+    params.set('sort', 'createdDate')
+    params.set('dir', 'desc')
+    params.set('folderId', '' + folderId)
+    params.set('t', ''+new Date().getTime())
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/exp/' + folderId, this._options)

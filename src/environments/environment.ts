@@ -25,4 +25,5 @@ export const environment = {
   // apiNameArchive: "/pxservice-nha/api",
   // apiServerHome: "http://PRAXiS-PC:82",
   // apiNameHome: "/pxservice-nha/api",
+  DMS: true
 };

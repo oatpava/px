@@ -15,6 +15,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
 import { Subscription } from 'rxjs/Rx';
+import * as es6printJS from "print-js";
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -146,28 +147,21 @@ export class FileAttachComponent implements OnInit {
   }
 
   downloadFile(fileAttach: FileAttach) {
-
-
-    console.log('downloadFile', fileAttach)
-
-    // if (fileAttach.fileAttachType == '.PDF') {
-
-    //   window.open(fileAttach.url)
-
-    // } else {
-    //   let tmp = new FileAttach(fileAttach)
-    //   this._pxService.downloadFileAttach(tmp)
-    //     .subscribe(response => {
-    //       console.log('----- etc', response)
-    //     })
-    // }
+  
     let tmp = new FileAttach(fileAttach)
-    this._pxService.downloadFileAttach(tmp)
+    // this._pxService
+    //   .downloadFileAttach(tmp)
 
+    if (fileAttach.fileAttachType == '.PDF') {
+      es6printJS(fileAttach.url, "pdf");
+    } else {
+      this._pxService
+        .downloadFileAttach(tmp)
+    }
 
   }
 
-  view(fileAttach: any, staus: any) {
+  view(fileAttach: any ,staus:any) {
 
 
     console.log('view att', fileAttach.url)

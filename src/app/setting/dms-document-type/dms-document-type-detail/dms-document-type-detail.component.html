@@ -61,6 +61,12 @@
                                                 <input md-input type="text" name="documentTypeDetailName" [value]='row.documentTypeDetailName' (keyup)="onKey(i,$event)" />
                                             </md-input-container>
                                         </td>
+                                        <td td-data-table-cell>
+                                            <md-input-container flex>
+                                                <input md-input type="text" name="order" [value]='row.order' (keyup)="onKey2(i,$event)" />
+                                            </md-input-container>
+                                        </td>
+                                       
                                         <td td-data-table-cell class="md-checkbox-cell">
                                             <md-checkbox [checked]="row.documentTypeDetailView === 'Y'" name="documentTypeDetailView" (change)="row.documentTypeDetailView = $event.checked ? 'Y' : 'N' ;">
                                             </md-checkbox>
@@ -83,85 +89,7 @@
                                         </td>
 
 
-                                        <!--<md-select *ngIf="dmsFields[i].fieldType == 'TEXT' || dmsFields[i].fieldType == 'VARCHAR' && dmsFields[i].fieldName != 'ชื่อเรื่อง'" style="width: 80%" placeholder=" " [(ngModel)]="row.documentTypeDetailLookup" name="documentTypeDetailLookup" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>-->
-                                        <!-- 
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText01' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText01" name="outLookText01" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText02' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText02" name="outLookText02" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText03' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText03" name="outLookText03" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText04' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText04" name="outLookText04" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentText05' " style="width: 80%" placeholder=" " [(ngModel)]="outLookText04" name="outLookText05" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar01' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar01" name="documentVarchar01" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar02' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar02" name="documentVarchar02" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar03' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar03" name="documentVarchar03" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar04' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar04" name="documentVarchar04" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar05' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar05" name="documentVarchar05" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar06' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar06" name="documentVarchar06" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar07' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar07" name="documentVarchar07" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar08' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar08" name="documentVarchar08" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar09' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar09" name="documentVarchar09" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select>
-
-                                        <md-select *ngIf="dmsFields[i].fieldMap == 'documentVarchar10' " style="width: 80%" placeholder=" " [(ngModel)]="outLookVarchar10" name="documentVarchar10" (change)="row.documentTypeDetailLookup = $event ? 'Y' : 'N' ;">
-                                            <md-option *ngFor=" let lookUp of listLookUp " [value]="lookUp.id "> {{lookUp.name}}
-                                            </md-option>
-                                        </md-select> -->
+                                    
 
 
 

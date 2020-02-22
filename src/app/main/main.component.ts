@@ -55,30 +55,35 @@ export class MainComponent implements OnInit {
       title: 'ข้อมูลส่วนตัว',
       route: this._mainUrl + 'mwps',
       icon: 'folder',
+      type: ''
     },
     {
       id: 2,
       title: 'ทะเบียนส่วนกลาง',
       route: this._mainUrl + 'sarabans',
       icon: 'class',
+      type: 'WF'
     },
     {
       id: 3,
       title: 'ระบบจัดเก็บเอกสารฯ',
       route: this._mainUrl + 'folders',
       icon: 'dashboard',
+      type: 'DMS'
     },
     // {
     //   id: 4,
     //   title: 'หนังสือเวียน',
     //   route: this._mainUrl + 'sarabans',//circularNotice
     //   icon: 'chrome_reader_mode',
+    //   type: 'CN'
     // },
     {
       id: 0,
       title: 'ส่วนงานผู้ดูแลระบบ',
       route: this._mainUrl + 'settings',
       icon: 'settings',
+      type: 'ADMIN'
     }
   ]
   userProfile: UserProfile = new UserProfile()
@@ -195,7 +200,10 @@ export class MainComponent implements OnInit {
     this._paramSarabanService.structureName = this.userProfile.structure.name
     this._paramSarabanService.userProfileTypeId = this.userProfile.userProfileType.id
     if (this.userProfile.userProfileType.id != 1 && this.userProfile.userProfileType.id != 3) {
-      this.routes = this.routes.filter(route => route.title != 'ส่วนงานผู้ดูแลระบบ')
+      this.routes = this.routes.filter(route => route.type != 'ADMIN')
+    }
+    if (!environment.DMS) {
+      this.routes = this.routes.filter(route => route.type != 'DMS')
     }
   }
 

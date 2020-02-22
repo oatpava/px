@@ -1,5 +1,5 @@
 export const environment = {
-  buildDate: '2020-01-28',
+  buildDate: '2020-02-22',
   key: '42444678902180239428358646519815165132078951561321646432131696998878616',
   production: true,
   appName: 'กรมอุตสาหกรรมพื้นฐานและการเหมืองแร่',
@@ -14,6 +14,7 @@ export const environment = {
   apiServer: 'http://saraban62.dpim.go.th:82',
   apiName: '/pxservice-dpim/api',
   plugIn: 'http://saraban62.dpim.go.th:80',
-  url: 'http://saraban62.dpim.go.th/praxticol8_dpim/#'
+  url: 'http://saraban62.dpim.go.th/praxticol8_dpim/#',
+  DMS: true
 };
 

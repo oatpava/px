@@ -98,13 +98,13 @@ export class ListDocumentComponent implements OnInit {
 
   getDocuments(folderId: number): void {
 
-    this._documentService
-      // .getDocumentByDoctype(1)
-      .getDocuments(folderId)
-      .subscribe(response => {
-        this.datas = response as Document[]
-        console.log('this.datas', this.datas)
-      })
+    // this._documentService
+    //   // .getDocumentByDoctype(1)
+    //   .getDocuments(folderId)
+    //   .subscribe(response => {
+    //     this.datas = response as Document[]
+    //     console.log('this.datas', this.datas)
+    //   })
 
   }
 

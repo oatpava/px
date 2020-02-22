@@ -160,7 +160,7 @@ nodeSelect(event, num: number) {
     event.node.data.added[num] = true
 
     /////
-    let tmp = this.findNode(this.privateGroupTree, event.node.label)
+    let tmp = this.findNode(this.privateGroupTree, event.node.data.name)
     if (tmp) {
       this.selectedGroup[num].push(tmp)
     }
@@ -177,7 +177,7 @@ nodeUnSelect(event, num: number) {
     event.node.data.added[num] = false
 
     /////
-    let tmp = this.findNode(this.privateGroupTree, event.node.label)
+    let tmp = this.findNode(this.privateGroupTree, event.node.data.name)
     if (tmp) {
       this.selectedGroup[num] = this.selectedGroup[num].filter(selectNode => selectNode !== tmp)
     }
@@ -190,7 +190,7 @@ nodeAdd(node: TreeNode, num: number) {
   node.data.added[num] = true
 
   /////
-  let tmp = this.findNode(this.privateGroupTree, node.label)
+  let tmp = this.findNode(this.privateGroupTree, node.data.name)
   if (tmp) {
     this.selectedGroup[num].push(tmp)
   }
@@ -202,7 +202,7 @@ nodeRemove(node: TreeNode, num: number) {
     node.data.added[num] = false
 
     /////
-    let tmp = this.findNode(this.privateGroupTree, node.label)
+    let tmp = this.findNode(this.privateGroupTree, node.data.name)
     if (tmp) {
       this.selectedGroup[num] = this.selectedGroup[num].filter(selectNode => selectNode !== tmp)
     }
@@ -258,10 +258,10 @@ removeFavorite(node: TreeNode) {
 }
 
 favoriteNodeSelect(node: TreeNode, num: number) {
-  let treeNode: TreeNode = this.findNode(this.structureTree, node.label)
+  let treeNode: TreeNode = this.findNode(this.structureTree, node.data.name)
   if (node.data.added[num]) {
     this.nodeRemove(treeNode, num)
-    this.sendTo[num] = this.sendTo[num].filter(sendToNode => sendToNode.label !== node.label)
+    this.sendTo[num] = this.sendTo[num].filter(sendToNode => sendToNode.data.name !== node.data.name)
   }
   else {
     this.nodeAdd(treeNode, num)
@@ -281,7 +281,7 @@ findNode(tree: TreeNode[], name: string): TreeNode {
 }
 
 findNodeRecursive(node: TreeNode, name: string): TreeNode {
-  if (node.label === name) {
+  if (node.data.name === name) {
     return node
   } else if (node.children.length > 0) {
     let res = null
@@ -406,7 +406,7 @@ genNode(pgu: PrivateGroupUser, parentNode: TreeNode): TreeNode {
     label: pgu.userName,
     icon: icon,
     leaf: true,
-    data: { id: pgu.id, profile: { email: pgu.email }, type: pgu.userType },
+    data: { id: pgu.id, name: pgu.userName, profile: { email: pgu.email }, type: pgu.userType },
     parent: parentNode,
     children: child
   }
@@ -423,7 +423,7 @@ groupSelect(event, num: number) {
   let selecteNode: TreeNode = event.node
   switch (selecteNode.data.type) {
     case (0): {//user
-      let tmp = this.findNode(this.structureTree, selecteNode.label)
+      let tmp = this.findNode(this.structureTree, selecteNode.data.name)
       if (!tmp.data.added[num]) {
         this.sendTo[num].push(tmp)
         this.selectedStructure[num].push(tmp)
@@ -445,7 +445,7 @@ groupSelect(event, num: number) {
       selecteNode.children.forEach(pgu => {
         if (pgu.data.type == 0) {
           //this.selectedGroup[num].push(pgu)
-          let tmp = this.findNode(this.structureTree, pgu.label)
+          let tmp = this.findNode(this.structureTree, pgu.data.name)
           if (!tmp.data.added[num]) {
             this.sendTo[num].push(tmp)
             this.selectedStructure[num].push(tmp)
@@ -463,7 +463,7 @@ groupUnSelect(event, num: number) {
   let selecteNode: TreeNode = event.node
   if (selecteNode.data.type != -1) {
     if (selecteNode.data.type == 0) {
-      let tmp = this.findNode(this.structureTree, selecteNode.label)
+      let tmp = this.findNode(this.structureTree, selecteNode.data.name)
       this.sendTo[num] = this.sendTo[num].filter(node => node !== tmp)
       this.selectedStructure[num] = this.selectedStructure[num].filter(selectNode => selectNode !== tmp)
       tmp.data.added[num] = false
@@ -473,7 +473,7 @@ groupUnSelect(event, num: number) {
   } else {
     selecteNode.children.forEach(pgu => {
       this.selectedGroup[num] = this.selectedGroup[num].filter(selectNode => selectNode !== pgu)
-      let tmp = this.findNode(this.structureTree, pgu.label)
+      let tmp = this.findNode(this.structureTree, pgu.data.name)
       this.sendTo[num] = this.sendTo[num].filter(node => node !== tmp)
       this.selectedStructure[num] = this.selectedStructure[num].filter(selectNode => selectNode !== tmp)
       tmp.data.added[num] = false
@@ -561,7 +561,7 @@ genFavouriteUser(node: TreeNode, id: number): PrivateGroupUser {
     id: 0,
     privateGroupId: id,
     userId: node.data.id,
-    userName: node.label,
+    userName: node.data.name,
     userType: (node.data.type) ? 0 : 1,
     email: '',
     structure: new Structure()

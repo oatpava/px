@@ -1,0 +1,35 @@
+<!--<button (click)="AcquireImage();">Start Scan</button>
+<button (click)="BrowseImage();">Browse Image</button>-->
+<!--<div style="display: block; position:absolute;">
+    <div id="dwtcontrolContainer"></div>
+    <div id="dwtcontrolContainerLargeViewer"></div>
+</div>-->
+<div id="iconScan" style="margin-left: 360px;">
+    <button md-icon-button (click)="AcquireImage()">
+   <md-icon alt="Start Scan" >scanner</md-icon>
+</button>
+    <button md-icon-button (click)="BrowseImage()">
+   <md-icon alt="Start Scan" >cloud_upload</md-icon>
+</button>
+    <button md-icon-button (click)="RotateImage()">
+   <md-icon alt="Start Scan" >rotate_left</md-icon>
+</button>
+    <!--<button md-icon-button (click)="RotateImage()">
+   <md-icon alt="Start Scan" >rotate_right</md-icon>
+</button>-->
+    <button md-icon-button (click)="zoomInFunction()">
+   <md-icon alt="Start Scan" >zoom_in</md-icon>
+</button>
+    <button md-icon-button (click)="zoomOutFunction()">
+   <md-icon alt="Start Scan" >zoom_out</md-icon>
+</button>
+    <button md-icon-button>
+   <md-icon alt="Start Scan" >print</md-icon>
+</button>
+</div>
+
+
+<div style="display: block; position:absolute;">
+    <div id="dwtcontrolContainer" style="float: left; width: 200px; height: 250px; position:relative;"></div>
+    <div id="dwtcontrolContainerLargeViewer" style="float: left; width: 240px; height: 250px; position:relative;">
+    </div>

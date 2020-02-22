@@ -87,7 +87,7 @@ export const SETTINGS: Setting[] = [
     id: 2,
     moduleId: 1,
     name: 'ระบบจัดเก็บเอกสาร',
-    type: '',
+    type: 'DMS',
     subSetting: '',
     iconModule: 'dashboard',
     child: [ 
@@ -122,7 +122,7 @@ export const SETTINGS: Setting[] = [
     id: 4,
     moduleId: 4,
     name: 'ระบบสารบรรณ',
-    type: '',
+    type: 'WF',
     subSetting: '',
     iconModule: 'class',
     child: [
