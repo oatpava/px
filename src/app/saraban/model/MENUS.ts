@@ -58,11 +58,12 @@ export const MENUS: Menu[] = [
     {
         version: 1,
         id: 6,
-        name: 'รับ - ส่งภายนอก',
-        nameEng: 'importExport',
         type: '',
+        //name: 'รับ - ส่งภายนอก',
+        name: 'ECMS',
+        nameEng: 'importExport',
         icon: 'import_export',
-        color: '#00995c',
+        color: '#e66700',
     },
     {
         version: 1,
@@ -225,5 +226,14 @@ export const MENUS: Menu[] = [
         icon: 'trending_flat',
         color: '#248f24',
         nameEng: 'move'
-    }
+    },
+    {
+        version: 1,
+        id: 25,
+        type: '',
+        name: 'ส่งหนังสือ ECMS',
+        icon: 'send',
+        color: '#e66700',
+        nameEng: 'sendContent'
+    },
 ]

@@ -1,0 +1,86 @@
+<div flex layout="row">
+    <div flex class="pad-sm">
+        <div layout="row" class="pad-sm bgc-blue-900 tc-blue-50 push-bottom-sm">
+            <div class="fontField-List"> {{ecmsType.name}} </div>
+        </div>
+        <div flex layout="row" class=" bgc-blue-400 tc-grey-50">
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="getCreateContentEcms()">ตรวจสอบหนังสือล่าสุด</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentEcms()">ลบหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="rigisterContentEcms()">ลงรับหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="refuseContentEcms()">ปฏิเสธหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms()">แจ้งหนังสือผิด/ส่งผิด</div>
+        </div>
+        <div class="blockFormECMS" flex>
+            <p-dataTable #dt [value]="listData" [(selection)]="selectedRow" [resizableColumns]="false" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" sortMode="multiple" [responsive]="true" styleClass="fixed-size">
+                <p-column [style]="{'width':'30px', 'text-align':'-webkit-center'}" selectionMode="multiple"></p-column>
+                <p-column field="index" header="ลำดับ" [style]="{'width':'50px', 'text-align':'-webkit-center'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{ri+1}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก" [style]="{'width':'140px', 'vertical-align':'middle' , cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[0].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[1].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifBookNo" header="เลขที่หนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[2].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifBookDate" header="วันที่" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[3].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifSubject" header="เรื่อง" [style]="{'width':'180px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[4].data}} &nbsp; &nbsp;</span>
+                      <div flex layout="row" class="push-top-sm" (click)="show(car)">
+                          <div *ngIf="car.wfFileAttach != null" layout="row" layout-wrap>
+                              <div *ngFor="let itemAttach of car.wfFileAttach; let i=index" class="hover" (click)="showFile(car.wfFileAttach)">
+                                  <div *ngIf="i < 3" layout="row" class="fileAttach pad-left-sm pad-right-sm push-top-xs pad-xs" title="{{itemAttach.fileAttachName}}">
+                                      <img class="hover" src="{{itemAttach.thumbnailUrl}}" style="width:15px;height:20px">
+                                      <div class="pad-left-xs pad-top-xs hover eslip">{{itemAttach.fileAttachName}}</div>
+                                  </div>
+                              </div>
+                              <div *ngIf="car.wfFileAttach.length> 4" class="fileAttachPlus pad-left-sm pad-right-sm push-top-xs pad-xs" title="มีเพิ่มอีก {{car.wfFileAttach.length - 3}} รายการ">
+                                  <div class="pad-left-xs pad-top-xs"> + {{car.wfFileAttach.length - 3}}</div>
+                              </div>
+                          </div>
+                      </div>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifSecret" header="ลับ" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[5].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifSpeed" header="ด่วน" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[6].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifSendDate" header="วันที่ส่ง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[7].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifLetterStatus" header="สถานะหนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                      <span flex layout="row" (click)="show(car)">{{car.td[8].data}} &nbsp; &nbsp;</span>
+                  </template>
+                </p-column>
+            </p-dataTable>
+        </div>
+        <div flex class="pad-sm bgc-blue-grey-100 push-top-xs" layout="row" layout-align="end">
+            <button md-raised-button color="warn" (click)="close()">ปิด</button>
+        </div>
+    </div>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

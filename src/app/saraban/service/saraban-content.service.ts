@@ -69,7 +69,7 @@ export class SarabanContentService {
   getMenus(menuType: string): Observable<Menu[]> {
     let menus: Menu[] = []
     if (menuType === "list-saraban") menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1])
-    else if (menuType === "saraban") menus.push(MENUS[15], MENUS[13], MENUS[11], MENUS[10], MENUS[9], MENUS[8], MENUS[24], MENUS[7])
+    else if (menuType === "saraban") menus.push(MENUS[15], MENUS[13], MENUS[11], MENUS[10], MENUS[25],MENUS[9], MENUS[8], MENUS[24], MENUS[7])
     else if (menuType === "saraban-finish") menus.push(MENUS[12])
     else if (menuType === "saraban-canceled") menus.push(MENUS[14])
     else if (menuType === "inbox") menus.push(MENUS[9], MENUS[17], MENUS[10])
@@ -83,18 +83,21 @@ export class SarabanContentService {
       if (isAdmin) {
         if (!isArchive) menus.push(MENUS[19])
       }
-      (contentAuth[1].auth) ? menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[1])
+      if (contentAuth[12].auth) menus.push(MENUS[6]);
+      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[1])
     } else if (menuType === "list-saraban-reserve") {//menu[3]
       if (isAdmin) {
         if (!isArchive) menus.push(MENUS[19])
       }
-      (contentAuth[1].auth) ? menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[1])
+      if (contentAuth[12].auth) menus.push(MENUS[6]);
+      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[1])
     } else if (menuType === "saraban") {
       //menus.push(MENUS[20])
       if (contentAuth[14].auth) menus.push(MENUS[15])
       if (contentAuth[8].auth) menus.push(MENUS[13])
       if (contentAuth[6].auth) menus.push(MENUS[11])
       if (contentAuth[5].auth) menus.push(MENUS[10])
+      if (contentAuth[12].auth) menus.push(MENUS[25])
       if (contentAuth[4].auth) menus.push(MENUS[9])
       if (contentAuth[3].auth) menus.push(MENUS[8])
       if (contentAuth[11].auth) menus.push(MENUS[24])

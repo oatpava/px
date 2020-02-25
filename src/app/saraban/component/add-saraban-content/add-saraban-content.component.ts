@@ -15,6 +15,7 @@ import { DocumentService } from '../../../dms/service/document.service'
 import { InboxService } from '../../../mwp/service/inbox.service'
 import { OutboxService } from '../../../mwp/service/outbox.service'
 import { ParamSarabanService } from '../../service/param-saraban.service'
+import { SarabanEcmsService } from '../../../ecms/service/saraban-ecms.service'
 
 import { Menu } from '../../model/menu.model'
 import { SarabanFolder } from '../../model/sarabanFolder.model'
@@ -40,12 +41,13 @@ import { SendEmailComponent } from '../send-email/send-email.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
 import { Outbox } from '../../../mwp/model/outbox.model'
 import { DialogRecordComponent } from './dialog-record/dialog-record.component'
+import { SendEcmsComponent } from '../../../ecms/component/send-ecms/send-ecms.component'
 
 @Component({
   selector: 'app-add-saraban-content',
   templateUrl: './add-saraban-content.component.html',
   styleUrls: ['./add-saraban-content.component.styl'],
-  providers: [SarabanContentService, PxService, WorkflowService, SarabanService, OutboxService, InboxService, DocumentService, SarabanReserveContentService]
+  providers: [SarabanContentService, PxService, WorkflowService, SarabanService, OutboxService, InboxService, DocumentService, SarabanReserveContentService, SarabanEcmsService]
 })
 export class AddSarabanContentComponent implements OnInit {
   @ViewChild('acFrom') acFrom: AutoComplete
@@ -161,6 +163,8 @@ export class AddSarabanContentComponent implements OnInit {
     showSelectorArrow: false,
     componentDisabled: true
   }
+  fkEcms: any = []
+  fkEcmsCreate: any = []
 
   constructor(
     private _loadingService: TdLoadingService,
@@ -175,6 +179,7 @@ export class AddSarabanContentComponent implements OnInit {
     private _inboxService: InboxService,
     private _documentService: DocumentService,
     private _sarabanReserveContentService: SarabanReserveContentService,
+    private _ecmsService: SarabanEcmsService
   ) {
     this.sarabanContent = new SarabanContent()
     this.contentNoFormat = this._paramSarabanService.contentNoFormat
@@ -232,6 +237,7 @@ export class AddSarabanContentComponent implements OnInit {
       case (17): this.reply(content); break
       //case (20): this.genBarcode(content.wfContentFolderId, content.id); break
       case (24): this.move(content); break
+      case (25): this.sendEcms(content); break
     }
   }
 
@@ -2290,4 +2296,99 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
+  sendEcms(content: SarabanContent) {
+    let dialogRef = this._dialog.open(SendEcmsComponent, {
+      width: '80%',
+    });
+    let instance = dialogRef.componentInstance
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        result.forEach(element => {
+          let send = {
+            DEPCODE: element.dataObj.thegifDepartmentCode,
+            wfContentId: content.id
+          }
+          this.fkEcms.push(this._ecmsService.sendContentECMSThEgif(send))
+        })
+        Observable.forkJoin(this.fkEcms)
+          .subscribe((response: any) => {
+            console.log(response)
+            this.fkEcms = []
+            if (response[0].data[0].errorCode != '') {
+              let dialogRef = this._dialog.open(DialogWarningComponent, {
+                width: '40%',
+              });
+              dialogRef.componentInstance.header = "ส่งหนังสือ ECMS"
+              dialogRef.componentInstance.message = response[0].data[0].errorCode + response[0].data[0].errorDescription
+              dialogRef.afterClosed().subscribe(result => {
+                response.forEach(element => {
+                  element.data.forEach(elementSend => {
+                    if (elementSend.errorCode == '') {
+                      let sendECMSContentData = {
+                        wfContentId: elementSend.wfContentId,
+                        filePath: elementSend.result,
+                        thegifDepartmentReceiver: elementSend.depCode
+                      }
+                      this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData))
+                    } else {
+                      let sendECMSContentData2 = {
+                        wfContentId: elementSend.wfContentId,
+                        filePath: elementSend.result,
+                        thegifDepartmentReceiver: elementSend.depCode,
+                        thegifLetterStatus: elementSend.errorCode
+                      }
+                      this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData2))
+                    }
+                  })
+                })
+                Observable.forkJoin(this.fkEcmsCreate)
+                  .subscribe((response2: any) => {
+                    this.fkEcmsCreate = []
+                    this.msgs = []
+                    this.msgs.push({
+                      severity: 'info',
+                      summary: 'บันทึกสำเร็จ',
+                      detail: 'คุณได้ส่งหนังสือ ECMS เรียบร้อยแล้ว'
+                    })
+                  })
+              })
+            } else {
+              response.forEach(element => {
+                element.data.forEach(elementSend => {
+                  console.log(elementSend)
+                  if (elementSend.errorCode == '') {
+                    let sendECMSContentData = {
+                      wfContentId: elementSend.wfContentId,
+                      filePath: elementSend.result,
+                      thegifDepartmentReceiver: elementSend.depCode
+                    }
+                    this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData))
+                  } else {
+                    let sendECMSContentData2 = {
+                      wfContentId: elementSend.wfContentId,
+                      filePath: elementSend.result,
+                      thegifDepartmentReceiver: elementSend.depCode,
+                      thegifLetterStatus: elementSend.errorCode
+                    }
+                    this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData2))
+                  }
+                })
+              })
+              Observable.forkJoin(this.fkEcmsCreate)
+                .subscribe((response2: any) => {
+                  this.fkEcmsCreate = []
+                  this.msgs = []
+                  this.msgs.push({
+                    severity: 'info',
+                    summary: 'บันทึกสำเร็จ',
+                    detail: 'คุณได้ส่งหนังสือ ECMS เรียบร้อยแล้ว'
+                  })
+                })
+            }
+
+          })
+      }
+    })
+  }
+  
 }
