@@ -22,8 +22,8 @@ import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/di
 import { ReserveSarabanContentComponent } from '../reserveContentNo/reserve-saraban-content/reserve-saraban-content.component'
 import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
 import { ListMenuEcmsComponent } from '../../../ecms/component/list-menu-ecms/list-menu-ecms.component'
-import { StatusEcmsComponent }  from '../../../ecms/component/status-ecms/status-ecms.component'
-import { CheckStatusEcmsComponent } from  '../../../ecms/component/check-status-ecms/check-status-ecms.component'
+import { StatusEcmsComponent } from '../../../ecms/component/status-ecms/status-ecms.component'
+import { CheckStatusEcmsComponent } from '../../../ecms/component/check-status-ecms/check-status-ecms.component'
 import { ReceiveEcmsComponent } from '../../../ecms/component/receive-ecms/receive-ecms.component'
 import { SendEcmsComponent } from '../../../ecms/component/send-ecms/send-ecms.component'
 
@@ -559,7 +559,7 @@ export class ListSarabanContentComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result)
+        console.log('ecms menu', result)
         if (result.type == 3) {
           let dialogRef = this._dialog.open(StatusEcmsComponent, {
             // width: '50%',
@@ -570,15 +570,22 @@ export class ListSarabanContentComponent implements OnInit {
           })
         }
         if (result.type == 2) {
+          this.msgs = []
+          this.msgs.push({ severity: 'info', summary: 'กำลังดำเนินการ', detail: 'ระบบกำลังลงรับหนังสือ กรุณารอสักครู่' })
           let dialogRef = this._dialog.open(ReceiveEcmsComponent, {
           });
           let instance = dialogRef.componentInstance
           instance.ecmsType = result
+          instance.folder = this.folder
           dialogRef.afterClosed().subscribe(result => {
             if (result) {
+              this.msgs = []
+              let dialogRef = this._dialog.open(DialogWarningComponent)
+              dialogRef.componentInstance.header = result.header
+              dialogRef.componentInstance.message = result.message
+              dialogRef.componentInstance.confirmation = false
             }
           })
-            
         }
         if (result.type == 4) {
           let dialogRef = this._dialog.open(CheckStatusEcmsComponent, {

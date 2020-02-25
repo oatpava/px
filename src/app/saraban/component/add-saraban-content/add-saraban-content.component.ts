@@ -2251,38 +2251,38 @@ export class AddSarabanContentComponent implements OnInit {
               });
               dialogRef.componentInstance.header = "ส่งหนังสือ ECMS"
               dialogRef.componentInstance.message = response[0].data[0].errorCode + response[0].data[0].errorDescription
-                dialogRef.afterClosed().subscribe(result => {
-                  response.forEach(element => {
-                    element.data.forEach(elementSend => {
-                      if (elementSend.errorCode == '') {
-                        let sendECMSContentData = {
-                          wfContentId: elementSend.wfContentId,
-                          filePath: elementSend.result,
-                          thegifDepartmentReceiver: elementSend.depCode
-                        }
-                        this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData))
-                      } else {
-                        let sendECMSContentData2 = {
-                          wfContentId: elementSend.wfContentId,
-                          filePath: elementSend.result,
-                          thegifDepartmentReceiver: elementSend.depCode,
-                          thegifLetterStatus: elementSend.errorCode
-                        }
-                        this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData2))
+              dialogRef.afterClosed().subscribe(result => {
+                response.forEach(element => {
+                  element.data.forEach(elementSend => {
+                    if (elementSend.errorCode == '') {
+                      let sendECMSContentData = {
+                        wfContentId: elementSend.wfContentId,
+                        filePath: elementSend.result,
+                        thegifDepartmentReceiver: elementSend.depCode
                       }
+                      this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData))
+                    } else {
+                      let sendECMSContentData2 = {
+                        wfContentId: elementSend.wfContentId,
+                        filePath: elementSend.result,
+                        thegifDepartmentReceiver: elementSend.depCode,
+                        thegifLetterStatus: elementSend.errorCode
+                      }
+                      this.fkEcmsCreate.push(this._ecmsService.createThegifFromWfContentForSend(sendECMSContentData2))
+                    }
+                  })
+                })
+                Observable.forkJoin(this.fkEcmsCreate)
+                  .subscribe((response2: any) => {
+                    this.fkEcmsCreate = []
+                    this.msgs = []
+                    this.msgs.push({
+                      severity: 'info',
+                      summary: 'บันทึกสำเร็จ',
+                      detail: 'คุณได้ส่งหนังสือ ECMS เรียบร้อยแล้ว'
                     })
                   })
-                  Observable.forkJoin(this.fkEcmsCreate)
-                    .subscribe((response2: any) => {
-                      this.fkEcmsCreate = []
-                      this.msgs = []
-                      this.msgs.push({
-                        severity: 'info',
-                        summary: 'บันทึกสำเร็จ',
-                        detail: 'คุณได้ส่งหนังสือ ECMS เรียบร้อยแล้ว'
-                      })
-                    })
-                })
+              })
             } else {
               response.forEach(element => {
                 element.data.forEach(elementSend => {
@@ -2321,5 +2321,5 @@ export class AddSarabanContentComponent implements OnInit {
       }
     })
   }
-
+  
 }

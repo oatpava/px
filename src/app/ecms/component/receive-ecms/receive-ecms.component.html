@@ -11,7 +11,7 @@
             <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms()">แจ้งหนังสือผิด/ส่งผิด</div>
         </div>
         <div class="blockFormECMS" flex>
-            <p-dataTable #dt [value]="listData" [(selection)]="selectedRow" [resizableColumns]="false" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" sortMode="multiple" [responsive]="true" styleClass="fixed-size">
+            <p-dataTable #dt [value]="listData" [(selection)]="selectedRow" [resizableColumns]="false" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" sortMode="multiple" [responsive]="true" styleClass="fixed-size">
                 <p-column [style]="{'width':'30px', 'text-align':'-webkit-center'}" selectionMode="multiple"></p-column>
                 <p-column field="index" header="ลำดับ" [style]="{'width':'50px', 'text-align':'-webkit-center'}">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
