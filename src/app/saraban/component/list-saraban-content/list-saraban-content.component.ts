@@ -21,6 +21,11 @@ import { ReportSarabanComponent } from '../report-saraban/report-saraban.compone
 import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/dialog-warning.component'
 import { ReserveSarabanContentComponent } from '../reserveContentNo/reserve-saraban-content/reserve-saraban-content.component'
 import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
+import { ListMenuEcmsComponent } from '../../../ecms/component/list-menu-ecms/list-menu-ecms.component'
+import { StatusEcmsComponent }  from '../../../ecms/component/status-ecms/status-ecms.component'
+import { CheckStatusEcmsComponent } from  '../../../ecms/component/check-status-ecms/check-status-ecms.component'
+import { ReceiveEcmsComponent } from '../../../ecms/component/receive-ecms/receive-ecms.component'
+import { SendEcmsComponent } from '../../../ecms/component/send-ecms/send-ecms.component'
 
 // / means the root of the current drive;
 // ./ means the current directory;
@@ -331,7 +336,7 @@ export class ListSarabanContentComponent implements OnInit {
       case (3): this.listReservecontent(); break
       case (4): this.report('pdf'); break
       case (5): this.report('xls'); break
-      case (6): this.importExport(); break
+      case (6): this.ecms(); break
       case (19): this.editStartNumber(); break
     }
   }
@@ -396,10 +401,6 @@ export class ListSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.folderType = this.folderType
     dialogRef.componentInstance.paramValue = [null, null, '' + this.folderId, null, null]
     dialogRef.componentInstance.searchModel = this.searchFilters_report
-  }
-
-  importExport() {
-
   }
 
   listReservecontent() {
@@ -550,6 +551,53 @@ export class ListSarabanContentComponent implements OnInit {
         }
       }],
       { relativeTo: this._route })
+  }
+
+  ecms() {
+    let dialogRef = this._dialog.open(ListMenuEcmsComponent, {
+      width: '60%'
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result)
+        if (result.type == 3) {
+          let dialogRef = this._dialog.open(StatusEcmsComponent, {
+            // width: '50%',
+          });
+          let instance = dialogRef.componentInstance
+          instance.ecmsType = result
+          dialogRef.afterClosed().subscribe(result => {
+          })
+        }
+        if (result.type == 2) {
+          let dialogRef = this._dialog.open(ReceiveEcmsComponent, {
+          });
+          let instance = dialogRef.componentInstance
+          instance.ecmsType = result
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+            }
+          })
+            
+        }
+        if (result.type == 4) {
+          let dialogRef = this._dialog.open(CheckStatusEcmsComponent, {
+          });
+          let instance = dialogRef.componentInstance
+          instance.ecmsType = result
+          dialogRef.afterClosed().subscribe(result => {
+          })
+        }
+        if (result.type == 1) {
+          let dialogRef = this._dialog.open(SendEcmsComponent, {
+            width: '80%',
+          });
+          let instance = dialogRef.componentInstance
+          dialogRef.afterClosed().subscribe(result => {
+          })
+        }
+      }
+    })
   }
 
 }

@@ -1,0 +1,9 @@
+<div layout-gt-sm="row" layout="column">
+    <div flex="100" style="width: 100%;" layout="column" layout-align="top center">
+        <div class="folder-List" *ngFor="let item of reportList" (click)="showReport(item)">
+            <i class="material-icons">menu</i>
+            <div class="fontFolder-List pad-left-xs">{{item.name}}</div>
+
+        </div>
+    </div>
+</div>
