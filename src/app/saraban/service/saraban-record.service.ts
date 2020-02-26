@@ -54,4 +54,15 @@ export class SarabanRecordService {
         }
     }
 
+    countByDocumentId(documentId): Observable<number> {
+        if (environment.production) {
+            return this._http.get(this._apiUrl + "/countByDocumentId/" + documentId, this._options)
+                .map((response: Response) => {
+                    return response.json().data
+                })
+                .catch(this.loggerService.handleError)
+        } else {
+        }
+    }
+
 }

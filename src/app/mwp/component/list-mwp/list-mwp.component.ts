@@ -51,10 +51,14 @@ export class ListMwpComponent implements OnInit {
     console.log('ListMwpComponent')
     this._route.params
       .subscribe((params: Params) => {
-        if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId!=1) {
-          this.getUserProfileFolders()
-          this.getShortcutSarabanFolders()
-          this.getStructureInboxs()
+        if (!this._paramSarabanService.inboxToContent) {
+          if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId!=1) {
+            this.getUserProfileFolders()
+            this.getShortcutSarabanFolders()
+            this.getStructureInboxs()
+          }
+        } else {
+          setTimeout(() => this.selectShortcutFolder(this._paramSarabanService.registedFolder), 1)
         }
       })
   }
@@ -121,9 +125,9 @@ export class ListMwpComponent implements OnInit {
 
   selectShortcutFolder(selectFolder: SarabanFolder) {
     if (selectFolder.wfFolderParentName == null) selectFolder.wfFolderParentName = ""
-    this._paramSarabanService.pathOld = ''
     this._paramSarabanService.path = selectFolder.wfFolderParentName + ' - ' + selectFolder.wfFolderName
-    this._paramSarabanService.folderId = selectFolder.wfFolderLinkFolderId
+    this._paramSarabanService.pathOld = (this._paramSarabanService.inboxToContent) ? this._paramSarabanService.path : ''
+    this._paramSarabanService.folderId = (this._paramSarabanService.inboxToContent) ? selectFolder.id : selectFolder.wfFolderLinkFolderId
     this._paramSarabanService.folderName = selectFolder.wfFolderName
     this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName
     this._paramSarabanService.folderIcon = "list"
