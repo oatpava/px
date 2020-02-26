@@ -114,7 +114,9 @@ export class SarabanEcmsService {
     let params = new URLSearchParams()
     if (environment.production) {
       this._options.search = params
-      params.set('q', this._pxService.encrypt('sort=createdDate&dir=asc&thegifDepartmentId=id'))
+      params.set('thegifDepartmentId', id)
+      params.set('sort', 'createdDate')
+      params.set('dir', 'asc')
       return this._http.get(this._apiUrl + '/v1/thegifDepartments/listByThegifDepartmentId', this._options)
         .map((response: Response) => {
           return this._pxService.verifyResponseArray(response.json())
@@ -126,7 +128,10 @@ export class SarabanEcmsService {
   getECMSSearchStructure(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('q', this._pxService.encrypt('sort=createdDate&dir=asc&thegifDepartmentName=' + model.thegifDepartmentName + '&thegifDepartmentCode=' + model.thegifDepartmentCode))
+    params.set('thegifDepartmentName', model.thegifDepartmentName)
+    params.set('thegifDepartmentCode', model.thegifDepartmentCode)
+    params.set('sort', 'createdDate')
+    params.set('dir', 'asc')
     return this._http.get(this._apiUrl + '/v1/thegifDepartments/searchThegifDepartment', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -137,7 +142,11 @@ export class SarabanEcmsService {
   getContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('q', this._pxService.encrypt('sort=createdDate&dir=desc&offset=' + model.offset + '&limit=' + model.limit + '&elementType=' + model.type))
+    params.set('offset', model.offset)
+    params.set('limit', model.limit)
+    params.set('elementType', model.type)
+    params.set('sort', 'createdDate')
+    params.set('dir', 'desc')
     return this._http.get(this._apiUrl + '/v1/thegifs/listByElementType', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -148,7 +157,8 @@ export class SarabanEcmsService {
   sendContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('q', this._pxService.encrypt('DEPCODE=' + model.DEPCODE + '&wfContentId=' + model.wfContentId))
+    params.set('DEPCODE', model.DEPCODE)
+    params.set('wfContentId', model.wfContentId)
     return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -159,7 +169,8 @@ export class SarabanEcmsService {
   getECMSAcceptLetterNotifier(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('q', this._pxService.encrypt('idThegif=' + model.idThegif + '&idWfContent=' + model.idWfContent))
+    params.set('idThegif', model.idThegif)
+    params.set('idWfContent', model.idWfContent)
     return this._http.get(this._apiUrl + '/v1/thegifs/getECMSAcceptLetterNotifier', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -222,7 +233,9 @@ export class SarabanEcmsService {
 
   getECMSDeleteGovernmentDocumentRequest(id) {
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('idThegif=' + id + '&id=' + id + '&letterStatus=CorrespondenceDeleteGovernmentDocumentRequest'))
+    params.set('idThegif', id)
+    params.set('id', id)
+    params.set('letterStatus', 'CorrespondenceDeleteGovernmentDocumentRequest')
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSDeleteGovernmentDocumentRequest', this._options)
@@ -235,7 +248,9 @@ export class SarabanEcmsService {
 
   getECMSRejectLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('idThegif=' + id + '&id=' + id + '&letterStatus=RejectLetterNotifier'))
+    params.set('idThegif', id)
+    params.set('id', id)
+    params.set('letterStatus', 'RejectLetterNotifier')
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSRejectLetterNotifier', this._options)
@@ -248,7 +263,9 @@ export class SarabanEcmsService {
 
   getECMSInvalidLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('idThegif=' + id + '&id=' + id + '&letterStatus=InvalidAcceptIDNotifier'))
+    params.set('idThegif', id)
+    params.set('id', id)
+    params.set('letterStatus', 'InvalidAcceptIDNotifier')
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSInvalidAcceptIDNotifier', this._options)
@@ -261,7 +278,9 @@ export class SarabanEcmsService {
 
   getECMSInvalidSendLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('idThegif=' + id + '&id=' + id + '&letterStatus=InvalidLetterNotifier'))
+    params.set('idThegif', id)
+    params.set('id', id)
+    params.set('letterStatus', 'InvalidLetterNotifier')
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSInvalidLetterNotifier', this._options)
@@ -271,6 +290,7 @@ export class SarabanEcmsService {
         .catch(this._loggerService.handleError)
     }
   }
+
 
   getECMSDeleteRequest() {
     let params = new URLSearchParams()
