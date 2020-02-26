@@ -97,18 +97,18 @@ export const SETTINGS: Setting[] = [
         childIcon: 'text_fields',
         subSetting: 'document-type',
       }, 
-      {
-        childId: 2,
-        childName: 'รายการสิทธิ์แฟ้มทะเบียน',
-        childIcon: 'dns',
-        subSetting: 'dms-auth',
-      }, 
-      {
-        childId: 3,
-        childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
-        childIcon: 'reorder',
-        subSetting: 'dms-user-auth',
-      }, 
+      // {
+      //   childId: 2,
+      //   childName: 'รายการสิทธิ์แฟ้มทะเบียน',
+      //   childIcon: 'dns',
+      //   subSetting: 'dms-auth',
+      // }, 
+      // {
+      //   childId: 3,
+      //   childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
+      //   childIcon: 'reorder',
+      //   subSetting: 'dms-user-auth',
+      // }, 
 
       // {
       //   childId: 6,
@@ -157,18 +157,18 @@ export const SETTINGS: Setting[] = [
         childIcon: 'list',
         subSetting: 'list-type',
       },
-      {
-        childId: 54,//6,
-        childName: 'รายการสิทธิ์แฟ้มทะเบียน',
-        childIcon: 'dns',
-        subSetting: 'wf-auth',
-      },
-      {
-        childId: 55,//7,
-        childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
-        childIcon: 'reorder',
-        subSetting: 'wf-user-auth',
-      },
+      // {
+      //   childId: 54,//6,
+      //   childName: 'รายการสิทธิ์แฟ้มทะเบียน',
+      //   childIcon: 'dns',
+      //   subSetting: 'wf-auth',
+      // },
+      // {
+      //   childId: 55,//7,
+      //   childName: 'รายการสิทธิ์ผู้ใช้แฟ้มทะเบียน',
+      //   childIcon: 'reorder',
+      //   subSetting: 'wf-user-auth',
+      // },
     ]
 
   }
