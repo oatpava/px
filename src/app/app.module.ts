@@ -177,9 +177,15 @@ import {
     DialogViewComponent,
     //BarcodeComponent,
     DialogMoveFolderComponent,
-    DialogRecordComponent
-   // LocationHistory,
-    // AuthGuard
+    DialogRecordComponent,
+    //LocationHistory,
+    //AuthGuard
+    StatusEcmsComponent,
+    CheckStatusEcmsComponent,
+    SendEcmsComponent,
+    ReceiveEcmsComponent,
+    FileEcmsComponent,
+    ListMenuEcmsComponent
 } from './shared';
 
 @NgModule({
@@ -333,7 +339,13 @@ import {
         DialogViewComponent,
         //BarcodeComponent,
         DialogMoveFolderComponent,
-        DialogRecordComponent
+        DialogRecordComponent,
+        StatusEcmsComponent,
+        CheckStatusEcmsComponent,
+        SendEcmsComponent,
+        ReceiveEcmsComponent,
+        FileEcmsComponent,
+        ListMenuEcmsComponent
     ],
     imports: [
         BrowserModule,

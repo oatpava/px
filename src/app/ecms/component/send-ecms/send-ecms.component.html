@@ -1,0 +1,70 @@
+<div layout="column" flex class="pad-xs">
+    <div flex layout="row" class="bgc-blue-900 tc-blue-50 pad-sm">
+        <span flex class="font-Head">ส่งภายนอก</span>
+        <!-- <i class="mderial-icons hover" (click)="close()">close</i> -->
+    </div>
+    <div layout="row" flex class="pad-sm">
+        <md-tab-group flex="60">
+            <md-tab>
+                <template md-tab-label>
+                    โครงสร้างหน่วยงานภายนอก
+                </template>
+                <div class="tree-BlockExternal">
+                    <p-tree [value]="structureTree" selectionMode="single" (onNodeSelect)="nodeSelect($event)" [metaKeySelection]="false" (onNodeExpand)="loadNode($event)">
+                        <template let-node pTemplate="default">
+                            <span>{{node.label}}</span>
+                        </template>
+                    </p-tree>
+                </div>
+            </md-tab>
+            <md-tab>
+                <template md-tab-label>
+                    ค้นหา
+                </template>
+                <div class="tree-BlockExternal">
+                    <div layout="row" flex class="f-block push-top-sm pad-left-md pad-right-md">
+                        <div layout="row" flex="30" class="f-block">
+                            <!-- <md-input-container class="f-block"> -->
+                            <md-input mdInput placeholder="รหัสหน่วยงาน" name="thegifDepartmentCode" [(ngModel)]="searchTree.thegifDepartmentCode" (keyup.enter)="search(searchTree)">
+                            </md-input>
+                            <!-- </md-input-container> -->
+                        </div>
+                        <div layout="row" flex class="f-block">
+                            <!-- <md-input-container class="f-block"> -->
+                            <md-input mdInput placeholder="ชื่อหน่วยงาน" name="thegifDepartmentName" [(ngModel)]="searchTree.thegifDepartmentName" (keyup.enter)="search(searchTree)">
+                            </md-input>
+                            <!-- </md-input-container> -->
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="end" flex class="f-block pad-left-md pad-right-md">
+                        <button md-raised-button color="primary" style="margin-right: 5px" (click)="search(searchTree)">ค้นหา</button>
+                    </div>
+                    <div class="searchCss push-top-sm">
+                        <div layout="row" flex class="pad-sm listDiv" *ngFor="let item of listSearch" [ngClass]="{'selected': item.code == true }" (click)="selectData(item)">
+                            <md-icon mdPrefix class="hover">personal</md-icon>
+                            <div flex layout="column">
+                                <div flex layout="row" class="hover pad-left-sm">{{item.thegifDepartmentName}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-tab>
+        </md-tab-group>
+        <div flex class="externalCss">
+            <div flex layout="row" layout-wrap>
+                <div class="selectLabel" *ngFor="let dsd of selectedStructure">
+                    <div flex layout="row">
+                        <div flex class="pad-right-xs pad-left-xs">{{dsd.label}}</div>
+                        <i title="ลบ" class="fav fa fa-close" (click)="delSelect(dsd)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div flex class="pad-sm bgc-blue-grey-100 push-sm" layout="row" layout-align="end">
+        <button md-raised-button color="primary" (click)="ok()" style="margin-right: 5px">ส่งภายนอก</button>
+        <button md-raised-button color="warn" (click)="close()">ยกเลิก</button>
+    </div>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

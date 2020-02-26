@@ -135,7 +135,13 @@ import {
     AuthAdminComponent,
     DialogViewComponent,
     DialogMoveFolderComponent,
-    DialogRecordComponent
+    DialogRecordComponent,
+    StatusEcmsComponent,
+    CheckStatusEcmsComponent,
+    SendEcmsComponent,
+    ReceiveEcmsComponent,
+    FileEcmsComponent,
+    ListMenuEcmsComponent
 } from './shared'
 
 const routes: Routes = [
@@ -206,6 +212,12 @@ const routes: Routes = [
             { path: 'DialogView', component: DialogViewComponent, outlet: 'center' },
             { path: 'MoveFolder', component: DialogMoveFolderComponent, outlet: 'center' },
             { path: 'record', component: DialogRecordComponent, outlet: 'center' },
+            { path: 'ecmsStatus', component: StatusEcmsComponent, outlet: 'center', },
+            { path: 'ecmsCheckStatus', component: CheckStatusEcmsComponent, outlet: 'center', },
+            { path: 'ecmsSend', component: SendEcmsComponent, outlet: 'center', },
+            { path: 'ecmsReceive', component: ReceiveEcmsComponent, outlet: 'center', }, 
+            { path: 'ecmsFile', component: FileEcmsComponent, outlet: 'center' },  
+            { path: 'ecmsListMenu', component: ListMenuEcmsComponent, outlet: 'center' },
             {
                 path: 'folders', component: FolderComponent, outlet: 'center',
                 children: [

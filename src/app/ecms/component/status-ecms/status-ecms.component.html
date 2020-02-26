@@ -1,0 +1,110 @@
+<div flex layout="row">
+    <div flex class="pad-sm">
+        <div layout="row" class="pad-sm bgc-blue-900 tc-blue-50 push-bottom-sm">
+            <!-- <mat-icon matListAvatar>playlist_add_check</mat-icon> -->
+            <div class="fontField-List"> {{ecmsType.name}} </div>
+        </div>
+        <div class="blockForm" flex>
+            <div flex layout="column" *ngIf="ecmsType.id == 4">
+                <div flex layout="row" class=" bgc-blue-400 tc-grey-50">
+                    <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="updateMine()">ปรับปรุงโครงสร้าง</div>
+                </div>
+                <div class="blockFormECMS">
+                    <p-dataTable #dt [value]="listData" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                        <p-column field="ministryID" header="รหัส" [style]="{'width':'100px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.ministryID}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                        <p-column field="ministryTHName" header="คำอธิบาย" [style]="{'width':'200px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.ministryTHName}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+            <div flex layout="row" *ngIf="ecmsType.id == 10">
+                <p style="width: 300px;">{{statusCheckTime}}</p>
+            </div>
+            <div flex layout="row" *ngIf="ecmsType.id == 9">
+                <p style="width: 300px;">{{statusCheckTime}}</p>
+            </div>
+            <div flex layout="column" *ngIf="ecmsType.id == 5">
+                <div flex layout="row" class=" bgc-blue-400 tc-grey-50">
+                    <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="updateOrg()">ปรับปรุงโครงสร้าง</div>
+                </div>
+                <div class="blockFormECMS">
+                    <p-dataTable #dt [value]="listData" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                        <p-column field="organizationTHName" header="ชื่อ TH" [style]="{'width':'150px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.organizationTHName}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                        <p-column field="organizationENName" header="ชื่อ EN" [style]="{'width':'150px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.organizationENName}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                        <p-column field="ECMSURL" header="URL" [style]="{'width':'200px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.ECMSURL}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                        <p-column field="organizationID" header="รหัส" [style]="{'width':'100px', 'vertical-align':'top', cursor: 'defult'}">
+                            <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                              <span flex layout="row" (click)="show(car)">{{car.organizationID}} &nbsp; &nbsp;</span>
+                          </template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+            <div flex layout="row" *ngIf="ecmsType.id == 7">
+                <p-dataTable #dt [value]="listData" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                    <p-column field="secretValue" header="รหัส" [style]="{'width':'100px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.secretValue}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                    <p-column field="secretDescription" header="คำอธิบาย" [style]="{'width':'200px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.secretDescription}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+            <div flex layout="row" *ngIf="ecmsType.id == 6">
+                <p-dataTable #dt [value]="listData" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                    <p-column field="speedValue" header="รหัส" [style]="{'width':'100px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.speedValue}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                    <p-column field="speedDescription" header="คำอธิบาย" [style]="{'width':'200px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.speedDescription}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+            <div flex layout="row" *ngIf="ecmsType.id == 8">
+                <p-dataTable #dt [value]="listData" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                    <p-column field="contentType" header="type" [style]="{'width':'100px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.contentType}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                    <p-column field="fileExtension" header="mime" [style]="{'width':'200px', 'vertical-align':'top', cursor: 'defult'}">
+                        <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                          <span flex layout="row" (click)="show(car)">{{car.fileExtension}} &nbsp; &nbsp;</span>
+                      </template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+        </div>
+        <div flex class="pad-sm bgc-blue-grey-100 push-top-xs" layout="row" layout-align="end">
+            <button md-raised-button color="warn" (click)="close()">ปิด</button>
+        </div>
+    </div>
+</div>
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>
