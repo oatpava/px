@@ -241,11 +241,11 @@ export class SendEmailComponent implements OnInit {
       .getFileAttachs('dms', linkId, 'asc')
       .subscribe(response => {
         this._loadingService.resolve('main')
-        response.forEach(fileAttach => {
+        response.forEach((fileAttach: any) => {
           if (fileAttach.referenceId == 0) {
             this.fileAttachs.push(fileAttach)
             this.selectedFileAttachs.push(fileAttach)
-            this.selectedFileAttachSize = this.sumFileAttachSize += fileAttach.fileSize
+            this.selectedFileAttachSize = this.sumFileAttachSize += fileAttach.fileAttachSize
           }
         })
         if (this.selectedFileAttachSize > this.emailAttachSize) {
@@ -561,7 +561,7 @@ export class SendEmailComponent implements OnInit {
   }
 
   select(event) {
-    this.selectedFileAttachSize += event.data.fileSize
+    this.selectedFileAttachSize += event.data. fileAttachSize
     if (this.selectedFileAttachSize > this.emailAttachSize) {
       this.msgs = []
       this.msgs.push({
@@ -573,7 +573,7 @@ export class SendEmailComponent implements OnInit {
   }
 
   unSelect(event) {
-    this.selectedFileAttachSize -= event.data.fileSize
+    this.selectedFileAttachSize -= event.data. fileAttachSize
   }
 
   selectAll(event) {

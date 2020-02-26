@@ -250,7 +250,7 @@ export class AddMyWorkComponent implements OnInit {
         tmp.id = this.fileAttachs[i].id
         tmp.secrets = this.fileAttachs[i].secrets
         tmp.fileAttachName = this.fileAttachs[i].fileAttachName + this.fileAttachs[i].type
-        edit_tmp.push(this._pxService.updateFileAttach2(tmp))
+        edit_tmp.push(this._pxService.updateFileAttach2(tmp, 0))
       } else if (this.fileAttachs[i].uploaded) {
         upload = true
         count++

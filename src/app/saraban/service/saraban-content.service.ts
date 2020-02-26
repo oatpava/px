@@ -77,20 +77,20 @@ export class SarabanContentService {
     return this.pxService.createObservable(menus)
   }
 
-  getAuthMenus(menuType: string, contentAuth: SarabanAuth[], isAdmin: boolean, isArchive: boolean): Observable<Menu[]> {
+  getAuthMenus(menuType: string, contentAuth: SarabanAuth[], isAdmin: boolean, isArchive: boolean, menuEcms: boolean): Observable<Menu[]> {
     let menus: Menu[] = []
     if (menuType === "list-saraban") {
       if (isAdmin) {
         if (!isArchive) menus.push(MENUS[19])
       }
-      if (contentAuth[12].auth) menus.push(MENUS[6]);
-      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[1])
+      if (contentAuth[12].auth && menuEcms) menus.push(MENUS[6]);
+      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[2], MENUS[1]) : menus.push(MENUS[5], MENUS[4], MENUS[1])
     } else if (menuType === "list-saraban-reserve") {//menu[3]
       if (isAdmin) {
         if (!isArchive) menus.push(MENUS[19])
       }
-      if (contentAuth[12].auth) menus.push(MENUS[6]);
-      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[6], MENUS[5], MENUS[4], MENUS[3], MENUS[1])
+      if (contentAuth[12].auth && menuEcms) menus.push(MENUS[6]);
+      (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[1])
     } else if (menuType === "saraban") {
       //menus.push(MENUS[20])
       if (contentAuth[14].auth) menus.push(MENUS[15])

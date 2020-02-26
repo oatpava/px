@@ -222,9 +222,9 @@ export class PxService {
     return uploader
   }
 
-  updateFileAttach2(updatedFileAttach: FileAttach): Observable<any> {
+  updateFileAttach2(updatedFileAttach: FileAttach, ecms: number): Observable<any> {
     if (environment.production) {
-      return this._http.put(this._apiUrl + '/v1/fileAttachs/update2', updatedFileAttach, this._options)
+      return this._http.put(this._apiUrl + '/v1/fileAttachs/update2/' + ecms, updatedFileAttach, this._options)
         .map((response: Response) => {
           return response.json().data
         })

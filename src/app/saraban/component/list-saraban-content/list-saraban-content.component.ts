@@ -123,7 +123,7 @@ export class ListSarabanContentComponent implements OnInit {
 
   ngOnInit() {
     console.log("ListSarabanContentComponent")
-    if (this._paramSarabanService.returnToContent) {
+    if (this._paramSarabanService.returnToContent || this._paramSarabanService.inboxToContent) {
       this._paramSarabanService.returnToContent = false
       setTimeout(() => this.returnToContent(this._paramSarabanService.sarabanContentId), 1)
     } else {
@@ -216,7 +216,7 @@ export class ListSarabanContentComponent implements OnInit {
 
   getMenus(auth: SarabanAuth[], userId: number, isArchive: boolean) {
     this._sarabanContentService
-      .getAuthMenus("list-saraban-reserve", auth, (userId == 1) ? true : false, isArchive)//'list-saraban' || 'list-saraban-reserve'
+      .getAuthMenus("list-saraban-reserve", auth, (userId == 1) ? true : false, isArchive, (this.folder.wfContentType2.id == 3))//'list-saraban' || 'list-saraban-reserve'//ECMS only type2 outside
       .subscribe(response => {
         this.menus = response as Menu[]
       })

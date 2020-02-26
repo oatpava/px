@@ -70,6 +70,7 @@ export class ParamSarabanService {
   inboxPath: string
   //registedContent: SarabanContent
   registedFolder: SarabanFolder
+  inboxToContent: boolean
 
   userProfiles: UserProfile[]
   userProfileIndex: number

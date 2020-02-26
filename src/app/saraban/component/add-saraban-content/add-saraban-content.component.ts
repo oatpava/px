@@ -16,6 +16,7 @@ import { InboxService } from '../../../mwp/service/inbox.service'
 import { OutboxService } from '../../../mwp/service/outbox.service'
 import { ParamSarabanService } from '../../service/param-saraban.service'
 import { SarabanEcmsService } from '../../../ecms/service/saraban-ecms.service'
+import { SarabanRecordService } from '../../service/saraban-record.service'
 
 import { Menu } from '../../model/menu.model'
 import { SarabanFolder } from '../../model/sarabanFolder.model'
@@ -47,7 +48,7 @@ import { SendEcmsComponent } from '../../../ecms/component/send-ecms/send-ecms.c
   selector: 'app-add-saraban-content',
   templateUrl: './add-saraban-content.component.html',
   styleUrls: ['./add-saraban-content.component.styl'],
-  providers: [SarabanContentService, PxService, WorkflowService, SarabanService, OutboxService, InboxService, DocumentService, SarabanReserveContentService, SarabanEcmsService]
+  providers: [SarabanContentService, PxService, WorkflowService, SarabanService, OutboxService, InboxService, DocumentService, SarabanReserveContentService, SarabanEcmsService, SarabanRecordService]
 })
 export class AddSarabanContentComponent implements OnInit {
   @ViewChild('acFrom') acFrom: AutoComplete
@@ -61,6 +62,7 @@ export class AddSarabanContentComponent implements OnInit {
   isCanceled: boolean
 
   numFileAttach: number = 0
+  numRecord: number = 0
   title: string
   mode: string
   sarabanContent: SarabanContent
@@ -179,7 +181,8 @@ export class AddSarabanContentComponent implements OnInit {
     private _inboxService: InboxService,
     private _documentService: DocumentService,
     private _sarabanReserveContentService: SarabanReserveContentService,
-    private _ecmsService: SarabanEcmsService
+    private _ecmsService: SarabanEcmsService,
+    private _recordService: SarabanRecordService
   ) {
     this.sarabanContent = new SarabanContent()
     this.contentNoFormat = this._paramSarabanService.contentNoFormat
@@ -297,6 +300,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.getCanceledReserveNo(response.wfContentFolderId)
 
         this.numFileAttach = response.numFileAttach
+        this._recordService.countByDocumentId(response.wfDocumentId).subscribe(response => this.numRecord = response)
         this.getProcesses(response.wfDocumentId, response.wfContentFolderId)
         this.sarabanContent = response as SarabanContent
 
@@ -326,7 +330,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentSpeedStr = this.sarabanSpeeds[this.sarabanContent.wfContentSpeed - 1].sarabanSpeedName
         this.sarabanContent.wfContentSecretStr = this.sarabanSecrets[this.sarabanContent.wfContentSecret - 1].sarabanSecretName
 
-        if (this._paramSarabanService.mwp.fromMwp) {
+        if (this._paramSarabanService.mwp.fromMwp || this._paramSarabanService.inboxToContent) {
           //this.isFinish = false//mwp always can action//GHB
           if (this.isCanceled || this.isFinish) this._paramSarabanService.menuType = ''
           let structureId: number = 0
@@ -343,6 +347,7 @@ export class AddSarabanContentComponent implements OnInit {
           } else {
             this.getContentAuth(this._paramSarabanService.registedFolder.id, structureId, userId)
             this._paramSarabanService.registedFolder = null
+            this._paramSarabanService.inboxToContent = false
           }
         } else {
           this.getMenus(this._paramSarabanService.contentAuth)
@@ -434,7 +439,7 @@ export class AddSarabanContentComponent implements OnInit {
   getMenus(auths: SarabanAuth[]) {
     this._loadingService.register('main')
     this._sarabanContentService
-      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive)
+      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive, true)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.menus = response
@@ -2291,6 +2296,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.documentId = this.sarabanContent.wfDocumentId
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.numRecord++
         this.openDialogContentRecord()
       }
     })

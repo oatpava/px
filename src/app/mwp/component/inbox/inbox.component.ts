@@ -507,17 +507,20 @@ export class InboxComponent implements OnInit {
   }
 
   backToSaraban(mode: string) {
-    this._paramSarabanService.mode = mode
-    this._paramSarabanService.pathOld = this._paramSarabanService.inboxPath
-    this._paramSarabanService.path = this._paramSarabanService.inboxPath
+    // this._paramSarabanService.mode = mode
+    // this._paramSarabanService.pathOld = this._paramSarabanService.inboxPath
+    // this._paramSarabanService.path = this._paramSarabanService.inboxPath
+    // this._paramSarabanService.menuType = "saraban"
+    // this._router.navigate(
+    //   ['../', {
+    //     outlets: {
+    //       contentCenter: ['addContent'],
+    //     }
+    //   }],
+    //   { relativeTo: this._route })
+    this._paramSarabanService.inboxToContent = true
     this._paramSarabanService.menuType = "saraban"
-    this._router.navigate(
-      ['../', {
-        outlets: {
-          contentCenter: ['addContent'],
-        }
-      }],
-      { relativeTo: this._route })
+    this._location.back()
   }
 
 }
