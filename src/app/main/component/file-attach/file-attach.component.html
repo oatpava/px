@@ -14,7 +14,7 @@
                         <md-icon alt="ลบ" >delete</md-icon>
                     </button>
             <h3 md-line style="font-weight:bold">
-                {{ item?.fileAttachName }} &nbsp; &nbsp; {{item?.createdName}} &nbsp; &nbsp;{{item?.createdDate}}
+                {{ item?.fileAttachName }} &nbsp; &nbsp; {{item?.createdName}} &nbsp; &nbsp;{{item?.createdDate}} &nbsp; &nbsp; ({{item.fileAttachSize/1000000}} MB)
 
             </h3>
             <h3 md-line style="font-weight:bold">
@@ -39,7 +39,7 @@
 
             <h3 md-line [style.margin-left]="'10%'" style="filter: alpha(opacity=25); -moz-opacity:.65;opacity:.65;">
                 <!-- {{ itemChildren?.fileAttachName }} -->
-                {{ itemChildren?.fileAttachName }} &nbsp; &nbsp; {{itemChildren?.createdName}} &nbsp; &nbsp;{{itemChildren?.createdDate}}
+                {{ itemChildren?.fileAttachName }} &nbsp; &nbsp; {{itemChildren?.createdName}} &nbsp; &nbsp;{{itemChildren?.createdDate}} &nbsp; &nbsp; ({{item.fileAttachSize/1000000}} MB)
 
             </h3>
             <h3 md-line [style.margin-left]="'10%'" style="filter: alpha(opacity=25); -moz-opacity:.65;opacity:.65;">
