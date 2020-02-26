@@ -2,12 +2,12 @@
     <div layout="column" flex>
         <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
             <button md-icon-button (click)="goBack()" *ngIf="parentId>1" [disabled]="disableBack">
-                <md-icon>arrow_back</md-icon>
-            </button>
+            <md-icon>arrow_back</md-icon>
+        </button>
             <button md-icon-button disabled>
-                <!-- <md-icon>{{icondmsHeaderName}}</md-icon> -->
-                <md-icon>dashboard</md-icon>
-            </button>
+          <!-- <md-icon>{{icondmsHeaderName}}</md-icon> -->
+          <md-icon>dashboard</md-icon>
+        </button>
             <!-- <div flex class="menu-showLabel">
                 <span>{{dmsHeaderName}}</span>
             </div> -->
@@ -27,12 +27,11 @@
 
 
             <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
-                <md-icon>more_vert</md-icon>
-            </button>
+            <md-icon>more_vert</md-icon>
+        </button>
             <md-menu #menu="mdMenu" x-position="before">
                 <div *ngFor="let menu of menus">
-                    <button *ngIf="menu.nameEng!=='search'" md-menu-item (click)="add(menu)"> เพิ่ม{{menu.name}}
-                    </button>
+                    <button *ngIf="menu.nameEng!=='search'" md-menu-item (click)="add(menu)"> เพิ่ม{{menu.name}} </button>
                     <button *ngIf="menu.nameEng==='search'" md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
                 </div>
             </md-menu>
@@ -45,7 +44,7 @@
 
                 <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
 
-                    <!-- <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ค้นหาทั้งหมด" name="allField" [(ngModel)]="allField">
+                    <!-- <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ค้นหาทั้งหมด" name="allField" [(ngModel)]="allField ">
                     </md-input> -->
 
                     <div *ngFor="let df of documentTypeDetails" layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px;">
@@ -119,13 +118,17 @@
                                          <app-dms-menu [Folder]="item" (selecFunction)="buttonAuth($event)"></app-dms-menu>
                                     </i>
 
-                                    <md-icon md-list-avatar (click)="selectOther(item)" style="cursor: pointer"
-                                        [ngClass]="{'fontIcon' : item.icon == 'done'}"
-                                        [style.background]="item.iconColor">{{item.icon}}</md-icon>
+                                </div>
+                                
 
-                                    <h3 md-line class="hover" (click)="selectFolder(item)"> {{item.folderName}} </h3>
-                                    <p md-line class="hover" (click)="selectFolder(item)"> {{item.folderDescription}}
-                                    </p>
+                                <div hide-gt-md class="block-icon-Option" >
+                                    <i class="material-icons icon-button"  (click)="edit(item)"  title="แก้ไข" >edit</i>
+                                     <i class="material-icons icon-button"  (click)="auth(item)" title="สิทธิ์" >settings</i>
+                                </div>
+                                
+                            </md-list-item>
+                            <md-divider  md-inset></md-divider>
+                        </template>
 
                             <td-paging-bar *ngIf='folders.length >0' style="margin-right: 20%;color: black" [pageSizes]="[25, 50, 100, 200,500]" [total]="projectAll" (change)="page($event)"></td-paging-bar>
 
@@ -138,7 +141,7 @@
 
     <div hide show-gt-md [tdToggle]="!ModeSearch && stetaPaste" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
 
-        <button class="showbutton" [tdToggle]="hoverMenuEdit" *ngIf=" seeButtonCopy" md-fab color="accent" [style.background]="'#1976d2'" title="ยกเลิก" (click)="cancelCopyMove()">
+        <button class="showbutton" [tdToggle]="hoverMenuEdit" *ngIf=" seeButtonCopy " md-fab color="accent" [style.background]="'#1976d2'" title="ยกเลิก" (click)="cancelCopyMove()">
             <md-icon>cancel</md-icon>
         </button>
         <div *ngFor="let menu of menus">
@@ -149,34 +152,34 @@
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
 
-                    <button *ngIf="menu.nameEng==='copy' && seeButtonCopy" md-fab [style.background]="menu.color" color="accent" title="คัดลอก" (click)="copy();">
+                    <button *ngIf="menu.nameEng==='copy' && seeButtonCopy " md-fab [style.background]="menu.color" color="accent" title="คัดลอก" (click)="copy(); ">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
 
-                    <button *ngIf="menu.nameEng==='move' && seeButtonCopy" md-fab [style.background]="menu.color" color="accent" title="ย้าย" (click)="move();">
+                    <button *ngIf="menu.nameEng==='move' && seeButtonCopy " md-fab [style.background]="menu.color" color="accent" title="ย้าย" (click)="move(); ">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
 
-                    <button *ngIf="menu.nameEng==='reorder' && !seeButtonCopy" md-fab [style.background]="menu.color" title="จัดลำดับ" color="accent" (click)="reOrder();">
+                    <button *ngIf="menu.nameEng==='reorder' && !seeButtonCopy" md-fab [style.background]="menu.color" title="จัดลำดับ" color="accent" (click)="reOrder(); ">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
 
 
 
-                    <button *ngIf="menu.nameEng==='search' && !seeButtonCopy" md-fab [style.background]="menu.color" title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
+                    <button *ngIf="menu.nameEng==='search' && !seeButtonCopy " md-fab [style.background]="menu.color" title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
                 </div>
 
                 <div *ngIf='authAddDoc'>
-                    <button *ngIf="menu.nameEng!=='search' && menu.nameEng!=='move' && menu.nameEng!=='reorder' && menu.nameEng!=='copy' && !seeButtonCopy && menu.nameEng ==='Document'" md-fab [style.background]="menu.color" color="accent" title="เพิ่ม{{menu.name}}" (click)="add(menu)">
+                    <button *ngIf="menu.nameEng!=='search' && menu.nameEng!=='move' && menu.nameEng!=='reorder' && menu.nameEng!=='copy' && !seeButtonCopy && menu.nameEng ==='Document' " md-fab [style.background]="menu.color" color="accent" title="เพิ่ม{{menu.name}}" (click)="add(menu)">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
                 </div>
 
 
                 <div *ngIf='!createFolder'>
-                    <button *ngIf="menu.nameEng==='search' && !seeButtonCopy" md-fab [style.background]="menu.color" title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
+                    <button *ngIf="menu.nameEng==='search' && !seeButtonCopy " md-fab [style.background]="menu.color" title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
                         <md-icon>{{menu.icon}}</md-icon>
                     </button>
                 </div>
@@ -184,33 +187,33 @@
 
         </div>
         <button md-fab color="accent" title="รายการเมนู">
-            <md-icon>{{listMenu}}</md-icon>
-        </button>
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
     </div>
 
     <div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
         <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="dmsSearch()">
-            <md-icon>search</md-icon>
-        </button>
+        <md-icon>search</md-icon>
+    </button>
         <!-- <button md-fab [style.background]="'#f93550'" color="accent" title="ค้นหาเอกสารหมดอายุ" (click)="dmsSearch('b')">
         <md-icon>search</md-icon>
     </button> -->
     </div>
 
     <!-- //////////////////// -->
-    <div class="showbutton" id="fixedbutton" [tdToggle]="!stetaPaste && !stetaCanCopy" layout="column">
+    <div class="showbutton" id="fixedbutton" [tdToggle]="!stetaPaste && !stetaCanCopy " layout="column">
 
         <button md-fab color="accent" [style.background]="'#1976d2'" title="ยกเลิก" (click)="cancelCopyMove()">
-            <md-icon>cancel</md-icon>
-        </button>
+        <md-icon>cancel</md-icon>
+    </button>
 
 
 
 
 
         <button md-fab [style.background]="'#1976d2'" color="accent" title="วาง1" (click)="paste()">
-            <md-icon>content_copy</md-icon>
-        </button>
+        <md-icon>content_copy</md-icon>
+    </button>
 
 
     </div>
@@ -219,14 +222,14 @@
     <div class="showbutton" id="fixedbutton" [tdToggle]="!stateMove" layout="column">
 
         <button md-fab color="accent" [style.background]="'#1976d2'" title="ยกเลิก" (click)="cancelCopyMove()">
-            <md-icon>cancel</md-icon>
-        </button>
+        <md-icon>cancel</md-icon>
+    </button>
 
 
 
         <button md-fab [style.background]="'#1976d2'" color="accent" title="วาง2" (click)="paste()">
-            <md-icon>compare_arrows</md-icon>
-        </button>
+        <md-icon>compare_arrows</md-icon>
+    </button>
 
     </div>
 </div>
@@ -235,8 +238,8 @@
     <div layout="column" flex>
         <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
             <button md-icon-button (click)="goBack()" [disabled]="disableBack">
-                <md-icon>arrow_back</md-icon>
-            </button>
+            <md-icon>arrow_back</md-icon>
+        </button>
             <button md-icon-button disabled>
           <md-icon>folder</md-icon>
         </button>
@@ -247,8 +250,8 @@
             </div>
 
             <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
-                <md-icon>more_vert</md-icon>
-            </button>
+            <md-icon>more_vert</md-icon>
+        </button>
             <md-menu #menu="mdMenu" x-position="before">
                 <div>
                     <button md-menu-item (click)="addDocument()"> เพิ่ม</button>
@@ -451,12 +454,11 @@
                             <!--mobile view   -->
                             <div hide-gt-md>
                                 <template let-item let-last="last" ngFor [ngForOf]="datas">
-                                    <md-list-item>
-                                        <md-icon md-list-avatar style="background: #b1ccea">description</md-icon>
-
-                                        <h3 md-line class="hover" (click)="selectDocument(item)"> {{item.documentName}}
-                                        </h3>
-                                        <!--<h4 md-line> วันที่ : {{item.documentPublicDate}} </h4>
+                                <md-list-item >
+                                    <md-icon md-list-avatar style="background: #b1ccea">description</md-icon>
+                                    
+                                    <h3 md-line class="hover" (click)="selectDocument(item)"> {{item.documentName}} </h3>
+                                    <!--<h4 md-line> วันที่ : {{item.documentPublicDate}} </h4>
                                     <p md-line> ผู้สร้าง : {{item.createdName}} </p>-->
 
                                 </md-list-item>
@@ -494,22 +496,22 @@
             <!--<button md-fab [style.background]="'#cc7a00'" color="accent" title="รายงาน" style="margin-bottom: 3px;">
                 <md-icon>assignment</md-icon>
             </button>-->
-            <button *ngIf='checkBox' md-fab [style.background]="'#79ff4d'" color="accent" title="ย้าย" (click)="listFolderTree();">
-                <md-icon>compare_arrows</md-icon>
-            </button>
+            <button *ngIf='checkBox' md-fab [style.background]="'#79ff4d'" color="accent" title="ย้าย" (click)="listFolderTree(); ">
+                    <md-icon>compare_arrows</md-icon>
+                </button>
 
-            <button *ngIf='checkBox && authDelDoc' md-fab [style.background]="'#C8665A'" color="accent" title="ลบ" (click)="delDocSelec();">
-                <md-icon>delete</md-icon>
-            </button>
+            <button *ngIf='checkBox && authDelDoc' md-fab [style.background]="'#C8665A'" color="accent" title="ลบ" (click)="delDocSelec(); ">
+                    <md-icon>delete</md-icon>
+                </button>
             <div *ngIf='authDocRe && !checkBox '>
-                <button md-fab color="accent" [style.background]="'#696969'" title="รายงาน" (click)="report();">
+                <button md-fab color="accent" [style.background]="'#696969'" title="รายงาน" (click)="report(); ">
                     <md-icon>assignment</md-icon>
                 </button>
             </div>
             <div *ngIf='authAddDoc && !checkBox '>
                 <button md-fab color="accent" [style.background]="warn" title="เพิ่มเอกสาร" (click)="addDocument()">
-                    <md-icon>add</md-icon>
-                </button>
+                <md-icon>add</md-icon>
+            </button>
             </div>
             <button *ngIf='!checkBox' md-fab color="accent" [style.background]="'#FF0000'" title="ค้นหาเอกสารหมดอายุ" (click)="searchExp()">
                 <md-icon>search</md-icon>
@@ -522,13 +524,13 @@
         </div>
         <!--</div>-->
         <button md-fab color="accent" title="รายการเมนู">
-            <md-icon>{{listMenu}}</md-icon>
-        </button>
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
     </div>
 
     <div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
         <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="dmsSearch();sideSubMenu.close();">
-            <md-icon>search</md-icon>
-        </button>
+        <md-icon>search</md-icon>
+    </button>
     </div>
 </div>
