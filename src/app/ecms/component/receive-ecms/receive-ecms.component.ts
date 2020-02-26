@@ -266,7 +266,7 @@ export class ReceiveEcmsComponent implements OnInit {
           .subscribe(response => {
             this._loadingService.resolve('main')
             content.id = response.id
-            //this.updateFileAttach(ecms.wfFileAttach, documentId)
+            this.updateFileAttach(ecms.wfFileAttach, documentId)
             this.createWorkflow(content)
           })
       })
@@ -330,23 +330,30 @@ export class ReceiveEcmsComponent implements OnInit {
   }
 
   updateFileAttach(fileAttachs: any[], documentId: number) {
+    let edit_tmp: any[] = []
     fileAttachs.forEach(fileAttach => {
+      // let tmp = new FileAttach({
+      //   fileAttachName: fileAttach.fileAttachName,
+      //   fileAttachType: fileAttach.fileAttachType,
+      //   fileSize: fileAttach.fileAttachSize,
+      //   linkType: 'dms',
+      //   linkId: documentId,
+      //   url: fileAttach.url,
+      //   thumbnailUrl: fileAttach.thumbnailUrl,
+      //   urlNoName: fileAttach.urlNoName,
+      //   referenceId: 0,
+      //   secrets: 1
+      // })
       let tmp = new FileAttach({
-        fileAttachName: fileAttach.fileAttachName,
-        fileAttachType: fileAttach.fileAttachType,
-        fileSize: fileAttach.fileAttachSize,
+        id: fileAttach.id,
         linkType: 'dms',
-        linkId: documentId,
-        url: fileAttach.url,
-        thumbnailUrl: fileAttach.thumbnailUrl,
-        urlNoName: fileAttach.urlNoName,
-        referenceId: 0,
-        secrets: 1
+        linkId: documentId
       })
-      // this._pxService
-      //   .updateFileAttach2()
-      //   .su
+      edit_tmp.push(this._pxService.updateFileAttach2(tmp, 1))
     })
+    Observable.forkJoin(edit_tmp)
+      .subscribe((res: any[]) => {
+      })
   }
 
 }
