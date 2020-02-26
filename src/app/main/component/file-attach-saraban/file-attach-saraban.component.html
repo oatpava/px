@@ -9,7 +9,7 @@
                 <h3 md-line style="font-weight:bold">
                     <span>{{item?.fileAttachName}}{{item?.type}} </span> [<span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
                 </h3>
-                <h4 md-line>{{item?.createdDate.substr(0,16)}}</h4>
+                <h4 md-line>{{item?.createdDate.substr(0,16)}} ({{item.fileAttachSize/1000000}} MB)</h4>
                 <p md-line>{{item?.createdName}}</p>
                 <div *ngIf="hoverEdit==item.id && (auth[item.secrets] || viewOnly)" class="block-icon-Option">
                     <button *ngIf="item.canView" md-icon-button title="ดูเอกสาร" (click)="viewImage(item)"><md-icon>visibility</md-icon></button>
