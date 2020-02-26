@@ -56,17 +56,15 @@ export class AddUserProfileComponent implements OnInit {
 
   posLevel = [
     { id: 0, name: 'เลือกระดับ' },
-    { id: 1, name: '1' },
-    { id: 2, name: '2' },
-    { id: 3, name: '3' },
-    { id: 4, name: '4' },
-    { id: 5, name: '5' },
-    { id: 6, name: '6' },
-    { id: 7, name: '7' },
-    { id: 8, name: '8' },
-    { id: 9, name: '9' },
-    { id: 10, name: '10' },
-    { id: 11, name: 'ลูกจ้างบริษัท' }
+    { id: 1, name: 'ระดับปฏิบัติงาน' },
+    { id: 2, name: 'ระดับปฏิบัติการ' },
+    { id: 3, name: 'ระดับชำนาญงาน' },
+    { id: 4, name: 'ระดับชำราญการ' },
+    { id: 5, name: 'ระดับอาวุโส' },
+    { id: 6, name: 'ระดับชำนาญการพิเศษ' },
+    { id: 7, name: 'ระดับทักษะพิเศษ' },
+    { id: 8, name: 'ระดับเชี่ยวชาญ' },
+    { id: 9, name: 'ระดับทรงคุณวุฒิ' }
   ]
   // userStatuss: UserStatus[] = []
   // private myDatePickerOptions: IMyOptions = {
