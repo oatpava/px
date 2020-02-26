@@ -123,7 +123,7 @@ export class ListSarabanContentComponent implements OnInit {
 
   ngOnInit() {
     console.log("ListSarabanContentComponent")
-    if (this._paramSarabanService.returnToContent) {
+    if (this._paramSarabanService.returnToContent || this._paramSarabanService.inboxToContent) {
       this._paramSarabanService.returnToContent = false
       setTimeout(() => this.returnToContent(this._paramSarabanService.sarabanContentId), 1)
     } else {

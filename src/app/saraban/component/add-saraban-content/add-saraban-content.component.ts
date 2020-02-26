@@ -326,7 +326,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.sarabanContent.wfContentSpeedStr = this.sarabanSpeeds[this.sarabanContent.wfContentSpeed - 1].sarabanSpeedName
         this.sarabanContent.wfContentSecretStr = this.sarabanSecrets[this.sarabanContent.wfContentSecret - 1].sarabanSecretName
 
-        if (this._paramSarabanService.mwp.fromMwp) {
+        if (this._paramSarabanService.mwp.fromMwp || this._paramSarabanService.inboxToContent) {
           //this.isFinish = false//mwp always can action//GHB
           if (this.isCanceled || this.isFinish) this._paramSarabanService.menuType = ''
           let structureId: number = 0
@@ -343,6 +343,7 @@ export class AddSarabanContentComponent implements OnInit {
           } else {
             this.getContentAuth(this._paramSarabanService.registedFolder.id, structureId, userId)
             this._paramSarabanService.registedFolder = null
+            this._paramSarabanService.inboxToContent = false
           }
         } else {
           this.getMenus(this._paramSarabanService.contentAuth)
