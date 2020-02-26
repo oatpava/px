@@ -434,7 +434,7 @@ export class AddSarabanContentComponent implements OnInit {
   getMenus(auths: SarabanAuth[]) {
     this._loadingService.register('main')
     this._sarabanContentService
-      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive)
+      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive, true)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.menus = response
