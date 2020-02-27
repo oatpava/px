@@ -123,6 +123,64 @@ export class ReceiveEcmsComponent implements OnInit {
       this.createDocument(this.selectedRow[0])
     }
   }
+  refuseContentEcms() { //ปฏิเสธหนังสือ
+    if (this.selectedRow.length != 1) {
+      this.msgs = []
+      this.msgs.push({
+        severity: 'warn',
+        summary: 'ไม่สามารถดำเนินการได้',
+        detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
+      })
+    } else {
+      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        width: '40%',
+      });
+      let instance = dialogRef.componentInstance
+      instance.dataName = 'คุณต้องการปฏิเสธหนังสือ ใช่ หรือ ไม่'
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.selectedRow.forEach(element => {
+            this.fkDelete.push(this._ecmsService.getECMSRejectLetterNotifier(element.id))
+          })
+          Observable.forkJoin(this.fkDelete)
+            .subscribe((response2: any[]) => {
+              this.fkDelete = []
+              if (response2[0].data[0].errorCode !== '') {
+                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                  width: '40%',
+                });
+                let instance = dialogRef.componentInstance
+                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+              } else {
+                //Update
+                this.selectedRow.forEach(element => {
+                  let sendECMSContentData2 = {
+                    wfContentId: element.wfContentId,
+                    filePath: element.result,
+                    thegifDepartmentReceiver: element.depCode,
+                    thegifLetterStatus: 'RejectLetterNotifier',
+                    thegifId: element.id
+                  }
+                  this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
+                })
+                Observable.forkJoin(this.fkUpdateEcms)
+                  .subscribe((response3: any[]) => {
+                    this.getContentEcms()
+                    this.fkUpdateEcms = []
+                    this.selectedRow = []
+                    this.msgs = []
+                    this.msgs.push({
+                      severity: 'success',
+                      summary: 'บันทึกสำเร็จ',
+                      detail: 'แจ้งปฏิเสธหนังสือแล้ว'
+                    })
+                  })
+              }
+            })
+        }
+      })
+    }
+  }
   wrongContentEcms() { //แจ้งหนังสือผิด/ส่งผิด
     if (this.selectedRow.length != 1) {
       this.msgs = []
