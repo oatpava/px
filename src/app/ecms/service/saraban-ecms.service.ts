@@ -114,9 +114,7 @@ export class SarabanEcmsService {
     let params = new URLSearchParams()
     if (environment.production) {
       this._options.search = params
-      params.set('thegifDepartmentId', id)
-      params.set('sort', 'createdDate')
-      params.set('dir', 'asc')
+      params.set('q', this._pxService.encrypt(`sort=createdDate&dir=asc&thegifDepartmentId=${id}`))
       return this._http.get(this._apiUrl + '/v1/thegifDepartments/listByThegifDepartmentId', this._options)
         .map((response: Response) => {
           return this._pxService.verifyResponseArray(response.json())
@@ -128,10 +126,7 @@ export class SarabanEcmsService {
   getECMSSearchStructure(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('thegifDepartmentName', model.thegifDepartmentName)
-    params.set('thegifDepartmentCode', model.thegifDepartmentCode)
-    params.set('sort', 'createdDate')
-    params.set('dir', 'asc')
+    params.set('q', this._pxService.encrypt(`thegifDepartmentName=${model.thegifDepartmentName}&thegifDepartmentCode=${model.thegifDepartmentCode}&sort=createdDate&dir=asc`))
     return this._http.get(this._apiUrl + '/v1/thegifDepartments/searchThegifDepartment', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -142,11 +137,7 @@ export class SarabanEcmsService {
   getContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('offset', model.offset)
-    params.set('limit', model.limit)
-    params.set('elementType', model.type)
-    params.set('sort', 'createdDate')
-    params.set('dir', 'desc')
+    params.set('q', this._pxService.encrypt(`offset=${model.offset}&limit=&${model.limit}&elementType=${model.type}&sort=createdDate&dir=desc`))
     return this._http.get(this._apiUrl + '/v1/thegifs/listByElementType', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -157,9 +148,7 @@ export class SarabanEcmsService {
   sendContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('DEPCODE', model.DEPCODE)
-    params.set('wfContentId', model.wfContentId)
-    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter', this._options)
+    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter/' + model.DEPCODE + '/' + model.wfContentId, this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
       })
@@ -169,8 +158,7 @@ export class SarabanEcmsService {
   getECMSAcceptLetterNotifier(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('idThegif', model.idThegif)
-    params.set('idWfContent', model.idWfContent)
+    params.set('q', this._pxService.encrypt(`idThegif=${model.idThegif}&idWfContent=${model.idWfContent}`))
     return this._http.get(this._apiUrl + '/v1/thegifs/getECMSAcceptLetterNotifier', this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
@@ -196,7 +184,7 @@ export class SarabanEcmsService {
   }
 
   createEcmsMinistry() {
-    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSMinistry', this._options)
+    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSMinistry', '', this._options)
       .map((response: Response) => {
         return response.json().data
       })
@@ -204,7 +192,7 @@ export class SarabanEcmsService {
   }
 
   createEcmsOrganization() {
-    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSOrganization', this._options)
+    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSOrganization', '', this._options)
       .map((response: Response) => {
         return response.json().data
       })
@@ -233,9 +221,7 @@ export class SarabanEcmsService {
 
   getECMSDeleteGovernmentDocumentRequest(id) {
     let params = new URLSearchParams()
-    params.set('idThegif', id)
-    params.set('id', id)
-    params.set('letterStatus', 'CorrespondenceDeleteGovernmentDocumentRequest')
+    params.set('q', this._pxService.encrypt(`idThegif=${id}&id=${id}&letterStatus=CorrespondenceDeleteGovernmentDocumentRequest`))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSDeleteGovernmentDocumentRequest', this._options)
@@ -248,9 +234,7 @@ export class SarabanEcmsService {
 
   getECMSRejectLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('idThegif', id)
-    params.set('id', id)
-    params.set('letterStatus', 'RejectLetterNotifier')
+    params.set('q', this._pxService.encrypt(`idThegif=${id}&id=${id}&letterStatus=RejectLetterNotifier`))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSRejectLetterNotifier', this._options)
@@ -263,9 +247,7 @@ export class SarabanEcmsService {
 
   getECMSInvalidLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('idThegif', id)
-    params.set('id', id)
-    params.set('letterStatus', 'InvalidAcceptIDNotifier')
+    params.set('q', this._pxService.encrypt(`idThegif=${id}&id=${id}&letterStatus=InvalidAcceptIDNotifier`))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSInvalidAcceptIDNotifier', this._options)
@@ -278,9 +260,7 @@ export class SarabanEcmsService {
 
   getECMSInvalidSendLetterNotifier(id) {
     let params = new URLSearchParams()
-    params.set('idThegif', id)
-    params.set('id', id)
-    params.set('letterStatus', 'InvalidLetterNotifier')
+    params.set('q', this._pxService.encrypt(`idThegif=${id}&id=${id}&letterStatus=InvalidLetterNotifier`))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/thegifs/getECMSInvalidLetterNotifier', this._options)
