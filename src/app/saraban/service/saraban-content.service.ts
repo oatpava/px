@@ -92,12 +92,12 @@ export class SarabanContentService {
       if (contentAuth[12].auth && menuEcms) menus.push(MENUS[6]);
       (contentAuth[1].auth) ? menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[2], MENUS[1]) : menus.push(MENUS[5], MENUS[4], MENUS[3], MENUS[1])
     } else if (menuType === "saraban") {
+      if (contentAuth[12].auth && menuEcms) menus.push(MENUS[25])
       //menus.push(MENUS[20])
       if (contentAuth[14].auth) menus.push(MENUS[15])
       if (contentAuth[8].auth) menus.push(MENUS[13])
       if (contentAuth[6].auth) menus.push(MENUS[11])
       if (contentAuth[5].auth) menus.push(MENUS[10])
-      if (contentAuth[12].auth) menus.push(MENUS[25])
       if (contentAuth[4].auth) menus.push(MENUS[9])
       if (contentAuth[3].auth) menus.push(MENUS[8])
       if (contentAuth[11].auth) menus.push(MENUS[24])

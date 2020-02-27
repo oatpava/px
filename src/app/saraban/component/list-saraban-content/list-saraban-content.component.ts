@@ -570,8 +570,6 @@ export class ListSarabanContentComponent implements OnInit {
           })
         }
         if (result.type == 2) {
-          this.msgs = []
-          this.msgs.push({ severity: 'info', summary: 'กำลังดำเนินการ', detail: 'ระบบกำลังลงรับหนังสือ กรุณารอสักครู่' })
           let dialogRef = this._dialog.open(ReceiveEcmsComponent, {
           });
           let instance = dialogRef.componentInstance
@@ -579,6 +577,7 @@ export class ListSarabanContentComponent implements OnInit {
           instance.folder = this.folder
           dialogRef.afterClosed().subscribe(result => {
             if (result) {
+              this.getSarabanContents(limit)
               this.msgs = []
               let dialogRef = this._dialog.open(DialogWarningComponent)
               dialogRef.componentInstance.header = result.header

@@ -120,7 +120,65 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      this.createDocument(this.selectedRow)
+      this.createDocument(this.selectedRow[0])
+    }
+  }
+  refuseContentEcms() { //ปฏิเสธหนังสือ
+    if (this.selectedRow.length != 1) {
+      this.msgs = []
+      this.msgs.push({
+        severity: 'warn',
+        summary: 'ไม่สามารถดำเนินการได้',
+        detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
+      })
+    } else {
+      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        width: '40%',
+      });
+      let instance = dialogRef.componentInstance
+      instance.dataName = 'คุณต้องการปฏิเสธหนังสือ ใช่ หรือ ไม่'
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.selectedRow.forEach(element => {
+            this.fkDelete.push(this._ecmsService.getECMSRejectLetterNotifier(element.id))
+          })
+          Observable.forkJoin(this.fkDelete)
+            .subscribe((response2: any[]) => {
+              this.fkDelete = []
+              if (response2[0].data[0].errorCode !== '') {
+                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                  width: '40%',
+                });
+                let instance = dialogRef.componentInstance
+                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+              } else {
+                //Update
+                this.selectedRow.forEach(element => {
+                  let sendECMSContentData2 = {
+                    wfContentId: element.wfContentId,
+                    filePath: element.result,
+                    thegifDepartmentReceiver: element.depCode,
+                    thegifLetterStatus: 'RejectLetterNotifier',
+                    thegifId: element.id
+                  }
+                  this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
+                })
+                Observable.forkJoin(this.fkUpdateEcms)
+                  .subscribe((response3: any[]) => {
+                    this.getContentEcms()
+                    this.fkUpdateEcms = []
+                    this.selectedRow = []
+                    this.msgs = []
+                    this.msgs.push({
+                      severity: 'success',
+                      summary: 'บันทึกสำเร็จ',
+                      detail: 'แจ้งปฏิเสธหนังสือแล้ว'
+                    })
+                  })
+              }
+            })
+        }
+      })
     }
   }
   wrongContentEcms() { //แจ้งหนังสือผิด/ส่งผิด
@@ -196,6 +254,9 @@ export class ReceiveEcmsComponent implements OnInit {
   }
 
   createDocument(ecms: any) {
+    console.log('ecms', ecms)
+    this.msgs = []
+    this.msgs.push({ severity: 'info', summary: 'กำลังดำเนินการ', detail: 'ระบบกำลังลงรับหนังสือ กรุณารอสักครู่' })
     let document = new Document()
     document.documentTypeId = 4
     let newDoc: any
@@ -231,16 +292,8 @@ export class ReceiveEcmsComponent implements OnInit {
         let month = dateTime.getMonth() + 1
         let day = dateTime.getDate()
         let tzoffset = dateTime.getTimezoneOffset() * 60000
-        content.wfContentContentTime = (new Date(Date.now() - tzoffset)).toISOString().slice(11, 16)
-        let time_str = (new Date(Date.now() - tzoffset)).toISOString().slice(11, 19)
-        content.wfContentContentDate = {
-          date: {
-            year: response.wfContentYear,
-            month: month,
-            day: day
-          }
-        }
-        let contentDate_str = ("0" + day).slice(-2) + "/" + ("0" + month).slice(-2) + "/" + response.wfContentYear
+        content.wfContentContentTime = (new Date(Date.now() - tzoffset)).toISOString().slice(11, 19)
+        content.wfContentContentDate = ("0" + day).slice(-2) + "/" + ("0" + month).slice(-2) + "/" + response.wfContentYear
         content.wfContentBookPre = ''
         content.wfContentBookNumber = 0
         content.wfContentBookPoint = 0
@@ -258,17 +311,8 @@ export class ReceiveEcmsComponent implements OnInit {
         content.wfContentReference = ecms.thegifReference
         content.wfContentContentYear = response.wfContentYear
         content.wfContentBookYear = response.wfContentYear
-        content.wfContentDate01 = contentDate_str + " " + time_str
-
-        this._loadingService.register('main')
-        this._sarabanContentService
-          .createSarabanContent(content, 0)
-          .subscribe(response => {
-            this._loadingService.resolve('main')
-            content.id = response.id
-            this.updateFileAttach(ecms.wfFileAttach, documentId)
-            this.createWorkflow(content)
-          })
+        content.wfContentDate01 = content.wfContentContentDate + " " + content.wfContentContentTime
+        this.createContent(content, documentId, ecms.id)
       })
   }
 
@@ -278,6 +322,19 @@ export class ReceiveEcmsComponent implements OnInit {
     } else {
       return 1
     }
+  }
+
+  createContent(content: SarabanContent, documentId: number, ecmsId: number) {
+    this._loadingService.register('main')
+    this._sarabanContentService
+      .createSarabanContent(content, 0)
+      .subscribe(response => {
+        console.log('createSarabanContent', response)
+        this._loadingService.resolve('main')
+        content.id = response.id
+        this.updateFileAttach(documentId, ecmsId)
+        this.createWorkflow(content)
+      })
   }
 
   createWorkflow(content: SarabanContent) {
@@ -329,30 +386,27 @@ export class ReceiveEcmsComponent implements OnInit {
       })
   }
 
-  updateFileAttach(fileAttachs: any[], documentId: number) {
-    let edit_tmp: any[] = []
-    fileAttachs.forEach(fileAttach => {
-      // let tmp = new FileAttach({
-      //   fileAttachName: fileAttach.fileAttachName,
-      //   fileAttachType: fileAttach.fileAttachType,
-      //   fileSize: fileAttach.fileAttachSize,
-      //   linkType: 'dms',
-      //   linkId: documentId,
-      //   url: fileAttach.url,
-      //   thumbnailUrl: fileAttach.thumbnailUrl,
-      //   urlNoName: fileAttach.urlNoName,
-      //   referenceId: 0,
-      //   secrets: 1
-      // })
-      let tmp = new FileAttach({
-        id: fileAttach.id,
-        linkType: 'dms',
-        linkId: documentId
-      })
-      edit_tmp.push(this._pxService.updateFileAttach2(tmp, 1))
-    })
-    Observable.forkJoin(edit_tmp)
-      .subscribe((res: any[]) => {
+  updateFileAttach(documentId: number, ecmsId: number) {
+    this._loadingService.register('main')
+    this._pxService
+      .getFileAttachs('thegif', ecmsId, 'asc')
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        console.log('ECMS fileaTaachs', response)
+        let edit_tmp: any[] = []
+        response.forEach(fileAttach => {
+          let tmp = new FileAttach({
+            id: fileAttach.id,
+            fileAttachName: fileAttach.fileAttachName + (fileAttach.fileAttachType).toLowerCase(),
+            linkType: 'dms',
+            linkId: documentId,
+            secrets: 1
+          })
+          edit_tmp.push(this._pxService.updateFileAttach2(tmp, 1))
+        })
+        Observable.forkJoin(edit_tmp)
+          .subscribe((res: any[]) => {
+          })
       })
   }
 
