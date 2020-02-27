@@ -148,8 +148,7 @@ export class SarabanEcmsService {
   sendContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    params.set('q', this._pxService.encrypt(`DEPCODE=${model.DEPCODE}&wfContentId=${model.wfContentId}`))
-    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter', this._options)
+    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter/' + model.DEPCODE + '/' + model.wfContentId, this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
       })
@@ -185,7 +184,7 @@ export class SarabanEcmsService {
   }
 
   createEcmsMinistry() {
-    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSMinistry', this._options)
+    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSMinistry', '', this._options)
       .map((response: Response) => {
         return response.json().data
       })
@@ -193,7 +192,7 @@ export class SarabanEcmsService {
   }
 
   createEcmsOrganization() {
-    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSOrganization', this._options)
+    return this._http.post(this._apiUrl + '/v1/thegifs/createNewECMSOrganization', '', this._options)
       .map((response: Response) => {
         return response.json().data
       })
