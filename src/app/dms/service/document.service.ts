@@ -296,7 +296,8 @@ export class DocumentService {
     if (dataSearch.documentVarchar10 === undefined || dataSearch.documentName === 'undefined') { newDataSearch.documentVarchar10 = ''; } else { newDataSearch.documentVarchar10 = dataSearch.documentVarchar10 }
 
     if (dataSearch.documentIntComma === undefined || dataSearch.documentName === 'undefined') { newDataSearch.documentIntComma = 0; } else { newDataSearch.documentIntComma = dataSearch.documentIntComma }
-
+    
+    if (dataSearch.fullText === undefined || dataSearch.documentName === 'undefined') { newDataSearch.fullText = ''; } else { newDataSearch.fullText = dataSearch.fullText }
 
     console.log('service - ',newDataSearch)
     // console.log(dataSearch)

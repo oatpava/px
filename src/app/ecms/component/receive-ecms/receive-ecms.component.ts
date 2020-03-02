@@ -333,6 +333,7 @@ export class ReceiveEcmsComponent implements OnInit {
         this._loadingService.resolve('main')
         content.id = response.id
         this.updateFileAttach(documentId, ecmsId)
+        this.deleteECMS(ecmsId)
         this.createWorkflow(content)
       })
   }
@@ -392,7 +393,7 @@ export class ReceiveEcmsComponent implements OnInit {
       .getFileAttachs('thegif', ecmsId, 'asc')
       .subscribe(response => {
         this._loadingService.resolve('main')
-        console.log('ECMS fileaTaachs', response)
+        console.log('ECMS fileAttachs', response)
         let edit_tmp: any[] = []
         response.forEach(fileAttach => {
           let tmp = new FileAttach({
@@ -407,6 +408,14 @@ export class ReceiveEcmsComponent implements OnInit {
         Observable.forkJoin(edit_tmp)
           .subscribe((res: any[]) => {
           })
+      })
+  }
+
+  deleteECMS(id: number) {
+    this._ecmsService
+      .delete(id)
+      .subscribe(response => {
+
       })
   }
 
