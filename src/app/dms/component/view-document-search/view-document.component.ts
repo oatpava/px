@@ -191,7 +191,7 @@ export class ViewDocumentComponent implements OnInit {
         if (params['documentIntComma'] != undefined) this.documentIntComma = params['documentIntComma'];
 
         // if (params['allField'] != undefined) this.allField = params['allField'];
-        // if (params['fullText'] != undefined) this.fullText = params['fullText'];
+        if (params['fullText'] != undefined) this.fullText = params['fullText'];
         // if (params['fileAttachName'] != undefined) this.fileAttachName = params['fileAttachName'];
 
 
@@ -267,7 +267,7 @@ export class ViewDocumentComponent implements OnInit {
     dataSearch['folderId'] = this.folderId
 
     // dataSearch['allField'] = this.allField.toLowerCase();
-    // dataSearch['fullText'] = this.fullText.toLowerCase();
+    dataSearch['fullText'] = this.fullText.toLowerCase();
     // dataSearch['fileAttachName'] = this.fileAttachName.toLowerCase();
 
 
@@ -275,7 +275,7 @@ export class ViewDocumentComponent implements OnInit {
 
 
 
-    console.log(dataSearch);
+    console.log("dataSearch ",dataSearch);
     console.log('--isFormListByDocType =', this.isFormListByDocType)
     console.log('--isWfFolderFromType =', this.isWfFolderFromType)
 

@@ -40,4 +40,5 @@ export class Search {
   documentVarchar10: string
   documentIntComma:number
   folderId: number
+  fullText:string
 }
