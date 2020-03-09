@@ -343,14 +343,14 @@ export class AddSarabanContentComponent implements OnInit {
           //   this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
           // }     
           if (this._paramSarabanService.registedFolder == null) {
-            this.getContentAuthMWP(this.sarabanContent.id, structureId, userId)//cause MWP => folderId=null 
+            this.getContentAuthMWP(this.sarabanContent.id, structureId, userId, false)//cause MWP => folderId=null 
           } else {
-            this.getContentAuth(this._paramSarabanService.registedFolder.id, structureId, userId)
+            this.getContentAuth(this._paramSarabanService.registedFolder.id, structureId, userId, false)//inbox registr only folder type1=1
             this._paramSarabanService.registedFolder = null
             this._paramSarabanService.inboxToContent = false
           }
         } else {
-          this.getMenus(this._paramSarabanService.contentAuth)
+          this.getMenus(this._paramSarabanService.contentAuth, (this._paramSarabanService.folder.wfContentType2.id == 3))
         }
 
         if (this.sarabanContent.wfContentDate01.length > 0) {
@@ -436,10 +436,10 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
-  getMenus(auths: SarabanAuth[]) {
+  getMenus(auths: SarabanAuth[], menuEcms: boolean) {
     this._loadingService.register('main')
     this._sarabanContentService
-      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive, (this._paramSarabanService.folder.wfContentType2.id == 3))
+      .getAuthMenus(this._paramSarabanService.menuType, auths, null, this.isArchive, menuEcms)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.menus = response
@@ -1780,14 +1780,14 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
-  getContentAuthMWP(contentId: number, structureId: number, userId: number) {
+  getContentAuthMWP(contentId: number, structureId: number, userId: number, menuEcms: boolean) {
     this._loadingService.register('main')
     this._sarabanService
       .getContentAuthMWP(contentId, structureId, userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this._paramSarabanService.setAuth(response)
-        this.getMenus(this._paramSarabanService.contentAuth)
+        this.getMenus(this._paramSarabanService.contentAuth, menuEcms)
       })
   }
 
@@ -2268,13 +2268,13 @@ export class AddSarabanContentComponent implements OnInit {
     })
   }
 
-  getContentAuth(folderId: number, structureId: number, userId: number) {
+  getContentAuth(folderId: number, structureId: number, userId: number, menuEcms: boolean) {
     this._loadingService.register('main')
     this._sarabanService
       .getContentAuth(folderId, structureId, userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.getMenus(response)
+        this.getMenus(response, menuEcms)
       })
   }
 
