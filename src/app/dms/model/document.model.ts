@@ -49,7 +49,7 @@ export class Document {
   expNumber: number
   wfTypeId:number
   fullPathName:string
-  
+  checkInout:number
   // createdName: string
 
   constructor(values: Object = {}) {
@@ -96,6 +96,7 @@ export class Document {
       this.expNumber = null
       this.wfTypeId = 0
       this.fullPathName=''
+      this.checkInout=0
       // this.createdName = null
       this.userProfileCreate = {
       "id": 1,

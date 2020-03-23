@@ -598,5 +598,33 @@ export class DocumentService {
     }
   }
 
+  checkIncheckOut(docIn:number){
+
+    if (environment.production) {
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOut/'+docIn, this._options)
+        .map((response: Response) => {
+          return response.json()
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+      
+    }
+
+  }
+
+  checkInOutUser(userId:number){
+
+    if (environment.production) {
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOutUser/'+userId, this._options)
+        .map((response: Response) => {
+          return response.json()
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+      
+    }
+
+  }
+
 
 }
