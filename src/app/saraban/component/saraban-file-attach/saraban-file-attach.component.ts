@@ -9,6 +9,7 @@ import { setTimeout } from 'timers'
 import { environment } from '../../../../environments/environment'
 
 import { PxService } from '../../../main/px.service'
+import { SarabanContentService } from '../../service/saraban-content.service'
 import { ParamSarabanService } from '../../service/param-saraban.service'
 
 import { FileAttach } from '../../../main/model/file-attach.model'
@@ -20,7 +21,7 @@ import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/di
   selector: 'app-saraban-file-attach',
   templateUrl: './saraban-file-attach.component.html',
   styleUrls: ['./saraban-file-attach.component.styl'],
-  providers: [PxService]
+  providers: [PxService, SarabanContentService]
 })
 export class SarabanFileAttachComponent implements OnInit {
   private isArchive: boolean
@@ -52,6 +53,7 @@ export class SarabanFileAttachComponent implements OnInit {
   constructor(
     private _loadingService: TdLoadingService,
     private _pxService: PxService,
+    private _sarabanContentService: SarabanContentService,
     private _paramSarabanService: ParamSarabanService,
   ) {
     this.isArchive = this._paramSarabanService.isArchive
@@ -75,6 +77,7 @@ export class SarabanFileAttachComponent implements OnInit {
     this.auth[4] = auth[18].auth
     if (!this.auth[0] || this._paramSarabanService.mwp.fromMwp || this.isArchive) {
       this.viewOnly = true
+      console.log('VIEWONLY')
     }
   }
 
@@ -294,12 +297,16 @@ export class SarabanFileAttachComponent implements OnInit {
   }
 
   afterSaveAdd(msgs_tmp: Message[]) {
-    this._loadingService.resolve('main')
-    this.blockUI = false
-    this.getFileAttachs()
-    this.msgs = []
-    this.life = 3000
-    this.msgs = msgs_tmp
+    this._sarabanContentService
+      .updateFullText(this.linkId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.blockUI = false
+        this.getFileAttachs()
+        this.msgs = []
+        this.life = 3000
+        this.msgs = msgs_tmp
+      })
   }
 
   delete() {
