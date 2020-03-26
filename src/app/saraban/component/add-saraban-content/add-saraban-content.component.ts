@@ -584,6 +584,7 @@ export class AddSarabanContentComponent implements OnInit {
     this._paramSarabanService.path += ' / เลขทะเบียน: ' + this.sarabanContent.wfContentContentNo
     this.path = this._paramSarabanService.path
 
+    this.disabledHardCopyRecieved = false
     this.hardCopyRecieved = false
     this.sarabanContent.wfContentDate01 = this.contentDate_str + " " + this.time_str
   }
