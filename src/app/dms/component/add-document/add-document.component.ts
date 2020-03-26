@@ -39,6 +39,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
 import { EmailComponent } from '../email/email.component'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
+import { Message } from 'primeng/primeng'
 @Component({
   selector: 'app-add-document',
   templateUrl: './add-document.component.html',
@@ -106,7 +107,7 @@ export class AddDocumentComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
     height: '30px',
-    width: '100%',
+    width: '1000px',
     inline: false,
     selectionTxtFontSize: '14px',
     openSelectorOnInputClick: true,
@@ -121,7 +122,7 @@ export class AddDocumentComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
     height: '30px',
-    width: '100%',
+    width: '1000px',
     inline: false,
     selectionTxtFontSize: '14px',
     openSelectorOnInputClick: true,
@@ -141,7 +142,7 @@ export class AddDocumentComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
     height: '30px',
-    width: '100%',
+    width: '1000px',
     inline: false,
     selectionTxtFontSize: '14px',
     openSelectorOnInputClick: true,
@@ -150,6 +151,8 @@ export class AddDocumentComponent implements OnInit {
     sunHighlight: false,
 
   }
+
+  msgs: Message[] = [];
 
   constructor(
 
@@ -224,17 +227,24 @@ export class AddDocumentComponent implements OnInit {
             console.log('exp date - Change 0')
             if (this.folderTypeExpireNumber > 0 && this.folderTypeExpire.length > 0) {
               console.log('exp date - Change 1')
-              console.log(this.folderTypeExpireNumber, this.folderTypeExpire)
-              if (this.folderTypeExpire == 'D') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() + 0 + this.folderTypeExpireNumber } }
-              }
-              if (this.folderTypeExpire == 'M') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1 + this.folderTypeExpireNumber, day: this.nowDate.getDate() } }
-              }
-              if (this.folderTypeExpire == 'Y') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543 + this.folderTypeExpireNumber), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
-              }
-              console.log('this.dmsDocument.documentExpireDate ', this.dmsDocument.documentExpireDate)
+              // console.log(this.folderTypeExpireNumber, this.folderTypeExpire)
+              // if (this.folderTypeExpire == 'D') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() + 0 + this.folderTypeExpireNumber } }
+              // }
+              // if (this.folderTypeExpire == 'M') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1 + this.folderTypeExpireNumber, day: this.nowDate.getDate() } }
+              // }
+              // if (this.folderTypeExpire == 'Y') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543 + this.folderTypeExpireNumber), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
+              // }
+              // console.log('this.dmsDocument.documentExpireDate ', this.dmsDocument.documentExpireDate)
+
+              let dateTemp = this.getdate(this.folderTypeExpireNumber, this.folderTypeExpire)
+              let dd = dateTemp.getDate();
+              let mm = dateTemp.getMonth() + 1;
+              let yy = dateTemp.getFullYear() + 543;
+
+              this.dmsDocument.documentExpireDate = { date: { year: yy, month: mm, day: dd } }
             }
           }
         }
@@ -349,6 +359,9 @@ export class AddDocumentComponent implements OnInit {
     this._loadingService.resolve('main')
   }
 
+  checkInCheckOutOwnrtStatus: boolean = false
+  checkInCheckOutLockStatus: boolean = false
+
   getDocument(documentId: number) {
     console.log('getDocument--- ', documentId)
     localStorage.setItem('activeX', 'complete')
@@ -358,6 +371,35 @@ export class AddDocumentComponent implements OnInit {
         this.dmsDocument = response as Document
         this.dmsDocument.createdDate = this._pxService.convertStringToDate(this.dmsDocument.createdDate)
         console.log('this.dmsDocument - ', this.dmsDocument)
+
+        if (this.dmsDocument.checkInout > 0) {
+
+          // 0 = owner , 1 = not owner
+          this._documentService
+            .checkInOutUser(this.dmsDocument.checkInout)
+            .subscribe(response => {
+              if (response.stutas == 1) {
+                this.checkInCheckOutLockStatus = true
+                this.msgs = [];
+                this.msgs.push(
+                  {
+                    severity: 'warn',
+                    summary: response.name + ' ได้จองเอกสาร',
+                
+                  })
+
+              }
+
+              console.log('checkInOutUser - ', response)
+              console.log('this.authEditDoc - ', !this.authEditDoc)
+              console.log('this.checkInCheckOutLockStatus - ', this.checkInCheckOutLockStatus)
+              console.log('this.authCreDocFile = ',!this.authCreDocFile)
+              console.log('---aaa---',!this.authDelDoc || this.checkInCheckOutLockStatus)
+
+
+            })
+        }
+
         if (this.dmsDocument.documentExpireDate != "") {
 
           this.dmsDocument.documentExpireDate = this._pxService.convertStringToDate(this.dmsDocument.documentExpireDate)
@@ -371,24 +413,27 @@ export class AddDocumentComponent implements OnInit {
 
             if (this.folderTypeExpireNumber > 0 && this.folderTypeExpire.length != null) {
 
-              if (this.folderTypeExpire == 'D') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() + 0 + this.folderTypeExpireNumber } }
-              }
-              if (this.folderTypeExpire == 'M') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1 + this.folderTypeExpireNumber, day: this.nowDate.getDate() } }
-              }
-              if (this.folderTypeExpire == 'Y') {
-                this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543 + this.folderTypeExpireNumber), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
-              }
-            }
-            // else {
+              let dateTemp = this.getdate(this.folderTypeExpireNumber, this.folderTypeExpire)
 
-            //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
-            // }
+              let dd = dateTemp.getDate();
+              let mm = dateTemp.getMonth() + 1;
+              let yy = dateTemp.getFullYear() + 543;
+
+
+              this.dmsDocument.documentExpireDate = { date: { year: yy, month: mm, day: dd } }
+
+              // if (this.folderTypeExpire == 'D') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() + 0 + this.folderTypeExpireNumber } }
+              // }
+              // if (this.folderTypeExpire == 'M') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1 + this.folderTypeExpireNumber, day: this.nowDate.getDate() } }
+              // }
+              // if (this.folderTypeExpire == 'Y') {
+              //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543 + this.folderTypeExpireNumber), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
+              // }
+            }
           }
-          // else {
-          //   this.dmsDocument.documentExpireDate = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
-          // }
+
         }
 
         if (this.dmsDocument.documentDate01 != "") {
@@ -967,6 +1012,7 @@ export class AddDocumentComponent implements OnInit {
     let temp = environment.plugIn
     console.log('temp url', temp)
     // let url = 'http://192.168.1.8/scan/?'
+
     let url = temp + '/scan/?'
     let mode = 'add'
     let fileAttachName = 'Document'
@@ -974,56 +1020,186 @@ export class AddDocumentComponent implements OnInit {
     let documentId = this.documentId
     let urlNoName = ''
     localStorage.setItem('scan', 'uncomplete')
-    window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName, 'scan', "height=600,width=1000")
-    const timer = TimerObservable.create(3000, 10000);
-    this.subscription = timer.subscribe(t => {
-      this.tick = '' + t;
-      console.log(this.tick + ' ' + localStorage.getItem('scan'))
-      if (localStorage.getItem('scan') == 'complete') {
-        console.log('scan ---- complete')
+    this._pxService
+      .createEmptyData('dms', documentId, 0)
+      .subscribe(res => {
 
-        this._pxService
-          .getFileAttachs('dms', this.documentId, 'asc')
-          .subscribe(response => {
-            let temp = response as any[]
-            let tempParent = response as any[]
-            console.log('this.authDocfileSecrets aa= ', this.authDocfileSecrets)
-            tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
-            console.log('tempParent = ', tempParent)
-            let datafileAttach = []
-            for (let i = 0; i < tempParent.length; i++) {
-              if (tempParent[i].referenceId == 0) {
-                tempParent[i].children = []
-                datafileAttach.push(tempParent[i])
-              }
-            }
+        window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-            for (let i = 0; i < datafileAttach.length; i++) {
-              let idParent = datafileAttach[i].id
-              for (let j = 0; j < temp.length; j++) {
-                if (idParent == temp[j].referenceId) {
-                  datafileAttach[i].children.push(temp[j])
-                  idParent = temp[j].id
-                  j = -1
-                }
+        const timer = TimerObservable.create(4000, 2000)
 
-              }
+        this.subscription = timer.subscribe(t => {
 
-
-            }
-            console.log('--- updateAtt temp', temp)
-            console.log('--- updateAtt datafileAttach', datafileAttach)
-            this.fileAttachs = datafileAttach
-            this._loadingService.resolve('main')
+          if (t == 58) {
             this.subscription.unsubscribe();
-          })
+          } else {
 
-        this.subscription.unsubscribe();
-        localStorage.setItem('scan', 'uncomplete')
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
 
+                if (res2.data == 'true') {
+                  this._pxService
+                    .getFileAttachs('dms', this.documentId, 'asc')
+                    .subscribe(response => {
+                      let temp = response as any[]
+                      let tempParent = response as any[]
+                      tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
+                      let datafileAttach = []
+                      for (let i = 0; i < tempParent.length; i++) {
+                        if (tempParent[i].referenceId == 0) {
+                          tempParent[i].children = []
+                          datafileAttach.push(tempParent[i])
+                        }
+                      }
+
+                      for (let i = 0; i < datafileAttach.length; i++) {
+                        let idParent = datafileAttach[i].id
+                        for (let j = 0; j < temp.length; j++) {
+                          if (idParent == temp[j].referenceId) {
+                            datafileAttach[i].children.push(temp[j])
+                            idParent = temp[j].id
+                            j = -1
+                          }
+
+                        }
+
+
+                      }
+
+                      this.fileAttachs = datafileAttach
+                      this.subscription.unsubscribe();
+                    })
+                }
+              })
+
+          }
+        })
+
+      })
+
+
+
+    // this.subscription = timer.subscribe(t => {
+    //   this.tick = '' + t;
+
+    //   if (localStorage.getItem('scan') == 'complete') {
+    //     this._pxService
+    //       .getFileAttachs('dms', this.documentId, 'asc')
+    //       .subscribe(response => {
+    //         let temp = response as any[]
+    //         let tempParent = response as any[]
+    //         console.log('this.authDocfileSecrets aa= ', this.authDocfileSecrets)
+    //         tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
+    //         console.log('tempParent = ', tempParent)
+    //         let datafileAttach = []
+    //         for (let i = 0; i < tempParent.length; i++) {
+    //           if (tempParent[i].referenceId == 0) {
+    //             tempParent[i].children = []
+    //             datafileAttach.push(tempParent[i])
+    //           }
+    //         }
+
+    //         for (let i = 0; i < datafileAttach.length; i++) {
+    //           let idParent = datafileAttach[i].id
+    //           for (let j = 0; j < temp.length; j++) {
+    //             if (idParent == temp[j].referenceId) {
+    //               datafileAttach[i].children.push(temp[j])
+    //               idParent = temp[j].id
+    //               j = -1
+    //             }
+
+    //           }
+
+
+    //         }
+    //         console.log('--- updateAtt temp', temp)
+    //         console.log('--- updateAtt datafileAttach', datafileAttach)
+    //         this.fileAttachs = datafileAttach
+    //         this._loadingService.resolve('main')
+    //         this.subscription.unsubscribe();
+    //       })
+    //     this.subscription.unsubscribe();
+    //     localStorage.setItem('scan', 'uncomplete')
+    //   }
+
+    // });
+  }
+
+  getdate(numVal, typeExp) {
+
+    switch (typeExp) {
+      case 'D': {
+        const date22 = new Date();
+        const newDate2 = this.addDays(date22, numVal);
+        return newDate2
       }
 
-    });
+      case 'M': {
+        const date22 = new Date();
+        const newDate2 = this.addMonth(date22, numVal);
+        return newDate2
+      }
+
+      case 'Y': {
+        const date22 = new Date();
+        const newDate2 = this.addYear(date22, numVal);
+        return newDate2
+      }
+    }
+  }
+
+  addDays(date, days) {
+    const copy = new Date(Number(date))
+    copy.setDate(date.getDate() + days)
+    return copy
+  }
+
+  addMonth(date, days) {
+    const copy = new Date(Number(date))
+    copy.setMonth(date.getMonth() + days)
+    return copy
+  }
+
+  addYear(date, days) {
+    const copy = new Date(Number(date))
+    copy.setFullYear(date.getFullYear() + days)
+    return copy
+  }
+
+  checkInCheckOut() {
+    this._documentService
+      .checkIncheckOut(this.documentId)
+      .subscribe(response => {
+
+        // console.log('checkInCheckOut - ', response)
+
+        let data = response.data
+        if (data > 0) {
+
+
+          this.msgs = [];
+          this.msgs.push(
+            {
+              severity: 'success',
+              summary: 'CheckIn Success',
+              // detail: event.node.label,
+            })
+
+        } else {
+
+
+          this.msgs = [];
+          this.msgs.push(
+            {
+              severity: 'success',
+              summary: 'ChecKOut Success',
+              // detail: event.node.label,
+            })
+
+        }
+
+      })
   }
 
 

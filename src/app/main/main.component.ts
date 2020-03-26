@@ -140,6 +140,15 @@ export class MainComponent implements OnInit {
   }
 
   selectModule(moduleId: number, moduleName: string) {
+    this._paramSarabanService.pathOld = null
+    this._paramSarabanService.path = null
+    this._paramSarabanService.searchFilters = null
+    this._paramSarabanService.searchFilters_tmp = null
+    this._paramSarabanService.datas = null
+    this._paramSarabanService.tableFirst = null
+    this._paramSarabanService.listReturn = null
+    this._paramSarabanService.barcodeFilter = null
+    this._paramSarabanService.folder = null
     let param = {}
     switch (moduleId) {
       case (2): param = { 

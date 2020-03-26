@@ -244,23 +244,23 @@
                         <md-divider></md-divider>
                         <md-card-content>
                             <app-file-attach [uploader]="uploader " [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved " [isAttach]="!addDocumentForm.form.valid " (referenceFileAttachId)="getReferenceFileAttachId($event)" (secrets)="getSecrets($event)" (updateAtt)="updateAtt($event)"
-                                (addAttachFile)="saveAddAttachFile($event)" (UpdateSecrets)="UpdateSecrets($event)" [folderId]="folderId"></app-file-attach>
+                                (addAttachFile)="saveAddAttachFile($event)" (UpdateSecrets)="UpdateSecrets($event)" [folderId]="folderId" [checkInCheckOutLockStatus]='checkInCheckOutLockStatus'></app-file-attach>
                         </md-card-content>
                         <md-divider></md-divider>
 
-                        <md-card-actions *ngIf=" checkIe" layout="row" layout-align="center start" style="width: 100%; padding:8px" [style.margin-top]="'15px '">
-                            <button md-raised-button [disabled]="!authCreDocFile" (click)="newWindow()">สแกน</button>
+                        <md-card-actions *ngIf="checkIe " layout="row" layout-align="center start" style="width: 100%; padding:8px" [style.margin-top]="'15px '">
+                            <button md-raised-button [disabled]="!authCreDocFile || checkInCheckOutLockStatus" (click)="newWindow()">สแกน</button>
                         </md-card-actions>
 
                         <md-card-actions layout="row" layout-align="center start" style="width: 100%; padding:8px" [style.margin-top]="'15px '">
-                            <button md-raised-button layout-align="center start" (click)="scan()">scan</button>
+                            <button md-raised-button [disabled]="!authCreDocFile || checkInCheckOutLockStatus" layout-align="center start" (click)="scan()">scan</button>
                         </md-card-actions>
                         <!-- <button md-raised-button layout-align="center start" (click)="scan()">scan</button> -->
                         <md-card-actions layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px '">
 
                             <button *ngIf="mode==='Add' " md-raised-button [ngClass]="{'md-primary ': addDocumentForm.form.valid}" [disabled]="!addDocumentForm.form.valid" [style.margin-right]="'5px '" (click)="save(dmsDocument)">บันทึก</button>
-                            <button *ngIf="mode==='Edit' " [disabled]="!authEditDoc" md-raised-button [ngClass]="{'md-primary ': addDocumentForm.form.valid}" [disabled]="!addDocumentForm.form.valid" [style.margin-right]="'5px '" (click)="update(dmsDocument)">บันทึก</button>
-                            <button *ngIf="mode==='Edit'  " [disabled]="!authDelDoc" md-raised-button [ngClass]="'md-warn '" [style.margin-right]="'5px '" (click)="delete(dmsDocument)">ลบเอกสาร</button>
+                            <button *ngIf="mode==='Edit' " [disabled]="!authEditDoc || checkInCheckOutLockStatus" md-raised-button [ngClass]="{'md-primary ': addDocumentForm.form.valid}" [disabled]="!addDocumentForm.form.valid" [style.margin-right]="'5px '" (click)="update(dmsDocument)">บันทึก</button>
+                            <button *ngIf="mode==='Edit'  " [disabled]="!authDelDoc || checkInCheckOutLockStatus" md-raised-button [ngClass]="'md-warn '" [style.margin-right]="'5px '" (click)="delete(dmsDocument)">ลบเอกสาร</button>
                             <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px '">ยกเลิก</button>
                         </md-card-actions>
 
@@ -279,6 +279,11 @@
 <div hide show-gt-md layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
     <!--<div >-->
     <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
+
+        <button  *ngIf="!checkInCheckOutLockStatus" md-fab color="accent" [style.background]="'#483D8B '" title="CheckIn-CheckOut" style="margin-bottom: 3px;" (click)="checkInCheckOut()">
+            <md-icon>check_circle</md-icon>
+        </button>
+
         <button md-fab color="accent" [style.background]="'#e600ac '" title="ส่งอีเมล" style="margin-bottom: 3px;" (click)="email()">
                 <md-icon>email</md-icon>
             </button>
@@ -289,3 +294,5 @@
     </button>
     <!--</div>-->
 </div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>
