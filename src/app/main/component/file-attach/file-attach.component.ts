@@ -25,6 +25,7 @@ export class FileAttachComponent implements OnInit {
   @Input() isAttach: boolean = false
   @Input() fileAttachs: any[]
   @Input() fileAttachRemoved: FileAttach[]
+  @Input() checkInCheckOutLockStatus: boolean = false
 
 
   @Output() referenceFileAttachId = new EventEmitter();
@@ -226,6 +227,91 @@ export class FileAttachComponent implements OnInit {
 
   }
 
+  editFile2(fileAttach: FileAttach, staus: number) {
+
+    console.log('fileAttach - ',fileAttach)
+    console.log('staus - ',staus)
+    console.log('this.authEditDocFile - ',this.authEditDocFile)
+
+
+
+
+    let temp = environment.plugIn
+      console.log('temp url', temp)
+      let auth = 0
+      if (this.authEditDocFile ) {
+        auth = 1
+      }
+      // let url = 'http://192.168.1.8/scan/?'
+      let url = temp + '/scan/?'
+      let mode = 'view'
+
+      // window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
+
+      this._pxService
+      .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
+      .subscribe(res => {
+        window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
+        + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
+        + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
+      const timer = TimerObservable.create(4000, 2000)
+
+        this.subscription = timer.subscribe(t => {
+
+          if (t == 58) {
+            this.subscription.unsubscribe();
+          } else {
+     
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+      
+                if (res2.data == 'true') {
+                  this._pxService
+                    .getFileAttachs('dms', fileAttach.linkId, 'asc')
+                    .subscribe(response => {
+                      let temp = response as any[]
+                      let tempParent = response as any[]
+                      tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
+                      let datafileAttach = []
+                      for (let i = 0; i < tempParent.length; i++) {
+                        if (tempParent[i].referenceId == 0) {
+                          tempParent[i].children = []
+                          datafileAttach.push(tempParent[i])
+                        }
+                      }
+
+                      for (let i = 0; i < datafileAttach.length; i++) {
+                        let idParent = datafileAttach[i].id
+                        for (let j = 0; j < temp.length; j++) {
+                          if (idParent == temp[j].referenceId) {
+                            datafileAttach[i].children.push(temp[j])
+                            idParent = temp[j].id
+                            j = -1
+                          }
+
+                        }
+
+
+                      }
+
+                      this.fileAttachs = datafileAttach
+                      this.subscription.unsubscribe();
+                    })
+                }
+              })
+
+          }
+        })
+
+      })
+
+   
+ 
+
+
+  }
+
   addFileAttach(data: any) {
     // console.log('-- addFileAttach --')
     // console.log('--$event', data)
@@ -286,6 +372,7 @@ export class FileAttachComponent implements OnInit {
 
   }
 
+  authDocfileSecrets:number=1
   authMenu(folderId: number) {
     this._folderService
       .getMenu(folderId)
@@ -299,16 +386,12 @@ export class FileAttachComponent implements OnInit {
           if (i.menuFunction == 'creDocFile') { this.authCreDocFile = true }
           if (i.menuFunction == 'editDocFile') { this.authEditDocFile = true }
           if (i.menuFunction == 'delDocFile') { this.authDelDocFile = true }
+          if (i.menuFunction == 'sec1Df') { this.authDocfileSecrets = 1 }
+          if (i.menuFunction == 'sec2Df') { this.authDocfileSecrets = 2 }
+          if (i.menuFunction == 'sec3Df') { this.authDocfileSecrets = 3 }
+          if (i.menuFunction == 'sec4Df') { this.authDocfileSecrets = 4 }
 
         }
-
-        console.log('authCreDocFile', this.authCreDocFile)
-        console.log('authEditDocFile', this.authEditDocFile)
-        console.log('authDelDocFile', this.authDelDocFile)
-        console.log('isAttach', this.isAttach)
-
-
-
       })
 
   }

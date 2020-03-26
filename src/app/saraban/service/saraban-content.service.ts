@@ -474,4 +474,17 @@ export class SarabanContentService {
     }
   }
 
+  updateFullText(documentId: number): Observable<any> {
+    if (environment.production) {
+      let tmp = new SarabanContent()
+      tmp.wfDocumentId = documentId
+      return this._http.put(this._apiUrl + '/updateFullText', tmp, this._options)
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }

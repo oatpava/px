@@ -62,7 +62,7 @@ export class ListSarabanContentComponent implements OnInit {
   statusValue: number[] = [0, 1, 2, 3]
   status: SelectItem[] = [
     { label: 'ทั้งหมด', value: null },
-    { label: 'ดำเนินการ', value: 1 },
+    { label: 'ยังไม่ดำเนินการ', value: 1 },
     { label: 'เรื่องเสร็จ', value: 2 },
     { label: 'ถูกยกเลิก', value: 3 },
   ]

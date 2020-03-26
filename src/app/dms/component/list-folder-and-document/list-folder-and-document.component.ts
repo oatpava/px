@@ -119,7 +119,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
     height: '30px',
-    width: '100%',
+    width: '1000px',
     inline: false,
     selectionTxtFontSize: '14px',
     openSelectorOnInputClick: true,
@@ -290,7 +290,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
     console.log(typeSearch)
-
+    let checkHaveDataSearch = false
     // console.log("this.documentIntComma = " + this.documentIntComma)
     if (this.documentIntComma != null) {
       this.search["documentIntComma"] = this.documentIntComma
@@ -365,53 +365,59 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     }
 
-    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted }
-    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted }
-    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted }
-    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted }
-    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted }
-    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted }
-    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted }
-    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted }
-    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted }
-    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted }
-    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted }
-    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted }
-    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted }
-    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted }
+    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true;console.log('--test--') }
+    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
 
-    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01 }
-    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02 }
-    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01 }
-    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02 }
-    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03 }
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04 }
-    if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma }
-    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01 }
-    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02 }
-    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03 }
-    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04 }
-    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05 }
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04 }
-    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01 }
-    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02 }
-    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03 }
-    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04 }
-    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05 }
-    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06 }
-    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07 }
-    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08 }
-    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09 }
-    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10 }
-    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy }
-    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy }
-    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName }
-    if (this.allField == undefined) { this.allField = '' }
-    if (this.fullText == undefined) { this.fullText = '' }
-    if (this.attachName == undefined) { this.attachName = '' }
+    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true;console.log('--test--') }
+    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true;console.log('--test--') }
+    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;console.log('--test--') }
+    if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma;}
+    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true ;console.log('--test--')}
 
+    if (this.allField == undefined ) { this.allField = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
+    if (this.fullText == undefined) { this.fullText = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
+    if (this.attachName == undefined) { this.attachName = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
 
+    if(checkHaveDataSearch){
+      if(this.allField == '' && this.fullText == '' && this.attachName == '') checkHaveDataSearch = false
+    }
 
+console.log('--checkHaveDataSearch--',checkHaveDataSearch)
+
+if (checkHaveDataSearch) {
     this._router.navigate(
       [{
         outlets: {
@@ -480,7 +486,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
           }],
         }
       }], { relativeTo: this._route })
-
+    }
   }
 
   selectFolder(selectFolder: Folder) {
