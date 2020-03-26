@@ -17,12 +17,12 @@
 <div layout="column" flex (click)="sideNavAlert($event)">
     <md-sidenav-layout layout="column" flex fullscreen>
         <md-sidenav #sideSubMenu align="end">
-            <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
+            <form #form="ngForm" layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
                 <div layout="column" layout-align="left start" style="width: 100%; margin-bottom: 10px; ">
 
-                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ จาก" locale="th" name="wfContentBookDate" [(ngModel)]="searchField.createdDateBegin">
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ จาก*" locale="th" name="wfContentBookDate" [(ngModel)]="searchField.createdDateBegin" required>
                     </my-date-picker>
-                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ ถึง" locale="th" name="wfContentBookTo" [(ngModel)]="searchField.createdDateEnd">
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ ถึง*" locale="th" name="wfContentBookTo" [(ngModel)]="searchField.createdDateEnd" required>
                     </my-date-picker>
                     <md-select style="width: 100%; padding-top: 10px; padding-bottom: 10px;" placeholder="Module" [(ngModel)]="searchField.moduleName" name="Module">
                         <md-option *ngFor="let lkd of modules" [value]="lkd.code">
@@ -91,6 +91,9 @@
                     </md-input-container>
                     <!-- <md-input flex placeholder="บุคลากร" name="detail" [(ngModel)]="searchField.detail">
                     </md-input> -->
+                    <div *ngIf="!form.valid">
+                        <span style="color: red;"><b>***กรุณาระบุวันที่</b></span>
+                    </div>
                 </div>
             </form>
         </md-sidenav>
@@ -160,7 +163,7 @@
 </div>
 
 <div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
-    <button md-fab [style.background]="'#1976d2'" title="ค้นหา" color="accent" (click)="searchLog(searchField,additional);">
+    <button md-fab [style.background]="'#1976d2'" title="ค้นหา" [color]="form.valid ? 'accent':''" [disabled]="!form.valid" (click)="searchLog(searchField,additional);">
         <md-icon>search</md-icon>
     </button>
 </div>

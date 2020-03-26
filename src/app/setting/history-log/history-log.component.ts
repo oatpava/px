@@ -39,7 +39,7 @@ export class HistoryLogComponent implements OnInit {
     { name: 'ipAddress', label: 'IP' },
     { name: 'description', label: 'รายละเอียด' },
   ];
-  additional: any = [
+  additional: any[] = [
     { "checked": false,},
     { "checked": false, type: 1, label: 'สร้าง' },
     { "checked": false, type: 2, label: 'แก้ไข' },
@@ -195,6 +195,17 @@ export class HistoryLogComponent implements OnInit {
         this._loadingService.resolve('main')
         this.data = response.data
         this.reportData = response.listModule
+
+        this.searchField = {
+          createdDateEnd: '',
+          createdDateBegin: '',
+          moduleName: '',
+          description: '',
+          userName: '',
+          createdBy: ''
+        }
+
+        this.additional.forEach(a => a.checked = false)
       });
   }
 
@@ -253,10 +264,32 @@ export class HistoryLogComponent implements OnInit {
         let params = new URLSearchParams()
 
         params.set("jobType", 'log_Report')
-        params.set("createdBy", '' +this._paramSarabanService.userId)
+        params.set("createdBy", '' + this._paramSarabanService.userId)
         this._pxService.report('log_Report', 'pdf', params)
 
       })
   }
 
+  private getDate(date: String): Date {
+    return date ? new Date(+date.substr(6, 4) - 543, +date.substr(3, 2) - 1, +date.substr(0, 2)) : null
+  }
+
+}
+
+export class searchModel {
+  createdDateBegin: any
+  createdDateEnd: any
+  moduleName: string
+  userName: string
+  type: string
+  createdBy: string
+
+  constructor(values: Object = {}) {
+    this.createdDateBegin = null
+    this.createdDateEnd = null
+    this.moduleName = ''
+    this.type = ''
+    this.createdBy = ''
+    Object.assign(this, values)
+  }
 }
