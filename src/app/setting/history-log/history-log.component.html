@@ -96,11 +96,11 @@
         </md-sidenav>
         <div class="body-showCenter">
             <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
-                <div flex-gt-md="70">
+                <div flex-gt-md="90">
                     <md-list>
                         <md-card style="margin-left: 0px; margin-right: 0px;">
                             <md-card-content>
-                                <table td-data-table>
+                                <table td-data-table class="fixed-size">
                                     <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
                                         {{column.label}}
                                     </th>
