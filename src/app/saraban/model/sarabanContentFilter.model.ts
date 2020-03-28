@@ -18,7 +18,7 @@ export class SarabanContentFilter {
     fileAttachText: String
     wfContentDescription: string
     wfContentStr03: string
-    contentTimeRange: number
+    sendingStatus: number
 
     constructor(values: Object = {}) {
         this.version = 1
@@ -35,12 +35,12 @@ export class SarabanContentFilter {
         this.wfContentFrom = ''
         this.wfContentTo = ''
         this.wfContentTitle = ''
-        this.status = 0
+        this.status = 1
         this.userName = ''
         this.fileAttachText = ''
         this.wfContentDescription = ''
         this.wfContentStr03 = ''
-        this.contentTimeRange = 0
+        this.sendingStatus = 0
         Object.assign(this, values)
     }
 }

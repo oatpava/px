@@ -59,13 +59,6 @@ export class ListSarabanContentComponent implements OnInit {
   folder: SarabanFolder
   folderType: number = 0//1, 2, 3, 4: รับใน, รับนอก, ส่งใน, ส่งนอก
 
-  statusValue: number[] = [0, 1, 2, 3]
-  status: SelectItem[] = [
-    { label: 'ทั้งหมด', value: null },
-    { label: 'ยังไม่ดำเนินการ', value: 1 },
-    { label: 'เรื่องเสร็จ', value: 2 },
-    { label: 'ถูกยกเลิก', value: 3 },
-  ]
   secret: SelectItem[] = [
     { label: 'ทั้งหมด', value: null },
     { label: 'ปกติ', value: 1 },
@@ -112,8 +105,8 @@ export class ListSarabanContentComponent implements OnInit {
     this.path[0] = this._paramSarabanService.path
     this.path[1] = this._paramSarabanService.path + ' / ผลการค้นหา'
     this.folder = new SarabanFolder()
-    this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
-    this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
+    this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year })
+    this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year })
     this.datas = [[], []]
     this.listReturn = [new ListReturn(), new ListReturn()]
     this.tableFirst = [0, 0]
@@ -129,8 +122,8 @@ export class ListSarabanContentComponent implements OnInit {
     } else {
       if (this._paramSarabanService.isArchive) {
         this.year -= 2
-        this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
-        this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
+        this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year })
+        this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year })
       }
       this.initial()
     }
@@ -373,8 +366,8 @@ export class ListSarabanContentComponent implements OnInit {
 
   reset() {
     this.searched = 0
-    this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
-    this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year, status: 0 })
+    this.searchFilters = new SarabanContentFilter({ wfContentContentYear: this.year })
+    this.searchFilters_report = new SarabanContentFilter({ wfContentContentYear: this.year })
     this.barcodeFilter = []
   }
 
