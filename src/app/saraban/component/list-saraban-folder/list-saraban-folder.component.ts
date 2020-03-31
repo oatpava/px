@@ -71,7 +71,9 @@ export class ListSarabanFolderComponent implements OnInit {
       .subscribe((params: Params) => {
         if (!isNaN(params['parentId'])) {
           this.parentId = +params['parentId']
-          this._paramSarabanService.path = this.path = params['path']
+          let path = params['path'].split('x|x').join('(')
+          path = path.split('y|y').join(')')
+          this._paramSarabanService.path = this.path = path
         } else {
           this.parentId = this._paramSarabanService.folderId
           this._paramSarabanService.path = this.path = 'ทะเบียนส่วนกลาง'
@@ -133,10 +135,12 @@ export class ListSarabanFolderComponent implements OnInit {
       this._paramSarabanService.path += ' / ' + selectFolder.wfFolderName
 
       if (selectFolder.wfContentType.id == 3) {
+        let path = this._paramSarabanService.path.split('(').join('x|x')
+        path = path.split(')').join('y|y')
         this._router.navigate(
           ['.', {
             parentId: selectFolder.id,
-            path: this._paramSarabanService.path
+            path: path
           }],
           { relativeTo: this._route })
       } else if (selectFolder.wfContentType.id == 4) {
