@@ -59,7 +59,7 @@
                         <md-divider md-inset></md-divider>
                     </md-list>
                     <md-divider></md-divider>
-                    <md-list *ngFor="let inbox of assignedInboxs_tree; let i=index;">
+                    <!-- <md-list *ngFor="let inbox of assignedInboxs_tree; let i=index;">
                         <md-list-item class="assignedInbox" (mouseover)="listButton.hidden=false; listButton.index=i;" (mouseleave)="listButton.hidden=true">
                             <md-icon md-list-avatar><i class="fa fa-user"></i></md-icon>
                             <h3 md-line>{{inbox.label}}</h3>
@@ -70,9 +70,22 @@
                             </div>
                         </md-list-item>
                         <md-divider md-inset></md-divider>
+                    </md-list> -->
+                    <md-list *ngFor="let inbox of assignedInboxs; let i=index;">
+                        <md-list-item class="defaultInbox" (mouseover)="listButton.hidden=false; listButton.index=i;" (mouseleave)="listButton.hidden=true">
+                            <md-icon md-list-avatar><i class="fa fa-user"></i></md-icon>
+                            <h3 md-line>{{inbox.assignName}}</h3>
+                            <h4 md-line>{{inbox.assignStructure}}</h4>
+                            <p md-line>{{inbox.assignPosition}}</p>
+                            <div hide show-gt-md class="block-icon-Option" [hidden]="listButton.hidden || listButton.index!=i">
+                                <i class="material-icons icon-button" (click)="delete(inbox)" title="ลบ">indeterminate_check_box</i>
+                            </div>
+                        </md-list-item>
+                        <md-divider md-inset></md-divider>
                     </md-list>
                     <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
-                        <button md-raised-button [ngClass]="{'md-primary': isEdited}" [style.margin-right]="'5px'" [disabled]="!isEdited" (click)="save()">บันทึก</button>
+                        <!-- <button md-raised-button [ngClass]="{'md-primary': isEdited}" [style.margin-right]="'5px'" [disabled]="!isEdited" (click)="save()">บันทึก</button> -->
+                        <button md-raised-button [ngClass]="{'md-primary': (listAdd.length + listRemove.length > 0)}" [style.margin-right]="'5px'" [disabled]="(listAdd.length==0 && listRemove.length==0)" (click)="save2()">บันทึก</button>
                         <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
                     </div>
                 </md-card-content>
