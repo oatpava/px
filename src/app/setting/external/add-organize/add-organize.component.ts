@@ -54,8 +54,6 @@ export class AddOrganizeComponent implements OnInit {
       .subscribe(response => {
         console.log(response)
         this.structure = response
-        this.structure.parentId = response.id
-        this.structure.parentKey = response.parentKey
       })
   }
 
@@ -131,6 +129,7 @@ export class AddOrganizeComponent implements OnInit {
 
   createStructure(structure: Structure) {
     //check Code
+    structure.parentId = this.parentId
     console.log(structure)
     this._structureService
       .checkOrgCode(structure.code, structure.name, 0)
