@@ -244,6 +244,12 @@ export class ListSarabanContentComponent implements OnInit {
     }
     else {
       this._paramSarabanService.path = this._paramSarabanService.pathOld
+      this._paramSarabanService.datas = null
+      this._paramSarabanService.listReturn = null
+      this._paramSarabanService.tableFirst = null
+      this._paramSarabanService.searchFilters = null
+      this._paramSarabanService.searchFilters_report = null
+      this._paramSarabanService.barcodeFilter = null
       this._location.back()
     }
   }
