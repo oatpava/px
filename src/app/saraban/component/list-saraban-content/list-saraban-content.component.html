@@ -37,7 +37,8 @@
                     <md-input flex type="number" placeholder="ปี" name="year" [(ngModel)]="searchFilters.wfContentContentYear"></md-input>
                 </div>
                 <md-select *ngIf="folder.searchField[1]" class="searchFilter" style="width:100%; padding-top:10px; padding-bottom:10px;" placeholder="สถานะหนังสือ" name="status" [(ngModel)]="searchFilters.status">
-                    <md-option [value]=1>ทั้งหมด</md-option>
+                    <md-option [value]=0>ทั้งหมด</md-option>
+                    <md-option [value]=1>ดำเนินการ</md-option>
                     <md-option [value]=2>เรื่องเสร็จ</md-option>
                     <md-option [value]=3>ถูกยกเลิก</md-option>
                 </md-select>

@@ -35,7 +35,7 @@ export class SarabanContentFilter {
         this.wfContentFrom = ''
         this.wfContentTo = ''
         this.wfContentTitle = ''
-        this.status = 1
+        this.status = 0
         this.userName = ''
         this.fileAttachText = ''
         this.wfContentDescription = ''
