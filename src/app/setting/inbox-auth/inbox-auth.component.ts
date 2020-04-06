@@ -23,7 +23,8 @@ export class InboxAuthComponent implements OnInit {
   userToAssignTree: TreeNode[] = []
   selectedUsersToAssign: TreeNode[] = []
   assignedInboxs: InoutAssign[]
-  assignedInboxs_tree: TreeNode[] = []
+  //assignedInboxs_tree: TreeNode[] = []
+  //assignedInboxs_list: { id: number, name: string, structure: string, position: string, assigned: boolean }[] = []
   ownerTree: TreeNode[] = []
   selectedOwner: TreeNode = {
     label: '',
@@ -35,6 +36,8 @@ export class InboxAuthComponent implements OnInit {
   msgs: Message[] = []
 
   isEdited: boolean = false
+  listAdd: number[] = []
+  listRemove: InoutAssign[] = []
 
   constructor(
     private _loadingService: TdLoadingService,
@@ -55,6 +58,7 @@ export class InboxAuthComponent implements OnInit {
     ).subscribe((response: Array<any>) => {
       response[0].forEach(structure => {
         let node = this._paramSarabanService.genParentNode(structure, null)
+        node.data.loaded = false
         this.ownerTree.push(node)
         this.userToAssignTree.push(node)
       })
@@ -68,20 +72,24 @@ export class InboxAuthComponent implements OnInit {
 
   loadNode(event) {
     let node = event.node
-    if (!node.leaf) {
-      Observable.forkJoin(
-        this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
-        this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
-      ).subscribe((response: Array<any>) => {
-        response[0].forEach(structure => {
-          let tmp = this._paramSarabanService.genParentNode(structure, node)
-          node.children.push(tmp)
+    if (!node.data.loaded) {
+      if (!node.leaf) {
+        Observable.forkJoin(
+          this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
+          this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
+        ).subscribe((response: Array<any>) => {
+          response[0].forEach(structure => {
+            let tmp = this._paramSarabanService.genParentNode(structure, node)
+            node.children.push(tmp)
+          })
+          response[1].forEach(user => {
+            let tmp = this._paramSarabanService.genNode(user, node)
+            node.children.push(tmp)
+          })
         })
-        response[1].forEach(user => {
-          let tmp = this._paramSarabanService.genNode(user, node)
-          node.children.push(tmp)
-        })
-      })
+      }
+    } else {
+      node.data.loaded = true
     }
   }
 
@@ -95,7 +103,7 @@ export class InboxAuthComponent implements OnInit {
           detail: event.node.label
         })
 
-    } else if (event.node.data.default) {
+    } else if (event.node.data.default || (event.node.data.profile.structure.id == this.selectedOwner.data.id)) {
       this.msgs = []
       this.msgs.push(
         {
@@ -105,7 +113,13 @@ export class InboxAuthComponent implements OnInit {
         })
     } else {
       this.isEdited = true
-      this.assignedInboxs_tree.push(event.node)
+      //this.assignedInboxs_tree.push(event.node)
+      let node = event.node
+      let tmp = this.assignedInboxs.find(a => a.inOutAssignAssignId == node.data.id)
+      if (!tmp) {
+        this.listAdd.push(node.data.id)
+        this.assignedInboxs.push(this.genInoutAssign(node))
+      }
     }
   }
 
@@ -120,27 +134,32 @@ export class InboxAuthComponent implements OnInit {
         })
     } else {
       this.isEdited = true
-      this.assignedInboxs_tree = this.assignedInboxs_tree.filter(node => node !== event.node)
+      //this.assignedInboxs_tree = this.assignedInboxs_tree.filter(node => node !== event.node)
+      //this.assignedInboxs_list = this.assignedInboxs_list.filter(a => a.id != event.node.data.id)
+      //this.assignedInboxs = this.assignedInboxs.filter(a => a.id != event.node.data.id)
     }
   }
 
   clear() {
     this.selectedUsersToAssign = []
-    this.assignedInboxs_tree = []
+    //this.assignedInboxs_tree = []
+    this.listAdd = []
+    this.listRemove = []
     this.isEdited = false
   }
 
   selectOwner(event) {
     let node = event.node
-    if (node.leaf) {
+    console.log('xxx', node)
+    if (node.leaf) {//leaf = user
       this.isOwnerSelected = true
       this.selectedOwner = node
-      this.getAssignedInboxs(node.data.id, 0)
+      this.getAssignedInboxs(node, 0)//0=user
     } else {
       if (node.data.id != 1) {
         this.isOwnerSelected = true
         this.selectedOwner = node
-        this.getAssignedInboxs(node.data.id, 1)
+        this.getAssignedInboxs(node, 1)//1=structure
       } else {
         this.isOwnerSelected = false
         this.isEdited = false
@@ -148,79 +167,99 @@ export class InboxAuthComponent implements OnInit {
     }
   }
 
-  getAssignedInboxs(id: number, type: number) {
+  getAssignedInboxs(node: any, type: number) {
     this._loadingService.register('main')
-    if (type == 0) {
-      let userNode: TreeNode = this.findNode(this.userToAssignTree, id)
-      userNode.data.default = true
-      this.selectedUsersToAssign.push(userNode)
-
-    }
+    let id: number = node.data.id
+    // if (type == 0) {
+    //   let userNode: TreeNode = this.findNode(this.userToAssignTree, id)
+    //   userNode.data.default = true
+    //   this.selectedUsersToAssign.push(userNode)
+    // } 
     this._inoutAssignService
       .listByOwnerId(id, type)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.assignedInboxs = response
-        this.assignedInboxs.forEach(assignedUser => {
-          let node: TreeNode = this.findNode(this.userToAssignTree, assignedUser.inOutAssignAssignId)
-          node.data.assigned = true
-          this.selectedUsersToAssign.push(node)
-          this.assignedInboxs_tree.push(node)
-        })
+
+
+        // let node: TreeNode = this.findNode(this.userToAssignTree, assignedUser.inOutAssignAssignId)
+        // node.data.assigned = true
+
+        // this.selectedUsersToAssign.push(node)
+        // this.assignedInboxs_tree.push(node)
+
       })
   }
 
-  delete(node: TreeNode) {
+  delete(node: any) {
     this.isEdited = true
     this.selectedUsersToAssign = this.selectedUsersToAssign.filter(assignedInbox => assignedInbox !== node)
-    this.assignedInboxs_tree = this.assignedInboxs_tree.filter(assignedInbox => assignedInbox !== node)
+    //this.assignedInboxs_tree = this.assignedInboxs_tree.filter(assignedInbox => assignedInbox !== node)
+    this.assignedInboxs = this.assignedInboxs.filter(assignedInbox => assignedInbox !== node)
+    this.listRemove.push(node)
   }
 
   cancel() {
     this._location.back()
   }
 
-  save() {
-    if (this.assignedInboxs != null) {
-      for (let i = 0; i < this.assignedInboxs.length; i++) {
-        if (this.assignedInboxs_tree.filter(assignedInbox => assignedInbox.data.id == this.assignedInboxs[i].inOutAssignAssignId)) {
-          this._loadingService.register('main')
-          this._inoutAssignService
-            .remove(this.assignedInboxs[i])
-            .subscribe(response => {
-              this._loadingService.resolve('main')
-              this.msgs = []
-              this.msgs.push({
-                severity: 'success',
-                summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
-                detail: ''
-              })
-            })
-        }
-      }
-    }
+  // save() {
+  //   if (this.assignedInboxs != null) {
+  //     for (let i = 0; i < this.assignedInboxs.length; i++) {
+  //       //if (this.assignedInboxs_tree.filter(assignedInbox => assignedInbox.data.id == this.assignedInboxs[i].inOutAssignAssignId)) {
+  //       if (this.assignedInboxs_list.filter(assignedInbox => assignedInbox.id == this.assignedInboxs[i].inOutAssignAssignId)) {
+  //         this._loadingService.register('main')
+  //         this._inoutAssignService
+  //           .remove(this.assignedInboxs[i])
+  //           .subscribe(response => {
+  //             this._loadingService.resolve('main')
+  //             this.msgs = []
+  //             this.msgs.push({
+  //               severity: 'success',
+  //               summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
+  //               detail: ''
+  //             })
+  //           })
+  //       }
+  //     }
+  //   }
 
-    this.assignedInboxs_tree.forEach(assignedInbox => {
-      if (!assignedInbox.data.assigned) {
-        this._loadingService.register('main')
-        this._inoutAssignService
-          .create(this.genInoutAssign(assignedInbox))
-          .subscribe(response => {
-            this._loadingService.resolve('main')
-            this.msgs = []
-            this.msgs.push({
-              severity: 'success',
-              summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
-              detail: assignedInbox.label
-            })
-          })
-      }
-    })
+  //   // this.assignedInboxs_tree.forEach(assignedInbox => {
+  //   //   if (!assignedInbox.data.assigned) {
+  //   //     this._loadingService.register('main')
+  //   //     this._inoutAssignService
+  //   //       .create(this.genInoutAssign(assignedInbox))
+  //   //       .subscribe(response => {
+  //   //         this._loadingService.resolve('main')
+  //   //         this.msgs = []
+  //   //         this.msgs.push({
+  //   //           severity: 'success',
+  //   //           summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
+  //   //           detail: assignedInbox.label
+  //   //         })
+  //   //       })
+  //   //   }
+  //   this.assignedInboxs_list.forEach(assignedInbox => {
+  //     if (!assignedInbox.assigned) {
+  //       this._loadingService.register('main')
+  //       this._inoutAssignService
+  //         .create(this.genInoutAssign2(assignedInbox))
+  //         .subscribe(response => {
+  //           this._loadingService.resolve('main')
+  //           this.msgs = []
+  //           this.msgs.push({
+  //             severity: 'success',
+  //             summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
+  //             detail: assignedInbox.name
+  //           })
+  //         })
+  //     }
+  //   })
 
-    setTimeout(() => {
-      this._location.back()
-    }, 2000)
-  }
+  //   setTimeout(() => {
+  //     this._location.back()
+  //   }, 2000)
+  // }
 
   genInoutAssign(node: TreeNode): InoutAssign {
     return {
@@ -232,7 +271,27 @@ export class InboxAuthComponent implements OnInit {
       inOutAssignIsperiod: 0,
       inOutAssignStartDate: null,
       inOutAssignEndDate: null,
-      ownerName: ''
+      ownerName: '',
+      assignName: node.label,
+      assignStructure: node.data.profile.structure.name,
+      assignPosition: node.data.profile.position.name
+    }
+  }
+
+  genInoutAssign2(id: number): InoutAssign {
+    return {
+      version: 1,
+      id: 0,
+      inOutAssignOwnerId: this.selectedOwner.data.id,
+      inOutAssignAssignId: id,
+      inOutAssignOwnerType: (this.selectedOwner.leaf) ? 0 : 1,
+      inOutAssignIsperiod: 0,
+      inOutAssignStartDate: null,
+      inOutAssignEndDate: null,
+      ownerName: '',
+      assignName: '',
+      assignStructure: '',
+      assignPosition: ''
     }
   }
 
@@ -240,30 +299,65 @@ export class InboxAuthComponent implements OnInit {
     this._location.back()
   }
 
-  findNode(tree: TreeNode[], id: number): any {//user=0->false, structure=1->true
-    let node = null
-    for (let i = 0; i < tree.length; i++) {
-      let tmp = this.findNodeRecursive(tree[i], id)
-      if (tmp) {
-        node = tmp
-        break
-      }
-    }
-    return node
-  }
-  findNodeRecursive(node: TreeNode, id: number): any {
-    if ((node.data.id === id) && (node.leaf)) {
-      return node
-    } else if (node.children) {
-      let res = null
-      for (let i = 0; i < node.children.length; i++) {
-        if (res == null) {
-          res = this.findNodeRecursive(node.children[i], id)
-        }
-      }
-      return res
-    }
-    return null
+  // findNode(tree: TreeNode[], id: number): any {//user=0->false, structure=1->true
+  //   let node = null
+  //   for (let i = 0; i < tree.length; i++) {
+  //     let tmp = this.findNodeRecursive(tree[i], id)
+  //     if (tmp) {
+  //       node = tmp
+  //       break
+  //     }
+  //   }
+  //   return node
+  // }
+  // findNodeRecursive(node: TreeNode, id: number): any {
+  //   if ((node.data.id === id) && (node.leaf)) {
+  //     return node
+  //   } else if (node.children) {
+  //     let res = null
+  //     for (let i = 0; i < node.children.length; i++) {
+  //       if (res == null) {
+  //         res = this.findNodeRecursive(node.children[i], id)
+  //       }
+  //     }
+  //     return res
+  //   }
+  //   return null
+  // }
+
+  save2() {
+    let add_tmp: any[] = []
+    let remove_tmp: any[] = []
+
+    this.listAdd.forEach(a => {
+      add_tmp.push(this._inoutAssignService.create(this.genInoutAssign2(a)))
+    })
+    this.listRemove.forEach(r => {
+      remove_tmp.push(this._inoutAssignService.remove(r))
+    })
+    Observable.forkJoin(add_tmp)
+      .subscribe((res: any[]) => {
+        this.msgs = []
+        this.msgs.push({
+          severity: 'success',
+          summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
+          detail: add_tmp.length + 'รายการ'
+        })
+      })
+
+    Observable.forkJoin(remove_tmp)
+      .subscribe((res: any[]) => {
+        this.msgs = []
+        this.msgs.push({
+          severity: 'success',
+          summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
+          detail: remove_tmp.length + 'รายการ'
+        })
+      })
+
+      setTimeout(() => {
+        this._location.back()
+      }, 2000)
   }
 
 }

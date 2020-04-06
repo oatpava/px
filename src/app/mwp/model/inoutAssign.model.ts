@@ -9,4 +9,7 @@ export class InoutAssign {
     inOutAssignEndDate: any
     //NIE: not in entity
     ownerName: string
+    assignName: string
+    assignStructure: string
+    assignPosition: string
 }
