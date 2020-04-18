@@ -365,6 +365,16 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     }
 
+   
+      if(this.allField == '' && this.fullText == '' && this.attachName == '') {
+        checkHaveDataSearch = false
+      }else{
+        if(this.allField != undefined ||this.fullText != undefined || this.attachName != undefined){
+          checkHaveDataSearch = true
+        }
+      }
+    
+
     if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
     if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
     if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
@@ -407,13 +417,11 @@ export class ListFolderAndDocumentComponent implements OnInit {
     if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true ;console.log('--test--')}
     if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true ;console.log('--test--')}
 
-    if (this.allField == undefined ) { this.allField = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
-    if (this.fullText == undefined) { this.fullText = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
-    if (this.attachName == undefined) { this.attachName = '' } else { checkHaveDataSearch = true ;console.log('--test--')}
+    if (this.allField == undefined ) { this.allField = '' } 
+    if (this.fullText == undefined) { this.fullText = '' } 
+    if (this.attachName == undefined) { this.attachName = '' } 
 
-    if(checkHaveDataSearch){
-      if(this.allField == '' && this.fullText == '' && this.attachName == '') checkHaveDataSearch = false
-    }
+    
 
 console.log('--checkHaveDataSearch--',checkHaveDataSearch)
 
