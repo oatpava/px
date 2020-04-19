@@ -204,5 +204,28 @@ export class WorkflowService {
     }
   }
 
+  getLastReply(): Observable<Workflow> {
+    if (environment.production) {
+      return this._http.get(this._apiUrl + "/workflows/getLastReply", this._options)
+        .map((response: Response) => { 
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    }
+  }
+
+  listWorkfliwToByWorkflowId(workflowId: number): Observable<WorkflowTo[]> {
+    if(environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('version=1.0&workflowId=' + workflowId))
+      this._options.search = params
+      return this._http.get(this._apiUrl + "/workflowTos", this._options)
+        .map((response: Response) => {
+          return this.pxService.verifyResponseArray(response.json().data)
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
 
 }

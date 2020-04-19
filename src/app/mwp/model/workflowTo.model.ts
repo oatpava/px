@@ -51,4 +51,6 @@ export class WorkflowTo {
     workflowToOpenDate: string
     workflowToActionDate: string
     workflowToFinishDate: string
+
+    structure: any
 }

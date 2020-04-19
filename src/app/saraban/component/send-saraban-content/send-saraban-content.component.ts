@@ -24,7 +24,7 @@ import { Structure } from '../../../setting/model/structure.model'
 
 import { environment } from '../../../../environments/environment'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { FileAttach } from '../../../shared'
+import { FileAttach, convertUserPorfile } from '../../../shared'
 import { DialogViewComponent } from '../add-saraban-content/dialog-view/dialog-view.component'
 
 @Component({
@@ -186,7 +186,8 @@ export class SendSarabanContentComponent implements OnInit {
           if (this._paramSarabanService.mwp.fromMwp) {
             if (this.mode == 'reply') {
               //this.prepareShowTo(this._paramSarabanService.mwp.replyTo)
-              this._paramSarabanService.lastSendTo.forEach(node => this.prepareShowToLastSending(node))
+              if (this._paramSarabanService.lastSendTo.length >0 ) this._paramSarabanService.lastSendTo.forEach(node => this.prepareShowToLastSending(node))
+              else this.getLastSendTo()
             }
           } else {
             //this.prepareShowTo(response.wfContentTo)//ghb
@@ -1021,6 +1022,28 @@ export class SendSarabanContentComponent implements OnInit {
           this.favouriteNodeAdded[0][node.data.favIndex] = true
         }
       }
+  }
+
+  getLastSendTo() {
+    this._loadingService.register('main')
+    this._workflowService
+      .getLastReply()
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        if (response) {
+          this._loadingService.register('main')
+          this._workflowService
+            .listWorkfliwToByWorkflowId(response.id)
+            .subscribe(response => {
+              this._loadingService.resolve('main')
+              response.forEach(workflowTo => {
+                let node = this._paramSarabanService.genParentNode(workflowTo.structure, null)
+                this._paramSarabanService.lastSendTo.push(node)
+                this.prepareShowToLastSending(node)
+              })
+            })
+        }
+      })
   }
 
 }
