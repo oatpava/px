@@ -141,7 +141,8 @@ import {
     SendEcmsComponent,
     ReceiveEcmsComponent,
     FileEcmsComponent,
-    ListMenuEcmsComponent
+    ListMenuEcmsComponent,
+    DialogsShowThEGifComponent
 } from './shared'
 
 const routes: Routes = [
@@ -218,6 +219,7 @@ const routes: Routes = [
             { path: 'ecmsReceive', component: ReceiveEcmsComponent, outlet: 'center', }, 
             { path: 'ecmsFile', component: FileEcmsComponent, outlet: 'center' },  
             { path: 'ecmsListMenu', component: ListMenuEcmsComponent, outlet: 'center' },
+            { path: 'ecmsDialogShow', component: DialogsShowThEGifComponent, outlet: 'center' },
             {
                 path: 'folders', component: FolderComponent, outlet: 'center',
                 children: [

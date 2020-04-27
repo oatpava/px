@@ -56,6 +56,23 @@
                       </div>
                   </template>
                 </p-column>
+                <!-- เพิ่มฟิล จาก หนังสือ) ถึง (หนังสือ) รายละเอียด -->
+                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle' , cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                        <span flex layout="row" (click)="show(car)">{{car.td[10].data}} &nbsp; &nbsp;</span>
+                    </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                        <span flex layout="row" (click)="show(car)">{{car.td[11].data}} &nbsp; &nbsp;</span>
+                    </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="รายละเอียด" [style]="{'width':'150px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                        <span flex layout="row" (click)="show(car)">{{car.thegifDescription}} &nbsp; &nbsp;</span>
+                    </template>
+                </p-column>
+                
                 <p-column [sortable]="true" field="thegifSecret" header="ลับ" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[5].data}} &nbsp; &nbsp;</span>
@@ -75,6 +92,16 @@
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[8].data}} &nbsp; &nbsp;</span>
                   </template>
+                </p-column>
+                <p-column [sortable]="true" field="thegifLetterStatus" header="อ้างถึง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                        <div layout="row" layout-wrap>
+                            <div layout="row" title="{{card}}" *ngFor="let card of car.thegifReferenceArray; let i=index" class="refferanceCss pad-xs push-top-xs">
+                                <i class="material-icons" style="font-size: 14px;margin: 2px;">share</i>
+                                <div class="eslipCard">{{card}}</div>
+                            </div>
+                        </div>
+                    </template>
                 </p-column>
             </p-dataTable>
         </div>

@@ -59,6 +59,21 @@ export class ReceiveEcmsComponent implements OnInit {
     this._ecmsService
       .getContentECMSThEgif(this.dataPaging)
       .subscribe(response => {
+        //เพิ่ม อ้างถึง ส่งมาเป็นแบบ string ตัด | push เป็น Array
+        response.data.forEach(element => {
+          if (element.thegifReference != '') {
+            let index = element.thegifReference.indexOf('|')
+            element.thegifReferenceArray = []
+            if (index > 0) {
+              let dataArray = element.thegifReference.split('|')
+              dataArray.forEach(elementArray => {
+                element.thegifReferenceArray.push(elementArray)
+              })
+            } else {
+              element.thegifReferenceArray.push(element.thegifReference)
+            }
+          }
+        });
         this.listData = response.data
       })
   }
@@ -270,6 +285,7 @@ export class ReceiveEcmsComponent implements OnInit {
           this.mapECMSContent(ecms, newDoc.id)
         },
         (err) => {
+          this._loadingService.resolve('main')
           this.dialogRef.close({ header: 'แจ้งเตือน', message: 'ไม่สามารถสร้างหนังสือ เนื่องจากระบบจัดเก็บเอกสารมีปัญหา' })
         })
   }
@@ -309,6 +325,8 @@ export class ReceiveEcmsComponent implements OnInit {
         content.wfContentTo = ecms.td[1].data
         content.wfContentTitle = ecms.thegifSubject
         content.wfContentReference = ecms.thegifReference
+        content.wfContentDescription = ecms.thegifDescription
+        content.wfContentAttachment = ecms.thegifAttachment
         content.wfContentContentYear = response.wfContentYear
         content.wfContentBookYear = response.wfContentYear
         content.wfContentDate01 = content.wfContentContentDate + " " + content.wfContentContentTime

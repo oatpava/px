@@ -212,5 +212,7 @@ export * from '../ecms/component/send-ecms/send-ecms.component'
 export * from '../ecms/component/receive-ecms/receive-ecms.component'
 export * from '../ecms/component/file-ecms/file-ecms.component'
 export * from '../ecms/component/list-menu-ecms/list-menu-ecms.component'
+export * from '../ecms/component/dialogs-show-th-e-gif/dialogs-show-th-e-gif.component'
+
 
 

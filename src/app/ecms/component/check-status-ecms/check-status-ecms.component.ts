@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable'
 import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
 import { ConfirmDialogComponent, DeleteDialogComponent } from '../../../shared'
+import { DialogsShowThEGifComponent } from '../dialogs-show-th-e-gif/dialogs-show-th-e-gif.component'
 
 @Component({
   selector: 'app-check-status-ecms',
@@ -38,10 +39,25 @@ export class CheckStatusEcmsComponent implements OnInit {
     this._ecmsService
       .getContentECMSThEgif(this.dataPaging)
       .subscribe(response => {
-        console.log(response)
+        console.log(response)//เพิ่ม อ้างถึง ส่งมาเป็นแบบ string ตัด | push เป็น Array
+        response.data.forEach(element => {
+          if (element.thegifReference != '') {
+            let index = element.thegifReference.indexOf('|')
+            element.thegifReferenceArray = []
+            if (index > 0) {
+              let dataArray = element.thegifReference.split('|')
+              dataArray.forEach(elementArray => {
+                element.thegifReferenceArray.push(elementArray)
+              })
+            } else {
+              element.thegifReferenceArray.push(element.thegifReference)
+            }
+          }
+        });
         this.listData = response.data
       })
   }
+
   getCreateContentEcms() {
     this._ecmsService
       .createEcmsLetter()
@@ -221,7 +237,18 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     }
   }
-  show() { }
+  //เพิ่ม คลิก แล้วเปิดหน้า แสดงรายละเอียดว่าส่งถึงใครบ้าง (เพิ่ม DialogsShowThEGifComponent)
+  show(item) {
+    let dialogRef = this._dialog.open(DialogsShowThEGifComponent, {
+      width: '60%',
+    });
+    let instance = dialogRef.componentInstance
+    instance.data = item
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    })
+  }
   close() {
     this.dialogRef.close()
   }
