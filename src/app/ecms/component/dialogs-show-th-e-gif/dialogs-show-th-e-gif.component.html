@@ -1,0 +1,48 @@
+<div>
+    <div flex class="pad-sm">
+        <div layout="row" class="pad-sm bgc-blue-900 tc-blue-50">
+            <mat-icon matListAvatar>beenhere</mat-icon>
+            <div class="fontField-List"> ตรวจสอบการส่ง </div>
+        </div>
+    </div>
+    <div class="pad-sm" flex layout="column">
+        <div flex layout="row" layout-align="left" class="pad-xs">
+            <div class="pad-right-xs fontWeightBold">เลขที่หนังสือ </div>
+            <div class="pad-right-sm">: {{data?.thegifBookNo}}</div>
+        </div>
+        <div flex layout="row" layout-align="left" class="pad-xs">
+            <div class="pad-right-xs fontWeightBold">เรื่อง </div>
+            <div class="pad-right-sm wordwarpellipsis">: {{data?.thegifSubject}}</div>
+        </div>
+    </div>
+    <div class="pad-sm blockLog" layout="column">
+        <p-dataTable #dt [value]="listSend" [(selection)]="selectedRow" sortMode="multiple" [rows]="20" [paginator]="true" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+            <p-column field="index" header="หน่วยงาน" [style]="{'width':'20px', 'text-align':'-webkit-center'}">
+                <template let-col let-car="rowData" let-ri="rowIndex" ptemplate="body">
+                    <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{car.thegifDepName}} &nbsp; &nbsp;</span>
+                </template>
+            </p-column>
+            <p-column field="index" header="สถานะ" [style]="{'width':'100px', 'text-align':'-webkit-center'}">
+                <template let-col let-car="rowData" let-ri="rowIndex" ptemplate="body">
+                    <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{car.thegifStatusSend}} &nbsp; &nbsp;</span>
+                </template>
+            </p-column>
+            <p-column field="index" header="ปลายทางลงเลขรับหนังสือ" [style]="{'width':'20px', 'text-align':'-webkit-center'}">
+                <template let-col let-car="rowData" let-ri="rowIndex" ptemplate="body">
+                    <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{car.thegifAcceptNo}} &nbsp; &nbsp;</span>
+                </template>
+            </p-column>
+
+            <p-column field="index" header="วันที่" [style]="{'width':'20px', 'text-align':'-webkit-center'}">
+                <template let-col let-car="rowData" let-ri="rowIndex" ptemplate="body">
+                    <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{car.thegifStatusAcceptDate}} &nbsp; &nbsp;</span>
+                </template>
+            </p-column>
+        </p-dataTable>
+    </div>
+    <div class="pad-sm">
+        <div flex class="pad-sm push-top-sm bgc-blue-grey-100" layout="row" layout-align="end">
+            <button mat-raised-button color="warn" (click)="close()">ปิด</button>
+        </div>
+    </div>
+</div>

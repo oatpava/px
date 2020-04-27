@@ -299,5 +299,15 @@ export class SarabanEcmsService {
       })
       .catch(this._loggerService.handleError)
   }
+  //เพิ่ม Function รายละเอียดการส่ง ECMS
+  sendContentDataECMSThEgif(model): Observable<any> {
+    let params = new URLSearchParams()
+    this._options.search = params
+    return this._http.get(this._apiUrl + '/v1/thegifs/listStatusSend/' + model.id, this._options)
+      .map((response: Response) => {
+        return this._pxService.verifyResponseArray(response.json())
+      })
+      .catch(this._loggerService.handleError)
+  }
 
 }
