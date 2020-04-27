@@ -185,7 +185,8 @@ import {
     SendEcmsComponent,
     ReceiveEcmsComponent,
     FileEcmsComponent,
-    ListMenuEcmsComponent
+    ListMenuEcmsComponent,
+    DialogsShowThEGifComponent
 } from './shared';
 
 @NgModule({
@@ -345,7 +346,8 @@ import {
         SendEcmsComponent,
         ReceiveEcmsComponent,
         FileEcmsComponent,
-        ListMenuEcmsComponent
+        ListMenuEcmsComponent,
+        DialogsShowThEGifComponent
     ],
     imports: [
         BrowserModule,

@@ -72,6 +72,18 @@
                       <span flex layout="row" (click)="show(car)">{{car.td[7].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
+                <!-- เพิ่ม ฟิลอ้างถึง -->
+                <p-column [sortable]="true" field="thegifLetterStatus" header="อ้างถึง" [style]="{'width':'150px', 'vertical-align':'middle', cursor: 'defult'}">
+                    <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
+                        <div layout="row" layout-wrap>
+                            <div layout="row" title="{{card}}" *ngFor="let card of car.thegifReferenceArray; let i=index" class="refferanceCss pad-xs push-top-xs">
+                                <i class="material-icons" style="font-size: 14px;margin: 2px;">share</i>
+                                <div class="eslipCard">{{card}}</div>
+                            </div>
+                        </div>
+                    </template>
+                </p-column>
+                <!-- เพิ่ม ฟิลอ้างถึง -->
             </p-dataTable>
         </div>
         <div flex class="pad-sm bgc-blue-grey-100 push-top-xs" layout="row" layout-align="end">
