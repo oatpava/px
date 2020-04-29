@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { TdLoadingService } from '@covalent/core'
 import { MdDialog } from '@angular/material'
+import { Message } from 'primeng/primeng'
 
 import { MwpService } from '../../service/mwp.service'
 import { SarabanService } from '../../../saraban/service/saraban.service'
@@ -25,6 +26,7 @@ export class ListMwpComponent implements OnInit {
   listMenu: string = 'menu'
   ModeSearch: boolean = true
   inboxAmount: number = 0
+  msgs: Message[] = []
 
   constructor(
     private _route: ActivatedRoute,
@@ -177,6 +179,11 @@ export class ListMwpComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.inboxAmount = response.listReturn.all
+        this.msgs = []
+        this.msgs.push({ 
+          severity: 'info', 
+          summary: 'แจ้งเตือนข้อมูลเข้า', 
+          detail: 'มีจำนวนเรื่องค้างรับทั้งหมด ' + response.listReturn.all + ' รายการ'})
       })
   }
 
