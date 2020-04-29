@@ -232,4 +232,7 @@ export class UserComponent implements OnInit {
     })
   }
 
+  onDateChanged(event: any) {
+  }
+
 }

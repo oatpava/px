@@ -1907,16 +1907,14 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   pushParamData(content: SarabanContent) {
+    content.hasFinish = false
+    content.isCanceled = false
+    content.status = 1
+    content.numFileAttach = this.numFileAttach
+    content.finishByS = 0
+    content.cancelBy = 0
+    content.isKeeped = false
     console.log('push', content)
-    // let tmp = content
-    // tmp.numFileAttach = 0
-    // tmp.status = 1
-    // tmp.hasFinish = false
-    // tmp.isCanceled = false
-    // tmp.finishByS = 0
-    // tmp.cancelBy = 0
-    // tmp.isKeeped = false
-
     this._paramSarabanService.datas[0].unshift(content)
     this._paramSarabanService.listReturn[0].count++
     this._paramSarabanService.listReturn[0].all++
