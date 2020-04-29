@@ -212,25 +212,22 @@ export class AddUserProfileComponent implements OnInit {
   // }
 
   getUserProfilesByUserId(userId: number) {
-    console.log('userId', userId)
+    console.log('getUserProfilesByUserId', userId)
     this._loadingService.register('main')
     this._userProfileService
       .getUserProfilesByUserId(userId)
       .subscribe(response => {
         console.log('userProfiles', response)
-        // this.userProfileList.length = 0
         this.userProfileList = []
-        // this.userProfileList = response as UserProfile[]
-        let userProfileL = response as UserProfile[]
-        for (let i = 0; i < userProfileL.length; i++) {
-          if (userProfileL[i].position === null) {
-            userProfileL[i].position = new Position()
+        this.userProfileList = response as UserProfile[]
+        this.userProfileList.forEach(userProfile => {
+          if (userProfile.position === null) {
+            userProfile.position = new Position()
           }
-          if (userProfileL[i].positionType === null) {
-            userProfileL[i].positionType = new PositionType()
+          if (userProfile.positionType === null) {
+            userProfile.positionType = new PositionType()
           }
-          this.userProfileList.push(new UserProfile(userProfileL[i]))
-        }
+        })
         this._loadingService.resolve('main')
       })
   }
@@ -399,7 +396,7 @@ export class AddUserProfileComponent implements OnInit {
               .subscribe(response => {
                 this._loadingService.resolve('main')
                 this.alertMessageUser.emit(true)
-                this.getUserProfilesByUserId(updateProfile.user.id)
+                this.getUserProfilesByUserId(this.userId)
                 this.toggleAddProfile = !this.toggleAddProfile
                 this.toggleCommand = false
                 this.toggleListProfile = false
@@ -417,11 +414,8 @@ export class AddUserProfileComponent implements OnInit {
     this._userProfileService
       .setDefaultProfile(updateProfile)
       .subscribe(response => {
-        this.getUserProfilesByUserId(updateProfile.user.id)
+        this.getUserProfilesByUserId(this.userId)
       })
-  }
-
-  onDateChanged(event: any) {
   }
 
   genFormat(event: any) {
