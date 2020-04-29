@@ -100,9 +100,6 @@
                 </div>
                 <div flex="48" flex-xs="100">
                     <md-select placeholder="ระดับ" [(ngModel)]="userProfile.positionLevel" name="positionLevel" class="pad-top" style="display:inherit;">
-                        <md-input-container flex style="width: 100%">
-                            <input md-input type="text" (keyup)="addOptionLevel($event.target.value)" />
-                        </md-input-container>
                         <md-option *ngFor="let pl of posLevel" [value]="pl.id">
                             {{pl.name}}
                         </md-option>
