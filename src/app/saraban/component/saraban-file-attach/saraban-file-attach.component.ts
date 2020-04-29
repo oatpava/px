@@ -7,6 +7,7 @@ import { MdProgressSpinner } from '@angular/material'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { setTimeout } from 'timers'
 import { environment } from '../../../../environments/environment'
+import { MdDialogRef } from '@angular/material'
 
 import { PxService } from '../../../main/px.service'
 import { SarabanContentService } from '../../service/saraban-content.service'
@@ -55,6 +56,7 @@ export class SarabanFileAttachComponent implements OnInit {
     private _pxService: PxService,
     private _sarabanContentService: SarabanContentService,
     private _paramSarabanService: ParamSarabanService,
+    public dialogRef: MdDialogRef<SarabanFileAttachComponent>
   ) {
     this.isArchive = this._paramSarabanService.isArchive
   }
@@ -302,10 +304,7 @@ export class SarabanFileAttachComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.blockUI = false
-        this.getFileAttachs()
-        this.msgs = []
-        this.life = 3000
-        this.msgs = msgs_tmp
+        this.dialogRef.close(msgs_tmp)
       })
   }
 

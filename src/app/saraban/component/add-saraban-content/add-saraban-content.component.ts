@@ -1444,8 +1444,12 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.num = this.numFileAttach
     dialogRef.componentInstance.title = this.trimTitle(this.sarabanContent.wfContentTitle)
     dialogRef.afterClosed().subscribe(result => {
-      this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num
-      this.setParamDataStatus(this.sarabanContent, true, false, false)
+      if (result) {
+        this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num
+        this.setParamDataStatus(this.sarabanContent, true, false, false)
+        this.msgs = []
+        this.msgs = result
+      }
     })
   }
 
