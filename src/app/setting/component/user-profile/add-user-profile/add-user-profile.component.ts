@@ -424,20 +424,12 @@ export class AddUserProfileComponent implements OnInit {
   onDateChanged(event: any) {
   }
 
-  addOptionLevel(value: any) {
-    // this.newPerStatus = this.perStatus
-    if (value !== '') {
-      this.posLevel = this.posLevel.filter(model => model.name.match(value + '+'))
-    }
-  }
-
   genFormat(event: any) {
     console.log('event : ', event)
   }
 
   nodeSelect(event) {
     let node = event.node
-    console.log('xxx', node)
     if (!event.node.leaf) {
       if (this.userProfile.structure.id === node.id) {
         this.userProfile.structure = new Structure({
