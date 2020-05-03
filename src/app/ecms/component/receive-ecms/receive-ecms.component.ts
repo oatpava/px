@@ -321,8 +321,8 @@ export class ReceiveEcmsComponent implements OnInit {
         content.wfDocumentId = documentId
         content.workflowId = 0
         content.inboxId = 0
-        content.wfContentFrom = ecms.td[0].data
-        content.wfContentTo = ecms.td[1].data
+        content.wfContentFrom = ecms.td[10].data
+        content.wfContentTo = ecms.td[11].data
         content.wfContentTitle = ecms.thegifSubject
         content.wfContentReference = ecms.thegifReference
         content.wfContentDescription = ecms.thegifDescription
