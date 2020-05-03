@@ -185,9 +185,9 @@ export class SendSarabanContentComponent implements OnInit {
           this.sendNote2 = (this.sarabanContent.wfContentDate01.length > 0) ? 'ได้รับเอกสารตัวจริงแล้ว ' + response.wfContentDate01.substr(0, 10) + ' ' + response.wfContentDate01.substr(11, 5) : 'รอเอกสารตัวจริง'
           if (this._paramSarabanService.mwp.fromMwp) {
             if (this.mode == 'reply') {
-              //this.prepareShowTo(this._paramSarabanService.mwp.replyTo)
-              if (this._paramSarabanService.lastSendTo.length >0 ) this._paramSarabanService.lastSendTo.forEach(node => this.prepareShowToLastSending(node))
-              else this.getLastSendTo()
+              this.prepareShowTo(this._paramSarabanService.mwp.replyTo)
+              // if (this._paramSarabanService.lastSendTo.length > 0 ) this._paramSarabanService.lastSendTo.forEach(node => this.prepareShowToLastSending(node))
+              // else this.getLastSendTo()
             }
           } else {
             //this.prepareShowTo(response.wfContentTo)//ghb
