@@ -136,7 +136,6 @@ export class ListSarabanContentComponent implements OnInit {
       this._paramSarabanService.msg = null
       setTimeout(() => this.msgs = [], 3000)
     }
-    this.getContentAuth(this.folderId, 0, this._paramSarabanService.userId)
     this.getFolder(this.folderId)
     this.getInititalDatas()
   }
@@ -196,20 +195,20 @@ export class ListSarabanContentComponent implements OnInit {
       })
   }
 
-  getContentAuth(folderId: number, structureId: number, userId: number) {
+  getContentAuth(folder: SarabanFolder, structureId: number, userId: number) {
     this._loadingService.register('main')
     this._sarabanService
-      .getContentAuth(folderId, structureId, userId)
+      .getContentAuth(folder.id, structureId, userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this._paramSarabanService.setAuth(response)
-        this.getMenus(this._paramSarabanService.contentAuth, userId, this._paramSarabanService.isArchive)
+        this.getMenus(this._paramSarabanService.contentAuth, userId, this._paramSarabanService.isArchive, folder)
       })
   }
 
-  getMenus(auth: SarabanAuth[], userId: number, isArchive: boolean) {
+  getMenus(auth: SarabanAuth[], userId: number, isArchive: boolean, folder: SarabanFolder) {
     this._sarabanContentService
-      .getAuthMenus("list-saraban-reserve", auth, (userId == 1) ? true : false, isArchive, (this.folder.wfContentType2.id == 3))//'list-saraban' || 'list-saraban-reserve'//ECMS only type2 outside
+      .getAuthMenus("list-saraban-reserve", auth, (userId == 1) ? true : false, isArchive, (folder.wfContentType2.id == 3))//'list-saraban' || 'list-saraban-reserve'//ECMS only type2 outside
       .subscribe(response => {
         this.menus = response as Menu[]
       })
@@ -435,6 +434,7 @@ export class ListSarabanContentComponent implements OnInit {
             this.folderType = 3//ส่ง null
           }
         }
+        this.getContentAuth(response, 0, this._paramSarabanService.userId)
       })
   }
 
