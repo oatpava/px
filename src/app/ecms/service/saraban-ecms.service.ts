@@ -148,7 +148,7 @@ export class SarabanEcmsService {
   sendContentECMSThEgif(model): Observable<any> {
     let params = new URLSearchParams()
     this._options.search = params
-    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter/' + model.DEPCODE + '/' + model.wfContentId, this._options)
+    return this._http.get(this._apiUrl + '/v1/thegifs/sendECMSLetter/' + model.wfContentId + '/' + model.DEPCODE, this._options)
       .map((response: Response) => {
         return this._pxService.verifyResponseArray(response.json())
       })
