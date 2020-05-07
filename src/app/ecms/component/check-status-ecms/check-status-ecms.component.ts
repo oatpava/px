@@ -41,7 +41,7 @@ export class CheckStatusEcmsComponent implements OnInit {
       .subscribe(response => {
         console.log(response)//เพิ่ม อ้างถึง ส่งมาเป็นแบบ string ตัด | push เป็น Array
         response.data.forEach(element => {
-          if (element.thegifReference != '') {
+          if (element.thegifReference != null && element.thegifReference != '') {
             let index = element.thegifReference.indexOf('|')
             element.thegifReferenceArray = []
             if (index > 0) {
