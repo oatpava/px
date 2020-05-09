@@ -24,6 +24,8 @@ export class CheckStatusEcmsComponent implements OnInit {
   fkDelete: any = []
   fkUpdateEcms: any = []
   msgs: Message[] = []
+  loading: { load: boolean, action: string } = { load: false, action: '' }
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -54,17 +56,20 @@ export class CheckStatusEcmsComponent implements OnInit {
           }
         });
         this.listData = response.data
+        this.loading ={ load: false, action: '' }
       })
   }
 
-  getCreateContentEcms() {
+  getCreateContentEcms(action: string) {
+    this.loading = { load: true, action: action }
     this._ecmsService
       .createEcmsLetter()
       .subscribe(response => {
         this.getContentEcms()
       })
   }
-  deleteContentEcms() { //ลบหนังสือ
+
+  deleteContentEcms(action: string) { //ลบหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -83,6 +88,7 @@ export class CheckStatusEcmsComponent implements OnInit {
           this.selectedRow.forEach(element => {
             this.fkDelete.push(this._ecmsService.delete(element.id))
           })
+          this.loading = { load: true, action: action }
           Observable.forkJoin(this.fkDelete)
             .subscribe((response2: any[]) => {
               this.fkDelete = []
@@ -99,7 +105,8 @@ export class CheckStatusEcmsComponent implements OnInit {
       })
     }
   }
-  wrongContentEcms() { //แจ้งรับเลขผิด
+
+  wrongContentEcms(action: string) { //แจ้งรับเลขผิด
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -126,6 +133,7 @@ export class CheckStatusEcmsComponent implements OnInit {
             this.selectedRow.forEach(element => {
               this.fkDelete.push(this._ecmsService.getECMSInvalidLetterNotifier(element.id))
             })
+            this.loading = { load: true, action: action }
             Observable.forkJoin(this.fkDelete)
               .subscribe((response2: any[]) => {
                 this.fkDelete = []
@@ -135,6 +143,7 @@ export class CheckStatusEcmsComponent implements OnInit {
                   // });
                   // let instance = dialogRef.componentInstance
                   // instance.data = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                  this.loading ={ load: false, action: '' }
                 } else {
                   //Update
                   this.selectedRow.forEach(element => {
@@ -167,7 +176,8 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     }
   }
-  deleteContentSendAginEcms() { //ขอลบหนังสือภายนอกเพื่อส่งใหม่
+
+  deleteContentSendAginEcms(action: string) { //ขอลบหนังสือภายนอกเพื่อส่งใหม่
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -193,6 +203,7 @@ export class CheckStatusEcmsComponent implements OnInit {
             this.selectedRow.forEach(element => {
               this.fkDelete.push(this._ecmsService.getECMSDeleteGovernmentDocumentRequest(element.id))
             })
+            this.loading = { load: true, action: action }
             Observable.forkJoin(this.fkDelete)
               .subscribe((response2: any[]) => {
                 this.fkDelete = []
@@ -202,6 +213,7 @@ export class CheckStatusEcmsComponent implements OnInit {
                   // });
                   // let instance = dialogRef.componentInstance
                   // instance.data = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                  this.loading ={ load: false, action: '' }
                 } else {
                   //Update
                   this.selectedRow.forEach(element => {
@@ -234,6 +246,7 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     }
   }
+
   //เพิ่ม คลิก แล้วเปิดหน้า แสดงรายละเอียดว่าส่งถึงใครบ้าง (เพิ่ม DialogsShowThEGifComponent)
   show(item) {
     let dialogRef = this._dialog.open(DialogsShowThEGifComponent, {
@@ -246,7 +259,9 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     })
   }
+
   close() {
     this.dialogRef.close()
   }
+  
 }

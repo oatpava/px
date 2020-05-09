@@ -3,14 +3,19 @@
         <div layout="row" class="pad-sm bgc-blue-900 tc-blue-50 push-bottom-sm">
             <div class="fontField-List"> {{ecmsType.name}} </div>
         </div>
-        <div flex layout="row" class=" bgc-blue-400 tc-grey-50">
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="getCreateContentEcms()">ตรวจสอบหนังสือล่าสุด</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentEcms()">ลบหนังสือ</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms()">แจ้งรับเลขผิด</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentSendAginEcms()">ขอลบหนังสือภายนอกเพื่อส่งใหม่</div>
+        <div *ngIf="loading.load">
+            <div style="text-align: center; font-size: 30px;">
+                <span class="animated">กำลัง{{loading.action}} กรุณารอสักครู่...</span>
+            </div>
+        </div>
+        <div *ngIf="!loading.load" flex layout="row" class=" bgc-blue-400 tc-grey-50">
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="getCreateContentEcms('ตรวจสอบหนังสือล่าสุด')">ตรวจสอบหนังสือล่าสุด</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentEcms('ลบหนังสือ')">ลบหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms('แจ้งรับเลขผิด')">แจ้งรับเลขผิด</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentSendAginEcms('ขอลบหนังสือภายนอกเพื่อส่งใหม่')">ขอลบหนังสือภายนอกเพื่อส่งใหม่'</div>
             <!-- <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover">ลบเรื่องล่าสุด</div> -->
         </div>
-        <div class="blockFormECMS" flex>
+        <div *ngIf="!loading.load" class="blockFormECMS" flex>
             <p-dataTable #dt [value]="listData" [(selection)]="selectedRow" [resizableColumns]="false" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" [responsive]="true" styleClass="fixed-size">
                 <p-column [style]="{'width':'30px', 'text-align':'-webkit-center'}" selectionMode="multiple"></p-column>
                 <p-column field="index" header="ลำดับ" [style]="{'width':'50px', 'text-align':'-webkit-center'}">

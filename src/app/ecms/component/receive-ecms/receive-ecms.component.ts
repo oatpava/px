@@ -39,6 +39,8 @@ export class ReceiveEcmsComponent implements OnInit {
   forRigister: any = []
   fkUpdateEcms: any = []
   folder: SarabanFolder
+  loading: { load: boolean, action: string } = { load: false, action: '' }
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -75,9 +77,11 @@ export class ReceiveEcmsComponent implements OnInit {
           }
         });
         this.listData = response.data
+        this.loading ={ load: false, action: '' }
       })
   }
-  getCreateContentEcms() { //ตรวจสอบหนังสือล่าสุด
+  getCreateContentEcms(action: string) { //ตรวจสอบหนังสือล่าสุด
+    this.loading = { load: true, action: action }
     this._ecmsService
       .createEcmsLetter()
       .subscribe(response => {
@@ -91,7 +95,8 @@ export class ReceiveEcmsComponent implements OnInit {
   close() {
     this.dialogRef.close()
   }
-  deleteContentEcms() { //ลบหนังสือ
+
+  deleteContentEcms(action: string) { //ลบหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -109,6 +114,7 @@ export class ReceiveEcmsComponent implements OnInit {
           this.selectedRow.forEach(element => {
             this.fkDelete.push(this._ecmsService.delete(element.id))
           })
+          this.loading = { load: true, action: action }
           Observable.forkJoin(this.fkDelete)
             .subscribe((response2: any[]) => {
               this.fkDelete = []
@@ -125,7 +131,8 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
-  rigisterContentEcms() { //ลงทะเบียนรับ
+
+  rigisterContentEcms(action: string) { //ลงทะเบียนรับ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -134,10 +141,12 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
+      this.loading = { load: true, action: action }
       this.createDocument(this.selectedRow[0])
     }
   }
-  refuseContentEcms() { //ปฏิเสธหนังสือ
+
+  refuseContentEcms(action: string) { //ปฏิเสธหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -177,6 +186,7 @@ export class ReceiveEcmsComponent implements OnInit {
                   }
                   this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
                 })
+                this.loading = { load: true, action: action }
                 Observable.forkJoin(this.fkUpdateEcms)
                   .subscribe((response3: any[]) => {
                     this.getContentEcms()
@@ -195,7 +205,8 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
-  wrongContentEcms() { //แจ้งหนังสือผิด/ส่งผิด
+
+  wrongContentEcms(action: string) { //แจ้งหนังสือผิด/ส่งผิด
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -235,6 +246,7 @@ export class ReceiveEcmsComponent implements OnInit {
                   }
                   this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
                 })
+                this.loading = { load: true, action: action }
                 Observable.forkJoin(this.fkUpdateEcms)
                   .subscribe((response3: any[]) => {
                     console.log(response3)
@@ -255,6 +267,7 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
+
   showFile(item) {
     let dialogRef = this._dialog.open(FileEcmsComponent, {
       width: '40%',
@@ -281,10 +294,12 @@ export class ReceiveEcmsComponent implements OnInit {
       .subscribe(
         (data) => {
           this._loadingService.resolve('main')
+          this.loading ={ load: false, action: '' }
           this.mapECMSContent(ecms, newDoc.id)
         },
         (err) => {
           this._loadingService.resolve('main')
+          this.loading ={ load: false, action: '' }
           this.dialogRef.close({ header: 'แจ้งเตือน', message: 'ไม่สามารถสร้างหนังสือ เนื่องจากระบบจัดเก็บเอกสารมีปัญหา' })
         })
   }
