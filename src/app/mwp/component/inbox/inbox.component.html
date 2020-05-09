@@ -14,6 +14,9 @@
             <span style="margin-right:1rem;">เลือกหนังสือเข้า</span>
             <p-dropdown [options]="inboxAssign" [style]="{'width':'30rem'}" [(ngModel)]="index" (onChange)="switchInbox($event.value)"></p-dropdown>
         </div>
+        <div hide-gt-md layout="row" style="align-items: center;">
+            <p-dropdown [options]="inboxAssign" [(ngModel)]="index" (onChange)="switchInbox($event.value)"></p-dropdown>
+        </div>
 
         <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
             <md-icon>more_vert</md-icon>
