@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { MdDialog, MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
-import { ConfirmDialogComponent, DeleteDialogComponent } from '../../../shared'
 import { DialogsShowThEGifComponent } from '../dialogs-show-th-e-gif/dialogs-show-th-e-gif.component'
+import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 
 @Component({
   selector: 'app-check-status-ecms',
@@ -74,11 +73,10 @@ export class CheckStatusEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการลบหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.message = 'คุณต้องการลบหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           console.log(this.selectedRow)
@@ -118,11 +116,11 @@ export class CheckStatusEcmsComponent implements OnInit {
           detail: 'กรุณาเลือกรายการ สถานะปลายทางลงเลขรับหนังสือ เท่านั้น'
         })
       } else {
-        let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        let dialogRef = this._dialog.open(DialogWarningComponent, {
           width: '40%',
         });
-        let instance = dialogRef.componentInstance
-        instance.dataName = 'คุณต้องการแจ้งรับเลขผิด ใช่ หรือ ไม่'
+        dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+        dialogRef.componentInstance.message = 'คุณต้องการแจ้งรับเลขผิดใช่ หรือ ไม่'
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.selectedRow.forEach(element => {
@@ -186,11 +184,10 @@ export class CheckStatusEcmsComponent implements OnInit {
           detail: 'กรุณาเลือกรายการ สถานะส่งหนังสือ เท่านั้น'
         })
       } else {
-        let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        let dialogRef = this._dialog.open(DialogWarningComponent, {
           width: '40%',
         });
-        let instance = dialogRef.componentInstance
-        instance.dataName = 'คุณต้องการ ขอลบหนังสือภายนอกเพื่อส่งใหม่ ใช่ หรือ ไม่'
+        dialogRef.componentInstance.message = 'คุณต้องการขอลบหนังสือภายนอกเพื่อส่งใหม่ใช่ หรือ ไม่'
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.selectedRow.forEach(element => {

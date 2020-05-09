@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { MdDialog, MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
-import { ConfirmDialogComponent, DeleteDialogComponent, FileEcmsComponent } from '../../../shared'
+import { FileEcmsComponent } from '../file-ecms/file-ecms.component'
+import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 
 import { TdLoadingService } from '@covalent/core'
 import { SarabanContent } from '../../../saraban/model/sarabanContent.model'
@@ -100,11 +100,10 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการลบหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.message = 'คุณต้องการลบหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
@@ -147,11 +146,11 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการปฏิเสธหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.header = 'ยืนยันการปฏิเสธข้อมูล'
+      dialogRef.componentInstance.message = 'คุณต้องการปฏิเสธหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
@@ -161,11 +160,11 @@ export class ReceiveEcmsComponent implements OnInit {
             .subscribe((response2: any[]) => {
               this.fkDelete = []
               if (response2[0].data[0].errorCode !== '') {
-                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                let dialogRef = this._dialog.open(DialogWarningComponent, {
                   width: '40%',
                 });
-                let instance = dialogRef.componentInstance
-                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+                dialogRef.componentInstance.message = 'คุณต้องการ' + response2[0].data[0].errorCode + response2[0].data[0].errorDescription + 'ใช่ หรือ ไม่'
               } else {
                 //Update
                 this.selectedRow.forEach(element => {
@@ -205,11 +204,11 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการแจ้งหนังสือผิด/ส่งผิด ใช่ หรือ ไม่'
+      dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+      dialogRef.componentInstance.message = 'คุณต้องการแจ้งหนังสือผิด/ส่งผิดใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
@@ -219,11 +218,11 @@ export class ReceiveEcmsComponent implements OnInit {
             .subscribe((response2: any[]) => {
               this.fkDelete = []
               if (response2[0].data[0].errorCode !== '') {
-                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                let dialogRef = this._dialog.open(DialogWarningComponent, {
                   width: '40%',
                 });
-                let instance = dialogRef.componentInstance
-                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+                dialogRef.componentInstance.message = 'คุณต้องการ' + response2[0].data[0].errorCode + response2[0].data[0].errorDescription + 'ใช่ หรือ ไม่'
               } else {
                 //Update
                 this.selectedRow.forEach(element => {

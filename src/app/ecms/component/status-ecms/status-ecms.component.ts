@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
+
 @Component({
   selector: 'app-status-ecms',
   templateUrl: './status-ecms.component.html',
