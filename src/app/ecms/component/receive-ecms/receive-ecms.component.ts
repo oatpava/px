@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
 import { FileEcmsComponent } from '../file-ecms/file-ecms.component'
 import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
+import { SarabanFileAttachComponent } from '../../../saraban/component/saraban-file-attach/saraban-file-attach.component'
 
 import { TdLoadingService } from '@covalent/core'
 import { SarabanContent } from '../../../saraban/model/sarabanContent.model'
@@ -449,6 +450,25 @@ export class ReceiveEcmsComponent implements OnInit {
       .subscribe(response => {
 
       })
+  }
+
+  loadFileAttach(ecms: any) {
+    let dialogRef = this._dialog.open(SarabanFileAttachComponent, {
+      width: '60%', height: '70%'
+    })
+    dialogRef.componentInstance.ecms = true
+    dialogRef.componentInstance.linkType = 'thegif'
+    dialogRef.componentInstance.linkId = ecms.id
+    dialogRef.componentInstance.num = ecms.numFileAttach
+    dialogRef.componentInstance.title = this.trimTitle(ecms.thegifSubject)
+  }
+
+  trimTitle(title: string): string {
+    if (title.length > 270) {
+      return title.substr(0, 270) + '...'
+    } else {
+      return title
+    }
   }
 
 }

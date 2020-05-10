@@ -43,7 +43,7 @@
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[3].data}} &nbsp; &nbsp;</span>
                       <div flex layout="row" class="push-top-sm" (click)="show(car)">
-                          <div *ngIf="car.wfFileAttach != null" layout="row" layout-wrap>
+                          <!-- <div *ngIf="car.wfFileAttach != null" layout="row" layout-wrap>
                               <div *ngFor="let itemAttach of car.wfFileAttach; let i=index">
                                   <div *ngIf="i < 3" layout="row" class="fileAttach pad-left-sm pad-right-sm push-top-xs pad-xs" title="{{itemAttach.fileAttachName}}">
                                       <img class="hover" src="{{itemAttach.thumbnailUrl}}" style="width:15px;height:20px">
@@ -53,7 +53,7 @@
                               <div *ngIf="car.wfFileAttach.length> 4" class="fileAttachPlus pad-left-sm pad-right-sm push-top-xs pad-xs" title="มีเพิ่มอีก {{car.wfFileAttach.length - 3}} รายการ">
                                   <div class="pad-left-xs pad-top-xs"> + {{car.wfFileAttach.length - 3}}</div>
                               </div>
-                          </div>
+                          </div> -->
                       </div>
                   </template>
                 </p-column>

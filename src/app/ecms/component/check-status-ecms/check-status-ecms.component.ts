@@ -263,5 +263,5 @@ export class CheckStatusEcmsComponent implements OnInit {
   close() {
     this.dialogRef.close()
   }
-  
+
 }
