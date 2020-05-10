@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { MdDialog, MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
-import { ConfirmDialogComponent, DeleteDialogComponent, FileEcmsComponent } from '../../../shared'
+import { FileEcmsComponent } from '../file-ecms/file-ecms.component'
+import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
+import { SarabanFileAttachComponent } from '../../../saraban/component/saraban-file-attach/saraban-file-attach.component'
 
 import { TdLoadingService } from '@covalent/core'
 import { SarabanContent } from '../../../saraban/model/sarabanContent.model'
@@ -39,6 +40,8 @@ export class ReceiveEcmsComponent implements OnInit {
   forRigister: any = []
   fkUpdateEcms: any = []
   folder: SarabanFolder
+  loading: { load: boolean, action: string } = { load: false, action: '' }
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -59,9 +62,9 @@ export class ReceiveEcmsComponent implements OnInit {
     this._ecmsService
       .getContentECMSThEgif(this.dataPaging)
       .subscribe(response => {
-        //เพิ่ม อ้างถึง ส่งมาเป็นแบบ string ตัด | push เป็น Array
+        console.log(response)//เพิ่ม อ้างถึง ส่งมาเป็นแบบ string ตัด | push เป็น Array
         response.data.forEach(element => {
-          if (element.thegifReference != '') {
+          if (element.thegifReference != null && element.thegifReference != '') {
             let index = element.thegifReference.indexOf('|')
             element.thegifReferenceArray = []
             if (index > 0) {
@@ -75,9 +78,11 @@ export class ReceiveEcmsComponent implements OnInit {
           }
         });
         this.listData = response.data
+        this.loading ={ load: false, action: '' }
       })
   }
-  getCreateContentEcms() { //ตรวจสอบหนังสือล่าสุด
+  getCreateContentEcms(action: string) { //ตรวจสอบหนังสือล่าสุด
+    this.loading = { load: true, action: action }
     this._ecmsService
       .createEcmsLetter()
       .subscribe(response => {
@@ -91,7 +96,8 @@ export class ReceiveEcmsComponent implements OnInit {
   close() {
     this.dialogRef.close()
   }
-  deleteContentEcms() { //ลบหนังสือ
+
+  deleteContentEcms(action: string) { //ลบหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -100,16 +106,16 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการลบหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.message = 'คุณต้องการลบหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
             this.fkDelete.push(this._ecmsService.delete(element.id))
           })
+          this.loading = { load: true, action: action }
           Observable.forkJoin(this.fkDelete)
             .subscribe((response2: any[]) => {
               this.fkDelete = []
@@ -126,7 +132,8 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
-  rigisterContentEcms() { //ลงทะเบียนรับ
+
+  rigisterContentEcms(action: string) { //ลงทะเบียนรับ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -135,10 +142,12 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
+      this.loading = { load: true, action: action }
       this.createDocument(this.selectedRow[0])
     }
   }
-  refuseContentEcms() { //ปฏิเสธหนังสือ
+
+  refuseContentEcms(action: string) { //ปฏิเสธหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -147,11 +156,11 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการปฏิเสธหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.header = 'ยืนยันการปฏิเสธข้อมูล'
+      dialogRef.componentInstance.message = 'คุณต้องการปฏิเสธหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
@@ -161,11 +170,11 @@ export class ReceiveEcmsComponent implements OnInit {
             .subscribe((response2: any[]) => {
               this.fkDelete = []
               if (response2[0].data[0].errorCode !== '') {
-                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                let dialogRef = this._dialog.open(DialogWarningComponent, {
                   width: '40%',
                 });
-                let instance = dialogRef.componentInstance
-                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+                dialogRef.componentInstance.message = 'คุณต้องการ' + response2[0].data[0].errorCode + response2[0].data[0].errorDescription + 'ใช่ หรือ ไม่'
               } else {
                 //Update
                 this.selectedRow.forEach(element => {
@@ -178,6 +187,7 @@ export class ReceiveEcmsComponent implements OnInit {
                   }
                   this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
                 })
+                this.loading = { load: true, action: action }
                 Observable.forkJoin(this.fkUpdateEcms)
                   .subscribe((response3: any[]) => {
                     this.getContentEcms()
@@ -196,7 +206,8 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
-  wrongContentEcms() { //แจ้งหนังสือผิด/ส่งผิด
+
+  wrongContentEcms(action: string) { //แจ้งหนังสือผิด/ส่งผิด
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -205,11 +216,11 @@ export class ReceiveEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการแจ้งหนังสือผิด/ส่งผิด ใช่ หรือ ไม่'
+      dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+      dialogRef.componentInstance.message = 'คุณต้องการแจ้งหนังสือผิด/ส่งผิดใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.selectedRow.forEach(element => {
@@ -219,11 +230,11 @@ export class ReceiveEcmsComponent implements OnInit {
             .subscribe((response2: any[]) => {
               this.fkDelete = []
               if (response2[0].data[0].errorCode !== '') {
-                let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+                let dialogRef = this._dialog.open(DialogWarningComponent, {
                   width: '40%',
                 });
-                let instance = dialogRef.componentInstance
-                instance.dataName = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+                dialogRef.componentInstance.message = 'คุณต้องการ' + response2[0].data[0].errorCode + response2[0].data[0].errorDescription + 'ใช่ หรือ ไม่'
               } else {
                 //Update
                 this.selectedRow.forEach(element => {
@@ -236,6 +247,7 @@ export class ReceiveEcmsComponent implements OnInit {
                   }
                   this.fkUpdateEcms.push(this._ecmsService.updateLettetStatus(sendECMSContentData2))
                 })
+                this.loading = { load: true, action: action }
                 Observable.forkJoin(this.fkUpdateEcms)
                   .subscribe((response3: any[]) => {
                     console.log(response3)
@@ -256,6 +268,7 @@ export class ReceiveEcmsComponent implements OnInit {
       })
     }
   }
+
   showFile(item) {
     let dialogRef = this._dialog.open(FileEcmsComponent, {
       width: '40%',
@@ -282,10 +295,12 @@ export class ReceiveEcmsComponent implements OnInit {
       .subscribe(
         (data) => {
           this._loadingService.resolve('main')
+          this.loading ={ load: false, action: '' }
           this.mapECMSContent(ecms, newDoc.id)
         },
         (err) => {
           this._loadingService.resolve('main')
+          this.loading ={ load: false, action: '' }
           this.dialogRef.close({ header: 'แจ้งเตือน', message: 'ไม่สามารถสร้างหนังสือ เนื่องจากระบบจัดเก็บเอกสารมีปัญหา' })
         })
   }
@@ -321,8 +336,8 @@ export class ReceiveEcmsComponent implements OnInit {
         content.wfDocumentId = documentId
         content.workflowId = 0
         content.inboxId = 0
-        content.wfContentFrom = ecms.td[0].data
-        content.wfContentTo = ecms.td[1].data
+        content.wfContentFrom = ecms.td[10].data
+        content.wfContentTo = ecms.td[11].data
         content.wfContentTitle = ecms.thegifSubject
         content.wfContentReference = ecms.thegifReference
         content.wfContentDescription = ecms.thegifDescription
@@ -435,6 +450,25 @@ export class ReceiveEcmsComponent implements OnInit {
       .subscribe(response => {
 
       })
+  }
+
+  loadFileAttach(ecms: any) {
+    let dialogRef = this._dialog.open(SarabanFileAttachComponent, {
+      width: '60%', height: '70%'
+    })
+    dialogRef.componentInstance.ecms = true
+    dialogRef.componentInstance.linkType = 'thegif'
+    dialogRef.componentInstance.linkId = ecms.id
+    dialogRef.componentInstance.num = ecms.numFileAttach
+    dialogRef.componentInstance.title = this.trimTitle(ecms.thegifSubject)
+  }
+
+  trimTitle(title: string): string {
+    if (title.length > 270) {
+      return title.substr(0, 270) + '...'
+    } else {
+      return title
+    }
   }
 
 }

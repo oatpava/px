@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { MdDialog, MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
-import { ConfirmDialogComponent, DeleteDialogComponent, FileEcmsComponent } from '../../../shared'
 
 @Component({
   selector: 'app-send-ecms',

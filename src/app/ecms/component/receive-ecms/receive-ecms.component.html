@@ -3,20 +3,30 @@
         <div layout="row" class="pad-sm bgc-blue-900 tc-blue-50 push-bottom-sm">
             <div class="fontField-List"> {{ecmsType.name}} </div>
         </div>
-        <div flex layout="row" class=" bgc-blue-400 tc-grey-50">
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="getCreateContentEcms()">ตรวจสอบหนังสือล่าสุด</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentEcms()">ลบหนังสือ</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="rigisterContentEcms()">ลงรับหนังสือ</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="refuseContentEcms()">ปฏิเสธหนังสือ</div>
-            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms()">แจ้งหนังสือผิด/ส่งผิด</div>
+        <div *ngIf="loading.load">
+            <div style="text-align: center; font-size: 30px;">
+                <span class="animated">กำลัง{{loading.action}} กรุณารอสักครู่...</span>
+            </div>
         </div>
-        <div class="blockFormECMS" flex>
+        <div *ngIf="!loading.load" flex layout="row" class=" bgc-blue-400 tc-grey-50">
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="getCreateContentEcms('ตรวจสอบหนังสือล่าสุด')">ตรวจสอบหนังสือล่าสุด</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="deleteContentEcms('ลบหนังสือ')">ลบหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="rigisterContentEcms('ลงรับหนังสือ')">ลงรับหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="refuseContentEcms('ปฏิเสธหนังสือ')">ปฏิเสธหนังสือ</div>
+            <div class="pad-left-sm pad-right-sm pad-top-sm pad-bottom-sm menuEcms hover" (click)="wrongContentEcms('แจ้งหนังสือผิด/ส่งผิด')">แจ้งหนังสือผิด/ส่งผิด</div>
+        </div>
+        <div *ngIf="!loading.load" class="blockFormECMS" flex>
             <p-dataTable #dt [value]="listData" [(selection)]="selectedRow" [resizableColumns]="false" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" sortMode="multiple" [responsive]="true" styleClass="fixed-size">
                 <p-column [style]="{'width':'30px', 'text-align':'-webkit-center'}" selectionMode="multiple"></p-column>
                 <p-column field="index" header="ลำดับ" [style]="{'width':'50px', 'text-align':'-webkit-center'}">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" class="pad-left-sm" (click)="show(car)">{{ri+1}} &nbsp; &nbsp;</span>
                   </template>
+                </p-column>
+                <p-column header="เอกสารแนบ" [style]="{'width':'50px', 'text-align':'center', 'vertical-align':'top'}">
+                    <template pTemplate="body" let-row="rowData">
+                        <button *ngIf="row.numFileAttach>0" md-icon-button title="{{row.numFileAttach}} รายการ" (click)="loadFileAttach(row)"><i class="material-icons">attach_file</i></button> 
+                    </template>
                 </p-column>
                 <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก" [style]="{'width':'140px', 'vertical-align':'middle' , cursor: 'defult'}">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
@@ -41,7 +51,7 @@
                 <p-column [sortable]="true" field="thegifSubject" header="เรื่อง" [style]="{'width':'180px', 'vertical-align':'middle', cursor: 'defult'}">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[4].data}} &nbsp; &nbsp;</span>
-                      <div flex layout="row" class="push-top-sm" (click)="show(car)">
+                      <!-- <div flex layout="row" class="push-top-sm" (click)="show(car)">
                           <div *ngIf="car.wfFileAttach != null" layout="row" layout-wrap>
                               <div *ngFor="let itemAttach of car.wfFileAttach; let i=index" class="hover" (click)="showFile(car.wfFileAttach)">
                                   <div *ngIf="i < 3" layout="row" class="fileAttach pad-left-sm pad-right-sm push-top-xs pad-xs" title="{{itemAttach.fileAttachName}}">
@@ -53,7 +63,7 @@
                                   <div class="pad-left-xs pad-top-xs"> + {{car.wfFileAttach.length - 3}}</div>
                               </div>
                           </div>
-                      </div>
+                      </div> -->
                   </template>
                 </p-column>
                 <!-- เพิ่มฟิล จาก หนังสือ) ถึง (หนังสือ) รายละเอียด -->
