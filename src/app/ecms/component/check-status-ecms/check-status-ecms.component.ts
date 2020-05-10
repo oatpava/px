@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { MdDialog, MdDialogRef } from '@angular/material'
 import { Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
-import { DatePipe } from '@angular/common'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
-import { ConfirmDialogComponent, DeleteDialogComponent } from '../../../shared'
 import { DialogsShowThEGifComponent } from '../dialogs-show-th-e-gif/dialogs-show-th-e-gif.component'
+import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 
 @Component({
   selector: 'app-check-status-ecms',
@@ -25,6 +24,8 @@ export class CheckStatusEcmsComponent implements OnInit {
   fkDelete: any = []
   fkUpdateEcms: any = []
   msgs: Message[] = []
+  loading: { load: boolean, action: string } = { load: false, action: '' }
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -55,17 +56,20 @@ export class CheckStatusEcmsComponent implements OnInit {
           }
         });
         this.listData = response.data
+        this.loading ={ load: false, action: '' }
       })
   }
 
-  getCreateContentEcms() {
+  getCreateContentEcms(action: string) {
+    this.loading = { load: true, action: action }
     this._ecmsService
       .createEcmsLetter()
       .subscribe(response => {
         this.getContentEcms()
       })
   }
-  deleteContentEcms() { //ลบหนังสือ
+
+  deleteContentEcms(action: string) { //ลบหนังสือ
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -74,17 +78,17 @@ export class CheckStatusEcmsComponent implements OnInit {
         detail: 'กรุณาเลือกรายการ 1 รายการเท่านั้น'
       })
     } else {
-      let dialogRef = this._dialog.open(DeleteDialogComponent, {
+      let dialogRef = this._dialog.open(DialogWarningComponent, {
         width: '40%',
       });
-      let instance = dialogRef.componentInstance
-      instance.dataName = 'คุณต้องการลบหนังสือ ใช่ หรือ ไม่'
+      dialogRef.componentInstance.message = 'คุณต้องการลบหนังสือใช่ หรือ ไม่'
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           console.log(this.selectedRow)
           this.selectedRow.forEach(element => {
             this.fkDelete.push(this._ecmsService.delete(element.id))
           })
+          this.loading = { load: true, action: action }
           Observable.forkJoin(this.fkDelete)
             .subscribe((response2: any[]) => {
               this.fkDelete = []
@@ -101,7 +105,8 @@ export class CheckStatusEcmsComponent implements OnInit {
       })
     }
   }
-  wrongContentEcms() { //แจ้งรับเลขผิด
+
+  wrongContentEcms(action: string) { //แจ้งรับเลขผิด
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -118,16 +123,17 @@ export class CheckStatusEcmsComponent implements OnInit {
           detail: 'กรุณาเลือกรายการ สถานะปลายทางลงเลขรับหนังสือ เท่านั้น'
         })
       } else {
-        let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        let dialogRef = this._dialog.open(DialogWarningComponent, {
           width: '40%',
         });
-        let instance = dialogRef.componentInstance
-        instance.dataName = 'คุณต้องการแจ้งรับเลขผิด ใช่ หรือ ไม่'
+        dialogRef.componentInstance.header = 'ยืนยันการทำรายการ'
+        dialogRef.componentInstance.message = 'คุณต้องการแจ้งรับเลขผิดใช่ หรือ ไม่'
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.selectedRow.forEach(element => {
               this.fkDelete.push(this._ecmsService.getECMSInvalidLetterNotifier(element.id))
             })
+            this.loading = { load: true, action: action }
             Observable.forkJoin(this.fkDelete)
               .subscribe((response2: any[]) => {
                 this.fkDelete = []
@@ -137,6 +143,7 @@ export class CheckStatusEcmsComponent implements OnInit {
                   // });
                   // let instance = dialogRef.componentInstance
                   // instance.data = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                  this.loading ={ load: false, action: '' }
                 } else {
                   //Update
                   this.selectedRow.forEach(element => {
@@ -169,7 +176,8 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     }
   }
-  deleteContentSendAginEcms() { //ขอลบหนังสือภายนอกเพื่อส่งใหม่
+
+  deleteContentSendAginEcms(action: string) { //ขอลบหนังสือภายนอกเพื่อส่งใหม่
     if (this.selectedRow.length != 1) {
       this.msgs = []
       this.msgs.push({
@@ -186,16 +194,16 @@ export class CheckStatusEcmsComponent implements OnInit {
           detail: 'กรุณาเลือกรายการ สถานะส่งหนังสือ เท่านั้น'
         })
       } else {
-        let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        let dialogRef = this._dialog.open(DialogWarningComponent, {
           width: '40%',
         });
-        let instance = dialogRef.componentInstance
-        instance.dataName = 'คุณต้องการ ขอลบหนังสือภายนอกเพื่อส่งใหม่ ใช่ หรือ ไม่'
+        dialogRef.componentInstance.message = 'คุณต้องการขอลบหนังสือภายนอกเพื่อส่งใหม่ใช่ หรือ ไม่'
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
             this.selectedRow.forEach(element => {
               this.fkDelete.push(this._ecmsService.getECMSDeleteGovernmentDocumentRequest(element.id))
             })
+            this.loading = { load: true, action: action }
             Observable.forkJoin(this.fkDelete)
               .subscribe((response2: any[]) => {
                 this.fkDelete = []
@@ -205,6 +213,7 @@ export class CheckStatusEcmsComponent implements OnInit {
                   // });
                   // let instance = dialogRef.componentInstance
                   // instance.data = response2[0].data[0].errorCode + response2[0].data[0].errorDescription
+                  this.loading ={ load: false, action: '' }
                 } else {
                   //Update
                   this.selectedRow.forEach(element => {
@@ -237,6 +246,7 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     }
   }
+
   //เพิ่ม คลิก แล้วเปิดหน้า แสดงรายละเอียดว่าส่งถึงใครบ้าง (เพิ่ม DialogsShowThEGifComponent)
   show(item) {
     let dialogRef = this._dialog.open(DialogsShowThEGifComponent, {
@@ -249,7 +259,9 @@ export class CheckStatusEcmsComponent implements OnInit {
       }
     })
   }
+
   close() {
     this.dialogRef.close()
   }
+
 }

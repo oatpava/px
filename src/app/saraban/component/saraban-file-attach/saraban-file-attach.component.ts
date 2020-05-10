@@ -28,6 +28,8 @@ export class SarabanFileAttachComponent implements OnInit {
   life: number = 3000
   msgs: Message[]
   blockUI: boolean = false
+  ecms: boolean = false
+  linkType: string = 'dms'
   linkId: number
 
   fileAttachs: any[] = []
@@ -70,14 +72,24 @@ export class SarabanFileAttachComponent implements OnInit {
   }
 
   setAuth(auth: SarabanAuth[]) {
-    this.auth[0] = auth[10].auth
-    this.auth[1] = auth[15].auth
-    this.auth[2] = auth[16].auth
-    this.auth[3] = auth[17].auth
-    this.auth[4] = auth[18].auth
-    if (!this.auth[0] || this._paramSarabanService.mwp.fromMwp || this.isArchive) {
+    if (!this.ecms) {
+      this.auth[0] = auth[10].auth
+      this.auth[1] = auth[15].auth
+      this.auth[2] = auth[16].auth
+      this.auth[3] = auth[17].auth
+      this.auth[4] = auth[18].auth
+      if (!this.auth[0] || this._paramSarabanService.mwp.fromMwp || this.isArchive) {
+        this.viewOnly = true
+        console.log('VIEWONLY')
+      }
+    } else {
+      this.auth[0] = false
+      this.auth[1] = true
+      this.auth[2] = true
+      this.auth[3] = true
+      this.auth[4] = true
       this.viewOnly = true
-      console.log('VIEWONLY')
+      console.log('ECMS VIEWONLY')
     }
   }
 
@@ -101,7 +113,7 @@ export class SarabanFileAttachComponent implements OnInit {
     this.initialData()
     this._loadingService.register('main')
     this._pxService
-      .getFileAttachs('dms', this.linkId, 'asc')
+      .getFileAttachs(this.linkType, this.linkId, 'asc')
       .subscribe((response: any[]) => {
         let fileAttachs = []
         let child = []
@@ -109,7 +121,7 @@ export class SarabanFileAttachComponent implements OnInit {
         response.forEach(fileattach => {
           if (fileattach.referenceId == 0) {
             fileattach.children = []
-            fileAttachs.push(fileattach)
+            fileAttachs.push(fileattach) 
           } else {
             child.push(fileattach)
           }
@@ -127,7 +139,7 @@ export class SarabanFileAttachComponent implements OnInit {
         })
 
         this.fileAttachs = fileAttachs
-        if (!this.isArchive) {
+        if (!this.isArchive && !this.ecms) {
           this.fileAttachs.forEach(tmp => {
             let name: string = tmp.fileAttachName
             let typePos: number = name.lastIndexOf(".")
@@ -319,7 +331,7 @@ export class SarabanFileAttachComponent implements OnInit {
 
   genFileattachDetail2(): FileAttach {
     return new FileAttach({
-      linkType: 'dms',
+      linkType: this.linkType,
       linkId: this.linkId,
       referenceId: this._paramSarabanService.folderId,    //for elastic search
       secrets: this._paramSarabanService.sarabanContentId //for elastic search
@@ -341,7 +353,7 @@ export class SarabanFileAttachComponent implements OnInit {
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'add'
-    let linkType = 'dms'
+    let linkType = this.linkType
     let fileAttachName = 'Document'
     let secret = 1
     let documentId = this.linkId
@@ -362,7 +374,7 @@ export class SarabanFileAttachComponent implements OnInit {
               .subscribe(res2 => {
                 if (res2.data == 'true') {
                   this._pxService
-                    .getFileAttachs('dms', this.linkId, 'asc')
+                    .getFileAttachs(this.linkType, this.linkId, 'asc')
                     .subscribe(response => {
                       this.getFileAttachs()
                       this._paramSarabanService.ScanSubscription.unsubscribe()
