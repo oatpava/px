@@ -9,11 +9,11 @@ export const environment = {
   reportSite: '',
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',
-  //ng build --prod -bh /praxticol8_ghb/
+  //ng build --prod -bh /praxticol8_px8/
   apiServer: 'http://127.0.0.1:8080',
-  apiName: '/pxservice-ghb/api',
+  apiName: '/pxservice-px8/api',
   plugIn: 'http://127.0.0.1:82',
-  url: 'http://127.0.0.1/praxticol8_ghb/#',
+  url: 'http://127.0.0.1/praxticol8_px8/#',
   DMS: false
 };
 
