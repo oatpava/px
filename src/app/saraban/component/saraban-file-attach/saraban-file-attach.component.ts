@@ -121,7 +121,7 @@ export class SarabanFileAttachComponent implements OnInit {
         response.forEach(fileattach => {
           if (fileattach.referenceId == 0) {
             fileattach.children = []
-            fileAttachs.push(fileattach) 
+            fileAttachs.push(fileattach)
           } else {
             child.push(fileattach)
           }
@@ -373,12 +373,8 @@ export class SarabanFileAttachComponent implements OnInit {
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
                 if (res2.data == 'true') {
-                  this._pxService
-                    .getFileAttachs(this.linkType, this.linkId, 'asc')
-                    .subscribe(response => {
-                      this.getFileAttachs()
-                      this._paramSarabanService.ScanSubscription.unsubscribe()
-                    })
+                  this.getFileAttachs()
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
                 }
               })
           }
