@@ -24,19 +24,19 @@
                     <md-icon>file_download</md-icon>
                 </button>
 
-                <button
+                <!-- <button
                     *ngIf="!editMode && (item.fileAttachType =='.PDF' || item.fileAttachType =='.TIF' || item.fileAttachType =='.TIFF'|| item.fileAttachType =='.JPG'|| item.fileAttachType =='.PNG')"
                     [disabled]="!authEditDocFile || checkInCheckOutLockStatus" md-icon-button alt="editFile" (click)="editFile2(item ,i)"
                     title="แก้ไขเอกสารแนบ">
                     <md-icon>edit</md-icon>
-                </button>
+                </button> -->
 
-                <button
+                <!-- <button
                     *ngIf="!editMode && !(item.fileAttachType =='.PDF' || item.fileAttachType =='.TIF' || item.fileAttachType =='.TIFF'|| item.fileAttachType =='.JPG'|| item.fileAttachType =='.PNG')"
                     [disabled]="!authEditDocFile || checkInCheckOutLockStatus" md-icon-button alt="editFile"
                     (click)="editFile(item ,i);file2.click()" title="แก้ไขเอกสารแนบ">
                     <md-icon>edit</md-icon>
-                </button>
+                </button> -->
 
                 <!-- <button
                     *ngIf="!editMode "
@@ -48,7 +48,7 @@
                 <button
                     *ngIf="checkChrome && (item.fileAttachType =='.PDF' || item.fileAttachType =='.TIF' || item.fileAttachType =='.TIFF'|| item.fileAttachType =='.JPG'|| item.fileAttachType =='.PNG')"
                     [disabled]="!authEditDocFile " md-icon-button alt="view" (click)="view(item,1)" title="ดูเอกสาร">
-                    <md-icon>remove_red_eye</md-icon>
+                    <md-icon>visibility</md-icon>
                 </button>
             </h3>
 
@@ -73,7 +73,7 @@
                     *ngIf="checkChrome && (itemChildren.fileAttachType =='.PDF' || itemChildren.fileAttachType =='.TIF' || itemChildren.fileAttachType =='.TIFF'|| itemChildren.fileAttachType =='.JPG'|| itemChildren.fileAttachType =='.PNG')"
                     [disabled]="!authEditDocFile " md-icon-button alt="view" (click)="view(itemChildren,2)"
                     title="ดูเอกสาร">
-                    <md-icon>remove_red_eye</md-icon>
+                    <md-icon>visibility</md-icon>
                 </button>
             </h3>
         </md-list-item>

@@ -170,31 +170,33 @@ export class FileAttachComponent implements OnInit {
 
 
     if (fileAttach.fileAttachType == '.PDF' || fileAttach.fileAttachType == '.TIF' || fileAttach.fileAttachType == '.TIFF' || fileAttach.fileAttachType == '.JPG' || fileAttach.fileAttachType == '.PNG') {
-      let temp = environment.plugIn
-      console.log('temp url', temp)
-      let auth = 0
-      if (this.authEditDocFile && staus == 1) {
-        auth = 1
-      }
-      // let url = 'http://192.168.1.8/scan/?'
-      let url = temp + '/scan/?'
-      let mode = 'view'
-      localStorage.setItem('scan', 'uncomplete')
-      window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
+      // let temp = environment.plugIn
+      // console.log('temp url', temp)
+      // let auth = 0
+      // if (this.authEditDocFile && staus == 1) {
+      //   auth = 1
+      // }
+      // // let url = 'http://192.168.1.8/scan/?'
+      // let url = temp + '/scan/?'
+      // let mode = 'view'
+      // localStorage.setItem('scan', 'uncomplete')
+      // window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
 
-      const timer = TimerObservable.create(3000, 10000);
-      this.subscription = timer.subscribe(t => {
-        this.tick = '' + t;
-        console.log(this.tick + ' ' + localStorage.getItem('scan'))
-        if (localStorage.getItem('scan') == 'complete') {
-          console.log('scan ---- complete')
+      // const timer = TimerObservable.create(3000, 10000);
+      // this.subscription = timer.subscribe(t => {
+      //   this.tick = '' + t;
+      //   console.log(this.tick + ' ' + localStorage.getItem('scan'))
+      //   if (localStorage.getItem('scan') == 'complete') {
+      //     console.log('scan ---- complete')
 
-          this.updateAtt.emit(true)
-          localStorage.setItem('scan', 'uncomplete')
+      //     this.updateAtt.emit(true)
+      //     localStorage.setItem('scan', 'uncomplete')
 
-        }
+      //   }
 
-      });
+      // });
+
+      this.viewImage(fileAttach)
 
 
     } else {
@@ -400,6 +402,10 @@ export class FileAttachComponent implements OnInit {
     this.uploader.onAfterAddingFile = (item => {
       this.file.nativeElement.value = ''
     });
+  }
+
+  viewImage(fileAttach: any) {
+    window.open(fileAttach.url, 'scan', "height=600,width=1000")
   }
 
 
