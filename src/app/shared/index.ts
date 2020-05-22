@@ -205,6 +205,7 @@ export * from '../setting/report/wf-folder-auth/wf-folder-auth.component'
 export * from '../setting/report/dms-folder-user-auth/dms-folder-user-auth.component'
 export * from '../setting/report/wf-folder-user-auth/wf-folder-user-auth.component'
 export * from '../setting/component/auth-admin/auth-admin.component'
+export * from '../setting/saraban-folder-group-auth/saraban-folder-group-auth.component'
 
 export * from '../ecms/component/status-ecms/status-ecms.component'
 export * from '../ecms/component/check-status-ecms/check-status-ecms.component'
