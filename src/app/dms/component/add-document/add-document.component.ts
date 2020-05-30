@@ -1182,7 +1182,7 @@ export class AddDocumentComponent implements OnInit {
           this.msgs.push(
             {
               severity: 'success',
-              summary: 'CheckIn Success',
+              summary: 'CheckOut Success',
               // detail: event.node.label,
             })
 
@@ -1193,7 +1193,7 @@ export class AddDocumentComponent implements OnInit {
           this.msgs.push(
             {
               severity: 'success',
-              summary: 'ChecKOut Success',
+              summary: 'CheckIn Success',
               // detail: event.node.label,
             })
 
