@@ -2204,7 +2204,7 @@ export class AddSarabanContentComponent implements OnInit {
       .getContentAuth(folderId, structureId, userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.getMenus(response, menuEcms)
+        this.getMenus(response.data, menuEcms)
       })
   }
 

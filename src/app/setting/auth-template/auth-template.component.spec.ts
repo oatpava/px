@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { SarabanFolderGroupAuthComponent } from './saraban-folder-group-auth.component';
+import { AuthTemplateComponent } from './auth-template.component';
 
-describe('SarabanFolderGroupAuthComponent', () => {
-  let component: SarabanFolderGroupAuthComponent;
-  let fixture: ComponentFixture<SarabanFolderGroupAuthComponent>;
+describe('AuthTemplateComponent', () => {
+  let component: AuthTemplateComponent;
+  let fixture: ComponentFixture<AuthTemplateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SarabanFolderGroupAuthComponent ]
+      declarations: [ AuthTemplateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SarabanFolderGroupAuthComponent);
+    fixture = TestBed.createComponent(AuthTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

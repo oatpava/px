@@ -201,7 +201,7 @@ export class ListSarabanContentComponent implements OnInit {
       .getContentAuth(folder.id, structureId, userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this._paramSarabanService.setAuth(response)
+        this._paramSarabanService.setAuth(response.data)
         this.getMenus(this._paramSarabanService.contentAuth, userId, this._paramSarabanService.isArchive, folder)
       })
   }
