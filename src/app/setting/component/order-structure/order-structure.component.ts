@@ -35,9 +35,12 @@ export class OrderStructureComponent implements OnInit {
     if (this.type == 'user') {
       this.typeName = 'บุคลากร'
       this.loadParentUser()
-    } else {
+    } else if (this.type == 'structure') {
       this.typeName = 'หน่วยงาน'
       this.loadParentStructure()
+    } else {
+      this.typeName = 'หน่วยงานภายนอก'
+      this.loadParentOrganize()
     }
   }
 
@@ -45,20 +48,25 @@ export class OrderStructureComponent implements OnInit {
     this._structureService
       .getStructures('1.0', '0', '200', 'orderNo', 'asc', this.structureId)
       .subscribe(response => {
-        let i = 0
         this.dataList = response
       })
-
   }
 
   loadParentUser() {
     this._structureService
       .getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', this.structureId)
       .subscribe(response => {
-        let i = 0
         this.dataList = response
       })
+  }
 
+  loadParentOrganize() {
+    this._structureService
+    .getOutStructures('1.0', '0', '200', 'orderNo', 'asc', this.structureId)
+      .subscribe(response => {
+        console.log('xxxxx', response)
+        this.dataList = response
+      })  
   }
 
   selectMove() {
@@ -81,7 +89,7 @@ export class OrderStructureComponent implements OnInit {
           })
       }
 
-    } else {
+    } else if (this.type == 'structure') {
       if (typeof data[index + 1] == 'undefined') {
         this._structureService
           .orderStructure(item.id, 0, item)
@@ -94,6 +102,18 @@ export class OrderStructureComponent implements OnInit {
           })
       }
 
+    } else {
+      if (typeof data[index + 1] == 'undefined') {
+        this._structureService
+          .orderOrganize(item.id, 0, item)
+          .subscribe(response => {
+          })
+      } else {
+        this._structureService
+          .orderOrganize(item.id, data[index + 1].id, item)
+          .subscribe(response => {
+          })
+      }
     }
 
   }

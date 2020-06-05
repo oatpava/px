@@ -8,7 +8,8 @@ font-size: large;">
     <md-icon md-list-avatar style="cursor: pointer;" (click)="close()">close</md-icon>
 </div>
 <div class="bodyDialogHeigthMove">
-    <px-structure [selectDepartment]="true" [noneUser]="true" (onselectData)="selectStructure($event)"></px-structure>
+    <px-structure *ngIf="!isOrganize" [selectDepartment]="true" [noneUser]="true" (onselectData)="selectStructure($event)"></px-structure>
+    <app-organize-external *ngIf="isOrganize" [selectDepartment]="true"  (onselectData)="selectStructure($event)"></app-organize-external>
 </div>
 <div layout="row" layout-align="end start" style="width: 100%; padding: 5px; background: #d4daec;" [style.margin-top]="'15px'">
     <button md-raised-button (click)="selectMove() " color="primary" [style.margin-right]="'5px'">ตกลง</button>

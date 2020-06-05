@@ -37,6 +37,16 @@
 
 <div layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
     <div [tdToggle]="hoverMenuEdit">
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="ย้าย" color="accent" (click)="structureMove()">
+                <md-icon>swap_vert</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="จัดลำดับหน่วยงาน" color="accent" [style.background]="'#336600'" (click)="orderStructure()">
+                <md-icon>line_weight</md-icon>
+            </button>
+        </div>
         <!-- Structure -->
         <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
             <button md-fab title="แก้ไขหน่วยงาน" [style.background]="'#00AAFF'" color="accent" (click)="manageStructure('edit','แก้ไข')">
