@@ -7,7 +7,7 @@
                 </md-icon>
                 <!-- <h3 md-line style="font-weight:bold">{{item?.fileAttachName}}{{item?.type}} [ชั้นความลับ : {{secretClass[item.secrets-1].label}}]</h3> -->
                 <h3 md-line style="font-weight:bold">
-                    <span>{{item?.fileAttachName}}{{item?.type}} </span> [<span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
+                    <span>{{item?.trimmedName}} ({{item?.type}}) </span> [<span [ngStyle]="cellColor_secret(item.secrets)">{{secretClass[item.secrets-1].label}}</span>]
                 </h3>
                 <h4 md-line>{{item?.createdDate.substr(0,16)}} ({{item.fileAttachSize/1000000}} MB)</h4>
                 <p md-line>{{item?.createdName}}</p>
@@ -49,7 +49,7 @@
                     <img src="assets/filetype/{{type[i].substring(1)}}.svg" onError="this.src='assets/filetype/unknown.svg'" flex>
                 </md-icon>
                 <h3 md-line>
-                    <input type="text" [(ngModel)]="item.file.name">
+                    <input type="text" style="width: 95%;" minlength="1" maxlength="250" [(ngModel)]="item.file.name">
                 </h3>
                 <md-select placeholder="ชั้นความลับ" [(ngModel)]="secret[i]" (ngModelChange)="selectSecret($event, i)">
                     <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
@@ -76,7 +76,7 @@
                 <img src="assets/filetype/{{item.type.substring(1)}}.svg" onError="this.src='assets/filetype/unknown.svg'" flex>
             </md-icon>
             <h3 md-line *ngIf="auth[item.secrets] && item.owner">
-                <input type="text" [(ngModel)]="item.fileAttachName" (ngModelChange)="edit(item ,i)">
+                <input type="text" style="width: 95%;" minlength="1" maxlength="250" [(ngModel)]="item.fileAttachName" (ngModelChange)="edit(item ,i)">
             </h3>
             <!-- <h3 md-line *ngIf="!auth[item.secrets] || !item.owner" style="font-weight:bold">{{item?.fileAttachName}}{{item?.type}} [ชั้นความลับ : {{secretClass[item.secrets-1].label}}]</h3> -->
             <h3 md-line *ngIf="!auth[item.secrets] || !item.owner" style="font-weight:bold">
