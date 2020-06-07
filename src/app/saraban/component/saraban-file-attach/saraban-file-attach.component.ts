@@ -386,7 +386,7 @@ export class SarabanFileAttachComponent implements OnInit {
 
   checkViewByFileType(type: string): boolean {
     let result: boolean = false
-    if (type == '.PDF' || type == '.TIF' || type == '.TIFF' || type == '.JPG' || type == '.PNG') {
+    if (type == '.PDF' || type == '.JPG' || type == '.PNG') {
       result = true
     }
     return result

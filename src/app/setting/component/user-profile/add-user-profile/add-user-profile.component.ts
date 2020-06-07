@@ -162,6 +162,7 @@ export class AddUserProfileComponent implements OnInit {
       .getMasterDatas('userProfileTypes')
       .subscribe(response => {
         this.userProfileTypes = response as UserProfileType[]
+        if (this.userProfileTypes.length == 3) this.userProfileTypes.pop()
         this.getPosition()
         this.getPositionType()
         if (this.userId !== 0) {

@@ -23,6 +23,7 @@ import {
 //import { CovalentChipsModule } from '@covalent/core'
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'
 import { AlertLogOffComponent } from './alert-log-off/alert-log-off.component'
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { AppComponent } from './app.component'
 import { appRoutes, appRoutingProviders } from './app.routes'
@@ -187,7 +188,8 @@ import {
     FileEcmsComponent,
     ListMenuEcmsComponent,
     DialogsShowThEGifComponent,
-    AuthTemplateComponent
+    AuthTemplateComponent,
+    DialogViewImageComponent
 } from './shared';
 
 @NgModule({
@@ -349,7 +351,8 @@ import {
         FileEcmsComponent,
         ListMenuEcmsComponent,
         DialogsShowThEGifComponent,
-        AuthTemplateComponent
+        AuthTemplateComponent,
+        DialogViewImageComponent
     ],
     imports: [
         BrowserModule,
@@ -376,7 +379,8 @@ import {
         TabViewModule,
         BlockUIModule,
         NgIdleKeepaliveModule.forRoot(),
-        GalleriaModule
+        GalleriaModule,
+        PdfViewerModule
     ],
     entryComponents: [
         AlertLogOffComponent
