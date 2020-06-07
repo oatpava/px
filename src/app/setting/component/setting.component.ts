@@ -18,7 +18,7 @@ import { TreeModule, TreeNode, Message } from 'primeng/primeng';
   providers: [SettingService]
 })
 export class SettingComponent implements OnInit {
-  settings: Setting[] = []
+  modules: any[] = []
   subModuleUserAuth: any[] = []
   ckEq: boolean = false;
   msgs: Message[] = []
@@ -28,8 +28,7 @@ export class SettingComponent implements OnInit {
     private _loadingService: TdLoadingService,
     private _settingService: SettingService,
     private _dialog: MdDialog,
-    private _paramSarabanService: ParamSarabanService,
-    // private _paramAdminService: ParamAdminService,
+    private _paramSarabanService: ParamSarabanService
   ) { }
 
   ngOnInit() {
@@ -37,88 +36,50 @@ export class SettingComponent implements OnInit {
     console.log('settingcomponent')
   }
 
-  // getSettings() {
-  //   this._loadingService.register('main')
-  //   this._settingService
-  //     .getSettings()
-  //     .subscribe(response => {
-  //       // console.log(response)
-  //       this.settings = response as Setting[]
-  //     })
-  //   this._loadingService.resolve('main')
-  // }
-
-  modules: any[] = []
   getSettings() {
-    this._loadingService.register('main')
     console.log('userProfileTypeId : ', this._paramSarabanService.userProfileTypeId)
     if (this._paramSarabanService.userProfileTypeId == 1) {
+      this._loadingService.register('main')
       this._settingService
         .getSettings()
         .subscribe(response => {
-          // this.settings = response as Setting[]
+          this._loadingService.resolve('main')
           this.modules = response as Setting[]
         })
-      this._loadingService.resolve('main')
-    } else {
-      this._settingService
-        .getSettings()
-        .subscribe(response => {
-          console.log('getSetting')
-          this.settings = response as Setting[]
-          this._settingService
-            .getAuthority()
-            .subscribe(rep => {
-              console.log('getAuthority')
-              this.subModuleUserAuth = rep
-              this.settings.forEach((data: Setting, index1: number) => {
-                let mdata = new Setting(data)
-                this.modules[index1] = mdata
-                this.modules[index1].child = []
-                data.child.forEach((data1: any, index: number) => {
-                  console.log('data1', data1)
-                  this.ckEq = false;
-                  this.subModuleUserAuth.forEach((data2: any) => {
-                    if (data1.childId === data2.submoduleAuth.id) {
-                      this.modules[index1].child.push(data1)
-                      this.ckEq = true;
-                    }
-                  })
-                })
-              })
-              console.log(this.modules)
-            })
-        })
-      // .getSettings()
-      // .subscribe(response => {
-      //   console.log('response ',response)
-      //   this.settings = response as Setting[]
-      //   this._settingService
-      //     .getAuthority()
-      //     .subscribe(rep => {
-      //       console.log('rep ',rep)
-      //       this.subModuleUserAuth = rep
-      //       this.settings.forEach((data: any) => {
-      //         console.log('data ',data)
-      //         data.child.forEach((data1: any, index: number) => {
-      //           // console.log('data1 ',data1)
-      //           this.ckEq = false;
-      //           this.subModuleUserAuth.forEach((data2: any) => {
-      //             console.log('data2 ',data2.submoduleAuth.id)
-      //             if (data1.childId == data2.submoduleAuth.id) {
-      //               // console.log('data1.childId ',data1.childId)
-      //               this.ckEq = true;
-      //             }
-      //           })
-      //           if (!this.ckEq) {
-      //             data.child.splice(index, 1)
-      //           }
-      //         })
-      //       })
-      //     })
-      // })
-      this._loadingService.resolve('main')
-    }
+    } 
+    // else {
+    //   this._loadingService.register('main')
+    //   this._settingService
+    //     .getSettings()
+    //     .subscribe(response => {
+    //       this._loadingService.resolve('main')
+    //       this.modules = response as Setting[]
+        
+    //       this._loadingService.register('main')
+    //       this._settingService
+    //         .getAuthority()
+    //         .subscribe(rep => {
+    //           this._loadingService.resolve('main')
+    //           console.log('getAuthority', rep)
+    //           this.subModuleUserAuth = rep
+    //           this.modules.forEach((data: Setting, index1: number) => {
+    //             let mdata = new Setting(data)
+    //             this.modules[index1] = mdata
+    //             this.modules[index1].child = []
+    //             data.child.forEach((data1: any, index: number) => {
+    //               console.log('data1', data1)
+    //               this.ckEq = false;
+    //               this.subModuleUserAuth.forEach((data2: any) => {
+    //                 if (data1.childId === data2.submoduleAuth.id) {
+    //                   this.modules[index1].child.push(data1)
+    //                   this.ckEq = true;
+    //                 }
+    //               })
+    //             })
+    //           })
+    //         })
+    //     })
+    // }
   }
 
   selectdSetting(selectdSetting: Setting): void {

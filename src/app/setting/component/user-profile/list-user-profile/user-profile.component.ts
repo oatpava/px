@@ -312,10 +312,9 @@ export class UserProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._loadingService.register('main')
-        this._loadingService.register('main')
         this.msgs = [];
         this.msgs.push({
-          severity: 'info',
+          severity: 'success',
           summary: 'บันทึกสำเร็จ',
           detail: 'ย้ายหน่วยงาน' + this.parentStructure.name
         })
