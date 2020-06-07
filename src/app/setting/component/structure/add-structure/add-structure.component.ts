@@ -80,15 +80,13 @@ export class AddStructureComponent implements OnInit {
               this.msgs = [];
               this.msgs.push({
                 severity: 'info',
-                summary: 'บันทึกสำเร็จ',
-                detail: 'เพิ่มหน่วยงาน' + structure.name
+                summary: 'กำลังดำเนินการ',
+                detail: 'ระบบกำลังเพิ่มหน่วยงาน กรุณารอสักครู่'
               })
               this._structureService
                 .createStructure(structure)
                 .subscribe(response => {
-                  setTimeout(() => {
                     this.createStructureFolders(response)
-                  }, 1000);
                 })
             }
           })
@@ -122,6 +120,12 @@ export class AddStructureComponent implements OnInit {
               this._sarabanService
                 .listSarabanFoldersByStructureId(structure.parentId)
                 .subscribe(parentFolder => {
+                  this.msgs = [];
+                  this.msgs.push({
+                    severity: 'success',
+                    summary: 'บันทึกสำเร็จ',
+                    detail: 'เพิ่มหน่วยงาน' + structure.name
+                  })
                   if (parentFolder.length > 0) this.createSarabanParentFolder(structure, parentFolder[0].id)
                   else this.createSarabanParentFolder(structure, 0)
                 })
@@ -268,9 +272,11 @@ export class AddStructureComponent implements OnInit {
     })
     folder.wfContentType.id = 3
     folder.wfContentType2.id = 1
+    this._loadingService.register('main')
     this._sarabanService
       .createSarabanFolder(folder)
       .subscribe(response => {
+        this._loadingService.resolve('main')
         this.createSarabanFolders(response)
       })
   }
@@ -334,8 +340,10 @@ export class AddStructureComponent implements OnInit {
       this._sarabanService.createSarabanFolder(folder23),
       this._sarabanService.createSarabanFolder(folder4),
     ]
+    this._loadingService.register('main')
     Observable.forkJoin(tmp)
       .subscribe((res: any[]) => {
+        this._loadingService.resolve('main')
         this.goBack()
       })
   }
