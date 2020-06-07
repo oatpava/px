@@ -126,12 +126,6 @@ export const SETTINGS: Setting[] = [
     subSetting: '',
     iconModule: 'class',
     child: [
-      // {
-      //   childId: 56,//0,
-      //   childName: 'กำหนดรูปแบบสิทธิ์แฟ้มทะเบียน',
-      //   childIcon: 'folder_shared',
-      //   subSetting: 'saraban-folder-group-auth',
-      // },
       {
         childId: 56,//0,
         childName: 'กำหนดรูปแบบสิทธิ์แฟ้มทะเบียน',
