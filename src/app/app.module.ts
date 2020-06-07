@@ -186,7 +186,8 @@ import {
     ReceiveEcmsComponent,
     FileEcmsComponent,
     ListMenuEcmsComponent,
-    DialogsShowThEGifComponent
+    DialogsShowThEGifComponent,
+    AuthTemplateComponent
 } from './shared';
 
 @NgModule({
@@ -347,7 +348,8 @@ import {
         ReceiveEcmsComponent,
         FileEcmsComponent,
         ListMenuEcmsComponent,
-        DialogsShowThEGifComponent
+        DialogsShowThEGifComponent,
+        AuthTemplateComponent
     ],
     imports: [
         BrowserModule,

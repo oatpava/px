@@ -312,6 +312,13 @@ export class UserProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._loadingService.register('main')
+        this._loadingService.register('main')
+        this.msgs = [];
+        this.msgs.push({
+          severity: 'info',
+          summary: 'บันทึกสำเร็จ',
+          detail: 'ย้ายหน่วยงาน' + this.parentStructure.name
+        })
         this.structureTree = []
         this._structureService
           .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
@@ -332,7 +339,7 @@ export class UserProfileComponent implements OnInit {
                 this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
                 this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
               ).subscribe((response: Array<any>) => {
-                let structures = []
+                this._loadingService.resolve('main')
                 for (let structure of response[0]) {
                   this.structureTree[i].children.push({
                     "label": structure.name,
@@ -344,7 +351,6 @@ export class UserProfileComponent implements OnInit {
                     "dataObj": structure
                   })
                 }
-                let userProfiles = []
                 for (let userProfile of response[1]) {
                   this.structureTree[i].children.push({
                     "label": userProfile.fullName,
@@ -358,9 +364,7 @@ export class UserProfileComponent implements OnInit {
                 }
                 i++;
               });
-
             }
-            this._loadingService.resolve('main')
           });
       }
     });
@@ -396,7 +400,7 @@ export class UserProfileComponent implements OnInit {
               this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
               this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
             ).subscribe((response: Array<any>) => {
-              let structures = []
+              this._loadingService.resolve('main')
               for (let structure of response[0]) {
                 this.structureTree[i].children.push({
                   "label": structure.name,
@@ -408,7 +412,6 @@ export class UserProfileComponent implements OnInit {
                   "dataObj": structure
                 })
               }
-              let userProfiles = []
               for (let userProfile of response[1]) {
                 this.structureTree[i].children.push({
                   "label": userProfile.fullName,
@@ -422,11 +425,8 @@ export class UserProfileComponent implements OnInit {
               }
               i++;
             });
-
           }
-          this._loadingService.resolve('main')
         });
-
     })
   }
 
@@ -460,7 +460,7 @@ export class UserProfileComponent implements OnInit {
               this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
               this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
             ).subscribe((response: Array<any>) => {
-              let structures = []
+              this._loadingService.resolve('main')
               for (let structure of response[0]) {
                 this.structureTree[i].children.push({
                   "label": structure.name,
@@ -472,7 +472,6 @@ export class UserProfileComponent implements OnInit {
                   "dataObj": structure
                 })
               }
-              let userProfiles = []
               for (let userProfile of response[1]) {
                 this.structureTree[i].children.push({
                   "label": userProfile.fullName,
@@ -486,11 +485,8 @@ export class UserProfileComponent implements OnInit {
               }
               i++;
             });
-
           }
-          this._loadingService.resolve('main')
         });
-
     })
   }
 
@@ -524,7 +520,7 @@ export class UserProfileComponent implements OnInit {
                 this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
                 this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
               ).subscribe((response: Array<any>) => {
-                let structures = []
+                this._loadingService.resolve('main')
                 for (let structure of response[0]) {
                   this.structureTree[i].children.push({
                     "label": structure.name,
@@ -536,7 +532,6 @@ export class UserProfileComponent implements OnInit {
                     "dataObj": structure
                   })
                 }
-                let userProfiles = []
                 for (let userProfile of response[1]) {
                   this.structureTree[i].children.push({
                     "label": userProfile.fullName,
@@ -550,9 +545,7 @@ export class UserProfileComponent implements OnInit {
                 }
                 i++;
               });
-
             }
-            this._loadingService.resolve('main')
           });
       }
     });
@@ -608,7 +601,7 @@ export class UserProfileComponent implements OnInit {
                     this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
                     this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
                   ).subscribe((response: Array<any>) => {
-                    let structures = []
+                    this._loadingService.resolve('main')
                     for (let structure of response[0]) {
                       this.structureTree[i].children.push({
                         "label": structure.name,
@@ -620,7 +613,6 @@ export class UserProfileComponent implements OnInit {
                         "dataObj": structure
                       })
                     }
-                    let userProfiles = []
                     for (let userProfile of response[1]) {
                       this.structureTree[i].children.push({
                         "label": userProfile.fullName,
@@ -634,11 +626,8 @@ export class UserProfileComponent implements OnInit {
                     }
                     i++;
                   });
-
                 }
-                this._loadingService.resolve('main')
               })
-
           })
       }
     })

@@ -8,22 +8,35 @@
         </button>
         <div flex class="menu-showLabel">
             <span>แก้ไขสิทธิ์แฟ้มทะเบียน {{sarabanFolderName}}</span>
+            <span hide-gt-md *ngIf="isSelected"> -> {{name}}</span>
         </div>
-        <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+        <button *ngIf="isSelected" hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
             <md-icon>more_vert</md-icon>
         </button>
         <md-menu #menu="mdMenu" x-position="before">
-            <button md-menu-item (click)="save()"> save </button>
-            <button md-menu-item (click)="cancel()"> cancel </button>
+            <button md-menu-item (click)="save()">บันทึก</button>
+            <button md-menu-item (click)="cancel()">ยกเลิก</button>
         </md-menu>
     </div>
 </div>
 <div layout="row">
-    <div flex>
+    <div flex hide show-gt-md>
         <px-structure [selectDepartment]="true" (onselectData)="selectStructure($event)"></px-structure>
     </div>
-    <div flex>
-        <md-list *ngIf="isSelected">
+    <div flex hide-gt-md *ngIf="!isSelected">
+        <px-structure [selectDepartment]="true" (onselectData)="selectStructure($event)"></px-structure>
+    </div>
+    <div flex *ngIf="isSelected">
+        <md-select style="width: 100%;padding-top: 2rem;padding-bottom: 1rem;" placeholder="รูปแบบสิทธิ์" name="authTemplates" [(ngModel)]="selectedAuthTemplateId">
+            <md-option *ngFor="let authTemplate of authTemplates" [value]="authTemplate.id" (click)="selectAuthTemplate(authTemplate)">
+                {{authTemplate.submoduleAuthTemplateName}}
+            </md-option>
+        </md-select>
+        <md-slide-toggle color="primary" [(ngModel)]="authAll" (change)="changeAll()">
+            <span *ngIf="authAll">ปิดสิทธิ์ทั้งหมด</span>
+            <span *ngIf="!authAll">เปิดสิทธิ์ทั้งหมด</span>
+        </md-slide-toggle>
+        <md-list>
             <md-list-item *ngFor="let auth of dataAuths; let i=index;">
                 <md-slide-toggle color="primary" [(ngModel)]="auth.auth" (change)="authEvent(i)">
                     {{auth.name}}
@@ -31,14 +44,14 @@
             </md-list-item>
         </md-list>
 
-        <div show-gt-md layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+        <div hide show-gt-md layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
             <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
                 <button md-fab title="บันทึก" color="accent" style="margin-bottom: 3px;" md-fab (click)="save()">
-                <md-icon>save</md-icon>
-            </button>
-                <button md-fab [style.background]="'#1976d2'" color="accent" title="ยกเลิก" style="margin-bottom: 3px;" (click)="cancel(); ">
-                <md-icon>cancel</md-icon>
-            </button>
+                    <md-icon>save</md-icon>
+                </button>
+                <button md-fab [style.background]="'#1976d2'" color="accent" title="ยกเลิก" style="margin-bottom: 3px;" (click)="cancel()">
+                    <md-icon>cancel</md-icon>
+                </button>
             </div>
             <button md-fab color="accent" title="รายการเมนู">
               <md-icon>{{listMenu}}</md-icon>
