@@ -147,12 +147,14 @@ export class SarabanFileAttachComponent implements OnInit {
             tmp.type = name.substr(typePos)
             tmp.canView = this.checkViewByFileType(tmp.fileAttachType)
             tmp.owner = (this._paramSarabanService.userId == tmp.createdBy) ? true : false
+            tmp.trimmedName = this.trimTitle(tmp.fileAttachName)
           })
         } else {
           this.fileAttachs.forEach(tmp => {
             tmp.type = tmp.fileAttachType.toLowerCase()
             tmp.canView = this.checkViewByFileType(tmp.fileAttachType)
             tmp.owner = false
+            tmp.trimmedName = this.trimTitle(tmp.fileAttachName)
           })
         }
 
@@ -393,6 +395,14 @@ export class SarabanFileAttachComponent implements OnInit {
 
   editFileAttachView() {
     this.getFileAttachs()
+  }
+
+  trimTitle(title: string): string {
+    if (title.length > 100) {
+      return title.substr(0, 100) + '...'
+    } else {
+      return title
+    }
   }
 
 }

@@ -187,7 +187,7 @@ import {
     FileEcmsComponent,
     ListMenuEcmsComponent,
     DialogsShowThEGifComponent,
-    SarabanFolderGroupAuthComponent
+    AuthTemplateComponent
 } from './shared';
 
 @NgModule({
@@ -349,7 +349,7 @@ import {
         FileEcmsComponent,
         ListMenuEcmsComponent,
         DialogsShowThEGifComponent,
-        SarabanFolderGroupAuthComponent
+        AuthTemplateComponent
     ],
     imports: [
         BrowserModule,

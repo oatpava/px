@@ -133,6 +133,12 @@ export const SETTINGS: Setting[] = [
       //   subSetting: 'saraban-folder-group-auth',
       // },
       {
+        childId: 56,//0,
+        childName: 'กำหนดรูปแบบสิทธิ์แฟ้มทะเบียน',
+        childIcon: 'folder_shared',
+        subSetting: 'auth-template',
+      },
+      {
         childId: 51,//1,
         childName: 'กำหนดแฟ้มทะเบียนให้เจ้าหน้าที่',
         // childIcon: 'assignment_ind',

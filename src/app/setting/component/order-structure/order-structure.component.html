@@ -13,7 +13,7 @@ font-size: large;">
         <div *ngFor="let item of dataList; let i = index" class="orderList" dnd-sortable [sortableIndex]="i" [dragData]="item" (onDropSuccess)="rightData($event, dataList)">
             <i *ngIf="type == 'user'" style="margin-top: 4px" class="material-icons">person</i>
             <div *ngIf="type == 'user'" class="orderf-list"> {{item.fullName}} </div>
-            <div *ngIf="type == 'structure'" class="orderf-list"> {{item.name}} </div>
+            <div *ngIf="type != 'user'" class="orderf-list"> {{item.name}} </div>
             <!-- <md-divider md-inset></md-divider> -->
         </div>
     </ul>

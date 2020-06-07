@@ -180,23 +180,23 @@ export class SarabanService {
     }
   }
 
-  getContentAuth(folderId: number, structureId: number, userId: number): Observable<SarabanAuth[]> {
+  getContentAuth(folderId: number, structureId: number, userId: number): Observable<any> {
     //this._apiUrl = environment.apiServerHome + environment.apiNameHome + '/v1/wfFolders'
     if (environment.production) {
       return this._http.get(this._apiUrl + '/contentAuth/' + folderId + '/' + structureId + '/' + userId, this._options)
         .map((response: Response) => {
-          return this.pxService.verifyResponseArray(response.json().data)
+          return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
     } else {
     }
   }
 
-  getFolderAuth(folderId: number, structureId: number, userId: number): Observable<SarabanAuth[]> {
+  getFolderAuth(folderId: number, structureId: number, userId: number): Observable<any> {
     if (environment.production) {
       return this._http.get(this._apiUrl + '/folderAuth/' + folderId + '/' + structureId + '/' + userId, this._options)
         .map((response: Response) => {
-          return this.pxService.verifyResponseArray(response.json().data)
+          return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
     } else {
@@ -279,6 +279,39 @@ export class SarabanService {
       return this._http.get(this._apiUrl + '/listByLinkId/' + structureId, this._options)
         .map((response: Response) => {
           return this.pxService.verifyResponseArray(response.json().data)
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
+  listAuthTemplateValue(linkid: number): Observable<any> {
+    if (environment.production) {
+      return this._http.get(this._apiUrl + '/listAuthTemplateValue/' + linkid, this._options)
+        .map((response: Response) => {
+          return this.pxService.verifyResponseArray(response.json().data)
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
+  createAuthTemplateValue(templateId: number, auth: SarabanAuth[]): Observable<any> {
+    if (environment.production) {
+      return this._http.post(this._apiUrl + '/authTemplateValue/' + templateId, auth, this._options)
+        .map((response: Response) => {
+          return response.json().data as SarabanFolder
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
+  updateAuthTemplateValue(templateId: number, auth: SarabanAuth[]): Observable<any> {
+    if (environment.production) {
+      return this._http.put(this._apiUrl + '/authTemplateValue/' + templateId, auth, this._options)
+        .map((response: Response) => {
+          return response.json().data as SarabanFolder
         })
         .catch(this.loggerService.handleError)
     } else {

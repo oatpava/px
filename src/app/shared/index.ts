@@ -191,6 +191,7 @@ export * from '../setting/document-type/component/edit-document-type/edit-docume
 
 export * from '../setting/folder-auth/folder-auth.component'
 export * from '../setting/inbox-auth/inbox-auth.component'
+export * from '../setting/auth-template/auth-template.component'
 
 export * from '../setting/history-log/list-histtory-user/list-histtory-user.component'
 export * from '../setting/history-log/report-log/report-log.component'
@@ -205,7 +206,6 @@ export * from '../setting/report/wf-folder-auth/wf-folder-auth.component'
 export * from '../setting/report/dms-folder-user-auth/dms-folder-user-auth.component'
 export * from '../setting/report/wf-folder-user-auth/wf-folder-user-auth.component'
 export * from '../setting/component/auth-admin/auth-admin.component'
-export * from '../setting/saraban-folder-group-auth/saraban-folder-group-auth.component'
 
 export * from '../ecms/component/status-ecms/status-ecms.component'
 export * from '../ecms/component/check-status-ecms/check-status-ecms.component'

@@ -96,7 +96,6 @@ export class StructureService {
     params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
     + '&sort=' + sort + '&dir=' + dir + '&structureId=' + structureId))
     this._options.search = params
-    this._options.search = params
     return this._http.get(this._apiUrl + "/v1/structures/profiles", this._options)
       .map((response: Response) => {
         this._loadingService.resolve('loading')
@@ -353,6 +352,16 @@ export class StructureService {
   deleteOrg(structure: Structure): Observable<any> {
     this._loadingService.register('loading')
     return this._http.delete(this._apiUrl + '/v1/organizes/' + structure.id, this._options)
+      .map((response: Response) => {
+        this._loadingService.resolve('loading')
+        return response.json().data
+      })
+      .catch(this._loggerService.handleError)
+  }
+
+  orderOrganize(id: number, curId: number, data) {
+    this._loadingService.register('loading')
+    return this._http.put(this._apiUrl + '/v1/organizes/updateOrderNo/' + id + '/from/' + curId, data, this._options)
       .map((response: Response) => {
         this._loadingService.resolve('loading')
         return response.json().data

@@ -13,7 +13,7 @@ export class AuthTemplateService {
     _options: RequestOptions
 
     constructor(private _http: Http, private pxService: PxService, private loggerService: LoggerService) {
-        this._apiUrl = environment.apiServer + environment.apiName + 'v1/authority/submoduleAuthTemplates'
+        this._apiUrl = environment.apiServer + environment.apiName + '/v1/authority/submoduleAuthTemplates'
         this._headers = new Headers()
         this._headers.append('Content-Type', 'application/json; charset=UTF-8')
         this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
@@ -24,6 +24,22 @@ export class AuthTemplateService {
         return this._http.get(this._apiUrl, this._options)
             .map((response: Response) => {
                 return this.pxService.verifyResponseArray(response.json().data)
+            })
+            .catch(this.loggerService.handleError)
+    }
+
+    create(template: any): Observable<any> {
+        return this._http.post(this._apiUrl, template, { headers: this._headers })
+            .map((response: Response) => {
+                return response.json().data
+            })
+            .catch(this.loggerService.handleError)
+    }
+
+    update(template: any): Observable<any> {
+        return this._http.put(this._apiUrl, template, { headers: this._headers })
+            .map((response: Response) => {
+                return response.json().data
             })
             .catch(this.loggerService.handleError)
     }
