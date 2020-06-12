@@ -6,6 +6,7 @@ import { Message } from 'primeng/primeng'
 import { SarabanService } from '../../service/saraban.service'
 import { AuthTemplateService } from '../../../setting/auth-template/auth-template.service'
 import { SarabanAuth } from '../../model/sarabanAuth.model'
+import { convertUserPorfile } from '../../../shared'
 
 @Component({
   selector: 'app-auth-saraban-content',
@@ -153,11 +154,10 @@ export class AuthSarabanContentComponent implements OnInit {
   }
 
   changeAll() {
-    this.dataAuths.forEach(auth => {
-      auth.auth = this.authAll
-    })
-
-    this.isChangeAuths.forEach(x => x = true)
+    for (let i = 0; i < this.dataAuths.length; i++) {
+      this.dataAuths[i].auth = this.authAll
+      this.isChangeAuths[i] = true
+    }
   }
 
   listAllTemplate() {

@@ -28,9 +28,7 @@ export class DialogParamComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.name)
     this.getParam(this.name)
-    console.log(this.param)
   }
 
   getParam(name: string){
@@ -40,6 +38,7 @@ export class DialogParamComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.param = response as Param
+        console.log(response)
       })
   }
 

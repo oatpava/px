@@ -17,13 +17,15 @@ export class ParamComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.menuPa = [{name:'DEFAULT_PASSWORD',detail:'ตั้งค่ารหัสผ่านเริ่มต้น'},{name:'PASSEXPIRATION',detail:'ตั้งค่าวันที่หมดอายุของรหัสผ่าน'}
-                  ,{name:'PASSEXPIRATIONTYPE',detail:'ตั้งค่าวันที่หมดอายุของรหัสผ่านพนักงานระดับสูง'},{name:'TIMEOUT',detail:'ตั้งค่า TimeOut'}]
+    this.menuPa = [
+      {name:'DEFAULT_PASSWORD',detail:'ตั้งค่ารหัสผ่านเริ่มต้น'},
+      {name:'PASSEXPIRATION',detail:'ตั้งค่าวันที่หมดอายุของรหัสผ่าน'},
+      // {name:'PASSEXPIRATIONTYPE',detail:'ตั้งค่าวันที่หมดอายุของรหัสผ่านพนักงานระดับสูง'},//userProfileType=4
+      {name:'TIMEOUT',detail:'ตั้งค่า TimeOut (วินาที)'}
+    ]
   }
 
   selectParam(param: any){
-    console.log(param.name)
-    console.log(param.detail)
     let dialogRef = this._dialog.open(DialogParamComponent, {
       width: '40%',
     });
