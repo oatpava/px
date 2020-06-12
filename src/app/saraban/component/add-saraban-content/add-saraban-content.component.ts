@@ -1590,10 +1590,20 @@ export class AddSarabanContentComponent implements OnInit {
     this._paramSarabanService.sarabanContentId = content.id
   }
 
+  // getReserveNo(folderId: number) {
+  //   this._loadingService.register('main')
+  //   this._sarabanReserveContentService
+  //     .getListByUser(folderId)
+  //     .subscribe(response => {
+  //       this._loadingService.resolve('main')
+  //       this.reserveNos = response
+  //     })
+  // }
+
   getReserveNo(folderId: number) {
     this._loadingService.register('main')
     this._sarabanReserveContentService
-      .getListByUser(folderId)
+      .getListByStructure(folderId, this._paramSarabanService.structureId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.reserveNos = response
