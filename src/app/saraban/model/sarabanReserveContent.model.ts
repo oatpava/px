@@ -11,6 +11,7 @@ export class SarabanReserveContent {
     reserveContentNoContentNumber: number
     reserveContentNoNote: string
     reserveContentNoUserName: string
+    reserveContentNoStructureId: number
 
     constructor(values: Object = {}) {
         this.version = 1
@@ -25,5 +26,6 @@ export class SarabanReserveContent {
         this.reserveContentNoContentNumber = 0
         this.reserveContentNoNote = ""
         this.reserveContentNoUserName = ""
+        this.reserveContentNoStructureId = 0
     }
 }

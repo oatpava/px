@@ -1604,6 +1604,16 @@ export class AddSarabanContentComponent implements OnInit {
       })
   }
 
+  // getReserveNo(folderId: number) {
+  //   this._loadingService.register('main')
+  //   this._sarabanReserveContentService
+  //     .getListByStructure(folderId, this._paramSarabanService.structureId)
+  //     .subscribe(response => {
+  //       this._loadingService.resolve('main')
+  //       this.reserveNos = response
+  //     })
+  // }
+
   getCanceledReserveNo(folderId: number) {
     this._loadingService.register('main')
     this._sarabanReserveContentService
