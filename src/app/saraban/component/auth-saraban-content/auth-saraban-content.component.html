@@ -27,7 +27,7 @@
         <px-structure [selectDepartment]="true" (onselectData)="selectStructure($event)"></px-structure>
     </div>
     <div flex *ngIf="isSelected">
-        <md-select style="width: 100%;padding-top: 2rem;padding-bottom: 1rem;" placeholder="รูปแบบสิทธิ์" name="authTemplates" [(ngModel)]="selectedAuthTemplateId">
+        <md-select *ngIf="authTemplates.length>0" style="width: 100%;padding-top: 2rem;padding-bottom: 1rem;" placeholder="รูปแบบสิทธิ์" name="authTemplates" [(ngModel)]="selectedAuthTemplateId">
             <md-option *ngFor="let authTemplate of authTemplates" [value]="authTemplate.id" (click)="selectAuthTemplate(authTemplate)">
                 {{authTemplate.submoduleAuthTemplateName}}
             </md-option>
