@@ -106,4 +106,18 @@ export class SarabanReserveContentService {
     }
   }
 
+  getListByStructure(folderId: number, structureId: number): Observable<SarabanReserveContent[]> {
+    if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('version=1.0&sort=orderNo&dir=desc'))
+      this._options.search = params
+      return this._http.get(this._apiUrl + '/structure/' + folderId + '/' + structureId, this._options)
+        .map((response: Response) => {
+          return this.pxService.verifyResponseArray(response.json().data)
+        })
+        .catch(this.loggerService.handleError)
+    } else {
+    }
+  }
+
 }
