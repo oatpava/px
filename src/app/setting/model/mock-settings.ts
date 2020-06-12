@@ -51,12 +51,12 @@ export const SETTINGS: Setting[] = [
         childIcon: 'search',
         subSetting: 'search-setting',
       },
-      {
-        childId: 50,//11,
-        childName: 'กำหนดสิทธิ์ให้ผู้ดูแลระบบ',
-        childIcon: 'donut_small',
-        subSetting: 'auth-admin',
-      },
+      // {
+      //   childId: 50,//11,
+      //   childName: 'กำหนดสิทธิ์ให้ผู้ดูแลระบบ',
+      //   childIcon: 'donut_small',
+      //   subSetting: 'auth-admin',
+      // },
       // {
       //   childId: 6,
       //   childName: 'นำเข้า HRIS (หน่วยงาน)',
