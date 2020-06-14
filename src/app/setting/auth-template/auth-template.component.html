@@ -1,0 +1,110 @@
+<div layout="column" flex>
+    <div class="bgc-blue-700" [style.color]="'#fff'" layout="row" flex>
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+            <md-icon>folder_shared</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>กำหนดรูปแบบสิทธิ์แฟ้มทะเบียน</span>
+        </div>
+        <button *ngIf="!showAuth" hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <button *ngIf="showAuth" hide-gt-md md-icon-button [md-menu-trigger-for]="menu2">
+            <md-icon>more_vert</md-icon>
+        </button>
+        <md-menu #menu="mdMenu" x-position="before">
+            <button md-menu-item (click)="add()">เพิ่มรูปแบบสิทธิ์</button>
+        </md-menu>
+        <md-menu #menu2="mdMenu" x-position="before">
+            <button *ngIf="authTemplate.id==0" md-menu-item (click)="create()">บันทึก</button>
+            <button *ngIf="authTemplate.id!=0" md-menu-item (click)="update()">บันทึก</button>
+            <button md-menu-item (click)="cancel()">ยกเลิก</button>
+        </md-menu>
+    </div>
+</div>
+
+<div>
+    <md-sidenav-layout flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div *ngIf="!showAuth" flex-gt-md="50">
+                    <md-list *ngFor="let template of authTemplates; let i = index;">
+                        <md-list-item (mouseover)="hoverEdit=template.id" (mouseleave)="hoverEdit=-1">
+                            <md-icon md-list-avatar style="background: #e60000; color: white; cursor: pointer">
+                                folder_shared</md-icon>
+                            <h3 md-line>{{template.submoduleAuthTemplateName}}</h3>
+                            <h4 md-line>{{template.submodule.module.moduleName}}</h4>
+                            <p md-line>แก้ไขล่าสุดวันที่: {{template.updatedDate}}</p>
+                            <div *ngIf="hoverEdit==template.id" hide show-gt-md class="block-icon-Option">
+                                <button md-icon-button title="แก้ไขสิทธิ์" (click)="edit(template)"><md-icon>edit</md-icon></button>
+                                <button md-icon-button title="ลบ" (click)="delete(template)"><md-icon>delete</md-icon></button>
+                            </div>
+                            <div hide-gt-md layout="row">
+                                <div class="block-icon-Option">
+                                    <i class="material-icons icon-button" title="แก้ไขสิทธิ์" (click)="edit(template)">edit</i>
+                                </div>
+                                <div class="block-icon-Option" >
+                                    <i class="material-icons icon-button" title="ลบ" (click)="delete(template)">delete</i>
+                                </div>
+                            </div>
+                        </md-list-item>
+                        <md-divider md-inset></md-divider>
+                    </md-list>
+                </div>
+
+                <div *ngIf="showAuth" flex-gt-md="50">
+                    <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <md-card-title style="background: #8fc2f5;" layout="row" flex>
+                            <span *ngIf="!editMode" class="md-headline">เพิ่มรูปแบบสิทธิ์</span>
+                            <span *ngIf="editMode" class="md-headline">แก้ไขรูปแบบสิทธิ์</span>
+                        </md-card-title>
+                        <md-card-content>
+                            <md-input flex type="text" style="width: 100%;" placeholder="ชื่อรูปแบบสิทธิ์" name="submoduleAuthTemplateName"
+                                [(ngModel)]="authTemplate.submoduleAuthTemplateName" required>
+                            </md-input>
+                            <md-slide-toggle color="primary" [(ngModel)]="authAll" (change)="changeAll()">
+                                <span *ngIf="authAll">ปิดสิทธิ์ทั้งหมด</span>
+                                <span *ngIf="!authAll">เปิดสิทธิ์ทั้งหมด</span>
+                            </md-slide-toggle>
+                            <md-list>
+                                <md-list-item *ngFor="let auth of dataAuths; let i=index;">
+                                    <md-slide-toggle color="primary" [(ngModel)]="auth.auth">
+                                        {{auth.name}}
+                                    </md-slide-toggle>
+                                </md-list-item>
+                            </md-list>
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div *ngIf="!showAuth" hide show-gt-md layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#00aaff'" color="accent" title="เพิ่มรูปแบบสิทธิ์" (click)="add()">
+        <md-icon>local_hospital</md-icon>
+    </button>
+</div>
+<div *ngIf="showAuth" hide show-gt-md layout="column" id="fixedbutton">
+    <div class="menuList" [tdToggle]="!menuClick" layout="column">
+        <button *ngIf="authTemplate.id==0" md-fab title="บันทึก" color="accent" style="margin-bottom: 3px;" md-fab (click)="create()">
+            <md-icon>save</md-icon>
+        </button>
+        <button *ngIf="authTemplate.id!=0" md-fab title="บันทึก" color="accent" style="margin-bottom: 3px;" md-fab (click)="update()">
+            <md-icon>save</md-icon>
+        </button>
+        <button md-fab [style.background]="'#1976d2'" color="accent" title="ยกเลิก" style="margin-bottom: 3px;" (click)="cancel()">
+            <md-icon>cancel</md-icon>
+        </button>
+    </div>
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuClick=!menuClick">
+        <md-icon *ngIf="!menuClick">menu</md-icon>
+        <md-icon *ngIf="menuClick">keyboard_arrow_up</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

@@ -121,7 +121,7 @@ export class SarabanFileAttachComponent implements OnInit {
         response.forEach(fileattach => {
           if (fileattach.referenceId == 0) {
             fileattach.children = []
-            fileAttachs.push(fileattach) 
+            fileAttachs.push(fileattach)
           } else {
             child.push(fileattach)
           }
@@ -147,12 +147,14 @@ export class SarabanFileAttachComponent implements OnInit {
             tmp.type = name.substr(typePos)
             tmp.canView = this.checkViewByFileType(tmp.fileAttachType)
             tmp.owner = (this._paramSarabanService.userId == tmp.createdBy) ? true : false
+            tmp.trimmedName = this.trimTitle(tmp.fileAttachName)
           })
         } else {
           this.fileAttachs.forEach(tmp => {
             tmp.type = tmp.fileAttachType.toLowerCase()
             tmp.canView = this.checkViewByFileType(tmp.fileAttachType)
             tmp.owner = false
+            tmp.trimmedName = this.trimTitle(tmp.fileAttachName)
           })
         }
 
@@ -373,12 +375,8 @@ export class SarabanFileAttachComponent implements OnInit {
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
                 if (res2.data == 'true') {
-                  this._pxService
-                    .getFileAttachs(this.linkType, this.linkId, 'asc')
-                    .subscribe(response => {
-                      this.getFileAttachs()
-                      this._paramSarabanService.ScanSubscription.unsubscribe()
-                    })
+                  this.getFileAttachs()
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
                 }
               })
           }
@@ -389,7 +387,7 @@ export class SarabanFileAttachComponent implements OnInit {
 
   checkViewByFileType(type: string): boolean {
     let result: boolean = false
-    if (type == '.PDF' || type == '.TIF' || type == '.TIFF' || type == '.JPG' || type == '.PNG') {
+    if (type == '.PDF' || type == '.JPG' || type == '.PNG') {
       result = true
     }
     return result
@@ -397,6 +395,14 @@ export class SarabanFileAttachComponent implements OnInit {
 
   editFileAttachView() {
     this.getFileAttachs()
+  }
+
+  trimTitle(title: string): string {
+    if (title.length > 100) {
+      return title.substr(0, 100) + '...'
+    } else {
+      return title
+    }
   }
 
 }

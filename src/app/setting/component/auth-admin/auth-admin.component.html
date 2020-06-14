@@ -7,7 +7,7 @@
         <md-icon>build</md-icon>
       </button>
         <div flex class="menu-showLabel">
-            <span>แก้ไขสิทธิ์ {{headerName}}</span>
+            <span>กำหนดสิทธิ์ให้ผู้ดูแลระบบ</span>
         </div>
         <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
           <md-icon>more_vert</md-icon>
@@ -72,3 +72,5 @@
       <md-icon>{{listMenu}}</md-icon>
   </button>
 </div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

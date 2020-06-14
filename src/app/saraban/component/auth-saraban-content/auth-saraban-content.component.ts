@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { IMyOptions } from 'mydatepicker'
 import { Message } from 'primeng/primeng'
-
 import { SarabanService } from '../../service/saraban.service'
-
+import { AuthTemplateService } from '../../../setting/auth-template/auth-template.service'
 import { SarabanAuth } from '../../model/sarabanAuth.model'
+import { convertUserPorfile } from '../../../shared'
 
 @Component({
   selector: 'app-auth-saraban-content',
   templateUrl: './auth-saraban-content.component.html',
   styleUrls: ['./auth-saraban-content.component.styl'],
-  providers: [SarabanService]
+  providers: [SarabanService, AuthTemplateService]
 })
 export class AuthSarabanContentComponent implements OnInit {
   listMenu: string = 'menu'
@@ -22,15 +21,18 @@ export class AuthSarabanContentComponent implements OnInit {
   msgs: Message[]
   folderId: number
   selectedUser: any
-  dataAuths: SarabanAuth[]
+  dataAuths: SarabanAuth[] = []
   isChangeAuths: boolean[]
   name: string = ''
+  authAll: boolean = true
+  selectedAuthTemplateId: number = null
+  authTemplates: any[] = []
 
   constructor(
     private _route: ActivatedRoute,
-    private _router: Router,
     private _loadingService: TdLoadingService,
     private _sarabanService: SarabanService,
+    private _templateService: AuthTemplateService,
     private _location: Location
   ) { }
 
@@ -40,6 +42,7 @@ export class AuthSarabanContentComponent implements OnInit {
       .subscribe((params: Params) => {
         this.folderId = params['sarabanFolderId']
         this.sarabanFolderName = params['sarabanFolderName']
+        this.listAllTemplate()
       })
   }
 
@@ -87,8 +90,8 @@ export class AuthSarabanContentComponent implements OnInit {
             summary: 'กำหนดสิทธิ์สำเร็จ',
             detail: 'คุณได้ทำการกำหนดสิทธิ์ของ ' + this.name
           })
-          this.isSelected = false
-          this.selectedUser = []
+          // this.isSelected = false
+          // this.selectedUser = []
         })
     }
   }
@@ -109,49 +112,80 @@ export class AuthSarabanContentComponent implements OnInit {
   }
 
   selectStructure(event) {
-    console.log('selectStructure')
-    console.log('event.type',event.type)
-    console.log('event.id=',event.id)
+    this.authAll = true
+    this.selectedAuthTemplateId = null
     if (event.type == "U") {
       this.isSelected = true
       this.name = event.fullName
       this.selectedUser = event
-      this.getallAuth(0, event.id)
+      this.getAllAuth(0, event.id)
     } else {
       if (event.id != 1) {
         this.isSelected = true
         this.name = event.name
         this.selectedUser = event
-        this.getallAuth(event.id, 0)
+        this.getAllAuth(event.id, 0)
       } else {
         this.isSelected = false
       }
     }
   }
 
-  getallAuth(structureId: number, userId: number) {
-    console.log('getallAuth')
-    console.log('this.folderId'+this.folderId+' structureId'+structureId+' userId'+userId)
+  getAllAuth(structureId: number, userId: number) {
+    this.isChangeAuths = []
     this._loadingService.register('main')
     this._sarabanService
       .getFolderAuth(this.folderId, structureId, userId)
-      .subscribe(response => {
-        this._loadingService.resolve('main')
-        this.isChangeAuths = []
-        this.dataAuths = response
-        this.dataAuths.forEach(auth => this.isChangeAuths.push(false))
+      .subscribe(responseFolder => {
+        let folderAuths = responseFolder.data
 
-        this._loadingService.register('main')
         this._sarabanService
           .getContentAuth(this.folderId, structureId, userId)
-          .subscribe(response => {
+          .subscribe(responseContent => {
             this._loadingService.resolve('main')
-            response.forEach(auth => {
-              this.dataAuths.push(auth)
+            let contentAuths = responseContent.data
+            this.dataAuths = folderAuths.concat(contentAuths)
+            this.dataAuths.forEach(auth => {
               this.isChangeAuths.push(false)
+              if (!auth.auth) this.authAll = false//for case have all auth to show changeAll as true
             })
           })
       })
+  }
+
+  changeAll() {
+    for (let i = 0; i < this.dataAuths.length; i++) {
+      this.dataAuths[i].auth = this.authAll
+      this.isChangeAuths[i] = true
+    }
+  }
+
+  listAllTemplate() {
+    this._loadingService.register('main')
+    this._templateService
+      .list()
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.authTemplates = response
+      })
+  }
+
+  getAllTemplateAuth(linkId: number) {
+    this.authAll = false
+    this._loadingService.register('main')
+    this._sarabanService
+      .listAuthTemplateValue(linkId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        for (let i = 0; i < response.length; i++) {
+          this.isChangeAuths[i] = (this.dataAuths[i].auth != response[i].auth)
+          this.dataAuths[i].auth = response[i].auth
+        }
+      })
+  }
+
+  selectAuthTemplate(template: any) {
+    this.getAllTemplateAuth(-template.id)
   }
 
 }

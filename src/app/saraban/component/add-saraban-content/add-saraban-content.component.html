@@ -177,8 +177,14 @@
                         <span *ngIf="!isKeeped">สถานะหนังสือ: เรื่องเสร็จ</span>
                         <span *ngIf="isKeeped">สถานะหนังสือ: เรื่องเสร็จจัดเก็บ</span>
                     </md-card-title>
-                    <md-card-title *ngIf="isCanceled" class="canceled">
-                        <span>สถานะหนังสือ: ถูกยกเลิก</span>
+                    <md-card-title *ngIf="isCanceled && (sarabanContent.commandTypeName.length==0)" class="canceled">
+                        <span style="color: white;">สถานะหนังสือ: ถูกยกเลิก</span>
+                    </md-card-title>
+                    <md-card-title *ngIf="isCanceled && (sarabanContent.commandTypeName.length>0)" class="canceled">
+                        <div layout="column">
+                            <span style="color: white;">สถานะหนังสือ: ถูกยกเลิกและย้ายหนังสือ</span>
+                            <span style="color: white;font-size: 20px;">({{sarabanContent.commandTypeName}})</span>
+                        </div>
                     </md-card-title>
                     <md-card-content [ngClass]="{'finish-content': isFinish, 'canceled-content': isCanceled}">
                         <div style="font-size: 16px;">

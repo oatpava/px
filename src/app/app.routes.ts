@@ -142,7 +142,9 @@ import {
     ReceiveEcmsComponent,
     FileEcmsComponent,
     ListMenuEcmsComponent,
-    DialogsShowThEGifComponent
+    DialogsShowThEGifComponent,
+    AuthTemplateComponent,
+    DialogViewImageComponent
 } from './shared'
 
 const routes: Routes = [
@@ -319,6 +321,8 @@ const routes: Routes = [
             { path: 'dms-user-auth', component: DmsFolderUserAuthComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'wf-user-auth', component: WfFolderUserAuthComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'auth-admin', component: AuthAdminComponent, canActivate: [AuthGuard], outlet: 'center' },
+            { path: 'auth-template', component: AuthTemplateComponent, canActivate: [AuthGuard], outlet: 'center' },
+            { path: 'dialog-view-image', component: DialogViewImageComponent, canActivate: [AuthGuard], outlet: 'center' }
         ]
     },
     { path: '**', component: LoginComponent },

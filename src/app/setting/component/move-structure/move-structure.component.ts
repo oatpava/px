@@ -24,6 +24,7 @@ export class MoveStructureComponent implements OnInit {
   structureData: any
   selectStructureData: any
   structure: Structure
+  isOrganize: boolean = false
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -51,38 +52,30 @@ export class MoveStructureComponent implements OnInit {
   }
 
   selectMove() {
-    console.log(this.structure)
-    console.log(this.selectStructureData)
     this.structure.parentId = this.selectStructureData.id
-    // this._structureService
-    //   .updateStructure(this.structure)
-    //   .subscribe(response => {
-    //     console.log(response)
-    //     this.dialogRef.close(true)
-    //   })
-      let dialogRef1 = this._dialog.open(ConfirmDialogComponent, {
-        width: '50%',
-      });
-      let instance = dialogRef1.componentInstance
-      instance.dataName = 'ย้าย หน่วยงาน' + this.structure.name
-      dialogRef1.afterClosed().subscribe(result => {
+    let dialogRef1 = this._dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+    });
+    let instance = dialogRef1.componentInstance
+    instance.dataName = 'ย้าย หน่วยงาน' + this.structure.name
+    dialogRef1.afterClosed().subscribe(result => {
 
-        if (result) {
-
-          this.msgs = [];
-          this.msgs.push({
-            severity: 'info',
-            summary: 'บันทึกสำเร็จ',
-            detail: 'ย้ายหน่วยงาน' + this.structure.name
-          })
+      if (result) {
+        if (!this.isOrganize) {
           this._structureService
-          .updateStructure(this.structure)
-          .subscribe(response => {
-            console.log(response)
-            dialogRef1.close(true)
-          })
+            .updateStructure(this.structure)
+            .subscribe(response => {
+              this.dialogRef.close(true)
+            })
+        } else {
+          this._structureService
+            .updateOrg(this.structure)
+            .subscribe(response => {
+              this.dialogRef.close(true)
+            })
         }
-      })
+      }
+    })
   }
 
 

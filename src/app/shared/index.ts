@@ -16,6 +16,7 @@ export * from '../main/component/file-attach-saraban/file-attach-saraban.compone
 export * from '../main/component/setting-defult-profile/setting-defult-profile.component'
 export * from '../main/component/dialog-instruction/dialog-instruction.component'
 export * from '../main/directive/loadMore.component'
+export * from '../main/component/file-attach-saraban/dialog-view-image/dialog-view-image.component'
 
 export * from '../login/login.component'
 export * from '../login/forgot-password/forgot-password.component'
@@ -191,6 +192,7 @@ export * from '../setting/document-type/component/edit-document-type/edit-docume
 
 export * from '../setting/folder-auth/folder-auth.component'
 export * from '../setting/inbox-auth/inbox-auth.component'
+export * from '../setting/auth-template/auth-template.component'
 
 export * from '../setting/history-log/list-histtory-user/list-histtory-user.component'
 export * from '../setting/history-log/report-log/report-log.component'

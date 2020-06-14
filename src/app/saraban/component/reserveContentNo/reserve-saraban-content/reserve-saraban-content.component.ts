@@ -62,6 +62,7 @@ export class ReserveSarabanContentComponent implements OnInit {
     this.reserveModel.reserveContentNoContentDate = this.date
     this.reserveModel.reserveContentNoContentTime = this.time
     this.reserveModel.reserveContentNoContentYear = this.year
+    this.reserveModel.reserveContentNoStructureId = this._paramSarabanService.structureId
     if (!this.reserveMode) {
       this.reserveModel.reserveContentNoStatus = 3
     }

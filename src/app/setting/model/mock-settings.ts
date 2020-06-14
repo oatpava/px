@@ -51,12 +51,12 @@ export const SETTINGS: Setting[] = [
         childIcon: 'search',
         subSetting: 'search-setting',
       },
-      {
-        childId: 50,//11,
-        childName: 'กำหนดสิทธิ์ให้ผู้ดูแลระบบ',
-        childIcon: 'donut_small',
-        subSetting: 'auth-admin',
-      },
+      // {
+      //   childId: 50,//11,
+      //   childName: 'กำหนดสิทธิ์ให้ผู้ดูแลระบบ',
+      //   childIcon: 'donut_small',
+      //   subSetting: 'auth-admin',
+      // },
       // {
       //   childId: 6,
       //   childName: 'นำเข้า HRIS (หน่วยงาน)',
@@ -126,6 +126,12 @@ export const SETTINGS: Setting[] = [
     subSetting: '',
     iconModule: 'class',
     child: [
+      {
+        childId: 56,//0,
+        childName: 'กำหนดรูปแบบสิทธิ์แฟ้มทะเบียน',
+        childIcon: 'folder_shared',
+        subSetting: 'auth-template',
+      },
       {
         childId: 51,//1,
         childName: 'กำหนดแฟ้มทะเบียนให้เจ้าหน้าที่',
