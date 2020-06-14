@@ -16,6 +16,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
 import { Subscription } from 'rxjs/Rx';
 import * as es6printJS from "print-js";
+import { DialogViewImageComponent } from '../file-attach-saraban/dialog-view-image/dialog-view-image.component'
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -404,8 +405,18 @@ export class FileAttachComponent implements OnInit {
     });
   }
 
+  // viewImage(fileAttach: any) {
+  //   window.open(fileAttach.url, '_blank', "height=600,width=1000")
+  // }
+
   viewImage(fileAttach: any) {
-    window.open(fileAttach.url, 'scan', "height=600,width=1000")
+    console.log(fileAttach)
+    let dialogRef = this._dialog.open(DialogViewImageComponent, {
+      width: '90%', height: '90%'
+    })
+    dialogRef.componentInstance.type = fileAttach.fileAttachType
+    dialogRef.componentInstance.url = fileAttach.url
+    dialogRef.componentInstance.trimmedName = fileAttach.fileAttachName
   }
 
 
