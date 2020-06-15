@@ -18,8 +18,8 @@ export const environment = {
   plugIn: 'http://localhost',
   url: 'http://localhost:4200/#',
 
-  apiServer: "http://localhost:8080",
-  apiName: "/pxservice/api",
+  apiServer: "http://localhost:85",
+  apiName: "/pxservice-px8/api",
 
   // apiServerArchive: "http://192.168.142.149:8080",
   // apiNameArchive: "/pxservice-nha/api",
