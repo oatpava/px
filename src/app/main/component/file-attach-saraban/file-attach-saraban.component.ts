@@ -248,18 +248,18 @@ export class FileAttachSarabanComponent implements OnInit {
     }
   }
 
-  // viewImage(fileAttach: any) {
-  //   window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  // }
-
   viewImage(fileAttach: any) {
-    let dialogRef = this._dialog.open(DialogViewImageComponent, {
-      width: '90%', height: '90%'
-    })
-    dialogRef.componentInstance.type = fileAttach.type
-    dialogRef.componentInstance.url = fileAttach.url
-    dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
+    window.open(fileAttach.url, "_blank", "height=600,width=1000")
   }
+
+  // viewImage(fileAttach: any) {
+  //   let dialogRef = this._dialog.open(DialogViewImageComponent, {
+  //     width: '90%', height: '90%'
+  //   })
+  //   dialogRef.componentInstance.type = fileAttach.type
+  //   dialogRef.componentInstance.url = fileAttach.url
+  //   dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
+  // }
 
 //   viewImage(fileAttach: any) {
 //     // console.log(encodeURIComponent(fileAttach.url))
