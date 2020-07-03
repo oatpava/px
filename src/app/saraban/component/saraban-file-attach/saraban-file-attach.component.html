@@ -14,7 +14,7 @@
                 <md-card-title *ngIf="editMode" class="dl-card-title">กำลังแก้ไขเอกสารแนบ</md-card-title>
                 <md-card-content *ngIf="!loading" class="dl-card-content">
                     <app-file-attach-saraban [uploader]="uploader" [secret]="secrets" [type]="types" [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved" [editMode]="editMode" [uploaderUpdate]="uploaderUpdate" [auth]="auth" (addFileAttach)=addFileAttach($event)
-                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()" (editFileAttachView)="editFileAttachView($event)">
+                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()" (editFileAttachView)="editFileAttachView()">
                     </app-file-attach-saraban>
                 </md-card-content>
                 <md-card-content *ngIf="loading" class="dl-card-content">

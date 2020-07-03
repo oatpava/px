@@ -75,9 +75,7 @@ export class FileAttachSarabanComponent implements OnInit {
   //   { label: 'edt', auth: true },
   //   { label: 'del', auth: true }
   // ]
-
-  //viewWindow
-  emptyDataId: number = 0
+  viewWindow
 
   constructor(
     private _pxService: PxService,
@@ -136,30 +134,35 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   view(fileAttach: any) {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'view'
     let auth = (this.viewOnly) ? 0 : (fileAttach.owner) ? 1 : 0
     localStorage.setItem('scan', 'uncomplete')
-    
+
     this._pxService
       .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
       .subscribe(res => {
-        this.emptyDataId = res.id
-        var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
+        window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
           + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
           + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
-
-        // var newWin = window.open('/some/url');
-        // newWin.onunload = function () {
-        //   // DOM unloaded, so the window is likely closed.
-        // }
-        scanWindow.onunload = this.afterCloseScanWindow
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this.editFileAttachView.emit()
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
+                }
+              })
+          }
+        })
       })
-  }
 
-  afterCloseScanWindow() {
-    this.editFileAttachView.emit(this.emptyDataId)
   }
 
   download(fileAttach: FileAttach) {
@@ -258,105 +261,105 @@ export class FileAttachSarabanComponent implements OnInit {
   //   dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
   // }
 
-  //   viewImage(fileAttach: any) {
-  //     // console.log(encodeURIComponent(fileAttach.url))
-  //     // console.log(decodeURIComponent(fileAttach.url))
+//   viewImage(fileAttach: any) {
+//     // console.log(encodeURIComponent(fileAttach.url))
+//     // console.log(decodeURIComponent(fileAttach.url))
 
-  //     // window.location.href = fileAttach.url
-  //     //window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     //window.open(fileAttach.url,'','toolbar=no,height=600,width=1000')
-  //     // window.open(fileAttach.url,'winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
-  //     // this._pxService
-  //     //     .viewFileAttach(fileAttach)
-  //     // window.open(fileAttach.url, 'xxxx','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=720,height=800')
-
-
-
-  //     // this.onURLinserted(fileAttach.url +'/?api_key=praXis')
-  //     //let url = encodeURIComponent(fileAttach.url)
-  // ////http://127.0.0.1:8080/document/Temp/dms/EXT45/45127.PDF
-  //     /////http://127.0.0.1:8080/document/Temp/dms/EXT45/45126.PNG
-  //     // let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = fileAttach.url
+//     // window.location.href = fileAttach.url
+//     //window.open(fileAttach.url, "_blank", "height=600,width=1000")
+//     //window.open(fileAttach.url,'','toolbar=no,height=600,width=1000')
+//     // window.open(fileAttach.url,'winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+//     // this._pxService
+//     //     .viewFileAttach(fileAttach)
+//     // window.open(fileAttach.url, 'xxxx','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=720,height=800')
 
 
 
-  //     //   this._pxService.downloadPDF(fileAttach.url).subscribe(response => {
-  //     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = response
-  //     //   })
-  //     //   window.addEventListener('unload', function(event) {
-  //     //     console.log('Navigation occuring');
-  //     // });
-  //     // let newWin = window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     // newWin.onload = function () {
-  //     //   console.log('on load')
-  //     //   newWin.addEventListener('click', function (event) {
-  //     //     this.console.log('sss', event)
-  //     //   })
-  //     // }
-  //     // newWin.onclick = function () {
-  //     //   console.log('on click')
-  //     // }
-  //     // this.viewWindow = window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     // // this.viewWindow.document.addEventListener('click', function (event) {
-  //     // //        this.console.log('sss', event)
-  //     // // })
-  //     // this.viewWindow.onload = function() {
-  //     //   setTimeout(function(){ 
-  //     //     let tmp = this.viewWindow.document.documentElement.outerHTML
-  //     //     console.log(tmp) 
-  //     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = tmp
-  //     // this.viewWindow.close()
-  //     //   }, 2000);
-  //     // }
-  //     // console.log(this.viewWindow.document.documentElement)
-  //     // console.log(this.viewWindow.document.documentElement.innerHTML)
-  //     // console.log(this.viewWindow.document.documentElement.outerHTML)
+//     // this.onURLinserted(fileAttach.url +'/?api_key=praXis')
+//     //let url = encodeURIComponent(fileAttach.url)
+// ////http://127.0.0.1:8080/document/Temp/dms/EXT45/45127.PDF
+//     /////http://127.0.0.1:8080/document/Temp/dms/EXT45/45126.PNG
+//     // let dialogRef = this._dialog.open(DeleteDialogComponent)
+//     // dialogRef.componentInstance.img = fileAttach.url
 
 
-  //     // let tmp = this.viewWindow.document.documentElement.innerHTML
-  //     // let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = tmp
-  //     // this.viewWindow.close()
-  //     let dialogRef = this._dialog.open(DialogViewImageComponent, {
-  //       width: '90%', height: '90%'
-  //     })
-  //     dialogRef.componentInstance.type = fileAttach.type
-  //     dialogRef.componentInstance.url = fileAttach.url
-  //     dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
-  //   }
 
-  //   // onURLinserted(myURL) {
-  //   //   this.getImage(myURL).subscribe(data => {
-  //   //     this.createImageFromBlob(data);
-  //   //   }, error => {
-  //   //     console.log("Error occured",error);
-  //   //   });
-  //   // }
+//     //   this._pxService.downloadPDF(fileAttach.url).subscribe(response => {
+//     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
+//     // dialogRef.componentInstance.img = response
+//     //   })
+//     //   window.addEventListener('unload', function(event) {
+//     //     console.log('Navigation occuring');
+//     // });
+//     // let newWin = window.open(fileAttach.url, "_blank", "height=600,width=1000")
+//     // newWin.onload = function () {
+//     //   console.log('on load')
+//     //   newWin.addEventListener('click', function (event) {
+//     //     this.console.log('sss', event)
+//     //   })
+//     // }
+//     // newWin.onclick = function () {
+//     //   console.log('on click')
+//     // }
+//     // this.viewWindow = window.open(fileAttach.url, "_blank", "height=600,width=1000")
+//     // // this.viewWindow.document.addEventListener('click', function (event) {
+//     // //        this.console.log('sss', event)
+//     // // })
+//     // this.viewWindow.onload = function() {
+//     //   setTimeout(function(){ 
+//     //     let tmp = this.viewWindow.document.documentElement.outerHTML
+//     //     console.log(tmp) 
+//     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
+//     // dialogRef.componentInstance.img = tmp
+//     // this.viewWindow.close()
+//     //   }, 2000);
+//     // }
+//     // console.log(this.viewWindow.document.documentElement)
+//     // console.log(this.viewWindow.document.documentElement.innerHTML)
+//     // console.log(this.viewWindow.document.documentElement.outerHTML)
 
-  //   // getImage(imageUrl: string): Observable<any> {
-  //   //   let headers={ responseType: ResponseContentType.Blob }
-  //   //   return this.http
-  //   //       .get(imageUrl, headers)
-  //   //       .map(res => res.blob());
-  //   // }
 
-  //   // createImageFromBlob(image: Blob) {
-  //   // let imageToShow
-  //   //  let reader = new FileReader(); //you need file reader for read blob data to base64 image data.
-  //   //  reader.addEventListener("load", () => {
-  //   //     imageToShow = reader.result; // here is the result you got from reader
-  //   //     let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //   //     dialogRef.componentInstance.img = imageToShow
-  //   //  }, false);
+//     // let tmp = this.viewWindow.document.documentElement.innerHTML
+//     // let dialogRef = this._dialog.open(DeleteDialogComponent)
+//     // dialogRef.componentInstance.img = tmp
+//     // this.viewWindow.close()
+//     let dialogRef = this._dialog.open(DialogViewImageComponent, {
+//       width: '90%', height: '90%'
+//     })
+//     dialogRef.componentInstance.type = fileAttach.type
+//     dialogRef.componentInstance.url = fileAttach.url
+//     dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
+//   }
 
-  //   //  if (image) {
-  //   //     reader.readAsDataURL(image);
-  //   //  }
-  //   // }
-  //   ///////
+//   // onURLinserted(myURL) {
+//   //   this.getImage(myURL).subscribe(data => {
+//   //     this.createImageFromBlob(data);
+//   //   }, error => {
+//   //     console.log("Error occured",error);
+//   //   });
+//   // }
+
+//   // getImage(imageUrl: string): Observable<any> {
+//   //   let headers={ responseType: ResponseContentType.Blob }
+//   //   return this.http
+//   //       .get(imageUrl, headers)
+//   //       .map(res => res.blob());
+//   // }
+
+//   // createImageFromBlob(image: Blob) {
+//   // let imageToShow
+//   //  let reader = new FileReader(); //you need file reader for read blob data to base64 image data.
+//   //  reader.addEventListener("load", () => {
+//   //     imageToShow = reader.result; // here is the result you got from reader
+//   //     let dialogRef = this._dialog.open(DeleteDialogComponent)
+//   //     dialogRef.componentInstance.img = imageToShow
+//   //  }, false);
+
+//   //  if (image) {
+//   //     reader.readAsDataURL(image);
+//   //  }
+//   // }
+//   ///////
 
 }
 

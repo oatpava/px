@@ -4,6 +4,7 @@ import { TdLoadingService } from '@covalent/core'
 import { FileUploader } from 'ng2-file-upload'
 import { Message, BlockUI } from 'primeng/primeng'
 import { MdProgressSpinner } from '@angular/material'
+import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { setTimeout } from 'timers'
 import { environment } from '../../../../environments/environment'
 
@@ -50,7 +51,6 @@ export class SarabanFileAttachComponent implements OnInit {
   num: number
   title: string
   loading: boolean = false
-  emptyDataId: number = 0
 
   constructor(
     private _loadingService: TdLoadingService,
@@ -351,6 +351,7 @@ export class SarabanFileAttachComponent implements OnInit {
   }
 
   scan() {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'add'
@@ -364,31 +365,24 @@ export class SarabanFileAttachComponent implements OnInit {
     this._pxService
       .createEmptyData(linkType, documentId, 0)
       .subscribe(res => {
-        this.emptyDataId = res.id
-        var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+        window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        scanWindow.onunload = this.afterCloseScanWindow
-      })
-  }
-
-  afterCloseScanWindow() {
-    this.msgs = []
-    this.msgs.push(
-      {
-        severity: 'info',
-        summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
-        detail: 'กรุณารอสักครู่'
-      })
-    setTimeout(function () {
-      this.msgs = []
-      this._pxService
-        .checkHaveAttach(this.emptyDataId)
-        .subscribe(response => {
-          if (response.data == 'true') {
-            this.getFileAttachs()
+        const timer = TimerObservable.create(4000, 2000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this.getFileAttachs()
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
+                }
+              })
           }
         })
-    }, 2000)
+
+      })
   }
 
   checkViewByFileType(type: string): boolean {
@@ -399,24 +393,8 @@ export class SarabanFileAttachComponent implements OnInit {
     return result
   }
 
-  editFileAttachView(id: number) {
-    this.msgs = []
-    this.msgs.push(
-      {
-        severity: 'info',
-        summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
-        detail: 'กรุณารอสักครู่'
-      })
-    setTimeout(function () {
-      this.msgs = []
-      this._pxService
-        .checkHaveAttach(id)
-        .subscribe(response => {
-          if (response.data == 'true') {
-            this.getFileAttachs()
-          }
-        })
-    }, 2000)
+  editFileAttachView() {
+    this.getFileAttachs()
   }
 
   trimTitle(title: string): string {
