@@ -153,6 +153,7 @@ export class AddDocumentComponent implements OnInit {
   }
 
   msgs: Message[] = [];
+  emptyDataId: number = 0
 
   constructor(
 
@@ -385,7 +386,7 @@ export class AddDocumentComponent implements OnInit {
                   {
                     severity: 'warn',
                     summary: response.name + ' ได้จองเอกสาร',
-                
+
                   })
 
               }
@@ -393,8 +394,8 @@ export class AddDocumentComponent implements OnInit {
               console.log('checkInOutUser - ', response)
               console.log('this.authEditDoc - ', !this.authEditDoc)
               console.log('this.checkInCheckOutLockStatus - ', this.checkInCheckOutLockStatus)
-              console.log('this.authCreDocFile = ',!this.authCreDocFile)
-              console.log('---aaa---',!this.authDelDoc || this.checkInCheckOutLockStatus)
+              console.log('this.authCreDocFile = ', !this.authCreDocFile)
+              console.log('---aaa---', !this.authDelDoc || this.checkInCheckOutLockStatus)
 
 
             })
@@ -1023,107 +1024,57 @@ export class AddDocumentComponent implements OnInit {
     this._pxService
       .createEmptyData('dms', documentId, 0)
       .subscribe(res => {
+        this.emptyDataId = res.id
+        var scanWindow = window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+        scanWindow.onunload = this.afterCloseScanWindow
+      })
+  }
 
-        const timer = TimerObservable.create(4000, 2000)
+  afterCloseScanWindow() {
+    this.msgs = []
+    this.msgs.push(
+      {
+        severity: 'info',
+        summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
+        detail: 'กรุณารอสักครู่'
+      })
+    setTimeout(function () {
+      this.msgs = []
+      this._pxService
+        .checkHaveAttach(this.emptyDataId)
+        .subscribe(res2 => {
 
-        this.subscription = timer.subscribe(t => {
-
-          if (t == 58) {
-            this.subscription.unsubscribe();
-          } else {
-
+          if (res2.data == 'true') {
             this._pxService
-              .checkHaveAttach(res.id)
-              .subscribe(res2 => {
-
-                if (res2.data == 'true') {
-                  this._pxService
-                    .getFileAttachs('dms', this.documentId, 'asc')
-                    .subscribe(response => {
-                      let temp = response as any[]
-                      let tempParent = response as any[]
-                      tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
-                      let datafileAttach = []
-                      for (let i = 0; i < tempParent.length; i++) {
-                        if (tempParent[i].referenceId == 0) {
-                          tempParent[i].children = []
-                          datafileAttach.push(tempParent[i])
-                        }
-                      }
-
-                      for (let i = 0; i < datafileAttach.length; i++) {
-                        let idParent = datafileAttach[i].id
-                        for (let j = 0; j < temp.length; j++) {
-                          if (idParent == temp[j].referenceId) {
-                            datafileAttach[i].children.push(temp[j])
-                            idParent = temp[j].id
-                            j = -1
-                          }
-
-                        }
-
-
-                      }
-
-                      this.fileAttachs = datafileAttach
-                      this.subscription.unsubscribe();
-                    })
+              .getFileAttachs('dms', this.documentId, 'asc')
+              .subscribe(response => {
+                let temp = response as any[]
+                let tempParent = response as any[]
+                tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
+                let datafileAttach = []
+                for (let i = 0; i < tempParent.length; i++) {
+                  if (tempParent[i].referenceId == 0) {
+                    tempParent[i].children = []
+                    datafileAttach.push(tempParent[i])
+                  }
                 }
-              })
 
+                for (let i = 0; i < datafileAttach.length; i++) {
+                  let idParent = datafileAttach[i].id
+                  for (let j = 0; j < temp.length; j++) {
+                    if (idParent == temp[j].referenceId) {
+                      datafileAttach[i].children.push(temp[j])
+                      idParent = temp[j].id
+                      j = -1
+                    }
+                  }
+                }
+                this.fileAttachs = datafileAttach
+              })
           }
         })
-
-      })
-
-
-
-    // this.subscription = timer.subscribe(t => {
-    //   this.tick = '' + t;
-
-    //   if (localStorage.getItem('scan') == 'complete') {
-    //     this._pxService
-    //       .getFileAttachs('dms', this.documentId, 'asc')
-    //       .subscribe(response => {
-    //         let temp = response as any[]
-    //         let tempParent = response as any[]
-    //         console.log('this.authDocfileSecrets aa= ', this.authDocfileSecrets)
-    //         tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
-    //         console.log('tempParent = ', tempParent)
-    //         let datafileAttach = []
-    //         for (let i = 0; i < tempParent.length; i++) {
-    //           if (tempParent[i].referenceId == 0) {
-    //             tempParent[i].children = []
-    //             datafileAttach.push(tempParent[i])
-    //           }
-    //         }
-
-    //         for (let i = 0; i < datafileAttach.length; i++) {
-    //           let idParent = datafileAttach[i].id
-    //           for (let j = 0; j < temp.length; j++) {
-    //             if (idParent == temp[j].referenceId) {
-    //               datafileAttach[i].children.push(temp[j])
-    //               idParent = temp[j].id
-    //               j = -1
-    //             }
-
-    //           }
-
-
-    //         }
-    //         console.log('--- updateAtt temp', temp)
-    //         console.log('--- updateAtt datafileAttach', datafileAttach)
-    //         this.fileAttachs = datafileAttach
-    //         this._loadingService.resolve('main')
-    //         this.subscription.unsubscribe();
-    //       })
-    //     this.subscription.unsubscribe();
-    //     localStorage.setItem('scan', 'uncomplete')
-    //   }
-
-    // });
+    }, 2000)
   }
 
   getdate(numVal, typeExp) {

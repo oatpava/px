@@ -5,7 +5,6 @@ import { TdLoadingService } from '@covalent/core'
 import { Message } from 'primeng/primeng'
 import { FileUploader } from 'ng2-file-upload'
 import { MdDialog } from '@angular/material'
-import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { setTimeout } from 'timers';
 
 import { SarabanContentService } from '../../../../saraban/service/saraban-content.service'
@@ -13,15 +12,11 @@ import { DocumentService } from '../../../../dms/service/document.service'
 import { PxService } from '../../../../main/px.service'
 import { ParamSarabanService } from '../../../../saraban/service/param-saraban.service'
 
-import { Menu } from '../../../model/menu.model'
 import { SarabanContent } from '../../../../saraban/model/sarabanContent.model'
-import { SarabanContent_get } from '../../../model/sarabanContentGet.model';
 import { Document } from '../../../../dms/model/document.model'
 import { FileAttach } from '../../../../main/model/file-attach.model'
 import { environment } from '../../../../../environments/environment'
 
-import { SendSarabanContentComponent } from '../../../../saraban/component/send-saraban-content/send-saraban-content.component'
-import { SendEmailComponent } from '../../../../saraban/component/send-email/send-email.component'
 import { DialogWarningComponent } from '../../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 
 
@@ -62,6 +57,7 @@ export class AddCircularNoticeComponent implements OnInit {
 
   auth: boolean[] = [true, true, true, true, true]//(add/edit)[10], secret1[15], secret2[16], secret3[17], secret4[18]
   viewOnly: boolean = false
+  emptyDataId: number = 0
 
   constructor(
     private _location: Location,
@@ -344,7 +340,6 @@ export class AddCircularNoticeComponent implements OnInit {
   }
 
   scan() {
-    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let linkId = this.circularNotice.wfDocumentId
     if (linkId != 0) {
       let temp = environment.plugIn
@@ -357,30 +352,39 @@ export class AddCircularNoticeComponent implements OnInit {
       let urlNoName = ''
       localStorage.setItem('scan', 'uncomplete')
       this._pxService
-      .createEmptyData('dms', documentId, 0)
-      .subscribe(res => {
-        window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
-        const timer = TimerObservable.create(4000, 2000)
-        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
-          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
-          else {
-          this._pxService
-            .checkHaveAttach(res.id)
-            .subscribe(res2 => {
-              if (res2.data == 'true') {
-                this.getFileAttachs()
-                this._paramSarabanService.ScanSubscription.unsubscribe()
-              }
-            })
-          }
+        .createEmptyData('dms', documentId, 0)
+        .subscribe(res => {
+          this.emptyDataId = res.id
+          var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+
+          scanWindow.onunload = this.afterCloseScanWindow
         })
-      })
     } else {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "แจ้งเตือน"
       dialogRef.componentInstance.message = "ไม่สามารถสแกนไฟล์เอกสาร เนื่องจากหนังสือเวียนนี้ยังไม่ถูกสร้าง\n\nกดปุ่ม 'บันทึก' เพื่อทำการสร้างหนังสือเวียน"
       dialogRef.componentInstance.confirmation = false
     }
+  }
+
+  afterCloseScanWindow() {
+    this.msgs = []
+    this.msgs.push(
+      {
+        severity: 'info',
+        summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
+        detail: 'กรุณารอสักครู่'
+      })
+    setTimeout(function () {
+      this.msgs = []
+      this._pxService
+        .checkHaveAttach(this.emptyDataId)
+        .subscribe(response => {
+          if (response.data == 'true') {
+            this.getFileAttachs()
+          }
+        })
+    }, 2000)
   }
 
   editTitle(title: string) {
