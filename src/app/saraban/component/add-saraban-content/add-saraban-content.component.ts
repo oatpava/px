@@ -2249,7 +2249,6 @@ export class AddSarabanContentComponent implements OnInit {
     let dialogRef = this._dialog.open(SendEcmsComponent, {
       width: '80%',
     });
-    let instance = dialogRef.componentInstance
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         result.forEach(element => {

@@ -61,10 +61,15 @@
             </div>
         </div>
     </div>
-
-    <div flex class="pad-sm bgc-blue-grey-100 push-sm" layout="row" layout-align="end">
-        <button md-raised-button color="primary" (click)="ok()" style="margin-right: 5px">ส่งภายนอก</button>
-        <button md-raised-button color="warn" (click)="close()">ยกเลิก</button>
+    <div flex class="pad-sm bgc-blue-grey-100 push-sm" layout="row" layout-align="space-between center">
+        <div layout="row" layout-align="start">
+            <button md-raised-button color="accent" (click)="updateMine()" style="margin-right: 5px">ปรับปรุงโครงสร้าง ขอรหัสกระทรวง</button>
+            <button md-raised-button color="accent" (click)="updateOrg()">ปรับปรุงโครงสร้าง ขอข้อมูลหน่วยงาน</button>
+        </div>
+        <div layout="row" layout-align="end">
+            <button md-raised-button color="primary" (click)="ok()" style="margin-right: 5px">ส่งภายนอก</button>
+            <button md-raised-button color="warn" (click)="close()">ยกเลิก</button>
+        </div>
     </div>
 </div>
 <p-growl [(value)]="msgs" [life]="3000"></p-growl>

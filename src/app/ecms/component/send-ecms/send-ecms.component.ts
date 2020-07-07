@@ -21,6 +21,7 @@ export class SendEcmsComponent implements OnInit {
   }
   msgs: Message[] = []
   listSearch: any[] = []
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -28,6 +29,12 @@ export class SendEcmsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getStructureTree()
+  }
+
+  getStructureTree() {
+    this.structureTree = []
+
     this._ecmsService
       .getECMSStructure(this.rootStructureId)
       .subscribe(response => {
@@ -66,6 +73,7 @@ export class SendEcmsComponent implements OnInit {
         })
       })
   }
+
   loadNode(event) {
     if (event.node) {
       Observable.forkJoin(
@@ -139,6 +147,34 @@ export class SendEcmsComponent implements OnInit {
   }
   close() {
     this.dialogRef.close()
+  }
+
+  updateMine() {
+    this._ecmsService
+      .createEcmsMinistry()
+      .subscribe(response2 => {
+        this.getStructureTree()
+        this.msgs = []
+        this.msgs.push({
+          severity: 'info',
+          summary: 'ปรับปรุงโครงสร้างสำเร็จ',
+          detail: 'ปรับปรุงโครงสร้างสำเร็จแล้ว'
+        })
+      })
+  }
+
+  updateOrg() {
+    this._ecmsService
+      .createEcmsOrganization()
+      .subscribe(response2 => {
+        this.getStructureTree()
+        this.msgs = []
+        this.msgs.push({
+          severity: 'info',
+          summary: 'ปรับปรุงโครงสร้างสำเร็จ',
+          detail: 'ปรับปรุงโครงสร้างสำเร็จแล้ว'
+        })
+      })
   }
 
 }
