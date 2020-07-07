@@ -38,13 +38,14 @@ export class MoveStructureComponent implements OnInit {
 
   ngOnInit() {
     this.structure = new Structure()
-    this.structure.code = this.structureData.code
-    this.structure.detail = this.structureData.detail
-    this.structure.id = this.structureData.id
+    this.structure.id = this.structure.id
     this.structure.name = this.structureData.name
-    this.structure.nodeLevel = this.structureData.nodeLevel
+    this.structure.shortName = this.structureData.shortName
+    this.structure.detail = this.structureData.detail
+    this.structure.code = this.structure.code
+    this.structure.nodeLevel = this.structure.nodeLevel
     this.structure.parentId = this.structureData.parentId
-    this.structure.parentKey = this.structureData.parentKey
+    this.structure.parentKey = this.selectStructureData.parentKey
   }
 
   selectStructure(event) {
@@ -59,7 +60,6 @@ export class MoveStructureComponent implements OnInit {
     let instance = dialogRef1.componentInstance
     instance.dataName = 'ย้าย หน่วยงาน' + this.structure.name
     dialogRef1.afterClosed().subscribe(result => {
-
       if (result) {
         if (!this.isOrganize) {
           this._structureService

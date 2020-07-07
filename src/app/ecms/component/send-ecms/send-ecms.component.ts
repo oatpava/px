@@ -21,6 +21,7 @@ export class SendEcmsComponent implements OnInit {
   }
   msgs: Message[] = []
   listSearch: any[] = []
+
   constructor(
     private _ecmsService: SarabanEcmsService,
     public _dialog: MdDialog,
@@ -28,6 +29,12 @@ export class SendEcmsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getStructureTree()
+  }
+
+  getStructureTree() {
+    this.structureTree = []
+
     this._ecmsService
       .getECMSStructure(this.rootStructureId)
       .subscribe(response => {
@@ -66,6 +73,7 @@ export class SendEcmsComponent implements OnInit {
         })
       })
   }
+
   loadNode(event) {
     if (event.node) {
       Observable.forkJoin(
@@ -97,18 +105,19 @@ export class SendEcmsComponent implements OnInit {
       this.selectedStructure.splice(index, 1)
     }
   }
+  
   nodeSelect(item) {
     if (item.node.collapsedIcon != "fa-circle-thin") {
+      this.selectedStructure.pop()
       this.msgs = []
       this.msgs.push({
         severity: 'warn',
         summary: 'ไม่สามารถเลือกได้',
         detail: 'เลือกได้เฉพาะหน่วยงานภายในเท่านั้น'
       })
-    } else {
-      this.selectedStructure.push(item.node)
     }
   }
+
   search(data) {
     this._ecmsService
       .getECMSSearchStructure(data)
@@ -139,6 +148,34 @@ export class SendEcmsComponent implements OnInit {
   }
   close() {
     this.dialogRef.close()
+  }
+
+  updateMine() {
+    this._ecmsService
+      .createEcmsMinistry()
+      .subscribe(response2 => {
+        this.getStructureTree()
+        this.msgs = []
+        this.msgs.push({
+          severity: 'info',
+          summary: 'ปรับปรุงโครงสร้างสำเร็จ',
+          detail: 'ปรับปรุงโครงสร้างสำเร็จแล้ว'
+        })
+      })
+  }
+
+  updateOrg() {
+    this._ecmsService
+      .createEcmsOrganization()
+      .subscribe(response2 => {
+        this.getStructureTree()
+        this.msgs = []
+        this.msgs.push({
+          severity: 'info',
+          summary: 'ปรับปรุงโครงสร้างสำเร็จ',
+          detail: 'ปรับปรุงโครงสร้างสำเร็จแล้ว'
+        })
+      })
   }
 
 }

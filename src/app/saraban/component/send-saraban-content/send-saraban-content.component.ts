@@ -23,7 +23,8 @@ import { PrivateGroupUser } from '../../../mwp/model/privateGroupUser.model'
 import { Structure } from '../../../setting/model/structure.model'
 
 import { environment } from '../../../../environments/environment'
-import { FileAttach } from '../../../shared'
+import { TimerObservable } from 'rxjs/observable/TimerObservable'
+import { FileAttach, convertUserPorfile } from '../../../shared'
 import { DialogViewComponent } from '../add-saraban-content/dialog-view/dialog-view.component'
 
 @Component({
@@ -77,7 +78,6 @@ export class SendSarabanContentComponent implements OnInit {
   processes: string[] = []
   filteredProcesses: string[]
   workflowDetail: string = ''
-  emptyDataId: number = 0
 
   private myDatePickerOptions: IMyOptions[] = [
     {
@@ -331,7 +331,7 @@ export class SendSarabanContentComponent implements OnInit {
       this.sendTo[num].push(node)
     }
   }
-
+  
 
 
   onDateChanged(event, num: number) {
@@ -962,37 +962,31 @@ export class SendSarabanContentComponent implements OnInit {
     this._pxService
       .createEmptyData('wfe', documentId, 0)
       .subscribe(res => {
-        this.emptyDataId = res.id
-        var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+        window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        scanWindow.onunload = this.afterCloseScanWindow
-      })
-  }
-
-  afterCloseScanWindow() {
-    this.msgs = []
-    this.msgs.push(
-      {
-        severity: 'info',
-        summary: 'กำลังตรวจสอบการแสกนไฟล์คำสั่งการ/คำเสนอ',
-        detail: 'กรุณารอสักครู่'
-      })
-    setTimeout(function () {
-      this.msgs = []
-      this._pxService
-        .checkHaveAttach(this.emptyDataId)
-        .subscribe(response => {
-          if (response.data == 'true') {
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
             this._pxService
-              .getFileAttachs('wfe', -this.sarabanContent.id, 'desc')
-              .subscribe(wfe => {
-                this.wfe = new FileAttach(wfe[0])
-                this.scanned = true
-                this.scanning = false
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+                if (res2.data == 'true') {
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
+                  this._pxService
+                    .getFileAttachs('wfe', -this.sarabanContent.id, 'desc')
+                    .subscribe(wfe => {
+                      this.wfe = new FileAttach(wfe[0])
+                      this.scanned = true
+                      this.scanning = false
+                    })
+                }
               })
           }
         })
-    }, 2000)
+
+      })
   }
 
   viewImage(url: string) {
@@ -1018,16 +1012,16 @@ export class SendSarabanContentComponent implements OnInit {
     let node: TreeNode
     let parentKey: number[]
     if (lastNodeData.userType == 1) {
-      parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
-      node = this._paramSarabanService.findNode(this.structureTree, lastNodeData.id, false, parentKey)
-      if (node) {
-        this.sendTo[0].push(node)
-        this.selectedStructure[0].push(node)
+        parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
+        node = this._paramSarabanService.findNode(this.structureTree, lastNodeData.id, false, parentKey)
+        if (node) {
+          this.sendTo[0].push(node)
+          this.selectedStructure[0].push(node)
 
-        this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
-        this.favouriteNodeAdded[0][node.data.favIndex] = true
+          this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
+          this.favouriteNodeAdded[0][node.data.favIndex] = true
+        }
       }
-    }
   }
 
   getLastSendTo() {

@@ -5,7 +5,7 @@ import { TdLoadingService } from '@covalent/core'
 import { Message } from 'primeng/primeng'
 import { FileUploader } from 'ng2-file-upload'
 import { MdDialog } from '@angular/material'
-import { setTimeout } from 'timers';
+import { TimerObservable } from 'rxjs/observable/TimerObservable'
 
 import { SarabanContentService } from '../../../../saraban/service/saraban-content.service'
 import { DocumentService } from '../../../../dms/service/document.service'
@@ -18,7 +18,6 @@ import { FileAttach } from '../../../../main/model/file-attach.model'
 import { environment } from '../../../../../environments/environment'
 
 import { DialogWarningComponent } from '../../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
-
 
 @Component({
   selector: 'app-add-circular-notice',
@@ -57,7 +56,6 @@ export class AddCircularNoticeComponent implements OnInit {
 
   auth: boolean[] = [true, true, true, true, true]//(add/edit)[10], secret1[15], secret2[16], secret3[17], secret4[18]
   viewOnly: boolean = false
-  emptyDataId: number = 0
 
   constructor(
     private _location: Location,
@@ -340,6 +338,7 @@ export class AddCircularNoticeComponent implements OnInit {
   }
 
   scan() {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let linkId = this.circularNotice.wfDocumentId
     if (linkId != 0) {
       let temp = environment.plugIn
@@ -352,39 +351,32 @@ export class AddCircularNoticeComponent implements OnInit {
       let urlNoName = ''
       localStorage.setItem('scan', 'uncomplete')
       this._pxService
-        .createEmptyData('dms', documentId, 0)
-        .subscribe(res => {
-          this.emptyDataId = res.id
-          var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
-
-          scanWindow.onunload = this.afterCloseScanWindow
+      .createEmptyData('dms', documentId, 0)
+      .subscribe(res => {
+        window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
+        
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
+          this._pxService
+            .checkHaveAttach(res.id)
+            .subscribe(res2 => {
+              if (res2.data == 'true') {
+                this._paramSarabanService.ScanSubscription.unsubscribe()
+                this.getFileAttachs()
+              }
+            })
+          }
         })
+      })
     } else {
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "แจ้งเตือน"
       dialogRef.componentInstance.message = "ไม่สามารถสแกนไฟล์เอกสาร เนื่องจากหนังสือเวียนนี้ยังไม่ถูกสร้าง\n\nกดปุ่ม 'บันทึก' เพื่อทำการสร้างหนังสือเวียน"
       dialogRef.componentInstance.confirmation = false
     }
-  }
-
-  afterCloseScanWindow() {
-    this.msgs = []
-    this.msgs.push(
-      {
-        severity: 'info',
-        summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
-        detail: 'กรุณารอสักครู่'
-      })
-    setTimeout(function () {
-      this.msgs = []
-      this._pxService
-        .checkHaveAttach(this.emptyDataId)
-        .subscribe(response => {
-          if (response.data == 'true') {
-            this.getFileAttachs()
-          }
-        })
-    }, 2000)
   }
 
   editTitle(title: string) {

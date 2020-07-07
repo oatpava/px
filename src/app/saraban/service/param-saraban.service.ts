@@ -3,6 +3,7 @@ import { Message, TreeNode } from 'primeng/primeng'
 import { SarabanAuth } from '../model/sarabanAuth.model'
 import { Structure } from '../../setting/model/structure.model'
 import { ListReturn } from '../../main/model/listReturn.model'
+import { Subscription } from 'rxjs/Rx'
 import { SarabanFolder } from '../model/sarabanFolder.model'
 import { UserProfile } from '../../shared'
 
@@ -62,6 +63,8 @@ export class ParamSarabanService {
 
   structureId: number
   structureName: string
+
+  ScanSubscription: Subscription
 
   inboxPath: string
   //registedContent: SarabanContent

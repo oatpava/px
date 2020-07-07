@@ -14,9 +14,9 @@ import { environment } from '../../../../environments/environment'
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
-import { Subscription } from 'rxjs/Rx';
 import * as es6printJS from "print-js";
 import { DialogViewImageComponent } from '../file-attach-saraban/dialog-view-image/dialog-view-image.component'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -55,8 +55,6 @@ export class FileAttachComponent implements OnInit {
   checkIe: boolean = false
   checkChrome: boolean = false
   fileAttachUpdate: FileAttach[]
-  private tick: string;
-  private subscription: Subscription;
 
   secretClassArr: any[] = []
 
@@ -65,13 +63,12 @@ export class FileAttachComponent implements OnInit {
   secretClass: any[] = [
     { id: 1, name: 'ปกติ' }, { id: 2, name: 'ลับ' }, { id: 3, name: 'ลับมาก' }, { id: 4, name: 'ลับที่สุด' }
   ]
-  emptyDataId: number = 0
-  linkId: number = 0
 
   constructor(
     private _pxService: PxService,
     private _folderService: FolderService,
     private _dialog: MdDialog,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.fileAttachUpdate = []
     // console.log('constructor file attach')
@@ -233,90 +230,109 @@ export class FileAttachComponent implements OnInit {
   }
 
   editFile2(fileAttach: FileAttach, staus: number) {
+
+    console.log('fileAttach - ',fileAttach)
+    console.log('staus - ',staus)
+    console.log('this.authEditDocFile - ',this.authEditDocFile)
+
+
+
+
     let temp = environment.plugIn
       console.log('temp url', temp)
       let auth = 0
       if (this.authEditDocFile ) {
         auth = 1
       }
+      // let url = 'http://192.168.1.8/scan/?'
       let url = temp + '/scan/?'
       let mode = 'view'
+
+      // window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
 
       this._pxService
       .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
       .subscribe(res => {
-        this.emptyDataId = res.id
-        this.linkId = fileAttach.linkId
-        var scanWindow = window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
+        window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
         + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
         + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
         
-        scanWindow.onunload = this.afterCloseScanWindow
-      })
-  }
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
 
-  afterCloseScanWindow() {
-    // this.msgs = []
-    // this.msgs.push(
-    //   {
-    //     severity: 'info',
-    //     summary: 'กำลังตรวจสอบการแสกนไฟล์เอกสาร',
-    //     detail: 'กรุณารอสักครู่'
-    //   })
-    setTimeout(function () {
-      // this.msgs = []
-      this._pxService
-      .checkHaveAttach(this.emptyDataId)
-      .subscribe(res2 => {
+            this._pxService
+              .checkHaveAttach(res.id)
+              .subscribe(res2 => {
+      
+                if (res2.data == 'true') {
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
+                  this._pxService
+                    .getFileAttachs('dms', fileAttach.linkId, 'asc')
+                    .subscribe(response => {
+                      let temp = response as any[]
+                      let tempParent = response as any[]
+                      tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
+                      let datafileAttach = []
+                      for (let i = 0; i < tempParent.length; i++) {
+                        if (tempParent[i].referenceId == 0) {
+                          tempParent[i].children = []
+                          datafileAttach.push(tempParent[i])
+                        }
+                      }
 
-        if (res2.data == 'true') {
-          this._pxService
-            .getFileAttachs('dms', this.linkId, 'asc')
-            .subscribe(response => {
-              let temp = response as any[]
-              let tempParent = response as any[]
-              tempParent = tempParent.filter(attarch => attarch.secrets <= this.authDocfileSecrets)
-              let datafileAttach = []
-              for (let i = 0; i < tempParent.length; i++) {
-                if (tempParent[i].referenceId == 0) {
-                  tempParent[i].children = []
-                  datafileAttach.push(tempParent[i])
+                      for (let i = 0; i < datafileAttach.length; i++) {
+                        let idParent = datafileAttach[i].id
+                        for (let j = 0; j < temp.length; j++) {
+                          if (idParent == temp[j].referenceId) {
+                            datafileAttach[i].children.push(temp[j])
+                            idParent = temp[j].id
+                            j = -1
+                          }
+
+                        }
+
+
+                      }
+
+                      this.fileAttachs = datafileAttach
+                    })
                 }
-              }
+              })
 
-              for (let i = 0; i < datafileAttach.length; i++) {
-                let idParent = datafileAttach[i].id
-                for (let j = 0; j < temp.length; j++) {
-                  if (idParent == temp[j].referenceId) {
-                    datafileAttach[i].children.push(temp[j])
-                    idParent = temp[j].id
-                    j = -1
-                  }
+          }
+        })
 
-                }
-
-
-              }
-
-              this.fileAttachs = datafileAttach
-            })
-        }
       })
-    }, 2000)
+
+   
+ 
+
+
   }
 
   addFileAttach(data: any) {
+    // console.log('-- addFileAttach --')
+    // console.log('--$event', data)
     let temp = this.uploader;
+    // console.log('temp', temp.queue[0].file.name)
     this.addAttachFile.emit(temp.queue[0].file.name)
   }
 
   addByDrop(event) {
+    console.log('event -', event)
+    console.log('this.uploader -', this.uploader)
     let temp = this.uploader;
     this.addAttachFile.emit(this.uploader)
 
   }
 
   updateFileAttach(data: any) {
+    console.log('-- updateFileAttach --')
+
+    console.log('this.uploader', this.uploader)
     this.updateAtt.emit(true)
     this.editMode = false
     this.referenceFileAttachId.emit(0)
@@ -327,25 +343,34 @@ export class FileAttachComponent implements OnInit {
 
   }
   updateSecrets(data: FileAttach, secrets: any) {
+    // console.log('secrets',secrets)
+    // console.log('data',data)
     data.secrets = secrets
     this.UpdateSecrets.emit(data)
 
 
   }
   removeTemp() {
+    console.log('-- removeTemp --')
     this.editMode = false
     this.referenceFileAttachId.emit(0)
     this.fileAttachUpdate = []
+    // this.uploader.queue = []
   }
   removeUpdate() {
+    console.log('-- removeUpdate --')
     this.editMode = false
     this.referenceFileAttachId.emit(0)
     this.fileAttachUpdate = []
     this.uploader.queue = []
+
   }
 
   updateSecretClassData(data: any) {
+    console.log('updateSecretClassData', this.secretClassData)
+
     this.secrets.emit(this.secretClassData)
+
   }
 
   authDocfileSecrets:number=1
@@ -353,6 +378,7 @@ export class FileAttachComponent implements OnInit {
     this._folderService
       .getMenu(folderId)
       .subscribe(response => {
+        // console.log(' - authMenu - ', response)
 
 
         for (let i of response.data) {

@@ -494,6 +494,7 @@ export class ListSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.mode = 'send'
     dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + content.wfContentTitle
     dialogRef.afterClosed().subscribe(result => {
+      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
       if (result) {
         content.wfContentInt03 = 1
         if (this._paramSarabanService.msg != null) {
