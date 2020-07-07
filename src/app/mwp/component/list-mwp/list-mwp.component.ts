@@ -47,6 +47,7 @@ export class ListMwpComponent implements OnInit {
     this._paramSarabanService.listReturn = null
     this._paramSarabanService.barcodeFilter = null
     this._paramSarabanService.folder = null
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
   }
 
   ngOnInit() {

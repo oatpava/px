@@ -6,24 +6,18 @@ import { Message } from 'primeng/primeng'
 import { FileUploader } from 'ng2-file-upload'
 import { MdDialog } from '@angular/material'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { setTimeout } from 'timers';
 
 import { SarabanContentService } from '../../../../saraban/service/saraban-content.service'
 import { DocumentService } from '../../../../dms/service/document.service'
 import { PxService } from '../../../../main/px.service'
 import { ParamSarabanService } from '../../../../saraban/service/param-saraban.service'
 
-import { Menu } from '../../../model/menu.model'
 import { SarabanContent } from '../../../../saraban/model/sarabanContent.model'
-import { SarabanContent_get } from '../../../model/sarabanContentGet.model';
 import { Document } from '../../../../dms/model/document.model'
 import { FileAttach } from '../../../../main/model/file-attach.model'
 import { environment } from '../../../../../environments/environment'
 
-import { SendSarabanContentComponent } from '../../../../saraban/component/send-saraban-content/send-saraban-content.component'
-import { SendEmailComponent } from '../../../../saraban/component/send-email/send-email.component'
 import { DialogWarningComponent } from '../../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
-
 
 @Component({
   selector: 'app-add-circular-notice',
@@ -360,16 +354,18 @@ export class AddCircularNoticeComponent implements OnInit {
       .createEmptyData('dms', documentId, 0)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + linkType + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
-        const timer = TimerObservable.create(4000, 2000)
+        
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
         this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
-          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
           else {
           this._pxService
             .checkHaveAttach(res.id)
             .subscribe(res2 => {
               if (res2.data == 'true') {
-                this.getFileAttachs()
                 this._paramSarabanService.ScanSubscription.unsubscribe()
+                this.getFileAttachs()
               }
             })
           }

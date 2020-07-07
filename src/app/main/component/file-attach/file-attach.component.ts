@@ -14,9 +14,9 @@ import { environment } from '../../../../environments/environment'
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
-import { Subscription } from 'rxjs/Rx';
 import * as es6printJS from "print-js";
 import { DialogViewImageComponent } from '../file-attach-saraban/dialog-view-image/dialog-view-image.component'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -55,8 +55,6 @@ export class FileAttachComponent implements OnInit {
   checkIe: boolean = false
   checkChrome: boolean = false
   fileAttachUpdate: FileAttach[]
-  private tick: string;
-  private subscription: Subscription;
 
   secretClassArr: any[] = []
 
@@ -70,6 +68,7 @@ export class FileAttachComponent implements OnInit {
     private _pxService: PxService,
     private _folderService: FolderService,
     private _dialog: MdDialog,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.fileAttachUpdate = []
     // console.log('constructor file attach')
@@ -257,19 +256,19 @@ export class FileAttachComponent implements OnInit {
         window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
         + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
         + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
-      const timer = TimerObservable.create(4000, 2000)
+        
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+          else {
 
-        this.subscription = timer.subscribe(t => {
-
-          if (t == 58) {
-            this.subscription.unsubscribe();
-          } else {
-     
             this._pxService
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
       
                 if (res2.data == 'true') {
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
                   this._pxService
                     .getFileAttachs('dms', fileAttach.linkId, 'asc')
                     .subscribe(response => {
@@ -299,7 +298,6 @@ export class FileAttachComponent implements OnInit {
                       }
 
                       this.fileAttachs = datafileAttach
-                      this.subscription.unsubscribe();
                     })
                 }
               })

@@ -943,6 +943,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.mode = 'send'
     dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + this.trimTitle(sarabanContent.wfContentTitle)
     dialogRef.afterClosed().subscribe(result => {
+      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
       if (result) {
         if (this._paramSarabanService.msg != null) {
           this.msgs = []
@@ -986,6 +987,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.mode = 'reply'
     dialogRef.componentInstance.title = 'คืนเรื่องหนังสือ: ' + this.trimTitle(sarabanContent.wfContentTitle)
     dialogRef.afterClosed().subscribe(result => {
+      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
       if (result) {
         if (this._paramSarabanService.msg != null) {
           this.msgs = []
@@ -1444,6 +1446,9 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.num = this.numFileAttach
     dialogRef.componentInstance.title = this.trimTitle(this.sarabanContent.wfContentTitle)
     dialogRef.afterClosed().subscribe(result => {
+      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+      this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num
+      this.setParamDataStatus(this.sarabanContent, true, false, false)
       if (result) {
         this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num
         this.setParamDataStatus(this.sarabanContent, true, false, false)
@@ -2250,7 +2255,6 @@ export class AddSarabanContentComponent implements OnInit {
     let dialogRef = this._dialog.open(SendEcmsComponent, {
       width: '80%',
     });
-    let instance = dialogRef.componentInstance
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         result.forEach(element => {

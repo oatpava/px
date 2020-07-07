@@ -134,7 +134,6 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   view(fileAttach: any) {
-    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let temp = environment.plugIn
     let url = temp + '/scan/?'
     let mode = 'view'
@@ -147,16 +146,18 @@ export class FileAttachSarabanComponent implements OnInit {
         window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
           + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
           + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
-        const timer = TimerObservable.create(4000, 2000)
+
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000)
         this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
-          if (t == 58) this._paramSarabanService.ScanSubscription.unsubscribe()
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
           else {
             this._pxService
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
                 if (res2.data == 'true') {
-                  this.editFileAttachView.emit()
                   this._paramSarabanService.ScanSubscription.unsubscribe()
+                  this.editFileAttachView.emit()
                 }
               })
           }

@@ -145,7 +145,7 @@ export class ParamSarabanComponent implements OnInit {
     return {
       label: structure.name + ' (' + structure.shortName + ')',
       icon: "fa-external-link-square",
-      leaf: true,
+      leaf: false,
       data: { id: structure.id, userType: 3, name: structure.name, profile: structure },
       parent: parentNode,
       children: child
