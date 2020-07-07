@@ -105,18 +105,19 @@ export class SendEcmsComponent implements OnInit {
       this.selectedStructure.splice(index, 1)
     }
   }
+  
   nodeSelect(item) {
     if (item.node.collapsedIcon != "fa-circle-thin") {
+      this.selectedStructure.pop()
       this.msgs = []
       this.msgs.push({
         severity: 'warn',
         summary: 'ไม่สามารถเลือกได้',
         detail: 'เลือกได้เฉพาะหน่วยงานภายในเท่านั้น'
       })
-    } else {
-      this.selectedStructure.push(item.node)
     }
   }
+
   search(data) {
     this._ecmsService
       .getECMSSearchStructure(data)

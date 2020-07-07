@@ -10,7 +10,7 @@
                     โครงสร้างหน่วยงานภายนอก
                 </template>
                 <div class="tree-BlockExternal">
-                    <p-tree [value]="structureTree" selectionMode="single" (onNodeSelect)="nodeSelect($event)" [metaKeySelection]="false" (onNodeExpand)="loadNode($event)">
+                    <p-tree [value]="structureTree" selectionMode="multiple" (onNodeSelect)="nodeSelect($event)" [metaKeySelection]="false" [(selection)]="selectedStructure" (onNodeExpand)="loadNode($event)">
                         <template let-node pTemplate="default">
                             <span>{{node.label}}</span>
                         </template>
