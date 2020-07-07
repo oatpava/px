@@ -27,7 +27,6 @@ import { DocumentFile } from '../../model/documentFile.model'
 import { DocumentFileService } from '../../service/documentFile.service'
 import { FolderService } from '../../service/folder.service'
 
-import { Subscription } from 'rxjs/Rx';
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 
 import { environment } from '../../../../environments/environment'
@@ -88,9 +87,6 @@ export class AddDocumentComponent implements OnInit {
   authEditDocFile: boolean
   authDelDocFile: boolean
   authDocfileSecrets: number
-
-  private tick: string;
-  private subscription: Subscription;
 
   wfDocTypeId: number = 0
   folderTypeExpireNumber: number
@@ -913,11 +909,12 @@ export class AddDocumentComponent implements OnInit {
     localStorage.setItem('activeX', 'uncomplete')
     window.open(url + "linkType=" + linkType + "&linkId=" + linkId + "&referenceId=" + referenceId + "&secrets=" + secrets + "&mode=" + mode, 'scan', "height=500,width=800")
     // -----------------------------
-    const timer = TimerObservable.create(3000, 10000);
-    this.subscription = timer.subscribe(t => {
-      this.tick = '' + t;
-      console.log(this.tick + '' + localStorage.getItem('activeX'))
-      if (localStorage.getItem('activeX') == 'complete') {
+    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+    const timer = TimerObservable.create(5000, 3000);
+    this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
+      if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+      else if (localStorage.getItem('activeX') == 'complete') {
+        this._paramSarabanService.ScanSubscription.unsubscribe()
         console.log('activeX ---- complete')
 
         this._pxService
@@ -953,10 +950,9 @@ export class AddDocumentComponent implements OnInit {
             console.log('--- updateAtt datafileAttach', datafileAttach)
             this.fileAttachs = datafileAttach
             this._loadingService.resolve('main')
-            this.subscription.unsubscribe();
           })
 
-        this.subscription.unsubscribe();
+          this._paramSarabanService.ScanSubscription.unsubscribe()
         localStorage.setItem('activeX', 'uncomplete')
 
       }
@@ -1026,19 +1022,18 @@ export class AddDocumentComponent implements OnInit {
 
         window.open(url + "mode=" + mode + "&fileAttachName=" + fileAttachName + "&secret=" + secret + "&documentId=" + documentId + "&urlNoName=" + urlNoName + "&fileAttachId=" + res.id, 'scan', "height=600,width=1000")
 
-        const timer = TimerObservable.create(4000, 2000)
-
-        this.subscription = timer.subscribe(t => {
-
-          if (t == 58) {
-            this.subscription.unsubscribe();
-          } else {
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        const timer = TimerObservable.create(5000, 3000);
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t =>  {
+          if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
+           else {
 
             this._pxService
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
 
                 if (res2.data == 'true') {
+                  this._paramSarabanService.ScanSubscription.unsubscribe()
                   this._pxService
                     .getFileAttachs('dms', this.documentId, 'asc')
                     .subscribe(response => {
@@ -1068,7 +1063,6 @@ export class AddDocumentComponent implements OnInit {
                       }
 
                       this.fileAttachs = datafileAttach
-                      this.subscription.unsubscribe();
                     })
                 }
               })

@@ -461,6 +461,9 @@ export class ReceiveEcmsComponent implements OnInit {
     dialogRef.componentInstance.linkId = ecms.id
     dialogRef.componentInstance.num = ecms.numFileAttach
     dialogRef.componentInstance.title = this.trimTitle(ecms.thegifSubject)
+    dialogRef.afterClosed().subscribe(result => {
+      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+    })
   }
 
   trimTitle(title: string): string {
