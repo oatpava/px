@@ -364,8 +364,16 @@ export class MainComponent implements OnInit {
     window.open('manual-setup.pdf')
   }
 
-  downloadUserManual() {
-    window.open('manual-user.pdf')
+  downloadSarabanManual() {
+    window.open('manual-saraban.pdf')
+  }
+
+  downloadDMSManual() {
+    window.open('manual-dms.pdf')
+  }
+
+  downloadECMSManual() {
+    window.open('manual-ecms.pdf')
   }
 
   checkAD() {

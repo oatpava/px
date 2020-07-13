@@ -49,9 +49,27 @@
                             <button flex="50" md-button color="primary" (click)="downloadSetupManual()">
                                 <md-icon>description</md-icon>คู่มือการติดตั้ง
                             </button>
-                            <button flex="50" md-button color="primary" (click)="downloadUserManual()">
+                            <button flex="50" md-button color="primary" [mdMenuTriggerFor]="userManual">
                                 <md-icon>description</md-icon>คู่มือการใช้งาน
                             </button>
+                            <md-menu #userManual="mdMenu">
+                                <td-menu>
+                                    <div layout="column" layout-align="center start">
+                                        <button md-button color="primary" style="width: 100%;text-align: left;" 
+                                            (click)="downloadSarabanManual()">
+                                            <md-icon>description</md-icon>คู่มือการใช้งานระบบสารบรรณฯ
+                                        </button>
+                                        <button md-button color="warn" style="width: 100%;text-align: left;"
+                                            (click)="downloadDMSManual()">
+                                            <md-icon>description</md-icon>คู่มือการใช้งานระบบจัดเก็บเอกสาร
+                                        </button>
+                                        <button md-button color="accent" style="width: 100%;text-align: left;"
+                                            (click)="downloadECMSManual()">
+                                            <md-icon>description</md-icon>คู่มือการใช้งาน ECMS
+                                        </button>
+                                </div>
+                                </td-menu>
+                            </md-menu>
                         </div>
                         <div *ngIf="!useAD" layout="row" layout-align="space-between start">
                             <button flex="50" md-button color="primary" (click)="openDialogChangePassword();">
