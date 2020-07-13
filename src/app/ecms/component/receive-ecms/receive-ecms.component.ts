@@ -18,6 +18,7 @@ import { DocumentService } from '../../../dms/service/document.service'
 import { WorkflowService } from '../../../mwp/service/workflow.service'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 import { PxService } from '../../../main/px.service'
+import { ECMS } from '../../mock/ECMS'
 
 @Component({
   selector: 'app-receive-ecms',
