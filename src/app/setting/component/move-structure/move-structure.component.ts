@@ -38,14 +38,14 @@ export class MoveStructureComponent implements OnInit {
 
   ngOnInit() {
     this.structure = new Structure()
-    this.structure.id = this.structure.id
+    this.structure.id = this.structureData.id
     this.structure.name = this.structureData.name
     this.structure.shortName = this.structureData.shortName
     this.structure.detail = this.structureData.detail
-    this.structure.code = this.structure.code
-    this.structure.nodeLevel = this.structure.nodeLevel
+    this.structure.code = this.structureData.code
+    this.structure.nodeLevel = this.structureData.nodeLevel
     this.structure.parentId = this.structureData.parentId
-    this.structure.parentKey = this.selectStructureData.parentKey
+    this.structure.parentKey = this.structureData.parentKey
   }
 
   selectStructure(event) {

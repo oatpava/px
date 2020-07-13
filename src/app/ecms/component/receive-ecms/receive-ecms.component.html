@@ -30,27 +30,32 @@
                         <button *ngIf="row.numFileAttach>0" md-icon-button title="{{row.numFileAttach}} รายการ" (click)="loadFileAttach(row)"><i class="material-icons">attach_file</i></button> 
                     </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก" [style]="{'width':'140px', 'vertical-align':'middle' , cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก" [style]="{'width':'140px', 'vertical-align':'middle' , cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[0].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[1].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifBookNo" header="เลขที่หนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifBookNo" header="เลขที่หนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[2].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifBookDate" header="วันที่" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifBookDate" header="วันที่" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[3].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifSubject" header="เรื่อง" [style]="{'width':'180px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSubject" header="เรื่อง" [style]="{'width':'180px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[4].data}} &nbsp; &nbsp;</span>
                       <!-- <div flex layout="row" class="push-top-sm" (click)="show(car)">
@@ -69,38 +74,45 @@
                   </template>
                 </p-column>
                 <!-- เพิ่มฟิล จาก หนังสือ) ถึง (หนังสือ) รายละเอียด -->
-                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle' , cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSenderDepartmentCode" header="จาก (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle' , cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                         <span flex layout="row" (click)="show(car)">{{car.td[10].data}} &nbsp; &nbsp;</span>
                     </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="ถึง (หนังสือ)" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                         <span flex layout="row" (click)="show(car)">{{car.td[11].data}} &nbsp; &nbsp;</span>
                     </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="รายละเอียด" [style]="{'width':'150px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifReceiverDepartmentCode" header="รายละเอียด" [style]="{'width':'150px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                         <span flex layout="row" (click)="show(car)">{{car.thegifDescription}} &nbsp; &nbsp;</span>
                     </template>
                 </p-column>
                 
-                <p-column [sortable]="true" field="thegifSecret" header="ลับ" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSecret" header="ลับ" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[5].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifSpeed" header="ด่วน" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSpeed" header="ด่วน" [style]="{'width':'70px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[6].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifSendDate" header="วันที่ส่ง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifSendDate" header="วันที่ส่ง" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[7].data}} &nbsp; &nbsp;</span>
                   </template>
                 </p-column>
-                <p-column [sortable]="true" field="thegifLetterStatus" header="สถานะหนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}">
+                <p-column [sortable]="true" field="thegifLetterStatus" header="สถานะหนังสือ" [style]="{'width':'100px', 'vertical-align':'middle', cursor: 'defult'}"
+                    [filter]="true" filterMatchMode="contains" filterPlaceholder="ค้นหา">
                     <template let-col let-car="rowData" let-ri="rowIndex" pTemplate="body">
                       <span flex layout="row" (click)="show(car)">{{car.td[8].data}} &nbsp; &nbsp;</span>
                   </template>
