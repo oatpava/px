@@ -43,7 +43,7 @@ export class HistoryLogService {
     console.log(dataSearch.type)
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=200&sort=createdDate&dir=desc'
+      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=0&sort=createdDate&dir=desc'
         + '&moduleName=' + dataSearch.moduleName + '&createdBy=' + dataSearch.createdBy + '&description=' + dataSearch.description
         + '&type=' + dataSearch.type + '&createdDateBegin=' + dataSearch.createdDateBegin + '&createdDateEnd=' + dataSearch.createdDateEnd))
       this._options.search = params
