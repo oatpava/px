@@ -171,6 +171,7 @@ export class SendSarabanContentComponent implements OnInit {
     this.getSarabanContent(this._paramSarabanService.sarabanContentId)
     this.prepareInitialDate()
     this.getProcesses()
+    this.prepareShowTo('งานสารบรรณ')
   }
 
   getSarabanContent(sarabanContentId: number): void {
