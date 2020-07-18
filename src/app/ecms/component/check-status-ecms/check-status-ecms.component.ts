@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable'
 import { SarabanEcmsService } from '../../service/saraban-ecms.service'
 import { DialogsShowThEGifComponent } from '../dialogs-show-th-e-gif/dialogs-show-th-e-gif.component'
 import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
+import { ECMS } from '../../mock/ECMS'
 
 @Component({
   selector: 'app-check-status-ecms',
