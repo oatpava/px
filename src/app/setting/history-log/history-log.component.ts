@@ -154,7 +154,7 @@ export class HistoryLogComponent implements OnInit {
     this._hisroyLogService
       .getHistoryList()
       .subscribe(response => {
-        console.log(response)
+        console.log('getHistoryList', response)
         this._loadingService.resolve('main')
         this.data = response.data
         this.reportData = response.listModule
@@ -171,12 +171,10 @@ export class HistoryLogComponent implements OnInit {
   }
 
   searchLog(data,additional: any) {
-    console.log(additional)
     data.type = ""
     for(let i=0;i<this.additional.length;i++){
       
       if(this.additional[i].checked){
-        console.log(this.additional[i].type)
         if(data.type == null || data.type == "" || data.type == "undefined"){
           data.type = this.additional[i].type 
         }else{
@@ -185,13 +183,11 @@ export class HistoryLogComponent implements OnInit {
       }
     }
 
-    // console.log(this.type)
-    console.log(data)
+    console.log('searchLog', data)
     this._loadingService.register('main')
     this._hisroyLogService
       .getSearchHistoryList(this._hisroyLogService.convertDateFormat(data))
       .subscribe(response => {
-        console.log(response)
         this._loadingService.resolve('main')
         this.data = response.data
         this.reportData = response.listModule
@@ -213,12 +209,8 @@ export class HistoryLogComponent implements OnInit {
     let dialogRef = this._dialog.open(ListHisttoryUserComponent, {
       width: '50%',
     });
-    let instance = dialogRef.componentInstance
-    // instance.structureId = this.parentStructure.structure.id
-    // instance.structureData = this.parentStructure
     dialogRef.afterClosed().subscribe(result => {
       if (result !== false) {
-        console.log(result)
         this.searchField.userName = result.fullName
         this.searchField.createdBy = result.id
       }
