@@ -112,9 +112,9 @@ export const SETTINGS: Setting[] = [
 
       // {
       //   childId: 6,
-      //   childName: 'ประเภทเอกสาร',
+      //   childName: 'ถังขยะ test',
       //   childIcon: 'list',
-      //   subSetting: 'list-document-type',
+      //   subSetting: 'recycleBin',
       // },
     ]
   }

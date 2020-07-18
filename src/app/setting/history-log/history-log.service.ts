@@ -40,7 +40,6 @@ export class HistoryLogService {
   }
 
   getSearchHistoryList(dataSearch): Observable<any> {
-    console.log(dataSearch.type)
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=0&sort=createdDate&dir=desc'
@@ -59,8 +58,6 @@ export class HistoryLogService {
 
   convertDateFormat(projectDate: any) {
     let newProjectDate = projectDate
-    console.log(projectDate.createdDateBegin)
-    console.log(projectDate.createdDateEnd)
     if (typeof projectDate.createdDateBegin !== 'undefined') {
       newProjectDate.createdDateBegin = projectDate.createdDateBegin.formatted
     } else {

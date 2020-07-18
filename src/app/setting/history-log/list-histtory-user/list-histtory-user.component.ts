@@ -27,7 +27,6 @@ export class ListHisttoryUserComponent implements OnInit {
   }
 
   selectMove(){
-    console.log(this.selectStructureData)
     this.dialogRef.close(this.selectStructureData)
   }
 
