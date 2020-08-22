@@ -94,17 +94,17 @@ export class ParamSarabanService {
   }
 
   getStringDate(date: Date): string {
-    return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + (date.getFullYear() + 543)
+    return date ? ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + (date.getFullYear() + 543) : ''
   }
 
   getStringDateTime(date: Date): string {
     let tzoffset = date.getTimezoneOffset() * 60000
-    return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + (date.getFullYear() + 543) +
-      " " + (new Date(Date.now() - tzoffset)).toISOString().slice(11, 19)
+    return date ? ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + (date.getFullYear() + 543) +
+      " " + (new Date(Date.now() - tzoffset)).toISOString().slice(11, 19) : ''
   }
 
   getStringDateAny(date: any): string {
-    return ("0" + '' + date.date.day).slice(-2) + "/" + ("0" + '' + date.date.month).slice(-2) + "/" + '' + date.date.year
+    return date ? ("0" + '' + date.date.day).slice(-2) + "/" + ("0" + '' + date.date.month).slice(-2) + "/" + '' + date.date.year : ''
   }
 
   genWaitngMsg(action: string): Message {
