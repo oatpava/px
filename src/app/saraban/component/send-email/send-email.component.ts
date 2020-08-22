@@ -561,7 +561,7 @@ export class SendEmailComponent implements OnInit {
   }
 
   select(event) {
-    this.selectedFileAttachSize += event.data. fileAttachSize
+    this.selectedFileAttachSize += event.data.fileAttachSize
     if (this.selectedFileAttachSize > this.emailAttachSize) {
       this.msgs = []
       this.msgs.push({
@@ -573,7 +573,7 @@ export class SendEmailComponent implements OnInit {
   }
 
   unSelect(event) {
-    this.selectedFileAttachSize -= event.data. fileAttachSize
+    this.selectedFileAttachSize -= event.data.fileAttachSize
   }
 
   selectAll(event) {

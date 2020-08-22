@@ -155,6 +155,7 @@ export class ListSarabanFolderComponent implements OnInit {
           }],
           { relativeTo: this._route })
       } else {
+        this._paramSarabanService.folder = selectFolder
         this._paramSarabanService.folderId = selectFolder.id
         this._paramSarabanService.folderName = selectFolder.wfFolderName
         this._paramSarabanService.folderParentName = selectFolder.wfFolderParentName

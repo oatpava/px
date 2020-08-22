@@ -338,7 +338,6 @@ export class AddCircularNoticeComponent implements OnInit {
   }
 
   scan() {
-    if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
     let linkId = this.circularNotice.wfDocumentId
     if (linkId != 0) {
       let temp = environment.plugIn
