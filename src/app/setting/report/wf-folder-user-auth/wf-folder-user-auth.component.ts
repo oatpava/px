@@ -131,7 +131,7 @@ export class WfFolderUserAuthComponent implements OnInit {
             "data": folder.id,
             "expandedIcon": this.iconDms,
             "collapsedIcon": this.iconDms,
-            "leaf": true,
+            "leaf": false,
             "selectable": true,
             "dataObj": folder
           })
