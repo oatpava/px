@@ -20,14 +20,18 @@
                         <div layout="row" layout-align="left start" class="blockSearch">
                             <md-input-container style="width: 100%;">
                                 <!-- (ngModelChange)="searchUserProfiles()" -->
-                                <input md-input type="text" flex placeholder="ค้นหารหัสผู้ใช้งาน" name="search" [(ngModel)]="userName" (keydown)="searchUserProfiles($event)">
+                                <input md-input type="text" flex placeholder="รหัสผู้ใช้งาน" name="search" [(ngModel)]="userName">
                             </md-input-container>
+                            <button *ngIf="showButton1" md-icon-button title="ค้นหา" (click)="searchUserProfiles(true)" [disabled]="userName.length==0"><i class="material-icons">search</i></button>
+                            <button *ngIf="!showButton1" md-icon-button title="ยกเลิกการค้นหา" (click)="cancelSearch()"><i class="material-icons">refresh</i></button>
                         </div>
                         <div layout="row" layout-align="left start" class="blockSearch">
                             <md-input-container style="width: 100%;">
                                 <!-- (ngModelChange)="searchUserProfiles()" -->
-                                <input md-input type="text" flex placeholder="ค้นหาชื่อผู้ใช้งาน" name="search" [(ngModel)]="userProfileName" (keydown)="searchUserProfiles($event)">
+                                <input md-input type="text" flex placeholder="ค้นหาชื่อผู้ใช้งาน" name="search" [(ngModel)]="userProfileName">
                             </md-input-container>
+                            <button *ngIf="showButton2" md-icon-button title="ค้นหา" (click)="searchUserProfiles(false)" [disabled]="userProfileName.length==0"><i class="material-icons">search</i></button>
+                            <button *ngIf="!showButton2" md-icon-button title="ยกเลิกการค้นหา" (click)="cancelSearch()"><i class="material-icons">refresh</i></button>
                         </div>
                         <md-card *ngIf="showSearchResult" style="margin-left: 0px; margin-right: 0px;">
                             <md-card-content>
