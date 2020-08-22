@@ -20,80 +20,30 @@
             <form #form="ngForm" layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
                 <div layout="column" layout-align="left start" style="width: 100%; margin-bottom: 10px; ">
 
-                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ จาก*" locale="th" name="wfContentBookDate" [(ngModel)]="searchField.createdDateBegin" required>
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" placeholder="วันที่จาก" locale="th" name="dateBegin" [(ngModel)]="searchField.dateBegin">
                     </my-date-picker>
-                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่ ถึง*" locale="th" name="wfContentBookTo" [(ngModel)]="searchField.createdDateEnd" required>
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" placeholder="วันที่ถึง" locale="th" name="dateEnd" [(ngModel)]="searchField.dateEnd">
                     </my-date-picker>
                     <md-select style="width: 100%; padding-top: 10px; padding-bottom: 10px;" placeholder="Module" [(ngModel)]="searchField.moduleName" name="Module">
-                        <md-option *ngFor="let lkd of modules" [value]="lkd.code">
-                            {{lkd.name}}
+                        <md-option *ngFor="let module of modules" [value]="module.code">
+                            {{module.name}}
                         </md-option>
                     </md-select>
-                    <!-- <md-list>
-                        ประเภทงาน -->
-                    <!-- <div *ngFor="let item in additional"> -->
-                    <!-- <md-list-item> -->
                     <form class="additional" layout-align="center">
                         <div layout="row">ประเภทงาน</div>
-                        <div layout="row">
-                            <md-checkbox name="type1" [(ngModel)]="additional[1].checked">สร้าง</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type2" [(ngModel)]="additional[2].checked">แก้ไข</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type3" [(ngModel)]="additional[3].checked">ลบ</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type4" [(ngModel)]="additional[4].checked">เข้าใช้งานระบบ</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type5" [(ngModel)]="additional[5].checked">กู้คืน</md-checkbox>
-                        </div>
-                        <!-- <div layout="row">
-                            <md-checkbox name="type6" [(ngModel)]="additional[6].checked">พิมพ์</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type7" [(ngModel)]="additional[7].checked">คัดลอก</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type8" [(ngModel)]="additional[8].checked">นำออก</md-checkbox>
-                        </div>
-                        <div layout="row">
-                            <md-checkbox name="type9" [(ngModel)]="additional[9].checked">เปิดใช้</md-checkbox>
-                        </div> -->
-                        <div layout="row">
-                            <md-checkbox name="type10" [(ngModel)]="additional[10].checked">ออกจากระบบ</md-checkbox>
+                        <div layout="row" *ngFor="let logType of logTypes">
+                            <md-checkbox [name]="logType.name" [(ngModel)]="logType.checked">{{logType.label}}</md-checkbox>
                         </div>
                     </form>
-                    <!-- <md-checkbox color="primary" name="type" [(ngModel)]="item[i].checked" style="font-size:14px;height:32px;">
-                                {{ item.label }}
-                            </md-checkbox> -->
-                    <!-- </div> -->
-                    <!-- </md-list-item>
-                    </md-list> -->
-                    <!-- <md-checkbox color="primary" name="budgetYear" [checked]="budgetYear" [(ngModel)]="budgetYear" style="font-size:14px;height:32px;">
-                        เลขทะเบียนนับตามปีงบประมาณ
-                    </md-checkbox>   -->
-                    <!-- <md-input flex placeholder="รายละเอียด" name="description" [(ngModel)]="searchField.description">
-                    </md-input> -->
                     <md-input-container class="setWidth">
-                        <span style="cursor: pointer;" (click)="getUser()" md-prefix>
+                        <span style="cursor: pointer;" (click)="openDialogUser()" md-prefix>
                             <md-icon>supervisor_account</md-icon>
                         </span>
                         <input md-input type="text" placeholder="บุคลากร" name="userName" disabled [(ngModel)]="searchField.userName">
                         <span style="cursor: pointer;" (click)="clearUser()" md-suffix>
                             <md-icon>close</md-icon>
                         </span>
-                        <!-- <button mat-button mdSuffix md-icon-button aria-label="Clear" (click)="clearUser()">
-                            <md-icon>close</md-icon>
-                        </button> -->
                     </md-input-container>
-                    <!-- <md-input flex placeholder="บุคลากร" name="detail" [(ngModel)]="searchField.detail">
-                    </md-input> -->
-                    <div *ngIf="!form.valid">
-                        <span style="color: red;"><b>***กรุณาระบุวันที่</b></span>
-                    </div>
                 </div>
             </form>
         </md-sidenav>
@@ -103,25 +53,47 @@
                     <md-list>
                         <md-card style="margin-left: 0px; margin-right: 0px;">
                             <md-card-content>
-                                <table td-data-table class="fixed-size">
-                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
-                                        {{column.label}}
-                                    </th>
-                                    <tr td-data-table-row *ngFor="let row of data" (click)="select(row)">
-                                        <td td-data-table-cell *ngFor="let column of columns">
-                                            <label class="hover" *ngIf="column.name!=='edit'">{{row[column.name]}}</label>
-                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
-                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                <p-dataTable #dt [value]="datas" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" [resizableColumns]="false"[responsive]="true" styleClass="fixed-size">
+                                    <p-header>
+                                        <div layout="row" layout-align="space-between start">
+                                            <div></div>
+                                            <div>
+                                                <span>รายการประวัติการใช้งาน</span>
                                             </div>
-                                        </td>
-                                        <!--<td td-data-table-cell *ngFor="let column of columns" (click)="edit(row)">
-                                            <label class="hover" *ngIf="column.name!=='edit'">{{row[column.name]}}</label>
-                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
-                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                            <div>
+                                                <button (click)="resetDataTable()"><i class="fa fa-refresh"></i></button>
                                             </div>
-                                        </td>-->
-                                    </tr>
-                                </table>
+                                        </div>
+                                    </p-header>
+                                    <p-footer>
+                                        <loadMore [listReturn]="listReturn" (load)=loadMoreContents()></loadMore>
+                                    </p-footer>
+                                    <p-column field="moduleName" header="Modules" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'120px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.moduleName}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="userProfileName" header="ผู้ใช้งาน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'350px', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.userProfileName}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="createdDate" header="วันและเวลา" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'180px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.createdDate}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="ipAddress" header="IP Address" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'120px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.ipAddress}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="description" header="รายละเอียด" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.description}}</span>
+                                        </template>
+                                    </p-column>
+                                </p-dataTable>
                             </md-card-content>
                         </md-card>
                     </md-list>
@@ -130,13 +102,6 @@
         </div>
     </md-sidenav-layout>
 </div>
-
-
-<!-- <div [tdToggle]="!ModeSearch" layout="column" id="fixedbutton">
-    <button md-fab title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
-        <md-icon>search</md-icon>
-    </button>
-</div> -->
 
 <div layout="column" [tdToggle]="!ModeSearch" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
     <div [tdToggle]="hoverMenuEdit">
