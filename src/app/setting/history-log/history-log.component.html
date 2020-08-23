@@ -117,8 +117,13 @@
             </button>
         </div>
         <div class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab [style.background]="'#cc7a00'" title="รายงาน PDF" color="accent" (click)="reportpdf();">
+            <button md-fab [style.background]="'#cc7a00'" title="รายงาน PDF" color="accent" (click)="reportpdf('pdf');">
                 <md-icon>assignment</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#cc7a00'" title="รายงาน Excel" color="accent" (click)="reportpdf('xls');">
+                <md-icon>grid_on</md-icon>
             </button>
         </div>
     </div>

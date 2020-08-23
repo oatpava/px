@@ -130,7 +130,6 @@ export class HistoryLogComponent implements OnInit {
         searchField.type = this.logTypes[i].type
       }
     }
-    console.log('xxx', this.searchField)
     searchField.createdDateBegin = this.getStringDate(searchField.dateBegin)
     searchField.createdDateEnd = this.getStringDate(searchField.dateEnd)
     return searchField
@@ -185,7 +184,7 @@ export class HistoryLogComponent implements OnInit {
     })
   }
 
-  reportpdf() {
+  reportpdf(reportType: string) {
     let data = this.datas
     this._loadingService.register('main')
     this._hisroyLogService
@@ -195,7 +194,7 @@ export class HistoryLogComponent implements OnInit {
         let params = new URLSearchParams()
         params.set("jobType", 'log_Report')
         params.set("createdBy", '' + this._paramSarabanService.userId)
-        this._pxService.report('log_Report', 'pdf', params)
+        this._pxService.report('log_Report', reportType, params)
       })
   }
 

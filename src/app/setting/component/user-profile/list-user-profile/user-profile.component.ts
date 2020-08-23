@@ -679,7 +679,7 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  genReport() {
+  genReport(reportType: string) {
     console.log(this.parentStructure)
     let data = this.parentStructure.parentKey
     this._loadingService.register('main')
@@ -691,7 +691,7 @@ export class UserProfileComponent implements OnInit {
         let params = new URLSearchParams()
         params.set("jobType", 'user_status')
         params.set("createdBy", '1')
-        this._pxService.report('user_status', 'pdf', params)
+        this._pxService.report('user_status', reportType, params)
       });
   }
 
