@@ -7,8 +7,8 @@
             <template let-item let-last="last" ngFor [ngForOf]="shortCutSaraban">
                 <md-list-item class="hover" (click)="selectShortcutFolder(item)">
                     <md-icon md-list-avatar
-                        [ngStyle]="{'background': (item.wfContentType.id==1) ? '#008000' : (item.wfContentType.id==2) ? '#e65c00' : '#e60000',
-                                'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900'}">book
+                        [ngStyle]="{'background': (item.wfContentType.id==1) ? '#008000' : (item.wfContentType.id==2) ? '#e65c00' : (item.wfContentType.id==4) ? 'black' : '#e60000',
+                                'color': (item.wfContentType.id==4) ? 'white' : (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900'}">book
                     </md-icon>
                     <h3 md-line> {{item.wfFolderName}} </h3>
                     <h4 md-line> {{item.wfFolderParentName}} </h4>
