@@ -1019,7 +1019,7 @@ export class AddSarabanContentComponent implements OnInit {
     this.getCanceledReserveNo(registedFolder.id)
     this.title = "ลงทะเบียน [" + this.trimTitle(registedFolder.wfFolderName) + "]"
     this.workflowFolderName = registedFolder.wfFolderName
-    this.diableEditBookNo = (registedFolder.wfContentType.id == 1) ? false : true
+    this.diableEditBookNo = (registedFolder.wfContentType.id == 1 || registedFolder.wfContentType.id == 2) ? false : true
 
     this.sarabanContent_tmp = sarabanContent
     this.sarabanContent = new SarabanContent()
