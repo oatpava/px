@@ -47,7 +47,7 @@ export class RegisterSarabanContentComponent implements OnInit {
         if (this.isRegister) {//register
           this.shortCutSaraban = (!this.fromMWP) ?
             response.filter(folder => folder.wfContentType2.id != 5) :
-            response.filter(folder => folder.wfContentType.id == 1 && folder.wfContentType2.id != 5)
+            response.filter(folder => (folder.wfContentType.id == 1 && folder.wfContentType2.id != 5) || folder.wfContentType.id == 4)
         } else {//move
           this.shortCutSaraban = response.filter(folder =>
             folder.wfContentType.id == 1 &&
