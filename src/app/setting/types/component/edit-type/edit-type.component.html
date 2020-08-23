@@ -38,7 +38,7 @@
                                         <input md-input type="text" placeholder='{{typeTitle}}' name="title" [(ngModel)]="workFlowType.workflowTypeTitle" required>
                                     </md-input-container>
                                 </div>
-                                <div layout="row" layout-align="left start" style="width: 100%;">
+                                <!-- <div layout="row" layout-align="left start" style="width: 100%;">
                                     <md-radio-group style="padding-top:14px;" [(ngModel)]="workFlowType.workflowTypeAction" name="workflowTypeAction">ใช้ในการคำนวณการดำเนินงาน
                                         <md-list-item>
                                             <md-radio-button value="1" [checked]="1 === workFlowType.workflowTypeAction || !workFlowType.workflowTypeAction" style="font-size:14px; padding-left:14px; padding-top:8px;">ไม่ใช้</md-radio-button>
@@ -47,7 +47,7 @@
                                             <md-radio-button value="2" [checked]="2 === workFlowType.workflowTypeAction" style="font-size:14px; padding-left:14px;">ใช้</md-radio-button>
                                         </md-list-item>
                                     </md-radio-group>
-                                </div>
+                                </div> -->
                             </form>
                             <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
                                 <button *ngIf="mode==='Add'" md-raised-button [ngClass]="{'md-primary': addFolderForm.form.valid}" [disabled]="!addFolderForm.form.valid" [style.margin-right]="'5px'" color="primary" (click)="createType(workFlowType)">บันทึก</button>
