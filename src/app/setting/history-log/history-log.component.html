@@ -78,9 +78,14 @@
                                             <span>{{row.userProfileName}}</span>
                                         </template>
                                     </p-column>
-                                    <p-column field="createdDate" header="วันและเวลา" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'180px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                    <p-column field="createdDate" header="วันที่" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'100px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
                                         <template pTemplate="body" let-row="rowData">   
-                                            <span>{{row.createdDate}}</span>
+                                            <span>{{row.createdDate.substr(0,10)}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="createdDate" header="เวลา" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'70px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.createdDate.substr(11,5)}}</span>
                                         </template>
                                     </p-column>
                                     <p-column field="ipAddress" header="IP Address" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'120px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
