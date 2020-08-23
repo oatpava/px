@@ -17,13 +17,31 @@
             <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
                 <div flex-gt-md="70">
                     <md-list>
-                        <!-- <div layout="row" layout-align="left start" class="blockSearch">
-              <md-input-container style="width: 100%;">
-                <input md-input type="text" flex placeholder="ค้นหาชื่อผู้ใช้งาน" name="search" [(ngModel)]="userProfileName" (ngModelChange)="searchUserProfiles()">
-              </md-input-container>
-            </div> -->
-
-                        <md-card style="margin-left: 0px; margin-right: 0px;">
+                        <div layout="row" layout-align="left start" class="blockSearch">
+                            <md-input-container style="width: 100%;">
+                                <input md-input type="text" flex placeholder="ชื่อหน่วยงานภายนอก" name="search" [(ngModel)]="organizeName">
+                            </md-input-container>
+                            <button *ngIf="!showSearchResult" md-icon-button title="ค้นหา" (click)="searchOrganize()" [disabled]="organizeName.length==0"><i class="material-icons">search</i></button>
+                            <button *ngIf="showSearchResult" md-icon-button title="ยกเลิกการค้นหา" (click)="showSearchResult='false';"><i class="material-icons">refresh</i></button>
+                        </div>
+                        <md-card *ngIf="showSearchResult" style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <table td-data-table>
+                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
+                                        {{column.label}}
+                                    </th>
+                                    <tr td-data-table-row *ngFor="let row of datas">
+                                        <td td-data-table-cell *ngFor="let column of columns" [numeric]="column.numeric" (click)="edit(row)">
+                                            <label class="hover" *ngIf="column.name!=='Edit'">{{row[column.name]}}</label>
+                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
+                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </md-card-content>
+                        </md-card>
+                        <md-card *ngIf="!showSearchResult" style="margin-left: 0px; margin-right: 0px;">
                             <md-card-content>
                                 <app-organize-external [selectDepartment]="true" [structureTree]="structureTree" (onselectData)="selectStructure($event)"></app-organize-external>
                             </md-card-content>

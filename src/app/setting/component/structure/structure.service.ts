@@ -369,4 +369,17 @@ export class StructureService {
       .catch(this._loggerService.handleError)
   }
 
+  listAllByName(name: string) {
+    this._loadingService.register('loading')
+    let params = new URLSearchParams()
+    params.set('q', this._pxService.encrypt('name=' + name))
+    this._options.search = params
+    return this._http.get(this._apiUrl + '/v1/organizes/listAllByName/', this._options)
+      .map((response: Response) => {
+        this._loadingService.resolve('loading')
+        return response.json().data
+      })
+      .catch(this._loggerService.handleError)
+  }
+
 }

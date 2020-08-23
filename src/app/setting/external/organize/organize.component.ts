@@ -23,6 +23,12 @@ export class OrganizeComponent implements OnInit {
   datas: any[] = []
   msgs: Message[] = []
   structureTree = []
+  columns: ITdDataTableColumn[] = [
+    { name: 'name', label: 'ชื่อหน่วยงาน' },
+    { name: 'shortName', label: 'ชื่อย่อหน่วยงาน' },
+    { name: 'detail', label: 'รายละเอียด' },
+    { name: 'edit', label: '' }
+  ]
   showMenu: boolean = false
   showEditStructure: boolean = false
   showEditUser: boolean = false
@@ -31,6 +37,7 @@ export class OrganizeComponent implements OnInit {
   showSearchResult: boolean = false
   showMergeStructure: boolean = false
   showMergeUser: boolean = false
+  organizeName: string = ''
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -193,6 +200,40 @@ export class OrganizeComponent implements OnInit {
           });
       }
     });
+  }
+
+  searchOrganize() {
+    this.datas = []
+
+    this._loadingService.register('main')
+    this._structureService
+      .listAllByName(this.organizeName)
+      .subscribe((response: any[]) => {
+        this._loadingService.resolve('main')
+        this.showSearchResult = true
+        response.forEach(organize => {
+          if (organize.shortName == null) organize.shortName = ''
+          if (organize.detail == null) organize.detail = ''
+          this.datas.push(organize)
+        })
+      })
+  }
+
+  edit(row: any) {
+    let param = {
+      mode: 'edit',
+      modeTitle: 'แก้ไข',
+      parentId: row.id,
+      t: new Date().getTime()
+    }
+
+    this._router.navigate(
+      ['/main', {
+        outlets: {
+          center: ['add-outing', param],
+        }
+      }],
+      { relativeTo: this._route })
   }
 
 }

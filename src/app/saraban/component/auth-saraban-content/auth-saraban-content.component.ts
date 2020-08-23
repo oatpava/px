@@ -6,7 +6,6 @@ import { Message } from 'primeng/primeng'
 import { SarabanService } from '../../service/saraban.service'
 import { AuthTemplateService } from '../../../setting/auth-template/auth-template.service'
 import { SarabanAuth } from '../../model/sarabanAuth.model'
-import { convertUserPorfile } from '../../../shared'
 
 @Component({
   selector: 'app-auth-saraban-content',

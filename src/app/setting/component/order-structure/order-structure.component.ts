@@ -64,7 +64,6 @@ export class OrderStructureComponent implements OnInit {
     this._structureService
     .getOutStructures('1.0', '0', '200', 'orderNo', 'asc', this.structureId)
       .subscribe(response => {
-        console.log('xxxxx', response)
         this.dataList = response
       })  
   }
