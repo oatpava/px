@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { TdLoadingService } from '@covalent/core'
 import { Location } from '@angular/common'
@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable'
 import { IMyOptions, IMyDateModel } from 'mydatepicker'
 import { PxService, } from '../../../../main/px.service'
 import { FileUploader } from 'ng2-file-upload'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
+import { TreeModule, TreeNode, Message, AutoComplete } from 'primeng/primeng'
 
 import { UserService } from '../../../service/user.service'
 import { UserProfileService } from '../../../service/user-profile.service'
@@ -83,6 +83,8 @@ export class AddUserProfileComponent implements OnInit {
   selectedStructure: TreeNode = null
   showUserProfileList: boolean = true
   title = ''
+  @ViewChild('acPosition') acPosition: AutoComplete
+  filteredPosition: Position[] = []
 
   constructor(
     private _route: ActivatedRoute,
@@ -181,6 +183,10 @@ export class AddUserProfileComponent implements OnInit {
         //   this.getUserProfilesByUserId(this.userId)
         // }
         // this.getUserProfilesByUserId(this.userId)
+        console.log('upf', this.userProfile)
+        // if (this.userProfile.id != 0) {
+        //   this.selectedPosition = response.find(position => position.id == this.userProfile.position.id)
+        // }
       })
   }
 
@@ -472,4 +478,23 @@ export class AddUserProfileComponent implements OnInit {
     }
     return null
   }
+
+  positionFilter(event) {
+    this.filteredPosition = []
+    this.filteredPosition = this.positions.filter(position => {
+      return event.query ? position.name.toLowerCase().indexOf(event.query.toLowerCase()) > -1 : false
+    })
+  }
+
+  handleDropdown(event) {
+    this.filteredPosition = this.positions
+    event.originalEvent.preventDefault();
+    event.originalEvent.stopPropagation();
+    if (this.acPosition.panelVisible) {
+      this.acPosition.hide();
+    } else {
+      this.acPosition.show();
+    }
+  }
+
 }
