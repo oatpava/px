@@ -76,10 +76,10 @@ export class WfFolderUserAuthComponent implements OnInit {
 
   getFolders() {
     this._sarabanService
-    .getSarabanFoldersWithAuth(0) // with  auth
+    .getSarabanFoldersWithAuth(0, 200, 0) // with  auth
     .subscribe(response => {
       let structures = []
-      for (let folder of response) {
+      for (let folder of response.data) {
         console.log(folder)
         if (folder.wfFolderType == 'T') {
           this.iconDms = 'fa-th-large'
@@ -110,10 +110,10 @@ export class WfFolderUserAuthComponent implements OnInit {
     if (event.node) {
       Observable.forkJoin(
         this._sarabanService
-          .getSarabanFoldersWithAuth(event.node.data)
+          .getSarabanFoldersWithAuth(0, 200, event.node.data)
       ).subscribe((response: Array<any>) => {
         let structures = []
-        for (let folder of response[0]) {
+        for (let folder of response[0].data) {
           // console.log(folder)
           if (folder.wfFolderType == 'T') {
             this.iconDms = 'fa-tasks'
@@ -208,9 +208,9 @@ export class WfFolderUserAuthComponent implements OnInit {
       if (event.node.expandedIcon === 'fa-folder') {
         //  this.dialogRef.close(event.node.dataObj); 
         this._sarabanService
-          .getSarabanFoldersWithAuth(event.node.data)
-          .subscribe((response: Array<any>) => {
-            console.log(response.length)
+          .getSarabanFoldersWithAuth(0, 200, event.node.data)
+          .subscribe(response => {
+            console.log(response.data.length)
             this.loadNode(event)
           })
       }

@@ -17,6 +17,7 @@ import { SarabanAuth } from '../../model/sarabanAuth.model'
 import { DialogWarningComponent } from '../../../saraban/component/add-saraban-content/dialog-warning/dialog-warning.component'
 import { ReportSarabanComponent } from '../report-saraban/report-saraban.component'
 import { DialogMoveFolderComponent } from './dialog-move-folder/dialog-move-folder.component'
+import { ListReturn } from '../../../main/model/listReturn.model'
 
 @Component({
   selector: 'app-list-saraban-folder',
@@ -53,6 +54,8 @@ export class ListSarabanFolderComponent implements OnInit {
     showSelectorArrow: false,
     componentDisabled: false
   }
+  listReturn: ListReturn = new ListReturn()
+  limit: number = 20
 
   constructor(private _route: ActivatedRoute,
     private _router: Router,
@@ -63,6 +66,9 @@ export class ListSarabanFolderComponent implements OnInit {
     private _paramSarabanService: ParamSarabanService
   ) {
     this.isArchive = this._paramSarabanService.isArchive
+    if (this._paramSarabanService.userId != 1) {
+      this.limit = 200
+    }
   }
 
   ngOnInit() {
@@ -112,12 +118,22 @@ export class ListSarabanFolderComponent implements OnInit {
   getSarabanFoldersWithAuth(parentId: number): void {
     this._loadingService.register('main')
     this._sarabanService
-      .getSarabanFoldersWithAuth(parentId)
+      .getSarabanFoldersWithAuth(0, this.limit, parentId)
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.sarabanFolder = response
+        this.sarabanFolder = response.data  
+        this.listReturn = response.listReturn  
+      })
+  }
 
-        
+  loadSarabanFoldersWithAuth(): void {
+    this._loadingService.register('main')
+    this._sarabanService
+      .getSarabanFoldersWithAuth(this.listReturn.count, this.limit, this.parentId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.sarabanFolder = this.sarabanFolder.concat(response.data)
+        this.listReturn = response.listReturn  
       })
   }
 
