@@ -113,7 +113,7 @@ export class InboxService {
   search(filters: InboxFilter): Observable<Inbox[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&sort=orderNo&dir=asc'))
+      params.set('q', this.pxService.encrypt('version=1.0&sort=orderNo&dir=desc'))
       this._options.search = params
       return this._http.post(this._apiUrl + '/search', filters, this._options)
         .map((response: Response) => {

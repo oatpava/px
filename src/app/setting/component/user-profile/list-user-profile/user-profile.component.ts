@@ -66,6 +66,9 @@ export class UserProfileComponent implements OnInit {
   userName: string = ''
   userProfileName: string = ''
   //userProfile: UserProfile
+  showButton1: boolean = true
+  showButton2: boolean = true
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -152,38 +155,39 @@ export class UserProfileComponent implements OnInit {
       { relativeTo: this._route })
   }
 
-  searchUserProfiles(event) {
-    if (event.key === "Enter") {
-      this.datas = []
-      if (this.userProfileName.length === 0 && this.userName.length === 0) {
-        // this.showSearchNotResult = false
-        this.showSearchResult = false
-      }
-      if (this.userProfileName.length > 3 || this.userName.length > 3) {
-        console.log('start search userProfileName....', this.userProfileName)
-        console.log('start search userName....', this.userName)
+  searchUserProfiles(isButton1: boolean) {
+    this.datas = []
+    this.showButton1 = !isButton1
+    this.showButton2 = isButton1
+    isButton1 ? this.userProfileName = '' : this.userName = ''
+
+    this._loadingService.register('main')
+    this._userProfileService
+      .searchUserProfilesByFullName('1.1', '0', '20', '', '', this.userProfileName, this.userName)
+      .subscribe((response: any[]) => {
+        this._loadingService.resolve('main')
         this.showSearchResult = true
-        this._userProfileService
-          .searchUserProfilesByFullName('1.1', '0', '20', '', '', this.userProfileName, this.userName)
-          .subscribe((response: any[]) => {
-            console.log('searchUserProfilesByFullName : ', response)
-            for (let data of response) {
-              let userProfile: UserProfile = data as UserProfile
-              if ('' + userProfile !== 'null') {
-                let tempListU = {
-                  userId: userProfile.user.id,
-                  structureId: userProfile.structure.id,
-                  fullName: userProfile.fullName,
-                  structureName: userProfile.structure ? userProfile.structure.name : "",
-                  positionName: userProfile.position ? userProfile.position.name : "",
-                  tel: userProfile.tel ? userProfile.tel : "",
-                }
-                this.datas.push(tempListU)
-              }
+        for (let data of response) {
+          let userProfile: UserProfile = data as UserProfile
+          if ('' + userProfile !== 'null') {
+            let tempListU = {
+              userId: userProfile.user.id,
+              structureId: userProfile.structure.id,
+              fullName: userProfile.fullName,
+              structureName: userProfile.structure ? userProfile.structure.name : "",
+              positionName: userProfile.position ? userProfile.position.name : "",
+              tel: userProfile.tel ? userProfile.tel : "",
             }
-          })
-      }
-    }
+            this.datas.push(tempListU)
+          }
+        }
+      })
+  }
+
+  cancelSearch() {
+    this.showSearchResult = false
+    this.showButton1 = true
+    this.showButton2 = true
   }
 
   getUsers = () => {
@@ -559,13 +563,13 @@ export class UserProfileComponent implements OnInit {
     let instance = dialogRef.componentInstance
     instance.userProfileId = this.parentStructure.id
     instance.structureId = this.parentStructure.structure.id
-    instance.status = this.parentStructure.userStatus    
+    instance.status = this.parentStructure.userStatus
     // instance.status = this.parentStructure.user.status
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result != 'undefined') {
         console.log(result)
         // this.userProfile = this.parentStructure
-        delete this.parentStructure["type"] 
+        delete this.parentStructure["type"]
         this.parentStructure.userStatus = result
         this.parentStructure.user.status = result
         this._loadingService.register('main')
@@ -577,8 +581,8 @@ export class UserProfileComponent implements OnInit {
           .subscribe(response => {
             this._userProfileService
               .updateUserProfile(this.parentStructure)
-              .subscribe(response => { 
-                console.log('updateUserProfile ',response)
+              .subscribe(response => {
+                console.log('updateUserProfile ', response)
               })
             this.structureTree = []
             this._structureService
@@ -675,7 +679,7 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  genReport() {
+  genReport(reportType: string) {
     console.log(this.parentStructure)
     let data = this.parentStructure.parentKey
     this._loadingService.register('main')
@@ -687,7 +691,7 @@ export class UserProfileComponent implements OnInit {
         let params = new URLSearchParams()
         params.set("jobType", 'user_status')
         params.set("createdBy", '1')
-        this._pxService.report('user_status', 'pdf', params)
+        this._pxService.report('user_status', reportType, params)
       });
   }
 

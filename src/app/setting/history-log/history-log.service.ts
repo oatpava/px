@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../../environments/environment'
 import { Observable } from 'rxjs/Observable'
-import { Observer } from 'rxjs/Observer'
 import 'rxjs/add/operator/map'
 import { PxService } from '../../main/px.service'
 import { LoggerService } from '../../main/logger.service'
@@ -24,10 +23,10 @@ export class HistoryLogService {
     this._options = new RequestOptions({ headers: this._headers })
   }
 
-  getHistoryList(): Observable<any> {
+  getHistoryList(offset: number, limit: number): Observable<any> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=100&sort=createdDate&dir=desc'))
+      params.set('q', this.pxService.encrypt('version=1.0&offset=' + offset + '&limit=' + limit + '&sort=createdDate&dir=desc'))
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/logDatas/search', this._options)
         .map((response: Response) => {
@@ -39,10 +38,10 @@ export class HistoryLogService {
     }
   }
 
-  getSearchHistoryList(dataSearch): Observable<any> {
+  getSearchHistoryList(offset: number, limit: number, dataSearch: any): Observable<any> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=0&sort=createdDate&dir=desc'
+      params.set('q', this.pxService.encrypt('version=1.0&offset=' + offset + '&limit=' + limit + '&sort=createdDate&dir=desc'
         + '&moduleName=' + dataSearch.moduleName + '&createdBy=' + dataSearch.createdBy + '&description=' + dataSearch.description
         + '&type=' + dataSearch.type + '&createdDateBegin=' + dataSearch.createdDateBegin + '&createdDateEnd=' + dataSearch.createdDateEnd))
       this._options.search = params

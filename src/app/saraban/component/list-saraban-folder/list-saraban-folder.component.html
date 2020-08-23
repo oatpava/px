@@ -65,6 +65,9 @@
                         </template>
 
                     </md-list>
+                    <div style="text-align: center;padding-top: 10px;padding-bottom: 10px;">
+                        <loadMore [listReturn]="listReturn" (load)=loadSarabanFoldersWithAuth()></loadMore>
+                    </div>
                 </div>
             </div>
         </div>

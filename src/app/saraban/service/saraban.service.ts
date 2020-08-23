@@ -9,6 +9,7 @@ import { Menu } from '../model/menu.model'
 import { MENUS } from '../model/MENUS'
 import { SarabanFolder } from '../model/sarabanFolder.model'
 import { SarabanAuth } from '../model/sarabanAuth.model'
+import { ListReturn } from '../../main/model/listReturn.model'
 
 @Injectable()
 export class SarabanService {
@@ -36,12 +37,15 @@ export class SarabanService {
     }
   }
 
-  getSarabanFoldersWithAuth(parentId: number): Observable<SarabanFolder[]> {
+  getSarabanFoldersWithAuth(offset: number, limit: number, parentId: number): Observable<{data: SarabanFolder[], listReturn: ListReturn}> {
     //this._apiUrl = environment.apiServerHome + environment.apiNameHome + '/v1/wfFolders'
     if (environment.production) {
+      let params = new URLSearchParams()
+      params.set('q', this.pxService.encrypt('offset=' + offset + '&limit=' + limit))
+      this._options.search = params
       return this._http.get(this._apiUrl + '/listByParentIdAuth/' + parentId, this._options)
         .map((response: Response) => {
-          return this.pxService.verifyResponseArray(response.json().data)
+          return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
     } else {
