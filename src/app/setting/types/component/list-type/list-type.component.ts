@@ -30,7 +30,7 @@ export class ListTypeComponent implements OnInit {
 
   columns: ITdDataTableColumn[] = [
     { name: 'title', label: 'ชื่อประเภทการส่ง' },
-    { name: 'actionType', label: 'ใช้ในการคำนวณการดำเนินงาน' },
+    // { name: 'actionType', label: 'ใช้ในการคำนวณการดำเนินงาน' },
   ];
 
   constructor(private _route: ActivatedRoute,
@@ -41,10 +41,10 @@ export class ListTypeComponent implements OnInit {
     private _dataTableService: TdDataTableService,
     private _dialogService: TdDialogService,
     private _dialog: MdDialog) {
-    this.getType()
   }
 
   ngOnInit() {
+    this.getType()
   }
 
   goBack() {
@@ -82,10 +82,10 @@ export class ListTypeComponent implements OnInit {
     this._typeService
       .getTypes()
       .subscribe(response => {
+        this._loadingService.resolve('main')
         this.allData = response as WorkflowTypes[]
         this.filter()
       })
-    this._loadingService.resolve('main')
   }
 
   add() {
