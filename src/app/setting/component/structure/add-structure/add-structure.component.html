@@ -10,8 +10,8 @@
                     <div layout="row" layout-xs="column" layout-margin>
                         <div flex="100" flex-xs="100">
                             <md-input-container style="width:100%;">
-                                <input md-input #structureCode placeholder="รหัสหน่วยงาน" name="structureCode" OnlyNumber="true" [(ngModel)]="structure.code" tdAutoTrim maxlength="6">
-                                <md-hint align="end">สูงสุด 6 ตัวอักษร {{structureCode.value.length}} / 6</md-hint>
+                                <input md-input #structureCode placeholder="รหัสหน่วยงาน" name="structureCode" OnlyNumber="true" [(ngModel)]="structure.code" tdAutoTrim required minlength="1" maxlength="6">
+                                <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{structureCode.value.length}} / 6</md-hint>
                             </md-input-container>
                         </div>
                     </div>
