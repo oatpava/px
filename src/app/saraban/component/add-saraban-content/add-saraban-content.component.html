@@ -262,7 +262,7 @@
                         </td-expansion-panel>
                     </md-card-content>
                 </md-card>
-                <md-card style="margin-left: 5px; margin-right: 5px;">
+                <md-card *ngIf="!isCanceled" style="margin-left: 5px; margin-right: 5px;">
                     <md-card-content>
                         <td-expansion-panel>
                             <template td-expansion-panel-header>
