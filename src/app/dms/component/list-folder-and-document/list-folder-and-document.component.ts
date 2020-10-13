@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
 import { Observable } from 'rxjs/Observable'
@@ -6,6 +6,7 @@ import { TdLoadingService } from '@covalent/core'
 import { URLSearchParams } from '@angular/http'//report
 import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/map'
+import { DataTable } from 'primeng/primeng'
 
 import { FolderService } from '../../service/folder.service'
 import { DmsFieldService } from '../../service/dmsField.service'
@@ -87,7 +88,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   documents: Document[] = []
   dmsfolderName: string
   columns: ITdDataTableColumn[] = []
-  datas: any[] = []
   top2: string = ''
   nameCreated: string = ''
   nameUpdate: string = ''
@@ -106,8 +106,10 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   typeSearchInput: string = 'a'
 
+  @ViewChild('dt') dt: DataTable
+  datas: any[]
   listReturn: ListReturn
-  
+  tableFirst: number
 
   typeSearchInputData: any[] = [
     { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
@@ -144,7 +146,9 @@ export class ListFolderAndDocumentComponent implements OnInit {
   ) {
     this.parentId = 1
     this.disableBack = false
+    this.datas = []
     this.listReturn = new ListReturn()
+    this.tableFirst = 0
   }
 
   ngOnInit() {
@@ -211,7 +215,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getFolders(parentId: number): void {
-    console.log('-- getFolders star--' , parentId)
+    console.log('-- getFolders star--', parentId)
     console.log('this.parentId = ', this.parentId)
 
 
@@ -219,7 +223,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this._folderService
       // .getFolders(parentId) // with out auth?
       // .getFoldersWithAuth(parentId)//with auth
-      .getFoldersWithAuthlazy(parentId,0,25)
+      .getFoldersWithAuthlazy(parentId, 0, 25)
       .subscribe(response => {
         this.folders = response as Folder[]
         console.log('-- this.folders--', this.folders)
@@ -232,7 +236,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
       })
 
-      this._folderService
+    this._folderService
       .countAll(parentId)
       .subscribe(response => {
         this.projectAll = response
@@ -365,135 +369,142 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     }
 
-   
-      if(this.allField == '' && this.fullText == '' && this.attachName == '') {
-        checkHaveDataSearch = false
-      }else{
-        if(this.allField != undefined ||this.fullText != undefined || this.attachName != undefined){
-          checkHaveDataSearch = true
-        }
+
+    if (this.allField == '' && this.fullText == '' && this.attachName == '') {
+      checkHaveDataSearch = false
+    } else {
+      if (this.allField != undefined || this.fullText != undefined || this.attachName != undefined) {
+        checkHaveDataSearch = true
       }
-    
+    }
 
-    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true;console.log('--test--') }
-    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true ;console.log('--test--')}
 
-    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true;console.log('--test--') }
-    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true;console.log('--test--') }
-    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;console.log('--test--') }
-    if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma;}
-    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true ;console.log('--test--')}
-    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true ;console.log('--test--')}
+    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true; console.log('--test--') }
 
-    if (this.allField == undefined ) { this.allField = '' } 
-    if (this.fullText == undefined) { this.fullText = '' } 
-    if (this.attachName == undefined) { this.attachName = '' } 
+    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma; }
+    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true; console.log('--test--') }
 
-    
-
-console.log('--checkHaveDataSearch--',checkHaveDataSearch)
-
-if (checkHaveDataSearch) {
-    this._router.navigate(
-      [{
-        outlets: {
-          contentCenter: ['searchFolder', { //ViewDocumentComponent
-            folderId: this.parentId,
-            documentTypeId: this.documentTypeId,
-            folderName: this.dmsHeaderName,
-            t: new Date().getTime(),
-            typeSerach: this.typeSerach,
-            dataSearch: this.search,
-            documentName: documentName,
-
-            createdDateForm: createdDateForm,
-            createdDateTo: createdDateTo,
-
-            createdBy: createdBy,
-            updatedDateForm: updatedDateForm,
-            updatedDateTo: updatedDateTo,
-
-            updatedBy: updatedBy,
-
-            documentExpireDateForm: documentExpireDateForm,
-            documentExpireDateTo: documentExpireDateTo,
-            documentDate01Form: documentDate01Form,
-            documentDate01To: documentDate01To,
-            documentDate02Form: documentDate02Form,
-            documentDate02To: documentDate02To,
-            documentDate03Form: documentDate03Form,
-            documentDate03To: documentDate03To,
-            documentDate04Form: documentDate04Form,
-            documentDate04To: documentDate04To,
-
-            documentFloat01: documentFloat01,
-            documentFloat02: documentFloat02,
-            documentInt01: documentInt01,
-            documentInt02: documentInt02,
-            documentInt03: documentInt03,
-            documentInt04: documentInt04,
-            documentText01: documentText01,
-            documentText02: documentText02,
-            documentText03: documentText03,
-            documentText04: documentText04,
-            documentText05: documentText05,
-            documentVarchar01: documentVarchar01,
-            documentVarchar02: documentVarchar02,
-            documentVarchar03: documentVarchar03,
-            documentVarchar04: documentVarchar04,
-            documentVarchar05: documentVarchar05,
-            documentVarchar06: documentVarchar06,
-            documentVarchar07: documentVarchar07,
-            documentVarchar08: documentVarchar08,
-            documentVarchar09: documentVarchar09,
-            documentVarchar10: documentVarchar10,
-
-            documentIntComma: documentIntComma,
-
-            allField: this.allField,
-            fullText: this.fullText,
-            fileAttachName: this.attachName,
+    if (this.allField == undefined) { this.allField = '' }
+    if (this.fullText == undefined) { this.fullText = '' }
+    if (this.attachName == undefined) { this.attachName = '' }
 
 
 
+    console.log('--checkHaveDataSearch--', checkHaveDataSearch)
+
+    if (checkHaveDataSearch) {
+
+      //oat-add
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+
+      this._router.navigate(
+        [{
+          outlets: {
+            contentCenter: ['searchFolder', { //ViewDocumentComponent
+              folderId: this.parentId,
+              documentTypeId: this.documentTypeId,
+              folderName: this.dmsHeaderName,
+              t: new Date().getTime(),
+              typeSerach: this.typeSerach,
+              dataSearch: this.search,
+              documentName: documentName,
+
+              createdDateForm: createdDateForm,
+              createdDateTo: createdDateTo,
+
+              createdBy: createdBy,
+              updatedDateForm: updatedDateForm,
+              updatedDateTo: updatedDateTo,
+
+              updatedBy: updatedBy,
+
+              documentExpireDateForm: documentExpireDateForm,
+              documentExpireDateTo: documentExpireDateTo,
+              documentDate01Form: documentDate01Form,
+              documentDate01To: documentDate01To,
+              documentDate02Form: documentDate02Form,
+              documentDate02To: documentDate02To,
+              documentDate03Form: documentDate03Form,
+              documentDate03To: documentDate03To,
+              documentDate04Form: documentDate04Form,
+              documentDate04To: documentDate04To,
+
+              documentFloat01: documentFloat01,
+              documentFloat02: documentFloat02,
+              documentInt01: documentInt01,
+              documentInt02: documentInt02,
+              documentInt03: documentInt03,
+              documentInt04: documentInt04,
+              documentText01: documentText01,
+              documentText02: documentText02,
+              documentText03: documentText03,
+              documentText04: documentText04,
+              documentText05: documentText05,
+              documentVarchar01: documentVarchar01,
+              documentVarchar02: documentVarchar02,
+              documentVarchar03: documentVarchar03,
+              documentVarchar04: documentVarchar04,
+              documentVarchar05: documentVarchar05,
+              documentVarchar06: documentVarchar06,
+              documentVarchar07: documentVarchar07,
+              documentVarchar08: documentVarchar08,
+              documentVarchar09: documentVarchar09,
+              documentVarchar10: documentVarchar10,
+
+              documentIntComma: documentIntComma,
+
+              allField: this.allField,
+              fullText: this.fullText,
+              fileAttachName: this.attachName,
 
 
 
-          }],
-        }
-      }], { relativeTo: this._route })
+
+
+
+            }],
+          }
+        }], { relativeTo: this._route })
     }
   }
 
@@ -504,6 +515,13 @@ if (checkHaveDataSearch) {
     str = str.replace('(', "1%#1%#1");
     str = str.replace(')', "2%#2%#2");
     // console.log('str = ', str)
+
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       ['.', {
         'parentId': selectFolder.id,
@@ -535,6 +553,12 @@ if (checkHaveDataSearch) {
 
   add(menuSelected: Menu) {
     console.log('----adddd ----')
+
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
 
     if (menuSelected.type === 'DOC') {
       this._folderService
@@ -598,6 +622,12 @@ if (checkHaveDataSearch) {
   }
 
   searchExp() {
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       [{
         outlets: {
@@ -612,6 +642,12 @@ if (checkHaveDataSearch) {
   }
 
   edit(folder: Folder) {
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       ['../folders/' + folder.id, {
         folderId: folder.id,
@@ -623,8 +659,12 @@ if (checkHaveDataSearch) {
 
 
   auth(folder: Folder) {
-    // console.log('--- auth ---')
-    // console.log(folder)
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       [{
         outlets: {
@@ -889,7 +929,12 @@ if (checkHaveDataSearch) {
   }
 
   reOrder() {
-    // console.log('----- reOrder -----')
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       [{
         outlets: {
@@ -910,7 +955,7 @@ if (checkHaveDataSearch) {
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
         this.documentTypeDetails = response as any[]
-        console.log('documentTypeDetails = ',this.documentTypeDetails)
+        console.log('documentTypeDetails = ', this.documentTypeDetails)
         // for (let dtd of this.documentTypeDetails) {
         // if(dtd.dmsFieldMap == 'createdBy'){
         //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
@@ -998,19 +1043,31 @@ if (checkHaveDataSearch) {
 
   getDocuments(folderId: number): void {
     this.datas = []
-    this._documentService
-      .getDocuments(folderId,offset,limit)
-      .subscribe(response => {
-        this.datas = response.data as Document[]
-        this.allData = response.data as Document[]
-        this.listReturn = response.listReturn
 
-        console.log('this.listReturn - ',this.listReturn )
-        for (let i = 0; i < this.allData.length; i++) {
-          this.flagCheck[i] = false
-        }
-        console.log('this.datas', this.datas)
-      })
+    //oat-add
+    if (!this._paramSarabanService.datas) {
+      this._documentService
+        .getDocuments(folderId, offset, limit)
+        .subscribe(response => {
+          this.datas = response.data as Document[]
+          this.allData = response.data as Document[]
+          this.listReturn = response.listReturn
+
+          console.log('this.listReturn - ', this.listReturn)
+          for (let i = 0; i < this.allData.length; i++) {
+            this.flagCheck[i] = false
+          }
+          console.log('this.datas', this.datas)
+        })
+    } else {
+      this.datas = this._paramSarabanService.datas[0] as Document[]
+      this.allData = this._paramSarabanService.datas[0] as Document[]
+      this.listReturn = this._paramSarabanService.listReturn[0]
+      this.tableFirst = this._paramSarabanService.tableFirst[0]
+      for (let i = 0; i < this.allData.length; i++) {
+        this.flagCheck[i] = false
+      }
+    }
 
   }
 
@@ -1022,6 +1079,12 @@ if (checkHaveDataSearch) {
     let tempFoler = this.folders.filter(folder => folder.id == this.parentId)
     console.log('temp = ', tempFoler)
     console.log('this.parentId = ', this.parentId)
+
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
 
     this._folderService
       .getFolder(this.parentId)
@@ -1042,6 +1105,13 @@ if (checkHaveDataSearch) {
 
   selectDocument(selectDoc: Document) {
     console.log('---selectDoc---', selectDoc)
+
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     if (this.openDoc) {
       this._router.navigate(
         ['../createDoc/', {
@@ -1121,6 +1191,12 @@ if (checkHaveDataSearch) {
     //       }],
     //     }
     //   }], { relativeTo: this._route })
+
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
 
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
@@ -1333,7 +1409,7 @@ if (checkHaveDataSearch) {
   listFolderTree() {
     console.log('-- listFolderTree --')
     let listDocId = this.getDataForSave()
-    console.log('listDocId - ',listDocId)
+    console.log('listDocId - ', listDocId)
     let dialogRef = this._dialog.open(DialogListFolderComponent, {
       width: '50%',
     })
@@ -1370,6 +1446,12 @@ if (checkHaveDataSearch) {
   }
 
   showBorrowHistoryList() {
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       ['../listBorrowAll/', {
       }],
@@ -1377,7 +1459,12 @@ if (checkHaveDataSearch) {
   }
 
   docBorrow(selectDoc: Document) {
-    //console.log("++++++++docBorrow: "+selectDoc.id+"/"+selectDoc.documentFolderId+"/"+this.documentTypeId)
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+
     this._router.navigate(
       ['../borrow/', {
         documentId: selectDoc.id,
@@ -1389,7 +1476,11 @@ if (checkHaveDataSearch) {
   }
 
   borrow() {
-
+    //oat-add
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
 
     this._router.navigate(
       ['../', {
@@ -1496,13 +1587,13 @@ if (checkHaveDataSearch) {
     window.location.href = data.levelUrl;
   }
 
-  fromRow:number
-  projectAll:number = 1000
-  currentPage:number
-  pageSize:number
-  dataPageIng:any ={
-    offset:0,
-    limit:25
+  fromRow: number
+  projectAll: number = 1000
+  currentPage: number
+  pageSize: number
+  dataPageIng: any = {
+    offset: 0,
+    limit: 25
   }
   page(pagingEvent: IPageChangeEvent): void {
     console.log(pagingEvent)
@@ -1516,24 +1607,24 @@ if (checkHaveDataSearch) {
 
     this._loadingService.register('main')
     this._folderService
-      .getFoldersWithAuthlazy(this.parentId,pagingEvent.fromRow-1,this.pageSize)
+      .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
       .subscribe(response => {
         this.folders = response as Folder[]
-        console.log('this.folders - ',this.folders)
+        console.log('this.folders - ', this.folders)
         this._loadingService.resolve('main')
-        })
+      })
 
-      
 
-      
-    
+
+
+
   }
 
-  loadMoreContents(){
+  loadMoreContents() {
     console.log('--loadMoreContents--')
-    this.allCheck  =false
+    this.allCheck = false
     this._documentService
-      .getDocuments(this.parentId,this.listReturn.count,limit)
+      .getDocuments(this.parentId, this.listReturn.count, limit)
       .subscribe(response => {
         // this.datas = response.data as Document[]
         // this.allData = response.data as Document[]
@@ -1551,9 +1642,9 @@ if (checkHaveDataSearch) {
 
 
   }
-  allCheck:any
+  allCheck: any
   checkAll2(event: any) {
-    console.log('checkAll2 -- ',this.allCheck)
+    console.log('checkAll2 -- ', this.allCheck)
     for (let i = 0; i < this.flagCheck.length; i++) {
       this.flagCheck[i] = event.checked
     }
