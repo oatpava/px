@@ -48,10 +48,10 @@ export class OrganizeExternalComponent implements OnInit {
             let structures = []
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
-                "label": structure.name,
+                "label": structure.name + ' (' + structure.shortName + ')',
                 "data": structure.id,
-                "expandedIcon": "fa-tag",
-                "collapsedIcon": "fa-tag",
+                "expandedIcon": "fa-external-link-square",
+                "collapsedIcon": "fa-external-link-square",
                 "leaf": false,
                 "selectable": true,
                 "dataObj": structure
@@ -87,10 +87,10 @@ export class OrganizeExternalComponent implements OnInit {
             let structures = []
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
-                "label": structure.name,
+                "label": structure.name + ' (' + structure.shortName + ')',
                 "data": structure.id,
-                "expandedIcon": "fa-tag",
-                "collapsedIcon": "fa-tag",
+                "expandedIcon": "fa-external-link-square",
+                "collapsedIcon": "fa-external-link-square",
                 "leaf": false,
                 "selectable": true,
                 "dataObj": structure
@@ -112,10 +112,10 @@ export class OrganizeExternalComponent implements OnInit {
         let structures = []
         for (let structure of response[0]) {
           structures.push({
-            "label": structure.name,
+            "label": structure.name + ' (' + structure.shortName + ')',
             "data": structure.id,
-            "expandedIcon": "fa-tag",
-            "collapsedIcon": "fa-tag",
+            "expandedIcon": "fa-external-link-square",
+            "collapsedIcon": "fa-external-link-square",
             "leaf": false,
             "selectable": true,
             "dataObj": structure

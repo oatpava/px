@@ -54,7 +54,7 @@ export class StructureComponent implements OnInit {
             let structures = []
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
-                "label": structure.name,
+                "label": structure.name + ' (' + structure.shortName + ')',
                 "data": structure.id,
                 "expandedIcon": "fa-tag",
                 "collapsedIcon": "fa-tag",
@@ -117,7 +117,7 @@ export class StructureComponent implements OnInit {
             let structures = []
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
-                "label": structure.name,
+                "label": structure.name + ' (' + structure.shortName + ')',
                 "data": structure.id,
                 "expandedIcon": "fa-tag",
                 "collapsedIcon": "fa-tag",
@@ -166,7 +166,7 @@ export class StructureComponent implements OnInit {
         let structures = []
         for (let structure of response[0]) {
           structures.push({
-            "label": structure.name,
+            "label": structure.name + ' (' + structure.shortName + ')',
             "data": structure.id,
             "expandedIcon": "fa-tag",
             "collapsedIcon": "fa-tag",
