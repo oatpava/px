@@ -275,7 +275,7 @@
 
                               
                                     <!-- ssssssssssssssssssssssssssssssssssssssssssss -->
-                                    <p-dataTable #dt [value]="datas" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                                    <p-dataTable #dt [value]="datas" [(first)]="tableFirst" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
 
 
                                         <p-footer>
