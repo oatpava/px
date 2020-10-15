@@ -432,10 +432,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     if (checkHaveDataSearch) {
 
       //oat-add
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
+      if (this.dt) {
+        this._paramSarabanService.datas = [this.datas]
+        this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+        this.tableFirst = this.dt.first
+        this._paramSarabanService.tableFirst = [this.tableFirst]
+      }
 
       this._router.navigate(
         [{
@@ -517,10 +519,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     // console.log('str = ', str)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['.', {
@@ -555,10 +559,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('----adddd ----')
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     if (menuSelected.type === 'DOC') {
       this._folderService
@@ -623,10 +629,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   searchExp() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -643,10 +651,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   edit(folder: Folder) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../folders/' + folder.id, {
@@ -660,10 +670,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   auth(folder: Folder) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -930,10 +942,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   reOrder() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -1081,10 +1095,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('this.parentId = ', this.parentId)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._folderService
       .getFolder(this.parentId)
@@ -1107,10 +1123,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('---selectDoc---', selectDoc)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     if (this.openDoc) {
       this._router.navigate(
@@ -1193,10 +1211,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     //   }], { relativeTo: this._route })
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
@@ -1447,10 +1467,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   showBorrowHistoryList() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../listBorrowAll/', {
@@ -1460,10 +1482,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   docBorrow(selectDoc: Document) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../borrow/', {
@@ -1477,10 +1501,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   borrow() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../', {
