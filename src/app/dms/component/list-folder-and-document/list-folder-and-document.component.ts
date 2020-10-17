@@ -216,14 +216,23 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getFolders(parentId: number): void {
+    let offset: number = 0
     this._loadingService.register('main')
     this._folderService
       // .getFolders(parentId) // with out auth?
       // .getFoldersWithAuth(parentId)//with auth
-      .getFoldersWithAuthlazy(parentId, 0, limit)
+      .getFoldersWithAuthlazy(parentId, offset, limit)
       .subscribe(response => {
         this.folders = response.data as Folder[]
-        this.folderListReturn = new ListReturn({ all: response.countAll, count: this.folders.length, next: limit })
+        let count: number = this.folders.length
+        let next: number = 0
+        if (count >= limit) {
+          next = offset + limit;
+          if (next >= response.countAll) {
+            next = 0;
+          }
+        }
+        this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         if (this.folders.length > 0 && this.parentType === 'F') {
           this.menus = this.menus.filter(menu => menu.id == 3 || menu.id == 4 || menu.id == 6 || menu.id == 7 || menu.id == 8);
 
