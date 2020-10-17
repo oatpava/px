@@ -106,6 +106,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   typeSearchInput: string = 'a'
 
+  folderListReturn = new ListReturn()
   @ViewChild('dt') dt: DataTable
   datas: any[]
   listReturn: ListReturn
@@ -215,34 +216,29 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getFolders(parentId: number): void {
-    console.log('-- getFolders star--', parentId)
-    console.log('this.parentId = ', this.parentId)
-
-
+    let offset: number = 0
     this._loadingService.register('main')
     this._folderService
       // .getFolders(parentId) // with out auth?
       // .getFoldersWithAuth(parentId)//with auth
-      .getFoldersWithAuthlazy(parentId, 0, 25)
+      .getFoldersWithAuthlazy(parentId, offset, limit)
       .subscribe(response => {
-        this.folders = response as Folder[]
-        console.log('-- this.folders--', this.folders)
+        this.folders = response.data as Folder[]
+        let count: number = this.folders.length
+        let next: number = 0
+        if (count >= limit) {
+          next = offset + limit;
+          if (next >= response.countAll) {
+            next = 0;
+          }
+        }
+        this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         if (this.folders.length > 0 && this.parentType === 'F') {
           this.menus = this.menus.filter(menu => menu.id == 3 || menu.id == 4 || menu.id == 6 || menu.id == 7 || menu.id == 8);
 
         }
-
         this._loadingService.resolve('main')
-
       })
-
-    this._folderService
-      .countAll(parentId)
-      .subscribe(response => {
-        this.projectAll = response
-      })
-
-
   }
 
 
@@ -432,10 +428,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     if (checkHaveDataSearch) {
 
       //oat-add
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
+      if (this.dt) {
+        this._paramSarabanService.datas = [this.datas]
+        this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+        this.tableFirst = this.dt.first
+        this._paramSarabanService.tableFirst = [this.tableFirst]
+      }
 
       this._router.navigate(
         [{
@@ -517,10 +515,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     // console.log('str = ', str)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['.', {
@@ -555,10 +555,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('----adddd ----')
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     if (menuSelected.type === 'DOC') {
       this._folderService
@@ -623,10 +625,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   searchExp() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -643,10 +647,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   edit(folder: Folder) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../folders/' + folder.id, {
@@ -660,10 +666,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   auth(folder: Folder) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -930,10 +938,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   reOrder() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       [{
@@ -1081,10 +1091,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('this.parentId = ', this.parentId)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._folderService
       .getFolder(this.parentId)
@@ -1107,10 +1119,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     console.log('---selectDoc---', selectDoc)
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     if (this.openDoc) {
       this._router.navigate(
@@ -1193,10 +1207,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     //   }], { relativeTo: this._route })
 
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
@@ -1447,10 +1463,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   showBorrowHistoryList() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../listBorrowAll/', {
@@ -1460,10 +1478,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   docBorrow(selectDoc: Document) {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../borrow/', {
@@ -1477,10 +1497,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   borrow() {
     //oat-add
-    this._paramSarabanService.datas = [this.datas]
-    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-    this.tableFirst = this.dt.first
-    this._paramSarabanService.tableFirst = [this.tableFirst]
+    if (this.dt) {
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+    }
 
     this._router.navigate(
       ['../', {
@@ -1587,37 +1609,52 @@ export class ListFolderAndDocumentComponent implements OnInit {
     window.location.href = data.levelUrl;
   }
 
-  fromRow: number
-  projectAll: number = 1000
-  currentPage: number
-  pageSize: number
-  dataPageIng: any = {
-    offset: 0,
-    limit: 25
-  }
-  page(pagingEvent: IPageChangeEvent): void {
-    console.log(pagingEvent)
-    this.fromRow = pagingEvent.fromRow
-    this.currentPage = pagingEvent.page
-    this.pageSize = pagingEvent.pageSize
-    this.dataPageIng = {
-      offset: pagingEvent.fromRow,
-      limit: pagingEvent.toRow
-    }
+  // fromRow: number
+  // projectAll: number = 1000
+  // currentPage: number
+  // pageSize: number
+  // dataPageIng: any = {
+  //   offset: 0,
+  //   limit: 25
+  // }
+  // page(pagingEvent: IPageChangeEvent): void {
+  //   console.log(pagingEvent)
+  //   this.fromRow = pagingEvent.fromRow
+  //   this.currentPage = pagingEvent.page
+  //   this.pageSize = pagingEvent.pageSize
+  //   this.dataPageIng = {
+  //     offset: pagingEvent.fromRow,
+  //     limit: pagingEvent.toRow
+  //   }
 
+  //   this._loadingService.register('main')
+  //   this._folderService
+  //     .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
+  //     .subscribe(response => {
+  //       this.folders = response as Folder[]
+  //       console.log('this.folders - ', this.folders)
+  //       this._loadingService.resolve('main')
+  //     })
+  // }
+
+  loadFolder() {
+    let offset: number = this.folders.length
     this._loadingService.register('main')
     this._folderService
-      .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
-      .subscribe(response => {
-        this.folders = response as Folder[]
-        console.log('this.folders - ', this.folders)
+      .getFoldersWithAuthlazy(this.parentId, offset, limit)
+      .subscribe(response => {        
+        this.folders = this.folders.concat(response.data)
+        let count: number = this.folders.length
+        let next: number = 0
+        if (count >= limit) {
+          next = offset + limit;
+          if (next >= response.countAll) {
+            next = 0;
+          }
+        }
+        this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         this._loadingService.resolve('main')
       })
-
-
-
-
-
   }
 
   loadMoreContents() {
