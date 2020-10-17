@@ -558,7 +558,7 @@ export class FolderService {
     }
 
 
-    getFoldersWithAuthlazy(parentId: number, offset: number, limit: number): Observable<Folder[]> {
+    getFoldersWithAuthlazy(parentId: number, offset: number, limit: number): Observable<any> {
         
         let params = new URLSearchParams()
         params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=' + offset + '&limit=' + limit + '&folderId=' + parentId))
@@ -566,7 +566,7 @@ export class FolderService {
             this._options.search = params
             return this._http.get(this._apiUrl + '/v1/dmsFolder/authLazy', this._options)
                 .map((response: Response) => {
-                    return this.pxService.verifyResponseArray(response.json().data)
+                    return this.pxService.verifyResponseArray(response.json())
                 })
                 .catch(this.loggerService.handleError)
         } else {
