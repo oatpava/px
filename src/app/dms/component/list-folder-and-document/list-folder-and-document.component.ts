@@ -106,6 +106,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   typeSearchInput: string = 'a'
 
+  folderListReturn = new ListReturn()
   @ViewChild('dt') dt: DataTable
   datas: any[]
   listReturn: ListReturn
@@ -215,34 +216,20 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getFolders(parentId: number): void {
-    console.log('-- getFolders star--', parentId)
-    console.log('this.parentId = ', this.parentId)
-
-
     this._loadingService.register('main')
     this._folderService
       // .getFolders(parentId) // with out auth?
       // .getFoldersWithAuth(parentId)//with auth
-      .getFoldersWithAuthlazy(parentId, 0, 25)
+      .getFoldersWithAuthlazy(parentId, 0, limit)
       .subscribe(response => {
-        this.folders = response as Folder[]
-        console.log('-- this.folders--', this.folders)
+        this.folders = response.data as Folder[]
+        this.folderListReturn = new ListReturn({ all: response.countAll, count: this.folders.length, next: limit })
         if (this.folders.length > 0 && this.parentType === 'F') {
           this.menus = this.menus.filter(menu => menu.id == 3 || menu.id == 4 || menu.id == 6 || menu.id == 7 || menu.id == 8);
 
         }
-
         this._loadingService.resolve('main')
-
       })
-
-    this._folderService
-      .countAll(parentId)
-      .subscribe(response => {
-        this.projectAll = response
-      })
-
-
   }
 
 
@@ -1613,37 +1600,52 @@ export class ListFolderAndDocumentComponent implements OnInit {
     window.location.href = data.levelUrl;
   }
 
-  fromRow: number
-  projectAll: number = 1000
-  currentPage: number
-  pageSize: number
-  dataPageIng: any = {
-    offset: 0,
-    limit: 25
-  }
-  page(pagingEvent: IPageChangeEvent): void {
-    console.log(pagingEvent)
-    this.fromRow = pagingEvent.fromRow
-    this.currentPage = pagingEvent.page
-    this.pageSize = pagingEvent.pageSize
-    this.dataPageIng = {
-      offset: pagingEvent.fromRow,
-      limit: pagingEvent.toRow
-    }
+  // fromRow: number
+  // projectAll: number = 1000
+  // currentPage: number
+  // pageSize: number
+  // dataPageIng: any = {
+  //   offset: 0,
+  //   limit: 25
+  // }
+  // page(pagingEvent: IPageChangeEvent): void {
+  //   console.log(pagingEvent)
+  //   this.fromRow = pagingEvent.fromRow
+  //   this.currentPage = pagingEvent.page
+  //   this.pageSize = pagingEvent.pageSize
+  //   this.dataPageIng = {
+  //     offset: pagingEvent.fromRow,
+  //     limit: pagingEvent.toRow
+  //   }
 
+  //   this._loadingService.register('main')
+  //   this._folderService
+  //     .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
+  //     .subscribe(response => {
+  //       this.folders = response as Folder[]
+  //       console.log('this.folders - ', this.folders)
+  //       this._loadingService.resolve('main')
+  //     })
+  // }
+
+  loadFolder() {
+    let offset: number = this.folders.length
     this._loadingService.register('main')
     this._folderService
-      .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
-      .subscribe(response => {
-        this.folders = response as Folder[]
-        console.log('this.folders - ', this.folders)
+      .getFoldersWithAuthlazy(this.parentId, offset, limit)
+      .subscribe(response => {        
+        this.folders = this.folders.concat(response.data)
+        let count: number = this.folders.length
+        let next: number = 0
+        if (count >= limit) {
+          next = offset + limit;
+          if (next >= response.countAll) {
+            next = 0;
+          }
+        }
+        this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         this._loadingService.resolve('main')
       })
-
-
-
-
-
   }
 
   loadMoreContents() {

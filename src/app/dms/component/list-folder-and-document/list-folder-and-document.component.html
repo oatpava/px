@@ -101,9 +101,8 @@
                             </md-list-item>
                             <md-divider  md-inset></md-divider>
                         </template>
-
-                            <td-paging-bar *ngIf='folders.length >0' style="margin-right: 20%;color: black" [pageSizes]="[25, 50, 100, 200,500]" [total]="projectAll" (change)="page($event)"></td-paging-bar>
-
+                            <!-- <td-paging-bar *ngIf='folders.length >0' style="margin-right: 20%;color: black" [pageSizes]="[2]" [total]="projectAll" (change)="page($event)"></td-paging-bar> -->
+                            <loadMore [listReturn]="folderListReturn" (load)=loadFolder()></loadMore>
                         </md-list>
                     </div>
                 </div>
@@ -275,7 +274,7 @@
 
                               
                                     <!-- ssssssssssssssssssssssssssssssssssssssssssss -->
-                                    <p-dataTable #dt [value]="datas" [(first)]="tableFirst" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                                    <p-dataTable #dt [value]="datas" [(first)]="tableFirst" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
 
 
                                         <p-footer>
