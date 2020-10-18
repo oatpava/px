@@ -156,6 +156,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     this._route.params
       .subscribe((params: Params) => {
+        console.log('xxxxx', params)
         if (!isNaN(params['parentId'])) this.parentId = +params['parentId']
         if (params['folderType'] !== undefined) this.parentType = params['folderType']
         if (params['folderName'] !== undefined) {
@@ -283,27 +284,13 @@ export class ListFolderAndDocumentComponent implements OnInit {
   dmsSearch() {
     let typeSearch = this.typeSearchInput
     this.nowDate = new Date()
-    console.log('---dmsSearch----')
-    console.log('allField', this.allField)
-    console.log('fullText ', this.fullText)
-    console.log('attachName', this.attachName)
 
-
-    console.log(typeSearch)
     let checkHaveDataSearch = false
-    // console.log("this.documentIntComma = " + this.documentIntComma)
     if (this.documentIntComma != null) {
       this.search["documentIntComma"] = this.documentIntComma
     }
-
-    // console.log(this.search);
-    // console.log(this.parentId)
-    // console.log(this.documentTypeId)
-
-    // console.log(this.search)
     let dataSearch: any = this.search
     //  if (this.search[documentName] != undefined){
-    //  console.log(dataSearch.createdDateForm.formatted)
     //  }
     let createdDateForm = ''
     let createdDateTo = ''
@@ -360,9 +347,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
       // documentExpireDateForm = dayS+'/'+monthS+'/'+expForm.date.year
       documentExpireDateTo = dayS + '/' + monthS + '/' + expForm.date.year
 
-      // console.log(documentExpireDateForm)
-      // console.log(documentExpireDateTo)
-
     }
 
 
@@ -375,55 +359,51 @@ export class ListFolderAndDocumentComponent implements OnInit {
     }
 
 
-    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true;}
 
-    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true;}
+    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true;}
+    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true;}
+    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true;}
+    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true;}
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;}
     if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma; }
-    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true; console.log('--test--') }
-    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true; console.log('--test--') }
+    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true;}
+    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true;}
+    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true;}
+    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true;}
+    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true;}
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true;}
+    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true;}
+    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true;}
+    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true;}
+    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true;}
 
     if (this.allField == undefined) { this.allField = '' }
     if (this.fullText == undefined) { this.fullText = '' }
     if (this.attachName == undefined) { this.attachName = '' }
-
-
-
-    console.log('--checkHaveDataSearch--', checkHaveDataSearch)
 
     if (checkHaveDataSearch) {
 
@@ -507,12 +487,9 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   selectFolder(selectFolder: Folder) {
-    // console.log('-- selectFolder --')
-    // console.log(selectFolder.folderName)
     let str = selectFolder.folderName
     str = str.replace('(', "1%#1%#1");
     str = str.replace(')', "2%#2%#2");
-    // console.log('str = ', str)
 
     //oat-add
     if (this.dt) {
@@ -537,13 +514,11 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   getMenus(parentType: string): void {
-    // console.log('getFolderType parentType = '+parentType)
     //  this._loadingService.register('main')
     this._folderService
       .getMenus(parentType)
       .subscribe(response => {
         this.menus = response as Menu[]
-        console.log('this.menus = ', this.menus)
 
         this.getFolders(this.parentId)
 
@@ -552,8 +527,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   add(menuSelected: Menu) {
-    console.log('----adddd ----')
-
     //oat-add
     if (this.dt) {
       this._paramSarabanService.datas = [this.datas]
@@ -582,7 +555,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
         })
     } else {
       if (menuSelected.nameEng === 'copy') {
-        // console.log('--- copy ---')
         if (this.selecArray.length != 0) {
           this.stateCopy = true;
           this.stetaPaste = true;
@@ -590,7 +562,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
       } else {
         if (menuSelected.nameEng === 'searchExp') {
-          console.log('--searchExp---')
 
           this._router.navigate(
             [{
@@ -707,11 +678,8 @@ export class ListFolderAndDocumentComponent implements OnInit {
         if (this.selecArray[i].id == otherFolder.id) {
           this.selecArray.splice(Number(i), 1)
         }
-        console.log(" ----a = ", this.selecArray)
-        console.log(" ----b = ", this.selecArray.length)
         if (this.selecArray.length == 0) {
           this.seeButtonCopy = false
-          // console.log('selectOther == 0')
           this.stateCopy = false;
           this.stetaPaste = false;
           this.maxFolderTypeSelect = 'F'
@@ -797,31 +765,21 @@ export class ListFolderAndDocumentComponent implements OnInit {
       if (this.parentType == 'C' && this.maxFolderTypeSelect == 'F') this.stetaCanCopy = true
       if (this.parentType == 'D' && this.maxFolderTypeSelect == 'F') this.stetaCanCopy = true
       if (this.parentType == 'F' && this.maxFolderTypeSelect == 'F') this.stetaCanCopy = true
-
-
-      // console.log("---- stetaCanCopy = " + this.stetaCanCopy)
     }
     if (this.stetaCanCopy) {
 
       for (let selec of this.selecArray) {
-        // console.log('--------')
-        // console.log(selec)
-
-
         if (selec.folderType == 'C') {
           selec.icon = 'dashboard'
           selec.iconColor = '#f93550'
           maxFolderType = 'C'
-
         } else if (selec.folderType == 'D') {
           selec.icon = 'dns'
           selec.iconColor = '#4ee832'
           if (maxFolderType == 'F') maxFolderType = 'D'
-
         } else if (selec.folderType == 'F') {
           selec.icon = 'folder'
           selec.iconColor = '#e6b800'
-
         }
 
 
@@ -831,7 +789,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
             .copyFolder(selec, this.parentId)
             .subscribe(response => {
               this.a = response as number
-              // console.log(this.a);
             })
         } else {
           if (selec.id != this.parentId) {
@@ -839,7 +796,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
               .moveFolder(selec, this.parentId)
               .subscribe(response => {
                 this.a = response as number
-                // console.log(this.a);
               })
           }
         }
@@ -871,7 +827,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
       this.selecArray = []
       this._location.back()
     } else {
-      console.log('------cant save----- ')
       this.selecArray = []
       this.stetaPaste = false
       this.stateMove = false
@@ -881,12 +836,9 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   copy() {
-    console.log('----- copy -----')
     //  this.maxFolderTypeSelect = 'F'
-    // console.log('maxFolderTypeSelect = '+this.maxFolderTypeSelect)
     if (this.selecArray.length != 0) {
       this.maxFolderTypeSelect = 'F'
-      // console.log(this.selecArray)
 
       for (let selec of this.selecArray) {
 
@@ -901,7 +853,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
         if (selec.folderType == 'C') this.maxFolderTypeSelect = 'C'
 
       }
-      // console.log('maxFolderTypeSelect = ' + this.maxFolderTypeSelect)
       this.stateCopy = true;
       this.stetaPaste = true;
     }
@@ -909,10 +860,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   move() {
-    // console.log('----- move -----')
-
-    // console.log(this.selecArray.length)
-
     if (this.selecArray.length != 0) {
       this.maxFolderTypeSelect = 'F'
       this.stateMove = true;
@@ -933,7 +880,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
       }
 
     }
-    // console.log('maxFolderTypeSelect = ' + this.maxFolderTypeSelect)
   }
 
   reOrder() {
@@ -965,21 +911,18 @@ export class ListFolderAndDocumentComponent implements OnInit {
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
         this.documentTypeDetails = response as any[]
-        console.log('documentTypeDetails = ', this.documentTypeDetails)
         // for (let dtd of this.documentTypeDetails) {
         // if(dtd.dmsFieldMap == 'createdBy'){
         //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
         // }
         // this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
         // }
-        // console.log(this.columns)
       })
 
     // this._loadingService.resolve('main')
   }
 
   onDateChanged(event: any) {
-    // console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
   }
 
   //--- pipe
@@ -988,7 +931,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   testemail() {
-    // console.log('--- testemail----')
     // this._loadingService.register('main')
     this._folderService
       .testemail()
@@ -999,7 +941,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   // change() {
-  //   console.log('-- cached --')
   //   this._router.navigate(
   //     [{
   //       outlets: {
@@ -1013,14 +954,10 @@ export class ListFolderAndDocumentComponent implements OnInit {
   // }
 
   checkDocInFolder() {
-    // console.log('-- checkDocInFolder --')
     this._folderService
       .checkDocumentsInFolderByFolderId(this.parentId)
       .subscribe(response => {
-        // console.log('this.parentId = ', this.parentId)
-        // console.log('checkDocInFolder = ', response)
         if (this.parentType === 'F' && response) {
-          console.log('-- list doc --')
           this.stateCopy = false;
           this.stetaPaste = false;
           this.stateMove = false
@@ -1033,7 +970,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
         } else {
-          console.log('-- list folder --')
           this.booleanCheckDocInFolder = false
           this.getMenus(this.parentType)
           this.getDocumentTypes()
@@ -1055,7 +991,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this.datas = []
 
     //oat-add
-    if (!this._paramSarabanService.datas) {
+    // if (!this._paramSarabanService.datas) {
       this._documentService
         .getDocuments(folderId, offset, limit)
         .subscribe(response => {
@@ -1063,21 +999,19 @@ export class ListFolderAndDocumentComponent implements OnInit {
           this.allData = response.data as Document[]
           this.listReturn = response.listReturn
 
-          console.log('this.listReturn - ', this.listReturn)
           for (let i = 0; i < this.allData.length; i++) {
             this.flagCheck[i] = false
           }
-          console.log('this.datas', this.datas)
         })
-    } else {
-      this.datas = this._paramSarabanService.datas[0] as Document[]
-      this.allData = this._paramSarabanService.datas[0] as Document[]
-      this.listReturn = this._paramSarabanService.listReturn[0]
-      this.tableFirst = this._paramSarabanService.tableFirst[0]
-      for (let i = 0; i < this.allData.length; i++) {
-        this.flagCheck[i] = false
-      }
-    }
+    // } else {
+    //   this.datas = this._paramSarabanService.datas[0] as Document[]
+    //   this.allData = this._paramSarabanService.datas[0] as Document[]
+    //   this.listReturn = this._paramSarabanService.listReturn[0]
+    //   this.tableFirst = this._paramSarabanService.tableFirst[0]
+    //   for (let i = 0; i < this.allData.length; i++) {
+    //     this.flagCheck[i] = false
+    //   }
+    // }
 
   }
 
@@ -1085,10 +1019,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   addDocument() {
 
-    console.log('add doc ', this.folders)
     let tempFoler = this.folders.filter(folder => folder.id == this.parentId)
-    console.log('temp = ', tempFoler)
-    console.log('this.parentId = ', this.parentId)
 
     //oat-add
     if (this.dt) {
@@ -1101,7 +1032,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this._folderService
       .getFolder(this.parentId)
       .subscribe(response => {
-        console.log(response)
         this._router.navigate(
           ['../createDoc/', {
             t: new Date().getTime(),
@@ -1116,8 +1046,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   selectDocument(selectDoc: Document) {
-    console.log('---selectDoc---', selectDoc)
-
     //oat-add
     if (this.dt) {
       this._paramSarabanService.datas = [this.datas]
@@ -1192,7 +1120,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   change() {
-    console.log('-- cached --')
     // this._router.navigate(
     //   ['../',{
     //     outlets: {
@@ -1236,7 +1163,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
         this.documentTypeDetails = response as any[]
-        // console.log('this.documentTypeDetails', this.documentTypeDetails)
         for (let dtd of this.documentTypeDetails) {
           // if(dtd.dmsFieldMap == 'createdBy'){
           //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
@@ -1245,7 +1171,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
         }
         this.widthSize = this.columns.length * 250
         this.columns.push({ name: 'borrowStatus', label: 'ยืม-คืน', })
-        // console.log('this.widthSize -- ', this.widthSize)
       })
 
     // this._loadingService.resolve('main')
@@ -1256,7 +1181,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this._folderService
           .deleteFolder(deleteFolder)
@@ -1270,18 +1194,14 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   buttonAuth(data: any) {
-    // console.log('buttonAuth = ', data)
     if (data.selec == 'edit') {
-      // console.log('edit')
       this.edit(data.Folder)
     }
     if (data.selec == 'auth') {
-      // console.log('auth')
       this.auth(data.Folder)
     }
 
     if (data.selec == 'del') {
-      // console.log('auth')
       this.openDialog(data.Folder)
     }
   }
@@ -1290,7 +1210,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this._folderService
       .getMenu(folderId)
       .subscribe(response => {
-        console.log('response ', response)
 
         this.authEditFolder = false
         this.authAddDoc = false
@@ -1300,7 +1219,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
         this.authDocRe = false
 
         for (let i of response.data) {
-          // console.log(i.menuFunction); 
           if (i.menuFunction == 'editFolder') {
             this.authEditFolder = true
           }
@@ -1350,12 +1268,10 @@ export class ListFolderAndDocumentComponent implements OnInit {
   searchRole(): void {
 
 
-    console.log('this.searchFilter = ', this.searchFilter)
 
   }
 
   onEnter(value: string) {
-    console.log('enter - ', this.allField)
     this.typeSearchInput = 'a'
     this.dmsSearch()
   }
@@ -1367,15 +1283,10 @@ export class ListFolderAndDocumentComponent implements OnInit {
   allData: Document[] = []
 
   clickSave(index: number, checkbox: any) {
-    // console.log('--- checkbox ---', checkbox)
-    // console.log('--- checkbox ---', checkbox.checked)
-    console.log(this.allData)
     this.checkBox = true
     this.flagCheck[index] = checkbox.checked
-    // console.log('--- this.flagCheck ---', this.flagCheck)
     this.checkBox = false
     for (let entry of this.flagCheck) {
-      console.log(entry);
       if (entry) {
         this.checkBox = true
         break
@@ -1385,16 +1296,13 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   checkAll(any: number, event: any) {
-    console.log('--checkalll--')
     this.checkBoxAll = event.checked
     this.checkBox = event.checked
     for (let i = 0; i < this.flagCheck.length; i++) {
       this.flagCheck[i] = event.checked
     }
-    console.log('--- this.flagCheck ---', this.flagCheck)
     this.checkBox = false
     for (let entry of this.flagCheck) {
-      console.log(entry);
       if (entry) {
         this.checkBox = true
         break
@@ -1418,14 +1326,11 @@ export class ListFolderAndDocumentComponent implements OnInit {
         dataSave[dataSave.length] = this.allData[i];
       }
     }
-    console.log(listDocId)
     return listDocId;
   }
 
   listFolderTree() {
-    console.log('-- listFolderTree --')
     let listDocId = this.getDataForSave()
-    console.log('listDocId - ', listDocId)
     let dialogRef = this._dialog.open(DialogListFolderComponent, {
       width: '50%',
     })
@@ -1433,8 +1338,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     instance.FolderId = this.parentId
     let folderId = 0
     dialogRef.afterClosed().subscribe(result => {
-      console.log(listDocId);
-      console.log(result);
       folderId = result.id
 
 
@@ -1442,7 +1345,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
       });
       dialogRef.afterClosed().subscribe(result => {
-        // console.log(result);
         if (result) {
 
           this._loadingService.register('main')
@@ -1517,19 +1419,16 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   delDocSelec() {
-    console.log('---delDocSelec---')
     let listDocId = this.getDataForSave().split(",");
 
     let dialogRef = this._dialog.open(DeleteDialogComponent, {
 
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
 
         let deleteDocument = new Document
         for (let entry of listDocId) {
-          // console.log('entry - ',entry)
           deleteDocument.id = +entry
           this._documentService
             .deleteDocument(deleteDocument)
@@ -1544,25 +1443,21 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   report() {
-    console.log('--report--', this.parentId)
     let dialogRef = this._dialog.open(DialogReportOptionComponent, {
 
     });
     dialogRef.componentInstance.docTypeId = this.documentTypeId
     dialogRef.componentInstance.folderId = this.parentId
     dialogRef.afterClosed().subscribe(result => { //id 1 ทั้งหมด 2 หมดอายุ
-      console.log('closed', result)
       if (result != undefined) {
         let params = new URLSearchParams()
         if (result.length > 0) {
           if (result[0].id == 1) {
-            console.log('เอกสารปกติ')
 
             params.set('folderId', '' + this.parentId)
             this._pxService.report('report01_nha', 'pdf', params)
           }
           if (result[0].id == 2) {
-            console.log('เอกสารหมดอายุ')
             params.set('folderId', '' + this.parentId)
             this._pxService.report('report02_nha', 'pdf', params)
 
@@ -1575,19 +1470,15 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   paramUrl() {
-    console.log('--- paramUrl ---')
     let tempLevelBar = this._paramDms.getLevelBar()
     let tempLevel = new Level()
 
     let currentUrl = this._router.url;
-    console.log('currentUrl - ', currentUrl, this._router)
     tempLevel.levelName = this.dmsHeaderName
     tempLevel.levelUrl = environment.url + currentUrl
     tempLevelBar.newLevel = tempLevel
 
-    console.log('tempLevelBar befor ', tempLevelBar)
     this._folderService.levelBar(tempLevelBar).subscribe(response => {
-      console.log('response bar = ', response)
       this._paramDms.setLevelBar(response.data)
       let a = response.data.listLevelName
       this.lvBar = response.data.listLevel
@@ -1598,14 +1489,11 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
         }
       }
-      console.log('this.lvBar ', this.lvBar)
     })
 
-    console.log('this._paramDms.getLevelBar() end- ', this._paramDms.getLevelBar())
   }
 
   lvBarBack(data: any) {
-    console.log('lvBarBack = ', data)
     window.location.href = data.levelUrl;
   }
 
@@ -1618,7 +1506,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   //   limit: 25
   // }
   // page(pagingEvent: IPageChangeEvent): void {
-  //   console.log(pagingEvent)
   //   this.fromRow = pagingEvent.fromRow
   //   this.currentPage = pagingEvent.page
   //   this.pageSize = pagingEvent.pageSize
@@ -1632,7 +1519,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   //     .getFoldersWithAuthlazy(this.parentId, pagingEvent.fromRow - 1, this.pageSize)
   //     .subscribe(response => {
   //       this.folders = response as Folder[]
-  //       console.log('this.folders - ', this.folders)
   //       this._loadingService.resolve('main')
   //     })
   // }
@@ -1642,7 +1528,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this._loadingService.register('main')
     this._folderService
       .getFoldersWithAuthlazy(this.parentId, offset, limit)
-      .subscribe(response => {        
+      .subscribe(response => {
         this.folders = this.folders.concat(response.data)
         let count: number = this.folders.length
         let next: number = 0
@@ -1658,7 +1544,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   loadMoreContents() {
-    console.log('--loadMoreContents--')
     this.allCheck = false
     this._documentService
       .getDocuments(this.parentId, this.listReturn.count, limit)
@@ -1670,18 +1555,15 @@ export class ListFolderAndDocumentComponent implements OnInit {
         this.datas = this.datas.concat(response.data)
         this.allData = this.allData.concat(response.data)
 
-        // console.log('this.listReturn - ',this.listReturn )
         for (let i = 0; i < this.allData.length; i++) {
           this.flagCheck[i] = false
         }
-        // console.log('this.datas', this.datas)
       })
 
 
   }
   allCheck: any
   checkAll2(event: any) {
-    console.log('checkAll2 -- ', this.allCheck)
     for (let i = 0; i < this.flagCheck.length; i++) {
       this.flagCheck[i] = event.checked
     }
