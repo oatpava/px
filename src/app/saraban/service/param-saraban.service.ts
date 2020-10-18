@@ -51,6 +51,8 @@ export class ParamSarabanService {
   listReturn: ListReturn[]
   tableFirst: number[]
   barcodeFilter: string[]
+  dmsFolderId: number
+  dmsFlagCheck: Boolean[]
 
   contentAuth: SarabanAuth[]
   structureTree: TreeNode[]
