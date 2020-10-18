@@ -156,7 +156,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
     this._route.params
       .subscribe((params: Params) => {
-        console.log('xxxxx', params)
+        console.log('params', params)
         if (!isNaN(params['parentId'])) this.parentId = +params['parentId']
         if (params['folderType'] !== undefined) this.parentType = params['folderType']
         if (params['folderName'] !== undefined) {
@@ -359,47 +359,47 @@ export class ListFolderAndDocumentComponent implements OnInit {
     }
 
 
-    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true;}
-    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true;}
+    if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.createdDateTo != undefined) { createdDateTo = dataSearch.createdDateTo.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.updatedDateForm != undefined) { updatedDateForm = dataSearch.updatedDateForm.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.updatedDateTo != undefined) { updatedDateTo = dataSearch.updatedDateTo.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentExpireDateForm != undefined) { documentExpireDateForm = dataSearch.documentExpireDateForm.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentExpireDateTo != undefined) { documentExpireDateTo = dataSearch.documentExpireDateTo.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate01Form != undefined) { documentDate01Form = dataSearch.documentDate01Form.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate01To != undefined) { documentDate01To = dataSearch.documentDate01To.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate02Form != undefined) { documentDate02Form = dataSearch.documentDate02Form.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate02To != undefined) { documentDate02To = dataSearch.documentDate02To.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate03Form != undefined) { documentDate03Form = dataSearch.documentDate03Form.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate03To != undefined) { documentDate03To = dataSearch.documentDate03To.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate04Form != undefined) { documentDate04Form = dataSearch.documentDate04Form.formatted; checkHaveDataSearch = true; }
+    if (dataSearch.documentDate04To != undefined) { documentDate04To = dataSearch.documentDate04To.formatted; checkHaveDataSearch = true; }
 
-    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true;}
-    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true;}
-    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true;}
-    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true;}
-    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true;}
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;}
+    if (dataSearch.documentFloat01 != undefined) { documentFloat01 = dataSearch.documentFloat01; checkHaveDataSearch = true; }
+    if (dataSearch.documentFloat02 != undefined) { documentFloat02 = dataSearch.documentFloat02; checkHaveDataSearch = true; }
+    if (dataSearch.documentInt01 != undefined) { documentInt01 = dataSearch.documentInt01; checkHaveDataSearch = true; }
+    if (dataSearch.documentInt02 != undefined) { documentInt02 = dataSearch.documentInt02; checkHaveDataSearch = true; }
+    if (dataSearch.documentInt03 != undefined) { documentInt03 = dataSearch.documentInt03; checkHaveDataSearch = true; }
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; }
     if (dataSearch.documentIntComma != undefined) { documentIntComma = dataSearch.documentIntComma; }
-    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true;}
-    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true;}
-    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true;}
-    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true;}
-    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true;}
-    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true;}
-    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true;}
-    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true;}
-    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true;}
-    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true;}
+    if (dataSearch.documentText01 != undefined) { documentText01 = dataSearch.documentText01; checkHaveDataSearch = true; }
+    if (dataSearch.documentText02 != undefined) { documentText02 = dataSearch.documentText02; checkHaveDataSearch = true; }
+    if (dataSearch.documentText03 != undefined) { documentText03 = dataSearch.documentText03; checkHaveDataSearch = true; }
+    if (dataSearch.documentText04 != undefined) { documentText04 = dataSearch.documentText04; checkHaveDataSearch = true; }
+    if (dataSearch.documentText05 != undefined) { documentText05 = dataSearch.documentText05; checkHaveDataSearch = true; }
+    if (dataSearch.documentInt04 != undefined) { documentInt04 = dataSearch.documentInt04; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar01 != undefined) { documentVarchar01 = dataSearch.documentVarchar01; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar02 != undefined) { documentVarchar02 = dataSearch.documentVarchar02; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar03 != undefined) { documentVarchar03 = dataSearch.documentVarchar03; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar04 != undefined) { documentVarchar04 = dataSearch.documentVarchar04; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar05 != undefined) { documentVarchar05 = dataSearch.documentVarchar05; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar06 != undefined) { documentVarchar06 = dataSearch.documentVarchar06; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar07 != undefined) { documentVarchar07 = dataSearch.documentVarchar07; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar08 != undefined) { documentVarchar08 = dataSearch.documentVarchar08; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar09 != undefined) { documentVarchar09 = dataSearch.documentVarchar09; checkHaveDataSearch = true; }
+    if (dataSearch.documentVarchar10 != undefined) { documentVarchar10 = dataSearch.documentVarchar10; checkHaveDataSearch = true; }
+    if (dataSearch.updatedBy != undefined) { updatedBy = dataSearch.updatedBy; checkHaveDataSearch = true; }
+    if (dataSearch.createdBy != undefined) { createdBy = dataSearch.createdBy; checkHaveDataSearch = true; }
+    if (dataSearch.documentName != undefined) { documentName = dataSearch.documentName; checkHaveDataSearch = true; }
 
     if (this.allField == undefined) { this.allField = '' }
     if (this.fullText == undefined) { this.fullText = '' }
@@ -408,12 +408,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
     if (checkHaveDataSearch) {
 
       //oat-add
-      if (this.dt) {
-        this._paramSarabanService.datas = [this.datas]
-        this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-        this.tableFirst = this.dt.first
-        this._paramSarabanService.tableFirst = [this.tableFirst]
-      }
+      this._paramSarabanService.datas = [this.datas]
+      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+      this.tableFirst = this.dt.first
+      this._paramSarabanService.tableFirst = [this.tableFirst]
+      this._paramSarabanService.dmsFolderId = this.parentId
+      this._paramSarabanService.dmsFlagCheck = this.flagCheck
 
       this._router.navigate(
         [{
@@ -491,14 +491,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     str = str.replace('(', "1%#1%#1");
     str = str.replace(')', "2%#2%#2");
 
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       ['.', {
         'parentId': selectFolder.id,
@@ -508,10 +500,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
         t: new Date().getTime()
       }],
       { relativeTo: this._route })
-
   }
-
-
 
   getMenus(parentType: string): void {
     //  this._loadingService.register('main')
@@ -527,13 +516,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   add(menuSelected: Menu) {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
 
     if (menuSelected.type === 'DOC') {
       this._folderService
@@ -596,12 +578,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   searchExp() {
     //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+    this._paramSarabanService.dmsFolderId = this.parentId
+    this._paramSarabanService.dmsFlagCheck = this.flagCheck
 
     this._router.navigate(
       [{
@@ -617,14 +599,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   edit(folder: Folder) {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       ['../folders/' + folder.id, {
         folderId: folder.id,
@@ -636,14 +610,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   auth(folder: Folder) {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       [{
         outlets: {
@@ -883,14 +849,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   reOrder() {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       [{
         outlets: {
@@ -900,10 +858,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
           }],
         }
       }], { relativeTo: this._route })
-
-
   }
-
 
   getDocumentTypeDetail(documentTypeId: number): void {//หัว columns
     // this._loadingService.register('main')
@@ -976,6 +931,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
           this.getDmsFields()
           this.getDocumentTypeDetail(this.documentTypeId)
 
+          //oat-add
+          this._paramSarabanService.datas = null
+          this._paramSarabanService.listReturn = null
+          this._paramSarabanService.tableFirst = null
+          this._paramSarabanService.dmsFolderId = null
+          this._paramSarabanService.dmsFlagCheck = null
         }
 
       })
@@ -991,7 +952,14 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this.datas = []
 
     //oat-add
-    // if (!this._paramSarabanService.datas) {
+    let tmpFolderId: number = (this._paramSarabanService.dmsFolderId) ? this._paramSarabanService.dmsFolderId : 0
+    if (folderId == tmpFolderId && this._paramSarabanService.datas) {
+      this.datas = this._paramSarabanService.datas[0] as Document[]
+      this.allData = this._paramSarabanService.datas[0] as Document[]
+      this.listReturn = this._paramSarabanService.listReturn[0]
+      this.tableFirst = this._paramSarabanService.tableFirst[0]
+      this.flagCheck = this._paramSarabanService.dmsFlagCheck
+    } else {
       this._documentService
         .getDocuments(folderId, offset, limit)
         .subscribe(response => {
@@ -1003,15 +971,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
             this.flagCheck[i] = false
           }
         })
-    // } else {
-    //   this.datas = this._paramSarabanService.datas[0] as Document[]
-    //   this.allData = this._paramSarabanService.datas[0] as Document[]
-    //   this.listReturn = this._paramSarabanService.listReturn[0]
-    //   this.tableFirst = this._paramSarabanService.tableFirst[0]
-    //   for (let i = 0; i < this.allData.length; i++) {
-    //     this.flagCheck[i] = false
-    //   }
-    // }
+    }
 
   }
 
@@ -1020,14 +980,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   addDocument() {
 
     let tempFoler = this.folders.filter(folder => folder.id == this.parentId)
-
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
 
     this._folderService
       .getFolder(this.parentId)
@@ -1047,12 +999,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   selectDocument(selectDoc: Document) {
     //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+    this._paramSarabanService.dmsFolderId = this.parentId
+    this._paramSarabanService.dmsFlagCheck = this.flagCheck
 
     if (this.openDoc) {
       this._router.navigate(
@@ -1132,14 +1084,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     //       }],
     //     }
     //   }], { relativeTo: this._route })
-
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
 
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
@@ -1364,14 +1308,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   showBorrowHistoryList() {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       ['../listBorrowAll/', {
       }],
@@ -1380,12 +1316,12 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   docBorrow(selectDoc: Document) {
     //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
+    this._paramSarabanService.datas = [this.datas]
+    this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
+    this.tableFirst = this.dt.first
+    this._paramSarabanService.tableFirst = [this.tableFirst]
+    this._paramSarabanService.dmsFolderId = this.parentId
+    this._paramSarabanService.dmsFlagCheck = this.flagCheck
 
     this._router.navigate(
       ['../borrow/', {
@@ -1398,14 +1334,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
   }
 
   borrow() {
-    //oat-add
-    if (this.dt) {
-      this._paramSarabanService.datas = [this.datas]
-      this._paramSarabanService.listReturn = [new ListReturn(this.listReturn)]
-      this.tableFirst = this.dt.first
-      this._paramSarabanService.tableFirst = [this.tableFirst]
-    }
-
     this._router.navigate(
       ['../', {
         outlets: {
