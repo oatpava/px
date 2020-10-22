@@ -59,7 +59,7 @@ export class AddUserProfileComponent implements OnInit {
     { id: 1, name: 'ระดับปฏิบัติงาน' },
     { id: 2, name: 'ระดับปฏิบัติการ' },
     { id: 3, name: 'ระดับชำนาญงาน' },
-    { id: 4, name: 'ระดับชำราญการ' },
+    { id: 4, name: 'ระดับชำนาญการ' },
     { id: 5, name: 'ระดับอาวุโส' },
     { id: 6, name: 'ระดับชำนาญการพิเศษ' },
     { id: 7, name: 'ระดับทักษะพิเศษ' },

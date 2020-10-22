@@ -224,16 +224,24 @@ export class ListFolderAndDocumentComponent implements OnInit {
       // .getFoldersWithAuth(parentId)//with auth
       .getFoldersWithAuthlazy(parentId, offset, limit)
       .subscribe(response => {
-        this.folders = response.data as Folder[]
-        let count: number = this.folders.length
+
+        let count: number = 0
+        let countAll: number = 0
         let next: number = 0
-        if (count >= limit) {
-          next = offset + limit;
-          if (next >= response.countAll) {
-            next = 0;
+        if (response.data != null) {
+          this.folders = response.data as Folder[]
+          count = this.folders.length
+          countAll = response.countAll
+          if (count >= limit) {
+            next = offset + limit;
+            if (next >= countAll) {
+              next = 0;
+            }
           }
+        } else {
+          this.folders = []
         }
-        this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
+        this.folderListReturn = new ListReturn({ all: countAll, count: count, next: next })
         if (this.folders.length > 0 && this.parentType === 'F') {
           this.menus = this.menus.filter(menu => menu.id == 3 || menu.id == 4 || menu.id == 6 || menu.id == 7 || menu.id == 8);
 
@@ -1457,14 +1465,21 @@ export class ListFolderAndDocumentComponent implements OnInit {
     this._folderService
       .getFoldersWithAuthlazy(this.parentId, offset, limit)
       .subscribe(response => {
-        this.folders = this.folders.concat(response.data)
-        let count: number = this.folders.length
+        let count: number = 0
+        let countAll: number = 0
         let next: number = 0
-        if (count >= limit) {
-          next = offset + limit;
-          if (next >= response.countAll) {
-            next = 0;
+        if (response.data != null) {
+          this.folders = this.folders.concat(response.data)
+          count = this.folders.length
+          countAll = response.countAll
+          if (count >= limit) {
+            next = offset + limit;
+            if (next >= countAll) {
+              next = 0;
+            }
           }
+        } else {
+          
         }
         this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         this._loadingService.resolve('main')
