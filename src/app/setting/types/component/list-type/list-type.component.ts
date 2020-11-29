@@ -30,7 +30,7 @@ export class ListTypeComponent implements OnInit {
 
   columns: ITdDataTableColumn[] = [
     { name: 'title', label: 'ชื่อประเภทการส่ง' },
-    { name: 'actionType', label: 'ใช้ในการคำนวณการดำเนินงาน' },
+    // { name: 'actionType', label: 'ใช้ในการคำนวณการดำเนินงาน' },
   ];
 
   constructor(private _route: ActivatedRoute,
