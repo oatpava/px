@@ -39,6 +39,7 @@ export class HistoryLogComponent implements OnInit {
     { id: 1, name: 'ทั้งหมด', code: '' },
     { id: 2, name: 'หน้าจอส่วนตัว', code: 'mwp' },
     { id: 3, name: 'ระบบสารบรรณฯ', code: 'wf' },
+    { id: 4, name: 'ระบบจัดเก็บเอกสาร', code: 'dms' },
     { id: 5, name: 'ผู้ดูแลระบบ', code: 'admin' }
   ]
   private myDatePickerOptions: IMyOptions = {
