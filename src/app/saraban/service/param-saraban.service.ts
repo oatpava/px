@@ -29,7 +29,7 @@ export class ParamSarabanService {
   userProfileTypeId: number
 
   isContent: boolean//content or myWork
-  mwp: { fromMwp: boolean, isUser: boolean, id: number, replyTo: string, inboxIndex: number }
+  mwp: { fromMwp: boolean, isUser: boolean, id: number, replyTo: number, inboxIndex: number }
   inboxId: number
   inboxFlag: { open: number, action: number, finish: number }
   folderId: number
