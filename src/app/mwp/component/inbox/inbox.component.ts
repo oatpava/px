@@ -299,7 +299,7 @@ export class InboxComponent implements OnInit {
       fromMwp: true,
       isUser: this.inboxAssign[this.index].isUser,
       id: this.inboxAssign[this.index].id,
-      replyTo: inbox.inboxFrom,
+      replyTo: inbox.createdBy,
       inboxIndex: this.index
     }
     if (inbox.workflowId > 0) {
