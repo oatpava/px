@@ -8,7 +8,7 @@
         </div>
     </p-tabPanel>
     <p-tabPanel header="เลขจอง" leftIcon="fa-calendar">
-        <p-dataTable #dt [value]="reserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="ok(1)" [resizableColumns]="true" [responsive]="true">
+        <p-dataTable #dt [value]="reserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" (onRowSelect)="ok($event.data, 1)" [resizableColumns]="true" [responsive]="true">
             <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
                 <template pTemplate="body" let-i="rowIndex+1">   
                     <span>{{i}}</span>
@@ -23,7 +23,7 @@
         </p-dataTable>
     </p-tabPanel>
     <p-tabPanel header="เลขจองที่ถูกยกเลิก" leftIcon="fa-calendar-times-o">
-        <p-dataTable #dt [value]="canceledReserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="ok(2)" [resizableColumns]="true" [responsive]="true">
+        <p-dataTable #dt [value]="canceledReserveNos" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" (onRowSelect)="ok($event.data, 2)" [resizableColumns]="true" [responsive]="true">
             <p-column [sortable]="true" [style]="{'width':'25px', 'text-align':'center', 'vertical-align':'top'}">
                 <template pTemplate="body" let-i="rowIndex+1">   
                     <span>{{i}}</span>

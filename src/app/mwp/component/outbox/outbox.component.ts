@@ -44,7 +44,6 @@ export class OutboxComponent implements OnInit {
   listReturn: ListReturn[]
   tableFirst: number[]
   searched: number
-  selectedRow: Outbox
 
   speed: SelectItem[] = [
     { label: 'ทั้งหมด', value: null },
