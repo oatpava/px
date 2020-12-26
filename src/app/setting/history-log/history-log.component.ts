@@ -13,7 +13,7 @@ import { HistoryLogService } from './history-log.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
 import { ListReturn } from '../../main/model/listReturn.model'
 
-const limit: number = 500
+const limit: number = 1000
 @Component({
   selector: 'app-history-log',
   templateUrl: './history-log.component.html',
