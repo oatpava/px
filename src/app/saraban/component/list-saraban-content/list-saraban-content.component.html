@@ -107,7 +107,7 @@
                 <div flex-gt-md="100">
                     <md-card hide show-gt-md>
                         <md-card-content>
-                            <p-dataTable #dt [value]="datas[searched]" [(first)]="tableFirst[searched]" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false"
+                            <p-dataTable #dt [value]="datas[searched]" [(first)]="tableFirst[searched]" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" selectionMode="single" (onRowSelect)="show($event.data)" [resizableColumns]="false"
                                 [responsive]="true" styleClass="fixed-size">
                                 <p-header>
                                     <div layout="row" layout-align="space-between start">

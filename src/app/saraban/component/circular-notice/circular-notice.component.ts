@@ -26,7 +26,6 @@ export class CircularNoticeComponent implements OnInit {
   //@Output() viewFileAttach = new EventEmitter()
   //@Output() downloadAttach = new EventEmitter()
   year: number
-  selectedRow: SarabanContent
 
   private tick: string;
   private subscription: Subscription;

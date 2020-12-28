@@ -25,7 +25,6 @@ export class MyWorkComponent implements OnInit {
 
   myWorks: any[]
   datas: any[] = []
-  selectedRow: SarabanContent
   selectedRow_num: number = 0
   allCheck: boolean = false
 

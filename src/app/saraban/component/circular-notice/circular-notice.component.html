@@ -1,4 +1,4 @@
-<p-dataTable #dt [value]="datas" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)"
+<p-dataTable #dt [value]="datas" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size" selectionMode="single" (onRowSelect)="show($event.data)"
     expandableRows="true">
     <p-footer>
         <loadMore [listReturn]="listReturn" (load)=loadMoreContents()></loadMore>

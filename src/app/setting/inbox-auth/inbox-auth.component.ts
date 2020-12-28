@@ -3,10 +3,12 @@ import { TreeNode, Message } from 'primeng/primeng'
 import { Observable } from 'rxjs/Observable'
 import { TdLoadingService } from '@covalent/core'
 import { Location } from '@angular/common'
+import { URLSearchParams } from '@angular/http'
 
 import { StructureService } from '../component/structure/structure.service'
 import { InoutAssignService } from '../../mwp/service/inout-assign.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
+import { PxService } from '../../main/px.service'
 
 import { InoutAssign } from '../../mwp/model/inoutAssign.model'
 
@@ -17,6 +19,7 @@ import { InoutAssign } from '../../mwp/model/inoutAssign.model'
   providers: [StructureService, InoutAssignService]
 })
 export class InboxAuthComponent implements OnInit {
+  menuOver: boolean = false
   listButton: { hidden: boolean, index: number } = { hidden: true, index: null }
   isOwnerSelected: boolean = false
 
@@ -44,7 +47,8 @@ export class InboxAuthComponent implements OnInit {
     private _location: Location,
     private _structureService: StructureService,
     private _inoutAssignService: InoutAssignService,
-    private _paramSarabanService: ParamSarabanService
+    private _paramSarabanService: ParamSarabanService,
+    private _pxService: PxService
   ) { }
 
   ngOnInit() {
@@ -150,7 +154,6 @@ export class InboxAuthComponent implements OnInit {
 
   selectOwner(event) {
     let node = event.node
-    console.log('xxx', node)
     if (node.leaf) {//leaf = user
       this.isOwnerSelected = true
       this.selectedOwner = node
@@ -355,9 +358,18 @@ export class InboxAuthComponent implements OnInit {
         })
       })
 
-      setTimeout(() => {
-        this._location.back()
-      }, 2000)
+    setTimeout(() => {
+      this._location.back()
+    }, 2000)
+  }
+
+  report(reportType: string) {
+    let params = new URLSearchParams()
+    if (this.isOwnerSelected) {
+      params.set('ownerType', this.selectedOwner.leaf ? '0' : '1')
+      params.set('ownerId', this.selectedOwner.data.id)
+    }
+    this._pxService.report('saraban_inbox_auth', reportType, params)
   }
 
 }

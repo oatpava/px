@@ -52,7 +52,6 @@ export class InboxComponent implements OnInit {
     openSelectorOnInputClick: true,
     showSelectorArrow: false
   }
-  selectedRow: Inbox
   status: SelectItem[] = [
     { label: 'ทั้งหมด', value: null },
     { label: 'ยังไม่เปิดอ่าน', value: 0 },

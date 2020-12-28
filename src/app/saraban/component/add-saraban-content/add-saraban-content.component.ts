@@ -628,48 +628,52 @@ export class AddSarabanContentComponent implements OnInit {
       name.forEach(x => listId.push("1"))
     }
     for (let i = 0; i < name.length; i++) {
-      this._loadingService.register('main')
-      this._sarabanContentService
-        .getStructureByName(name[i], +listId[i])
-        .subscribe(response => {
-          this._loadingService.resolve('main')
-          let node
-          let parentKey
-          switch (response.userType) {
-            case 0:
-              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
-              if (node) {
-                this.sendTo[num].push(node)
-                this.selectedStructure[num].push(node)
-              } else {
-                this.sendTo[num].push(this.genOutSideNode(name[i]))
-              }
-              ; break
-            case 1:
-              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
-              if (node) {
-                this.sendTo[num].push(node)
-                this.selectedStructure[num].push(node)
-              } else {
-                this.sendTo[num].push(this.genOutSideNode(name[i]))
-              }
-              ; break
-            case 2:
-              this.sendTo[num].push(this.genOutSideNode(name[i])); break
-            case 3:
-              node = this.findNode_old(this.externalTree, name[i])
-              if (node) {
-                this.sendTo[num].push(node)
-                this.selectedExternal[num].push(node)
-              } else {
-                this.sendTo[num].push(this.genOutSideNode(name[i]))
-              }
-              ; break
-            default: ; break
-          }
-        })
+      if (name[i].indexOf('"') > 0) {
+        this.sendTo[num].push(this.genOutSideNode(name[i]))
+      } else {
+        this._loadingService.register('main')
+        this._sarabanContentService
+          .getStructureByName(name[i], +listId[i])
+          .subscribe(response => {
+            this._loadingService.resolve('main')
+            let node
+            let parentKey
+            switch (response.userType) {
+              case 0:
+                parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
+                node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
+                if (node) {
+                  this.sendTo[num].push(node)
+                  this.selectedStructure[num].push(node)
+                } else {
+                  this.sendTo[num].push(this.genOutSideNode(name[i]))
+                }
+                ; break
+              case 1:
+                parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
+                node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
+                if (node) {
+                  this.sendTo[num].push(node)
+                  this.selectedStructure[num].push(node)
+                } else {
+                  this.sendTo[num].push(this.genOutSideNode(name[i]))
+                }
+                ; break
+              case 2:
+                this.sendTo[num].push(this.genOutSideNode(name[i])); break
+              case 3:
+                node = this.findNode_old(this.externalTree, name[i])
+                if (node) {
+                  this.sendTo[num].push(node)
+                  this.selectedExternal[num].push(node)
+                } else {
+                  this.sendTo[num].push(this.genOutSideNode(name[i]))
+                }
+                ; break
+              default: ; break
+            }
+          })
+      }
     }
   }
 
@@ -2415,5 +2419,5 @@ export class AddSarabanContentComponent implements OnInit {
       return title
     }
   }
-  
+
 }
