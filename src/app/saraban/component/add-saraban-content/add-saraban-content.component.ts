@@ -1675,7 +1675,9 @@ export class AddSarabanContentComponent implements OnInit {
         this.reservedContent = dialogRef.componentInstance.selectedRow
         this.sarabanContent.wfContentContentNo = dialogRef.componentInstance.selectedRow.reserveContentNoContentNo
         this.sarabanContent.wfContentContentNumber = dialogRef.componentInstance.selectedRow.reserveContentNoContentNumber
+        this.sarabanContent.wfContentContentYear = dialogRef.componentInstance.selectedRow.reserveContentNoContentYear
         if (this.mode == 'add' && !this.sharedFolder) {
+          this.sarabanContent.wfContentBookYear = dialogRef.componentInstance.selectedRow.reserveContentNoContentYear
           this.sarabanContent.wfContentBookNumber = dialogRef.componentInstance.selectedRow.reserveContentNoContentNumber
           this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, this.sarabanContent.wfContentBookYear)
         }
