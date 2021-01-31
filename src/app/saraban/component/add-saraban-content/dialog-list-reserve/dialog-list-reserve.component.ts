@@ -13,7 +13,7 @@ export class DialogListReserveComponent implements OnInit {
   lastNumber: number
   reserveNos: SarabanReserveContent[]
   canceledReserveNos: SarabanReserveContent[]
-  selectedRow: any
+  selectedRow: SarabanReserveContent
   disableInsert: boolean = false
   insertAt: number
 
@@ -30,7 +30,8 @@ export class DialogListReserveComponent implements OnInit {
   ngOnInit() {
   }
 
-  ok(type: number) {
+  ok(selectedRow: SarabanReserveContent, type: number) {
+    this.selectedRow = selectedRow
     this.dialogRef.close(type)
   }
 

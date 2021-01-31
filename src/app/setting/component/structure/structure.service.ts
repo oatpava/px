@@ -78,12 +78,12 @@ export class StructureService {
     //this._apiUrl = environment.apiServerHome + environment.apiNameHome
     // console.log("structureId = "+structureId)
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
-    + '&sort=' + sort + '&dir=' + dir + '&structureId=' + structureId))
+    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit
+      + '&sort=' + sort + '&dir=' + dir + '&structureId=' + structureId))
     this._options.search = params
     return this._http.get(this._apiUrl + "/v1/structures", this._options)
       .map((response: Response) => {
-        this._loadingService.resolve('loading')       
+        this._loadingService.resolve('loading')
         return this._pxService.verifyResponseArray(response.json().data)
       }).publishReplay().refCount()
       .catch(this._loggerService.handleError)
@@ -93,8 +93,8 @@ export class StructureService {
     //this._apiUrl = environment.apiServerHome + environment.apiNameHome
     this._loadingService.register('loading')
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
-    + '&sort=' + sort + '&dir=' + dir + '&structureId=' + structureId))
+    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit
+      + '&sort=' + sort + '&dir=' + dir + '&structureId=' + structureId))
     this._options.search = params
     return this._http.get(this._apiUrl + "/v1/structures/profiles", this._options)
       .map((response: Response) => {
@@ -248,8 +248,8 @@ export class StructureService {
   getStructureConvert(version: string, offset: string, limit: string, sort: string, dir: string): Observable<any> {
     this._loadingService.register('loading')
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
-    + '&sort=' + sort + '&dir=' + dir))
+    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit
+      + '&sort=' + sort + '&dir=' + dir))
     this._options.search = params
     return this._http.get(this._apiUrl + "/v1/structures/convert", this._options)
       .map((response: Response) => {
@@ -263,10 +263,10 @@ export class StructureService {
   searchStructureConvert(search: any, version: string, offset: string, limit: string, sort: string, dir: string): Observable<any> {
     this._loadingService.register('loading')
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
-    + '&sort=' + sort + '&dir=' + dir + '&vstatus=' + search.vstatus 
-    + '&strucDetail=' + search.strucDetail + '&structureCode=' + search.structureCode
-    + '&structureName=' + search.structureName + '&strucShortName=' + search.strucShortName))
+    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit
+      + '&sort=' + sort + '&dir=' + dir + '&vstatus=' + search.vstatus
+      + '&strucDetail=' + search.strucDetail + '&structureCode=' + search.structureCode
+      + '&structureName=' + search.structureName + '&strucShortName=' + search.strucShortName))
     this._options.search = params
     return this._http.get(this._apiUrl + "/v1/structures/convert", this._options)
       .map((response: Response) => {
@@ -293,8 +293,8 @@ export class StructureService {
     this._loadingService.register('loading')
     // console.log("structureId = "+structureId)
     let params = new URLSearchParams()
-    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit 
-    + '&sort=' + sort + '&dir=' + dir + '&organizeId=' + structureId))
+    params.set('q', this._pxService.encrypt('version=' + version + '&offset=' + offset + '&limit=' + limit
+      + '&sort=' + sort + '&dir=' + dir + '&organizeId=' + structureId))
     this._options.search = params
     return this._http.get(this._apiUrl + "/v1/organizes", this._options)
       .map((response: Response) => {
@@ -321,7 +321,7 @@ export class StructureService {
   checkOrgCode(code, name, id) {
     this._loadingService.register('loading')
 
-    return this._http.get(this._apiUrl + "/v1/organizes/checkDup/" + code + '/name/' + name +  '/id/' + id, this._options)
+    return this._http.get(this._apiUrl + "/v1/organizes/checkDup/" + code + '/name/' + name + '/id/' + id, this._options)
       .map((response: Response) => {
         this._loadingService.resolve('loading')
         return this._pxService.verifyResponseArray(response.json().data)
@@ -375,6 +375,19 @@ export class StructureService {
     params.set('q', this._pxService.encrypt('name=' + name))
     this._options.search = params
     return this._http.get(this._apiUrl + '/v1/organizes/listAllByName/', this._options)
+      .map((response: Response) => {
+        this._loadingService.resolve('loading')
+        return response.json().data
+      })
+      .catch(this._loggerService.handleError)
+  }
+
+  listByParentId(parentId: number, offset: number, limit: number): Observable<Structure[]> {
+    this._loadingService.register('loading')
+    let params = new URLSearchParams()
+    params.set('q', this._pxService.encrypt('version=1.0&offset=' + offset + '&limit=' + limit + '&sort=orderNo&dir=desc'))
+    this._options.search = params
+    return this._http.get(this._apiUrl + "/v1/structures/parentId/" + parentId, this._options)
       .map((response: Response) => {
         this._loadingService.resolve('loading')
         return response.json().data

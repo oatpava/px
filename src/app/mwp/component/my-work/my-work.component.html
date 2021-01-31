@@ -27,7 +27,7 @@
 
                 <md-card hide show-gt-md style="margin-left: 0px; margin-right: 0px;">
                     <md-card-content>
-                        <p-dataTable #dt [value]="datas" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" [(selection)]="selectedRow" (onRowSelect)="select(selectedRow, 'show')" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                        <p-dataTable #dt [value]="datas" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50]" selectionMode="single" (onRowSelect)="select($event.data, 'show')" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
                             <p-header>
                                 <div layout="row" layout-align="space-between start">
                                     <div></div>

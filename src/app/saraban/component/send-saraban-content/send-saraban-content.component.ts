@@ -9,6 +9,7 @@ import { MwpService } from '../../../mwp/service/mwp.service'
 import { InboxService } from '../../../mwp/service/inbox.service'
 import { OutboxService } from '../../../mwp/service/outbox.service'
 import { WorkflowService } from '../../../mwp/service/workflow.service'
+import { UserProfileService } from '../../../setting/service/user-profile.service'
 import { PxService } from '../../../main/px.service'
 import { ParamSarabanService } from '../../service/param-saraban.service'
 
@@ -24,14 +25,14 @@ import { Structure } from '../../../setting/model/structure.model'
 
 import { environment } from '../../../../environments/environment'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { FileAttach, convertUserPorfile } from '../../../shared'
+import { FileAttach } from '../../../shared'
 import { DialogViewComponent } from '../add-saraban-content/dialog-view/dialog-view.component'
 
 @Component({
   selector: 'app-send-saraban-content',
   templateUrl: './send-saraban-content.component.html',
   styleUrls: ['./send-saraban-content.component.styl'],
-  providers: [SarabanContentService, WorkflowService, MwpService, OutboxService, InboxService, PxService]
+  providers: [SarabanContentService, WorkflowService, MwpService, OutboxService, InboxService, UserProfileService, PxService]
 })
 export class SendSarabanContentComponent implements OnInit {
 
@@ -152,10 +153,11 @@ export class SendSarabanContentComponent implements OnInit {
     private _mwpService: MwpService,
     private _outboxService: OutboxService,
     private _inboxService: InboxService,
+    private _userProfileService: UserProfileService,
     private _pxService: PxService,
     private _paramSarabanService: ParamSarabanService,
     public dialogRef: MdDialogRef<SendSarabanContentComponent>,
-    private _dialog: MdDialog
+    private _dialog: MdDialog,
   ) {
     this.structureTree = this._paramSarabanService.structureTree
     this.structureTree_filter = this._paramSarabanService.structureTree_filter
@@ -332,7 +334,7 @@ export class SendSarabanContentComponent implements OnInit {
       this.sendTo[num].push(node)
     }
   }
-  
+
 
 
   onDateChanged(event, num: number) {
@@ -701,43 +703,22 @@ export class SendSarabanContentComponent implements OnInit {
     }
   }
 
-  prepareShowTo(sendTo: string) {
-    let to: string[] = sendTo.split(", ")
-    to.forEach(name => {
-      this._loadingService.register('main')
-      this._sarabanContentService
-        .getStructureByName(name, 1)
-        .subscribe(response => {
-          this._loadingService.resolve('main')
-          let node: TreeNode
-          let parentKey: number[]
-          switch (response.userType) {
-            case 0://user
-              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
-              if (node) {
-                this.sendTo[0].push(node)
-                this.selectedStructure[0].push(node)
+  prepareShowTo(userProfileId: number) {
+    this._loadingService.register('main')
+    this._userProfileService
+      .getUserProfile(userProfileId, '1.0')
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        let parentKey: number[] = this._paramSarabanService.convertParentKey(response.structure.parentKey)
+        let node: TreeNode = this._paramSarabanService.findNode(this.structureTree, response.structure.id, false, parentKey)
+        if (node) {
+          this.sendTo[0].push(node)
+          this.selectedStructure[0].push(node)
 
-                this.selectedGroup[0].push(this._privateGroupTree[1].find(x => x.data.id == node.data.id))
-                this.favouriteNodeAdded[0][node.data.favIndex] = true
-              }
-              ; break
-            case 1://structure
-              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
-              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
-              if (node) {
-                this.sendTo[0].push(node)
-                this.selectedStructure[0].push(node)
-
-                this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
-                this.favouriteNodeAdded[0][node.data.favIndex] = true
-              }
-              ; break
-            default: ; break//3: external
-          }
-        })
-    })
+          this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
+          this.favouriteNodeAdded[0][node.data.favIndex] = true
+        }
+      })
   }
 
   getPrivateGroup() {
@@ -1013,16 +994,16 @@ export class SendSarabanContentComponent implements OnInit {
     let node: TreeNode
     let parentKey: number[]
     if (lastNodeData.userType == 1) {
-        parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
-        node = this._paramSarabanService.findNode(this.structureTree, lastNodeData.id, false, parentKey)
-        if (node) {
-          this.sendTo[0].push(node)
-          this.selectedStructure[0].push(node)
+      parentKey = this._paramSarabanService.convertParentKey(lastNodeData.profile.parentKey)
+      node = this._paramSarabanService.findNode(this.structureTree, lastNodeData.id, false, parentKey)
+      if (node) {
+        this.sendTo[0].push(node)
+        this.selectedStructure[0].push(node)
 
-          this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
-          this.favouriteNodeAdded[0][node.data.favIndex] = true
-        }
+        this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
+        this.favouriteNodeAdded[0][node.data.favIndex] = true
       }
+    }
   }
 
   getLastSendTo() {

@@ -71,7 +71,7 @@ export class AddOrganizeComponent implements OnInit {
           .subscribe(response => {
             this.msgs = [];
             this.msgs.push({
-              severity: 'error',
+              severity: 'success',
               summary: 'ลบข้อมูลสำเร็จ',
               detail: 'หน่วยงาน' + structure.name
             })
@@ -81,20 +81,20 @@ export class AddOrganizeComponent implements OnInit {
   }
 
   updateStructure(structure: Structure) {
-    //check Code
-    this._structureService
-      .checkOrgCode(structure.code, structure.name, structure.id)
-      .subscribe(response => {
-        console.log(response)
-        //check Code
-        if (response.result) {
-          this.msgs = [];
-          this.msgs.push({
-            severity: 'warn',
-            summary: 'ไม่สามารถแก้ไขได้เนื่องจาก',
-            detail: 'รหัสหน่วยงาน หรือชื่อหน่วยงาน ซ้ำ'
-          })
-        } else {
+    // //check Code
+    // this._structureService
+    //   .checkOrgCode(structure.code, structure.name, structure.id)
+    //   .subscribe(response => {
+    //     console.log(response)
+    //     //check Code
+    //     if (response.result) {
+    //       this.msgs = [];
+    //       this.msgs.push({
+    //         severity: 'warn',
+    //         summary: 'ไม่สามารถแก้ไขได้เนื่องจาก',
+    //         detail: 'รหัสหน่วยงาน หรือชื่อหน่วยงาน ซ้ำ'
+    //       })
+    //     } else {
 
           let dialogRef = this._dialog.open(ConfirmDialogComponent, {
             width: '50%',
@@ -107,7 +107,7 @@ export class AddOrganizeComponent implements OnInit {
 
               this.msgs = [];
               this.msgs.push({
-                severity: 'info',
+                severity: 'success',
                 summary: 'บันทึกสำเร็จ',
                 detail: 'แก้ไขหน่วยงาน' + structure.name
               })
@@ -121,9 +121,9 @@ export class AddOrganizeComponent implements OnInit {
             }
           })
 
-        }
-        //check Code
-      })
+      //   }
+      //   //check Code
+      // })
   }
 
 
@@ -155,7 +155,7 @@ export class AddOrganizeComponent implements OnInit {
 
               this.msgs = [];
               this.msgs.push({
-                severity: 'info',
+                severity: 'success',
                 summary: 'บันทึกสำเร็จ',
                 detail: 'เพิ่มหน่วยงาน' + structure.name
               })

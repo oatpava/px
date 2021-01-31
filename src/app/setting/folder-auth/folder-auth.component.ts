@@ -3,10 +3,12 @@ import { TreeNode, Message } from 'primeng/primeng';
 import { TdLoadingService } from '@covalent/core'
 import { Location } from '@angular/common'
 import { Observable } from 'rxjs/Observable'
+import { URLSearchParams } from '@angular/http'
 
 import { SarabanService } from '../../saraban/service/saraban.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
 import { StructureService } from '../../setting/component/structure/structure.service'
+import { PxService } from '../../main/px.service'
 
 import { SarabanFolder } from '../../saraban/model/sarabanFolder.model'
 
@@ -17,6 +19,7 @@ import { SarabanFolder } from '../../saraban/model/sarabanFolder.model'
   providers: [SarabanService, StructureService]
 })
 export class FolderAuthComponent implements OnInit {
+  menuOver: boolean = false
   listButton: { hidden: boolean, index: number } = { hidden: true, index: null }
   isUserSelected: boolean = false
   isEdited: boolean = false
@@ -41,7 +44,8 @@ export class FolderAuthComponent implements OnInit {
     private _location: Location,
     private _sarabanService: SarabanService,
     private _paramSarabanService: ParamSarabanService,
-    private _structureService: StructureService
+    private _structureService: StructureService,
+    private _pxService: PxService
   ) { }
 
   ngOnInit() {
@@ -329,6 +333,14 @@ export class FolderAuthComponent implements OnInit {
 
   reOrder(from: number, to: number) {
     this.selectedFolders.splice(to, 0, this.selectedFolders.splice(from, 1)[0])
+  }
+
+  report(reportType: string) {
+    let params = new URLSearchParams()
+    if (this.isUserSelected) {
+      params.set('ownerId', this.selectedUser.data.id)
+    }
+    this._pxService.report('saraban_folder_auth', reportType, params)
   }
 
 }

@@ -273,8 +273,7 @@
                                 <md-card-content>
 
                               
-                                    <!-- ssssssssssssssssssssssssssssssssssssssssssss -->
-                                    <p-dataTable #dt [value]="datas" [(first)]="tableFirst" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" [(selection)]="selectedRow" (onRowSelect)="show(selectedRow)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
+                                    <p-dataTable #dt [value]="datas" [(first)]="tableFirst" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,50,100]" selectionMode="single" (onRowSelect)="selectDocument($event.data)" [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
 
 
                                         <p-footer>
@@ -296,14 +295,14 @@
 
                                             <p-column *ngIf="column.name =='count'  " [field]="column.name" [header]="column.label" [style]="{'width':'50px'}">
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                    <span *ngIf=" row.isExp =='N' "  (click)="selectDocument(row)" >{{i+1}}</span>    
-                                                    <span *ngIf=" row.isExp =='Y' " style="color: red"  (click)="selectDocument(row)" >{{i+1}}</span>  
+                                                    <span *ngIf=" row.isExp =='N' ">{{i+1}}</span>    
+                                                    <span *ngIf=" row.isExp =='Y' " style="color: red">{{i+1}}</span>  
                                                  </template>
                                             </p-column>
                                             <p-column *ngIf="column.name !='infozafeBarcode' && column.name !='borrowStatus'  && column.name !='count' && column.name!=='Edit' && column.name!=='createdBy'&& column.name!=='updatedBy'  " [field]="column.name" [header]="column.label" [sortable]="true">
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                <span *ngIf=" row.isExp =='N' "   (click)="selectDocument(row)" > {{row[column.name]}}</span>    
-                                                <span  *ngIf=" row.isExp =='Y' " style="color: red" (click)="selectDocument(row)" > {{row[column.name]}}</span>    
+                                                <span *ngIf=" row.isExp =='N' "> {{row[column.name]}}</span>    
+                                                <span  *ngIf=" row.isExp =='Y' " style="color: red"> {{row[column.name]}}</span>    
                                             </template>
                                             </p-column>
 
@@ -319,31 +318,31 @@
 
                                             <p-column *ngIf="column.name =='infozafeBarcode'  " [field]="column.name" [header]="column.label">
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                        <span *ngIf=" row.isExp =='N'  && row.infozafeBarcode == null "  (click)="selectDocument(row)" >จัดเก็บเอง</span>    
-                                                        <span *ngIf=" row.isExp =='N'  && row.infozafeBarcode != null "  (click)="selectDocument(row)" >สถานะจัดเก็บ {{row[column.name]}}</span>  
+                                                        <span *ngIf=" row.isExp =='N'  && row.infozafeBarcode == null ">จัดเก็บเอง</span>    
+                                                        <span *ngIf=" row.isExp =='N'  && row.infozafeBarcode != null ">สถานะจัดเก็บ {{row[column.name]}}</span>  
     
-                                                        <span *ngIf=" row.isExp =='Y'  && row.infozafeBarcode == null " style="color: red" (click)="selectDocument(row)" >จัดเก็บเอง</span>    
-                                                        <span *ngIf=" row.isExp =='Y'  && row.infozafeBarcode != null "  style="color: red"(click)="selectDocument(row)" >สถานะจัดเก็บ {{row[column.name]}}</span>  
+                                                        <span *ngIf=" row.isExp =='Y'  && row.infozafeBarcode == null " style="color: red">จัดเก็บเอง</span>    
+                                                        <span *ngIf=" row.isExp =='Y'  && row.infozafeBarcode != null "  style="color: red">สถานะจัดเก็บ {{row[column.name]}}</span>  
                                                     </template>
                                             </p-column>
 
                                             <p-column *ngIf="column.name =='createdBy'  " [field]="column.name" [header]="column.label" [sortable]="true" >
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                        <span *ngIf=" row.isExp =='N' "  (click)="selectDocument(row)" >{{row.userProfileCreate.fullName}}</span>    
-                                                        <span *ngIf=" row.isExp =='Y' " style="color: red"  (click)="selectDocument(row)" >{{row.userProfileCreate.fullName}}</span>  
+                                                        <span *ngIf=" row.isExp =='N' ">{{row.userProfileCreate.fullName}}</span>    
+                                                        <span *ngIf=" row.isExp =='Y' " style="color: red">{{row.userProfileCreate.fullName}}</span>  
                                                      </template>
                                             </p-column>
 
                                             <p-column *ngIf="column.name =='updatedBy'  " [field]="column.name" [header]="column.label" [sortable]="true">
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                    <span *ngIf=" row.isExp =='N' "  (click)="selectDocument(row)" >{{row.userProfileUpdate.fullName}}</span>    
-                                                    <span *ngIf=" row.isExp =='Y' " style="color: red"  (click)="selectDocument(row)" >{{row.userProfileUpdate.fullName}}</span>  
+                                                    <span *ngIf=" row.isExp =='N' ">{{row.userProfileUpdate.fullName}}</span>    
+                                                    <span *ngIf=" row.isExp =='Y' " style="color: red">{{row.userProfileUpdate.fullName}}</span>  
                                                 </template>
                                             </p-column>
                                             <p-column *ngIf="column.name =='removedBy'  " [field]="column.name" [header]="column.label">
                                                 <template let-col let-row="rowData" pTemplate="body" let-i="rowIndex">
-                                                    <span *ngIf=" row.isExp =='N' "  (click)="selectDocument(row)" >{{row.userProfileDel.fullName}}</span>    
-                                                    <span *ngIf=" row.isExp =='Y' " style="color: red"  (click)="selectDocument(row)" >{{row.userProfileDel.fullName}}</span>  
+                                                    <span *ngIf=" row.isExp =='N' ">{{row.userProfileDel.fullName}}</span>    
+                                                    <span *ngIf=" row.isExp =='Y' " style="color: red">{{row.userProfileDel.fullName}}</span>  
                                                 </template>
                                             </p-column>
                                         </div>

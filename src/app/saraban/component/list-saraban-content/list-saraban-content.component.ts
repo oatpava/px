@@ -52,7 +52,6 @@ export class ListSarabanContentComponent implements OnInit {
   listReturn: ListReturn[]
   tableFirst: number[]
   searched: number
-  selectedRow: SarabanContent
 
   year: number
   folderId: number
@@ -303,7 +302,6 @@ export class ListSarabanContentComponent implements OnInit {
         }],
         { relativeTo: this._route })
     } else {
-      this.selectedRow = null
       let dialogRef = this._dialog.open(DialogWarningComponent)
       dialogRef.componentInstance.header = "แจ้งเตือน"
       dialogRef.componentInstance.message = "คุณไม่มีสิทธิ์ในการเปิดหนังสือชั้นความลับ (" + secret + ")"

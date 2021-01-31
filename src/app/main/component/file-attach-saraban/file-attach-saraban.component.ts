@@ -75,7 +75,7 @@ export class FileAttachSarabanComponent implements OnInit {
   //   { label: 'edt', auth: true },
   //   { label: 'del', auth: true }
   // ]
-  viewWindow
+  //viewWindow
 
   constructor(
     private _pxService: PxService,
