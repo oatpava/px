@@ -100,6 +100,8 @@ export class ListFolderAndDocumentComponent implements OnInit {
   openDoc: boolean = false
   authDelDoc: boolean = false
   authDocRe: boolean = false
+  authCopy: boolean = false
+  authMove: boolean = false
   lvBar: LevelBar
   levleBar: string = ''
   disableBack = false
@@ -1169,6 +1171,8 @@ export class ListFolderAndDocumentComponent implements OnInit {
         this.openDoc = false
         this.authDelDoc = false
         this.authDocRe = false
+        let authCopy: boolean = response.authCopy
+        let authMove: boolean = response.authMove
 
         for (let i of response.data) {
           if (i.menuFunction == 'editFolder') {
@@ -1201,20 +1205,25 @@ export class ListFolderAndDocumentComponent implements OnInit {
           this.authAddDoc = false
           this.createFolder = false
           this.authDelDoc = false
+          authCopy = false
+          authMove = false
         }
 
         if (!this.createFolder) {
-          //not auth
           this.menus = this.menus.filter(menu => menu.id != 1 && menu.id != 2 && menu.id != 3);
         }
         if (!this.authAddDoc) {
-          //not auth
           this.menus = this.menus.filter(menu => menu.id != 5);
         }
 
+        if (!authCopy) {
+          this.menus = this.menus.filter(menu => menu.id != 6)
+        }
 
+        if (!authMove) {
+          this.menus = this.menus.filter(menu => menu.id != 7)
+        }
       })
-
   }
 
   searchRole(): void {
@@ -1479,7 +1488,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
             }
           }
         } else {
-          
+
         }
         this.folderListReturn = new ListReturn({ all: response.countAll, count: count, next: next })
         this._loadingService.resolve('main')

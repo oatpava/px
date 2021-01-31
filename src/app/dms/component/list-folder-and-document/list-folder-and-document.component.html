@@ -386,7 +386,7 @@
 
         <div layout="column" class="showbutton" [tdToggle]="hoverMenuEdit">
 
-            <button *ngIf='checkBox' md-fab [style.background]="'#79ff4d'" color="accent" title="ย้าย" (click)="listFolderTree(); ">
+            <button *ngIf='checkBox && authMove' md-fab [style.background]="'#79ff4d'" color="accent" title="ย้าย" (click)="listFolderTree(); ">
                     <md-icon>compare_arrows</md-icon>
                 </button>
 
