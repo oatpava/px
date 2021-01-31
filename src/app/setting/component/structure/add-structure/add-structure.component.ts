@@ -244,6 +244,13 @@ export class AddStructureComponent implements OnInit {
         if (this.mode === 'add') {
           this.structure.parentId = response.id
           this.structure.parentKey = response.parentKey
+
+          this._structureService
+            .listByParentId(response.id, 0, 1)
+            .subscribe(responses => {
+              let code: number = (responses.length > 0) ? +responses[0].code : +response.code
+              this.structure.code = '' + (code + 1)
+            })
         } else {
           this.structure = response
           this.getStructureFolders(structureId)
