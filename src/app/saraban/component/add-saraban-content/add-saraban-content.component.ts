@@ -939,49 +939,56 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   send(sarabanContent: SarabanContent) {
-    let dialogRef = (window.innerWidth < 960) ?
-      this._dialog.open(SendSarabanContentComponent) :
-      this._dialog.open(SendSarabanContentComponent, {
-        width: '80%', height: '90%'
-      })
-    dialogRef.componentInstance.mode = 'send'
-    dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + this.trimTitle(sarabanContent.wfContentTitle)
-    dialogRef.afterClosed().subscribe(result => {
-      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
-      if (result) {
-        if (this._paramSarabanService.msg != null) {
-          this.msgs = []
-          this.msgs.push(this._paramSarabanService.msg)
-          this._paramSarabanService.msg = null
-          setTimeout(() => this.msgs = [], 3000)
-        }
-        this.getProcesses(sarabanContent.wfDocumentId, 0)
-        if (this._paramSarabanService.datas) {
-          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-          if (tmp) tmp.wfContentInt03 = 1
-          if (this._paramSarabanService.searchFilters) {
-            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-            if (tmp1) tmp1.wfContentInt03 = 1
+    // if (this.numFileAttach == 0) {
+    //   let dialogRef = this._dialog.open(DialogWarningComponent)
+    //   dialogRef.componentInstance.header = "แจ้งเตือน"
+    //   dialogRef.componentInstance.message = "ไม่สามารถส่งหนังสือ เนื่องจากยังไม่ได้แนบเอกสาร"
+    //   dialogRef.componentInstance.confirmation = false
+    // } else {
+      let dialogRef = (window.innerWidth < 960) ?
+        this._dialog.open(SendSarabanContentComponent) :
+        this._dialog.open(SendSarabanContentComponent, {
+          width: '80%', height: '90%'
+        })
+      dialogRef.componentInstance.mode = 'send'
+      dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + this.trimTitle(sarabanContent.wfContentTitle)
+      dialogRef.afterClosed().subscribe(result => {
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        if (result) {
+          if (this._paramSarabanService.msg != null) {
+            this.msgs = []
+            this.msgs.push(this._paramSarabanService.msg)
+            this._paramSarabanService.msg = null
+            setTimeout(() => this.msgs = [], 3000)
           }
-        }
-      } else {
-        if (dialogRef.componentInstance.scanned) {
-          this._loadingService.register('main')
-          this._pxService
-            .updateWfe(-sarabanContent.id, 0)
-            .subscribe(response => {
-              this._loadingService.resolve('main')
-            })
-        }
+          this.getProcesses(sarabanContent.wfDocumentId, 0)
+          if (this._paramSarabanService.datas) {
+            let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
+            if (tmp) tmp.wfContentInt03 = 1
+            if (this._paramSarabanService.searchFilters) {
+              let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
+              if (tmp1) tmp1.wfContentInt03 = 1
+            }
+          }
+        } else {
+          if (dialogRef.componentInstance.scanned) {
+            this._loadingService.register('main')
+            this._pxService
+              .updateWfe(-sarabanContent.id, 0)
+              .subscribe(response => {
+                this._loadingService.resolve('main')
+              })
+          }
 
-        // if (this._paramSarabanService.menuType == "inbox") {
-        //   this._paramSarabanService.reloadInbox = true
-        // } else if (this._paramSarabanService.menuType == "outbox") {
-        //   this._paramSarabanService.reloadOutbox = true
-        // }
+          // if (this._paramSarabanService.menuType == "inbox") {
+          //   this._paramSarabanService.reloadInbox = true
+          // } else if (this._paramSarabanService.menuType == "outbox") {
+          //   this._paramSarabanService.reloadOutbox = true
+          // }
 
-      }
-    })
+        }
+      })
+    // }
   }
 
   reply(sarabanContent: SarabanContent) {
