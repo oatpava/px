@@ -87,7 +87,7 @@
             </md-select>
             <button *ngIf="!item.uploaded" md-icon-button title="นำเข้าไฟล์เอกสารแก้ไข" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
             <button *ngIf="item.uploaded" md-icon-button title="มีการแก้ไขเอกสาร" disabled><md-icon>playlist_add_check</md-icon></button>
-            <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" (change)="update(item ,i)" style="display:none ">
+            <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" (change)="update(item ,i)" style="display:none" [accept]="allowedMimeType.toString()">
         </md-list-item>
         <md-divider md-inset></md-divider>
     </md-list>

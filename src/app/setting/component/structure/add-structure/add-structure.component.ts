@@ -135,20 +135,20 @@ export class AddStructureComponent implements OnInit {
   }
 
   updateStructure(structure: Structure) {
-    //check Code
-    this._structureService
-      .checkStructureCode(structure.code, structure.name, structure.id)
-      .subscribe(response => {
-        console.log(response)
-        //check Code
-        if (response.result) {
-          this.msgs = [];
-          this.msgs.push({
-            severity: 'warn',
-            summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
-            detail: 'รหัสหน่วยงาน ซ้ำ'
-          })
-        } else {
+    // //check Code
+    // this._structureService
+    //   .checkStructureCode(structure.code, structure.name, structure.id)
+    //   .subscribe(response => {
+    //     console.log(response)
+    //     //check Code
+    //     if (response.result) {
+    //       this.msgs = [];
+    //       this.msgs.push({
+    //         severity: 'warn',
+    //         summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
+    //         detail: 'รหัสหน่วยงาน ซ้ำ'
+    //       })
+    //     } else {
 
           let dialogRef = this._dialog.open(ConfirmDialogComponent, {
             width: '50%',
@@ -161,7 +161,7 @@ export class AddStructureComponent implements OnInit {
 
               this.msgs = [];
               this.msgs.push({
-                severity: 'info',
+                severity: 'success',
                 summary: 'บันทึกสำเร็จ',
                 detail: 'แก้ไขหน่วยงาน' + structure.name
               })
@@ -177,9 +177,9 @@ export class AddStructureComponent implements OnInit {
             }
           })
 
-        }
-        //check Code
-      })
+      //   }
+      //   //check Code
+      // })
   }
 
   updateStructureFolders(structure: Structure) {
@@ -244,6 +244,13 @@ export class AddStructureComponent implements OnInit {
         if (this.mode === 'add') {
           this.structure.parentId = response.id
           this.structure.parentKey = response.parentKey
+
+          this._structureService
+            .listByParentId(response.id, 0, 1)
+            .subscribe(responses => {
+              let code: number = (responses.length > 0) ? +responses[0].code : +response.code
+              this.structure.code = '' + (code + 1)
+            })
         } else {
           this.structure = response
           this.getStructureFolders(structureId)
