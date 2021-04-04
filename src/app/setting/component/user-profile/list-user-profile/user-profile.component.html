@@ -99,12 +99,12 @@
             </button>
         </div> -->
         <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน PDF)" color="accent" [style.background]="'#cc7a00'" (click)="genReport('pdf')">
+            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน PDF)" color="accent" [style.background]="'#cc7a00'" (click)="genReportPDF('pdf')">
                 <md-icon>assignment</md-icon>
             </button>
         </div>
         <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน Excel)" color="accent" [style.background]="'#cc7a00'" (click)="genReport('xls')">
+            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน Excel)" color="accent" [style.background]="'#cc7a00'" (click)="genReportExcel('xls')">
                 <md-icon>grid_on</md-icon>
             </button>
         </div>

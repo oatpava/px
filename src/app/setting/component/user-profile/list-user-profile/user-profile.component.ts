@@ -679,20 +679,30 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  genReport(reportType: string) {
-    console.log(this.parentStructure)
-    let data = this.parentStructure.parentKey
+  genReportPDF() {
     this._loadingService.register('main')
     this._userProfileService
-      .getlistStatusByStucture(data, 'user_status')
+      .getlistStatusByStucture(this.parentStructure.parentKey, 'user_status')
       .subscribe(response => {
-        console.log(response)
         this._loadingService.resolve('main')
         let params = new URLSearchParams()
         params.set("jobType", 'user_status')
         params.set("createdBy", '1')
-        this._pxService.report('user_status', reportType, params)
-      });
+        this._pxService.report('user_status', 'pdf', params)
+      })
+  }
+
+  genReportExcel() {
+    this._loadingService.register('main')
+    this._userProfileService
+      .getlistStatusByStucture(this.parentStructure.parentKey, 'user_status')
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        let params = new URLSearchParams()
+        params.set("jobType", 'user_status')
+        params.set("createdBy", '1')
+        this._pxService.report('user_status2', 'xls', params)
+      })
   }
 
 }
