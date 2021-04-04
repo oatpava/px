@@ -339,6 +339,8 @@ export class FolderAuthComponent implements OnInit {
     let params = new URLSearchParams()
     if (this.isUserSelected) {
       params.set('ownerId', this.selectedUser.data.id)
+    } else {
+      params.set('ownerId', '0')
     }
     this._pxService.report('saraban_folder_auth', reportType, params)
   }

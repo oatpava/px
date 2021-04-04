@@ -368,6 +368,9 @@ export class InboxAuthComponent implements OnInit {
     if (this.isOwnerSelected) {
       params.set('ownerType', this.selectedOwner.leaf ? '0' : '1')
       params.set('ownerId', this.selectedOwner.data.id)
+    } else {
+      params.set('ownerType', '0')
+      params.set('ownerId', '0')
     }
     this._pxService.report('saraban_inbox_auth', reportType, params)
   }

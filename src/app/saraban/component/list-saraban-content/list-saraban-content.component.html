@@ -87,6 +87,10 @@
                 <div *ngIf="folder.searchField[9]" layout="row" layout-align="left start" class="searchFilter">
                     <md-input flex placeholder="เรื่อง" name="title" [(ngModel)]="searchFilters.wfContentTitle"></md-input>
                 </div>
+                <!-- *****not implement folder.searchField yet-->
+                <div *ngIf="folder.searchField[10]" layout="row" layout-align="left start" class="searchFilter">
+                    <md-input flex placeholder="การปฏิบัติ" name="wfContentText01" [(ngModel)]="searchFilters.wfContentText01"></md-input>
+                </div>
                 <div *ngIf="folder.searchField[10]" layout="row" layout-align="left start" class="searchFilter">
                     <md-input flex placeholder="หมายเหตุ" name="description" [(ngModel)]="searchFilters.wfContentDescription"></md-input>
                 </div>
