@@ -13,6 +13,7 @@ export class SarabanContentFilter {
     wfContentFrom: string
     wfContentTo: string
     wfContentTitle: string
+    wfContentText01: string
     status: number
     userName: string
     fileAttachText: String
@@ -35,6 +36,7 @@ export class SarabanContentFilter {
         this.wfContentFrom = ''
         this.wfContentTo = ''
         this.wfContentTitle = ''
+        this.wfContentText01 = ''
         this.status = 0
         this.userName = ''
         this.fileAttachText = ''
