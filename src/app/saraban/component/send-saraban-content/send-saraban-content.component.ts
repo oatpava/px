@@ -173,7 +173,7 @@ export class SendSarabanContentComponent implements OnInit {
     this.getSarabanContent(this._paramSarabanService.sarabanContentId)
     this.prepareInitialDate()
     this.getProcesses()
-    this.prepareShowTo('งานสารบรรณ')
+    this.prepareShowToStr('งานสารบรรณ')
   }
 
   getSarabanContent(sarabanContentId: number): void {
@@ -701,6 +701,45 @@ export class SendSarabanContentComponent implements OnInit {
     } else {
       this.acProcess.show();
     }
+  }
+
+  prepareShowToStr(sendTo: string) {
+    let to: string[] = sendTo.split(", ")
+    to.forEach(name => {
+      this._loadingService.register('main')
+      this._sarabanContentService
+        .getStructureByName(name, 1)
+        .subscribe(response => {
+          this._loadingService.resolve('main')
+          let node: TreeNode
+          let parentKey: number[]
+          switch (response.userType) {
+            case 0://user
+              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, true, parentKey)
+              if (node) {
+                this.sendTo[0].push(node)
+                this.selectedStructure[0].push(node)
+
+                this.selectedGroup[0].push(this._privateGroupTree[1].find(x => x.data.id == node.data.id))
+                this.favouriteNodeAdded[0][node.data.favIndex] = true
+              }
+              ; break
+            case 1://structure
+              parentKey = this._paramSarabanService.convertParentKey(response.data.parentKey)
+              node = this._paramSarabanService.findNode(this.structureTree, response.data.id, false, parentKey)
+              if (node) {
+                this.sendTo[0].push(node)
+                this.selectedStructure[0].push(node)
+
+                this.selectedGroup[0].push(this._privateGroupTree[0].find(x => x.data.id == node.data.id))
+                this.favouriteNodeAdded[0][node.data.favIndex] = true
+              }
+              ; break
+            default: ; break//3: external
+          }
+        })
+    })
   }
 
   prepareShowTo(userProfileId: number) {
