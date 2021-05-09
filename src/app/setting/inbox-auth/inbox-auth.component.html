@@ -94,7 +94,7 @@
                     <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
                         <!-- <button md-raised-button [ngClass]="{'md-primary': isEdited}" [style.margin-right]="'5px'" [disabled]="!isEdited" (click)="save()">บันทึก</button> -->
                         <button md-raised-button [ngClass]="{'md-primary': (listAdd.length + listRemove.length > 0)}" [style.margin-right]="'5px'" [disabled]="(listAdd.length==0 && listRemove.length==0)" (click)="save2()">บันทึก</button>
-                        <button md-raised-button md-ripple (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
+                        <button md-raised-button md-ripple (click)="goBack()" [style.margin-right]="'5px'">ยกเลิก</button>
                     </div>
                 </md-card-content>
             </md-card>

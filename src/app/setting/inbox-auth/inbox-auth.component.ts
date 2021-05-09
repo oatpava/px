@@ -53,16 +53,40 @@ export class InboxAuthComponent implements OnInit {
 
   ngOnInit() {
     this.initialStructurTree()
+    this.msgs = []
+    this.msgs.push({
+      severity: 'info',
+      summary: 'กำลังดำเนินการ',
+      detail: 'ระบบกำลังดำเนินการ กรุณารอสักครู่'
+    })
+  }
+
+  goBack() {
+    if (this.isOwnerSelected) {
+      this.isOwnerSelected = false
+      this.selectedOwner = {
+        label: '',
+        icon: '',
+        data: { id: 0, profile: null },
+        leaf: true
+      }
+      this.assignedInboxs = []
+      this.ownerTree.forEach(node => node.expanded = false)
+    } else {
+      this._location.back()
+    }
   }
 
   initialStructurTree() {
+    this._loadingService.register('main')
     Observable.forkJoin(
       this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', 1),
       this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', 1)
     ).subscribe((response: Array<any>) => {
+      this._loadingService.resolve('main')
+      this.msgs = []
       response[0].forEach(structure => {
         let node = this._paramSarabanService.genParentNode(structure, null)
-        node.data.loaded = false
         this.ownerTree.push(node)
         this.userToAssignTree.push(node)
       })
@@ -76,12 +100,14 @@ export class InboxAuthComponent implements OnInit {
 
   loadNode(event) {
     let node = event.node
-    if (!node.data.loaded) {
+    if (node.children.length == 0) {
       if (!node.leaf) {
+        this._loadingService.register('main')
         Observable.forkJoin(
           this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
           this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
         ).subscribe((response: Array<any>) => {
+          this._loadingService.resolve('main')
           response[0].forEach(structure => {
             let tmp = this._paramSarabanService.genParentNode(structure, node)
             node.children.push(tmp)
@@ -92,8 +118,6 @@ export class InboxAuthComponent implements OnInit {
           })
         })
       }
-    } else {
-      node.data.loaded = true
     }
   }
 
@@ -202,10 +226,6 @@ export class InboxAuthComponent implements OnInit {
     this.listRemove.push(node)
   }
 
-  cancel() {
-    this._location.back()
-  }
-
   // save() {
   //   if (this.assignedInboxs != null) {
   //     for (let i = 0; i < this.assignedInboxs.length; i++) {
@@ -260,7 +280,7 @@ export class InboxAuthComponent implements OnInit {
   //   })
 
   //   setTimeout(() => {
-  //     this._location.back()
+  //     this.goBack()
   //   }, 2000)
   // }
 
@@ -298,10 +318,6 @@ export class InboxAuthComponent implements OnInit {
     }
   }
 
-  goBack() {
-    this._location.back()
-  }
-
   // findNode(tree: TreeNode[], id: number): any {//user=0->false, structure=1->true
   //   let node = null
   //   for (let i = 0; i < tree.length; i++) {
@@ -329,38 +345,39 @@ export class InboxAuthComponent implements OnInit {
   // }
 
   save2() {
-    let add_tmp: any[] = []
-    let remove_tmp: any[] = []
+    let tmp: any[] = []
+    let addedNum: number = 0
+    let removedNum: number = 0
 
     this.listAdd.forEach(a => {
-      add_tmp.push(this._inoutAssignService.create(this.genInoutAssign2(a)))
+      tmp.push(this._inoutAssignService.create(this.genInoutAssign2(a)))
+      addedNum++
     })
     this.listRemove.forEach(r => {
-      remove_tmp.push(this._inoutAssignService.remove(r))
+      tmp.push(this._inoutAssignService.remove(r))
+      removedNum++
     })
-    Observable.forkJoin(add_tmp)
+    this._loadingService.register('main')
+    Observable.forkJoin(tmp)
       .subscribe((res: any[]) => {
+        this._loadingService.resolve('main')
         this.msgs = []
-        this.msgs.push({
-          severity: 'success',
-          summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
-          detail: add_tmp.length + 'รายการ'
-        })
+        if (addedNum > 0) {
+          this.msgs.push({
+            severity: 'success',
+            summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
+            detail: 'คุณได้ทำการกำหนดสิทธิ์หนังสือเข้า ' + addedNum + ' รายการ'
+          })
+        }
+        if (removedNum > 0) {
+          this.msgs.push({
+            severity: 'success',
+            summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
+            detail: 'คุณได้ทำการแก้ไขสิทธิ์หนังสือเข้า ' + removedNum + ' รายการ'
+          })
+        }
+        this.goBack()
       })
-
-    Observable.forkJoin(remove_tmp)
-      .subscribe((res: any[]) => {
-        this.msgs = []
-        this.msgs.push({
-          severity: 'success',
-          summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
-          detail: remove_tmp.length + 'รายการ'
-        })
-      })
-
-    setTimeout(() => {
-      this._location.back()
-    }, 2000)
   }
 
   report(reportType: string) {

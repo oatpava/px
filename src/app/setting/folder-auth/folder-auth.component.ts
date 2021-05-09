@@ -53,11 +53,66 @@ export class FolderAuthComponent implements OnInit {
     this.getFolders()
   }
 
+  goBack() {
+    if (this.isUserSelected) {
+      this.isUserSelected = false
+      this.isEdited = false
+      this.selectedUser = {
+        label: '',
+        icon: '',
+        data: { id: 0, profile: null },
+        leaf: true
+      }
+      this.clearFolderTree()
+      this.selectedFolders = []
+      this.deletedFolders = []
+      this.structureTree.forEach(node => node.expanded = false)
+    } else {
+      this._location.back()
+    }
+  }
+
+  clearFolderTree() {
+    this._loadingService.register('main')
+    this.msgs = []
+    this.msgs.push({
+      severity: 'info',
+      summary: 'กำลังดำเนินการ',
+      detail: 'ระบบกำลังดำเนินการ กรุณารอสักครู่'
+    })
+    setTimeout(() => {
+      this._loadingService.resolve('main')
+      this.msgs = []
+    }, 1000)
+
+    this.folderTree.forEach(node => {
+      this.clearNodeRecursive(node)
+    })
+  }
+  clearNodeRecursive(node: TreeNode) {
+    if (!node.leaf) {
+      node.expanded = false
+      node.partialSelected = false
+      node.data.selected = false
+    } else {
+      node.data.selected = false
+      node.data.sc = false
+      node.data.scId = 0
+      node.data.scOrderNo = 0
+    }
+
+    node.children.forEach(childNode => {
+      this.clearNodeRecursive(childNode)
+    })
+  }
+
   initialStructurTree() {
+    this._loadingService.register('main')
     Observable.forkJoin(
       this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', 1),
       this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', 1)
     ).subscribe((response: Array<any>) => {
+      this._loadingService.resolve('main')
       response[0].forEach(structure => {
         let node = this._paramSarabanService.genParentNode(structure, null)
         this.structureTree.push(node)
@@ -71,24 +126,36 @@ export class FolderAuthComponent implements OnInit {
 
   loadNode(event) {
     let node = event.node
-    if (!node.leaf) {
-      Observable.forkJoin(
-        this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
-        this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
-      ).subscribe((response: Array<any>) => {
-        response[0].forEach(structure => {
-          let tmp = this._paramSarabanService.genParentNode(structure, node)
-          node.children.push(tmp)
+    if (node.children.length == 0) {
+      if (!node.leaf) {
+        this._loadingService.register('main')
+        Observable.forkJoin(
+          this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.data.id),
+          this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.data.id)
+        ).subscribe((response: Array<any>) => {
+          this._loadingService.resolve('main')
+          response[0].forEach(structure => {
+            let tmp = this._paramSarabanService.genParentNode(structure, node)
+            node.children.push(tmp)
+          })
+          response[1].forEach(user => {
+            let tmp = this._paramSarabanService.genNode(user, node)
+            node.children.push(tmp)
+          })
         })
-        response[1].forEach(user => {
-          let tmp = this._paramSarabanService.genNode(user, node)
-          node.children.push(tmp)
-        })
-      })
+      }
     }
   }
 
   getFolders() {
+    this.msgs = []
+    this.msgs.push({
+      severity: 'info',
+      summary: 'กำลังดำเนินการ',
+      detail: 'ระบบกำลังดำเนินการ กรุณารอสักครู่'
+    })
+    setTimeout(() => this.msgs = [], 3000)
+
     this._loadingService.register('main')
     this._sarabanService
       .getSarabanFolders(0)
@@ -103,7 +170,7 @@ export class FolderAuthComponent implements OnInit {
       })
   }
   getFoldersRecursive(node: TreeNode) {
-    if (node.data.isFolder) {
+    if (!node.leaf) {
       this._loadingService.register('main')
       this._sarabanService
         .getSarabanFolders(node.data.folder.id)
@@ -123,7 +190,8 @@ export class FolderAuthComponent implements OnInit {
       label: folder.wfFolderName,
       expandedIcon: "fa-folder-open-o",
       collapsedIcon: "fa-folder-o",
-      data: { folder: folder, isFolder: true, selected: false },
+      leaf: false,
+      data: { folder: folder, selected: false },
       children: [],
       parent: parentNode
     }
@@ -132,24 +200,10 @@ export class FolderAuthComponent implements OnInit {
     return {
       label: folder.wfFolderName,
       icon: "fa-book",
-      data: { folder: folder, isFolder: false, selected: false, sc: false },
+      leaf: true,
+      data: { folder: folder, selected: false, sc: false },
       children: [],
       parent: parentNode
-    }
-  }
-  clearNode() {
-    this.folderTree.forEach(node => {
-      this.clearRecursive(node)
-    })
-  }
-  private clearRecursive(node: TreeNode) {
-    node.expanded = false
-    node.partialSelected = false
-    node.data.selected = false
-    if (node.children) {
-      node.children.forEach(childNode => {
-        this.clearRecursive(childNode)
-      })
     }
   }
   findNodeRecursive(tree: TreeNode[], id: number): TreeNode {
@@ -168,33 +222,30 @@ export class FolderAuthComponent implements OnInit {
   }
 
   getShortcutFolders(userProfileId: number) {
-    let shortcutedFolders: SarabanFolder[]
     this._loadingService.register('main')
     this._sarabanService
       .listShortcutsByUserProfileId(userProfileId)
-      .map(scFolders => shortcutedFolders = scFolders)
-      .subscribe(
-        (data) => {
-          this._loadingService.resolve('main')
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+
+        if (response.length > 0) {
           this.msgs = []
           this.msgs.push(
             {
               severity: 'info',
               summary: 'แฟ้มทะบียนที่กำหนดสิทธิ์',
-              detail: 'จำนวน ' + shortcutedFolders.length + ' แฟ้มทะบียน'
+              detail: 'จำนวน ' + response.length + ' แฟ้มทะบียน'
             })
-          for (let i = 0; i < shortcutedFolders.length; i++) {
-            let node: TreeNode = this.findNodeRecursive(this.folderTree, shortcutedFolders[i].wfFolderLinkFolderId)
+          for (let i = 0; i < response.length; i++) {
+            let node: TreeNode = this.findNodeRecursive(this.folderTree, response[i].wfFolderLinkFolderId)
             node.data.selected = true
             node.data.sc = true
-            node.data.scId = shortcutedFolders[i].id
-            node.data.scOrderNo = shortcutedFolders[i].orderNo
+            node.data.scId = response[i].id
+            node.data.scOrderNo = response[i].orderNo
             this.patialSelectRecursive(node, true)
             this.selectedFolders.push(node)
           }
-        },
-        (err) => {
-          this._loadingService.resolve('main')
+        } else {
           this.msgs = []
           this.msgs.push(
             {
@@ -202,11 +253,12 @@ export class FolderAuthComponent implements OnInit {
               summary: 'ยังไม่มีแฟ้มทะบียนที่กำหนดสิทธิ์',
               detail: ''
             })
-        })
+        }
+      })
   }
 
   nodeSelect(event) {
-    if (event.node.data.isFolder && event.node.children.length == 0) {//empty folder
+    if (!event.node.leaf && event.node.children.length == 0) {//empty folder
       this.msgs = []
       this.msgs.push(
         {
@@ -219,11 +271,11 @@ export class FolderAuthComponent implements OnInit {
       this.selectedFolders.forEach(node => {
         if (node.parent != null) {
           node.parent.partialSelected = true
-          if (!node.data.isFolder) node.data.selected = true
+          if (node.leaf) node.data.selected = true
         }
       })
     }
-    this.selectedFolders = this.selectedFolders.filter(node => !node.data.isFolder)//unselect folder
+    this.selectedFolders = this.selectedFolders.filter(node => node.leaf)//unselect folder
   }
 
   nodeUnSelect(event) {
@@ -240,12 +292,11 @@ export class FolderAuthComponent implements OnInit {
       this.isUserSelected = false
       this.isEdited = false
       this.msgs = []
-      this.msgs.push(
-        {
-          severity: 'warn',
-          summary: 'กำหนดแฟ้มทะเบียนได้เฉพาะผู้ใช้งานเท่านั้น',
-          detail: event.node.label
-        })
+      this.msgs.push({
+        severity: 'warn',
+        summary: 'กำหนดแฟ้มทะเบียนได้เฉพาะผู้ใช้งานเท่านั้น',
+        detail: event.node.label
+      })
     }
 
   }
@@ -271,14 +322,19 @@ export class FolderAuthComponent implements OnInit {
 
   save() {
     let tmp: any[] = []
+    let addedNum: number = 0
+    let removedNum: number = 0
+
     this.deletedFolders.forEach(deletedFolder => {
       deletedFolder.data.folder.id = deletedFolder.data.scId
       tmp.push(this._sarabanService.deleteFolder(deletedFolder.data.folder))
+      removedNum++
     })
     for (let i = 0; i < this.selectedFolders.length; i++) {
       if (!this.selectedFolders[i].data.sc) {
         let folder: SarabanFolder = new SarabanFolder({ id: this.selectedFolders[i].data.folder.id, orderNo: i })
         tmp.push(this._sarabanService.createSarabanShortcutFolder(this.selectedUser.data.id, folder))
+        addedNum++
       } else {
         if (this.selectedFolders[i].data.scOrderNo != i) {
           let folder: SarabanFolder = new SarabanFolder({ id: this.selectedFolders[i].data.scId, orderNo: i })
@@ -286,23 +342,27 @@ export class FolderAuthComponent implements OnInit {
         }
       }
     }
+    this._loadingService.register('main')
     Observable.forkJoin(tmp)
       .subscribe((res: any[]) => {
-        this._location.back()
+        this._loadingService.resolve('main')
+        this.msgs = []
+        if (addedNum > 0) {
+          this.msgs.push({
+            severity: 'success',
+            summary: 'กำหนดแฟ้มทะเบียนให้เจ้าหน้าที่สำเร็จ',
+            detail: 'คุณได้ทำการกำหนดแฟ้มทะเบียนให้เจ้าหน้าที่ ' + addedNum + ' รายการ'
+          })
+        }
+        if (removedNum > 0) {
+          this.msgs.push({
+            severity: 'success',
+            summary: 'แก้ไขสิทธิ์แฟ้มทะเบียนให้เจ้าหน้าที่สำเร็จ',
+            detail: 'คุณได้ทำการแก้ไขสิทธิ์แฟ้มทะเบียนให้เจ้าหน้าที่ ' + removedNum + ' รายการ'
+          })
+        }
+        this.goBack()
       })
-  }
-
-  clear() {
-    this.isEdited = false
-    this.selectedFolders = []
-  }
-
-  goBack() {
-    this._location.back()
-  }
-
-  cancel() {
-    this._location.back()
   }
 
   drop($event, i: number) {

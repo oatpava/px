@@ -86,25 +86,26 @@
                 <div flex="100" flex-xs="100">
                     <md-input-container style="width:100%;">
                         <input md-input #idCard type="text" placeholder="เลขบัตรประชาชน" name="idCard" OnlyNumber="true" minlength="13" maxlength="13" [(ngModel)]="userProfile.idCard" required>
-                        <!-- (keyup)="genFormat(idCard.value)" -->
                     </md-input-container>
                 </div>
             </div>
             <div layout="row" layout-xs="column" layout-margin>
-                <!-- <div flex="48" flex-xs="100">
+                <!-- <div flex="50" flex-xs="100">
                     <md-select placeholder="ตำแหน่ง" [(ngModel)]="userProfile.position.id" name="position" class="pad-top" style="display:inherit;" required>
                         <md-option *ngFor="let position of positions" [value]="position.id">
                             {{position.name}}
                         </md-option>
                     </md-select>
                 </div> -->
-                <div flex="48" flex-xs="100" layout="column" layout-align="left start" style="width:100%;">
-                    <span style="font-size:11.5px;color:#a8a8a8; padding-bottom:5px;">ตำแหน่ง</span>
-                    <p-autoComplete #acPosition field="name" name="position" [(ngModel)]="userProfile.position" [suggestions]="filteredPosition" (completeMethod)="positionFilter($event)" [dropdown]="true" (onDropdownClick)="handleDropdown($event)" class="p-autocomplete" [style]="{'width':'100%'}"
-                        [inputStyle]="{'width':'100%'}" required>
+                <div flex="50" flex-xs="100" layout="column" layout-align="left start" style="width:100%;">
+                    <span style="font-size:11.5px;color:#a8a8a8; padding-bottom:5px;">ตำแหน่ง *</span>
+                    <p-autoComplete #acPosition name="position" [(ngModel)]="selectedPosition" [suggestions]="filteredPosition" field="name" (completeMethod)="positionFilter($event)" 
+                        [dropdown]="true" (onDropdownClick)="handlePositionDropdown($event)" class="p-autocomplete"
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" required>
                     </p-autoComplete>
                 </div>
-                <div flex="48" flex-xs="100">
+                
+                <div flex="50" flex-xs="100">
                     <md-select placeholder="ระดับ" [(ngModel)]="userProfile.positionLevel" name="positionLevel" class="pad-top" style="display:inherit;">
                         <md-option *ngFor="let pl of posLevel" [value]="pl.id">
                             {{pl.name}}

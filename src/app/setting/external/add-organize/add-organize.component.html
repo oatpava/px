@@ -24,7 +24,7 @@
                         </div>
                         <div flex="30" flex-xs="100">
                             <md-input-container style="width:100%;">
-                                <input md-input #structureDetail placeholder="ชื่อย่อหน่วยงาน" name="structureShortName" [(ngModel)]="structure.shortName" tdAutoTrim required minlength="1" maxlength="30">
+                                <input md-input #structureDetail placeholder="ชื่อย่อหน่วยงาน" name="structureShortName" [(ngModel)]="structure.shortName" tdAutoTrim minlength="1" maxlength="30">
                                 <md-hint align="end">อย่างน้อย 1 ตัวอักษร {{structureDetail.value.length}} / 30</md-hint>
                             </md-input-container>
                         </div>
