@@ -660,14 +660,15 @@ export class UserProfileComponent implements OnInit {
   }
 
   genReport(reportType: string) {
+    let data = this.parentStructure.parentKey
     this._loadingService.register('main')
     this._userProfileService
-      .getlistStatusByStucture(this.parentStructure.id, 'user_status')
+      .getlistStatusByStucture(data, 'user_status')
       .subscribe(response => {
         this._loadingService.resolve('main')
         let params = new URLSearchParams()
         params.set("jobType", 'user_status')
-        params.set("createdBy", '' + this._paramSarabanService.userId)
+        params.set("createdBy", '1')
         this._pxService.report('user_status', reportType, params)
       })
   }
