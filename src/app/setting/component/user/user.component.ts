@@ -1,22 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { Observable } from 'rxjs/Observable'
-import { IMyOptions, IMyDateModel } from 'mydatepicker'
+import { IMyOptions } from 'mydatepicker'
 import { PxService, } from '../../../main/px.service'
 import { StructureService } from '../structure/structure.service'
 import { UserService } from '../../service/user.service'
 import { UserProfileService } from '../../service/user-profile.service'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component'
-import { ConfirmDialogComponent } from '../../../main/component/confirm-dialog/confirm-dialog.component'
-import { MdDialog, MdDialogRef } from '@angular/material'
-// import { FileUploader } from 'ng2-file-upload'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng';
-
-
+import { MdDialog } from '@angular/material'
+import { Message } from 'primeng/primeng'
 import { User } from '../../model/user.model'
-// import { FileAttach } from '../../../main/model/file-attach.model'
+import { Structure } from '../../model/structure.model'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'pxc-user',
@@ -28,7 +24,7 @@ export class UserComponent implements OnInit {
   mode: string = 'add'
   modeTitle: string = 'เพิ่ม'
   iconHeader: string = 'person_add'
-  structureName: string = ''
+  structure = new Structure()
   userId: number
   user: User
   userResult: User
@@ -38,12 +34,10 @@ export class UserComponent implements OnInit {
   toggleAddProfile: boolean = true
   toggleEditProfile: boolean = true
   toggleListProfile: boolean = true
-  // uploader: FileUploader = new FileUploader({})
-  // fileAttachs: FileAttach[] = []
-  // hasBaseDropZoneOver: boolean = false
-  // fileAttachRemoved: FileAttach[] = []
+
   userProfileId: number
   structureId: number
+
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
@@ -55,18 +49,17 @@ export class UserComponent implements OnInit {
     showSelectorArrow: false,
     componentDisabled: false
   }
-
   msgs: Message[] = []
+
   constructor(
     private _route: ActivatedRoute,
-    private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
-    private _pxService: PxService,
-    private _structureService: StructureService,
     private _userService: UserService,
     private _userProfileService: UserProfileService,
     private _dialog: MdDialog,
+    private _strucctureService: StructureService,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.user = new User({
@@ -76,7 +69,6 @@ export class UserComponent implements OnInit {
       expireDate: { date: { year: (this.nowDate.getFullYear() + 543) + 1, month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } },
       passwordExpireDate: { date: { year: (this.nowDate.getFullYear() + 543) + 1, month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } },
     })
-    // this.userResult = new User()
   }
 
   ngOnInit() {
@@ -86,12 +78,8 @@ export class UserComponent implements OnInit {
         this.mode = params['mode']
         this.modeTitle = params['modeTitle']
         this.structureId = +params['structureId']
-        this._structureService.getStructure('1', Number(this.structureId))
-          .subscribe(response => {
-            this.structureName = 'หน่วยงาน : ' + response.name
-          })
+        this.getStructure()
         if (this.mode === 'add') {
-          this.structureId = +params['structureId']
           this.userId = 0
         } else if (this.mode === 'edit') {
           this.userId = +params['userId']
@@ -106,12 +94,34 @@ export class UserComponent implements OnInit {
     this._location.back()
   }
 
-  createUser = (createUser: User) => {
+  getStructure() {
+    this._loadingService.register('main')
+    this._strucctureService
+      .getStructure('1', this.structureId)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.structure = response as Structure
+      })
+  }
+
+  getUser(userId: number) {
+    this._loadingService.register('main')
+    this._userService
+      .getUser(userId, '1.1')
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        this.userResult = this.user = response as User
+      })
+  }
+
+  createUser(createUser: User) {
     this._loadingService.register('main')
     this._userService
       .checkUserNameExist('1.0', createUser.name)
       .subscribe(response => {
+        this._loadingService.resolve('main')
         if (!response) {
+          this._loadingService.register('main')
           this._userService
             .createUser(createUser)
             .subscribe(response => {
@@ -119,51 +129,40 @@ export class UserComponent implements OnInit {
               this.userId = response.id
               this.userResult = response as User
               this.toggleEditUser()
+              this.msgs = []
+              this.msgs.push({
+                severity: 'error',
+                summary: 'เพิ่มบัญชีผู้ใช้สำเร็จ',
+                detail: 'คุณได้ทำการเพิ่มบัญชีผู้ใช้ ' + createUser.name,
+              })
             })
         } else {
-          this._loadingService.resolve('main')
-          this.msgs = [];
-          this.msgs.push(
-            {
-              severity: 'warn',
-              summary: 'ชื่อผู้ใช้ซ้ำ',
-              detail: 'ไม่สามารถบันทึกข้อมูลได้',
-            },
-          );
+          this.msgs = []
+          this.msgs.push({
+            severity: 'error',
+            summary: 'เพิ่มบัญชีผู้ใช้ไม่สำเร็จ',
+            detail: 'ชื่อผู้ใช้ ซ้ำ',
+          })
         }
       })
   }
 
-  getUser = (userId: number) => {
-    this._loadingService.register('main')
-    this._userService
-      .getUser(userId, '1.1')
-      .subscribe(response => {
-        this.user = response as User
-        this.userResult = this.user
-        this._loadingService.resolve('main')
-      })
-  }
-
-  updateUser = (updateUser: User) => {
-    console.log("updateUser 1 ", updateUser)
-    // this.toggleEditUser()
+  updateUser(updateUser: User) {
     this._loadingService.register('main')
     this._userService
       .updateUser(this._userService.convertDateFormat(updateUser))
       .subscribe(response => {
-        this.userResult = response as User
-        this.toggleEditUser()
         this._loadingService.resolve('main')
+        this._paramSarabanService.msg = {
+          severity: 'success',
+          summary: 'แก้ไขวันที่หมดอายุของรหัสผ่านและการใช้งานสำเร็จ',
+          detail: 'คุณได้ทำการแก้ไขบัญชีผู้ใช้ ' + updateUser.name
+        }
+        this.goBack()
       })
-
-    this._location.back()
   }
 
-  deleteUser = (deleteUser: User) => {
-    console.log("deleteUser 1 ", deleteUser)
-    // this.toggleEditUser()
-    // this._loadingService.register('main')
+  deleteUser(deleteUser: User) {
     let dialogRef = this._dialog.open(DeleteDialogComponent, {
       width: '50%',
     });
@@ -176,22 +175,19 @@ export class UserComponent implements OnInit {
         this._userService
           .deleteUser(deleteUser)
           .subscribe(response => {
-            console.log(response)
+            this._loadingService.resolve('main')
             if (response) {
+              this._loadingService.register('main')
               this._userProfileService
                 .deleteUserProfile(deleteUser)
                 .subscribe(response => {
-                  this.toggleEditUser()
-                  // this._location.back()
-                  // this._loadingService.resolve('main')
-                  this.msgs = [];
-                  this.msgs.push({
-                    severity: 'success',
-                    summary: 'ลบข้อมูลสำเร็จ',
-                    detail: 'ผู้ใช้งาน ' + deleteUser.name
-                  })
-                  this._location.back()
                   this._loadingService.resolve('main')
+                  this._paramSarabanService.msg = {
+                    severity: 'success',
+                    summary: 'ลบบัญชีผู้ใช้สำเร็จ',
+                    detail: 'คุณได้ทำการลบบัญชีผู้ใช้ ' + deleteUser.name
+                  }
+                  this.goBack()
                 })
             }
           })
@@ -200,12 +196,10 @@ export class UserComponent implements OnInit {
   }
 
   editMode = (updateUser: User) => {
-    console.log('updateUser', updateUser)
     this.user = updateUser
     this.user.passwordExpireDate = this._userService.convertStringToDate(this.user.passwordExpireDate)
     this.user.expireDate = this._userService.convertStringToDate(this.user.expireDate)
     this.toggleEditUser()
-    console.log('updateUser2', this.user)
   }
 
   toggleEditUser = () => {
@@ -214,25 +208,9 @@ export class UserComponent implements OnInit {
     this.toggleCommand = !this.toggleCommand
   }
 
-  alertMessage() {
-    this.msgs = [];
-    this.msgs.push({
-      severity: 'warn',
-      summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
-      detail: 'รหัสพนักงาน ซ้ำ'
-    })
-  }
-
-  alertMessageUser() {
-    this.msgs = [];
-    this.msgs.push({
-      severity: 'info',
-      summary: 'บันทึกสำเร็จ',
-      detail: 'แก้ไขรายชื่อเรียบร้อย'
-    })
-  }
-
-  onDateChanged(event: any) {
+  alertMessage(msg: Message) {
+    this.msgs = []
+    this.msgs.push(msg)
   }
 
 }

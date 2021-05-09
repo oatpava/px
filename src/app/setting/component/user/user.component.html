@@ -7,7 +7,7 @@
           <md-icon>{{iconHeader}}</md-icon>
         </button>
         <div flex class="menu-showLabel">
-            <span>{{modeTitle}}ผู้ใช้งาน  {{structureName}}</span>
+            <span>{{modeTitle}}ผู้ใช้งาน  {{structure.name}}</span>
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
                 <div flex-gt-md="70">
                     <md-card>
                         <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
-                            <span class="md-headline">{{modeTitle}}ชื่อผู้ใช้ & รหัสผ่าน</span>
+                            <span class="md-headline">{{modeTitle}}บัญชีผู้ใช้</span>
                         </md-card-title>
                         <md-card-content class="push-bottom-none">
                             <form #addUserform="ngForm" [tdToggle]="!toggleAddUser">
@@ -41,21 +41,15 @@
                                     </div>
                                 </div>
                                 <div layout="row" layout-xs="column" layout-margin>
-                                    <!-- <div flex flex-xs="100">
-                                        <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันเริ่มต้นใช้งาน" locale="th" name="activeDate" [(ngModel)]="user.activeDate"></my-date-picker>
-                                    </div>
-                                    <div flex flex-xs="100">
-                                        <my-date-picker [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันสิ้นสุดใช้งาน" locale="th" name="expireDate" [(ngModel)]="user.expireDate"></my-date-picker>
-                                    </div> -->
                                     <div flex="100" flex-xs="100">
                                         <span style="font-size: 11.5px; color: #a8a8a8;">วันที่หมดอายุของรหัสผ่าน : &nbsp;</span>
-                                        <my-date-picker style="width:42%;" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่หมดอายุของรหัสผ่าน" locale="th" name="passwordExpireDate" [(ngModel)]="user.passwordExpireDate"></my-date-picker>
+                                        <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="วันที่หมดอายุของรหัสผ่าน" locale="th" name="passwordExpireDate" [(ngModel)]="user.passwordExpireDate"></my-date-picker>
                                     </div>
                                 </div>
                                 <div layout="row" layout-xs="column" layout-margin>
                                     <div flex="100" flex-xs="100">
                                         <span style="font-size: 11.5px; color: #a8a8a8;">วันที่หมดอายุการใช้งาน : &nbsp;</span>
-                                        <my-date-picker style="width:42%;" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)" placeholder="วันที่หมดอายุการใช้งาน" locale="th" name="expireDate" [(ngModel)]="user.expireDate"></my-date-picker>
+                                        <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="วันที่หมดอายุการใช้งาน" locale="th" name="expireDate" [(ngModel)]="user.expireDate"></my-date-picker>
                                     </div>
                                 </div>
                             </form>
@@ -64,9 +58,6 @@
                                     <md-icon md-list-avatar>lock</md-icon>
                                     <h3 md-line class="hover">ชื่อผู้ใช้: {{userResult?.name}}</h3>
                                     <h4 md-line> รหัสผ่าน: ******** </h4>
-                                    <!-- <p md-line>วันเริ่มต้นใช้งาน: {{userResult.activeDate}}</p>
-                                    <p md-line>วันสิ้นสุดใช้งาน: {{userResult.expireDate}}</p>
-                                    <p md-line>วันที่หมดอายุของรหัสผ่าน: {{userResult.passwordExpireDate}}</p> -->
                                     <button md-icon-button (click)="editMode(userResult)">
                                         <md-icon alt="แก้ไข">edit</md-icon>
                                     </button>
@@ -85,7 +76,7 @@
                         </md-card-actions>
                     </md-card>
 
-                    <app-add-user-profile [toggleCommand]="toggleCommand" (alertMessageUser)="alertMessageUser()" (alertMessage)="alertMessage()" [userId]="userId" [structureId]="structureId"></app-add-user-profile>
+                    <app-add-user-profile *ngIf="mode==='edit'" [toggleCommand]="toggleCommand" (alertMessage)="alertMessage($event)" [userId]="userId" [structureId]="structureId"></app-add-user-profile>
                 </div>
             </div>
         </div>
