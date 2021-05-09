@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { MdDialog } from '@angular/material';
+import { MdDialog } from '@angular/material'
 import { URLSearchParams } from '@angular/http'
 import { TdDataTableSortingOrder, ITdDataTableColumn } from '@covalent/core'
 import { Message } from 'primeng/primeng'
@@ -19,8 +19,9 @@ import { UserProfileService } from '../../../service/user-profile.service'
 import { User } from '../../../model/user.model'
 import { UserProfile } from '../../../model/user-profile.model'
 import { Observable } from 'rxjs/Observable'
-import { StructureService } from '../../structure/structure.service';
+import { StructureService } from '../../structure/structure.service'
 import { PxService } from '../../../../main/px.service'
+import { ParamSarabanService } from '../../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'app-user-profile',
@@ -74,12 +75,18 @@ export class UserProfileComponent implements OnInit {
     private _dialog: MdDialog,
     private _structureService: StructureService,
     private _pxService: PxService,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.parentId = 1
   }
 
   ngOnInit() {
     console.log('UserProfileComponent')
+    if (this._paramSarabanService.msg != null) {
+      this.msgs = []
+      this.msgs.push(this._paramSarabanService.msg)
+      this._paramSarabanService.msg = null
+    }
   }
 
 

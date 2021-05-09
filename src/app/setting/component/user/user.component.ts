@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
 import { IMyOptions } from 'mydatepicker'
 import { PxService, } from '../../../main/px.service'
-import { StructureService } from '../structure/structure.service';
+import { StructureService } from '../structure/structure.service'
 import { UserService } from '../../service/user.service'
 import { UserProfileService } from '../../service/user-profile.service'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component'
 import { MdDialog } from '@angular/material'
-import { Message } from 'primeng/primeng';
+import { Message } from 'primeng/primeng'
 import { User } from '../../model/user.model'
-import { Structure } from '../../model/structure.model';
+import { Structure } from '../../model/structure.model'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'pxc-user',
@@ -57,7 +58,8 @@ export class UserComponent implements OnInit {
     private _userService: UserService,
     private _userProfileService: UserProfileService,
     private _dialog: MdDialog,
-    private _strucctureService: StructureService
+    private _strucctureService: StructureService,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.user = new User({
@@ -102,7 +104,7 @@ export class UserComponent implements OnInit {
       })
   }
 
-  getUser = (userId: number) => {
+  getUser(userId: number) {
     this._loadingService.register('main')
     this._userService
       .getUser(userId, '1.1')
@@ -112,7 +114,7 @@ export class UserComponent implements OnInit {
       })
   }
 
-  createUser = (createUser: User) => {
+  createUser(createUser: User) {
     this._loadingService.register('main')
     this._userService
       .checkUserNameExist('1.0', createUser.name)
@@ -127,31 +129,40 @@ export class UserComponent implements OnInit {
               this.userId = response.id
               this.userResult = response as User
               this.toggleEditUser()
+              this.msgs = []
+              this.msgs.push({
+                severity: 'error',
+                summary: 'เพิ่มบัญชีผู้ใช้สำเร็จ',
+                detail: 'คุณได้ทำการเพิ่มบัญชีผู้ใช้ ' + createUser.name,
+              })
             })
         } else {
-          this.msgs = [];
-          this.msgs.push(
-            {
-              severity: 'warn',
-              summary: 'ชื่อผู้ใช้ซ้ำ',
-              detail: 'ไม่สามารถบันทึกข้อมูลได้',
-            },
-          );
+          this.msgs = []
+          this.msgs.push({
+            severity: 'error',
+            summary: 'เพิ่มบัญชีผู้ใช้ไม่สำเร็จ',
+            detail: 'ชื่อผู้ใช้ ซ้ำ',
+          })
         }
       })
   }
 
-  updateUser = (updateUser: User) => {
+  updateUser(updateUser: User) {
     this._loadingService.register('main')
     this._userService
       .updateUser(this._userService.convertDateFormat(updateUser))
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this._location.back()
+        this._paramSarabanService.msg = {
+          severity: 'success',
+          summary: 'แก้ไขวันที่หมดอายุของรหัสผ่านและการใช้งานสำเร็จ',
+          detail: 'คุณได้ทำการแก้ไขบัญชีผู้ใช้ ' + updateUser.name
+        }
+        this.goBack()
       })
   }
 
-  deleteUser = (deleteUser: User) => {
+  deleteUser(deleteUser: User) {
     let dialogRef = this._dialog.open(DeleteDialogComponent, {
       width: '50%',
     });
@@ -171,7 +182,12 @@ export class UserComponent implements OnInit {
                 .deleteUserProfile(deleteUser)
                 .subscribe(response => {
                   this._loadingService.resolve('main')
-                  this._location.back()
+                  this._paramSarabanService.msg = {
+                    severity: 'success',
+                    summary: 'ลบบัญชีผู้ใช้สำเร็จ',
+                    detail: 'คุณได้ทำการลบบัญชีผู้ใช้ ' + deleteUser.name
+                  }
+                  this.goBack()
                 })
             }
           })
@@ -193,7 +209,7 @@ export class UserComponent implements OnInit {
   }
 
   alertMessage(msg: Message) {
-    this.msgs = [];
+    this.msgs = []
     this.msgs.push(msg)
   }
 
