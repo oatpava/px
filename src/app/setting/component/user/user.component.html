@@ -76,7 +76,7 @@
                         </md-card-actions>
                     </md-card>
 
-                    <app-add-user-profile *ngIf="mode==='edit'" [toggleCommand]="toggleCommand" (alertMessageUser)="alertMessageUser()" (alertMessage)="alertMessage()" [userId]="userId" [structureId]="structureId"></app-add-user-profile>
+                    <app-add-user-profile *ngIf="mode==='edit'" [toggleCommand]="toggleCommand" (alertMessage)="alertMessage($event)" [userId]="userId" [structureId]="structureId"></app-add-user-profile>
                 </div>
             </div>
         </div>

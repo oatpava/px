@@ -7,7 +7,7 @@ export class Position {
     constructor(values: Object = {}) {
         this.version = 1
         this.id = 0
-        this.name = null
+        this.name = ''
         // this.nameEng = null
         // this.nameExtra = null
         Object.assign(this, values)

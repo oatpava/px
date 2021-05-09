@@ -28,11 +28,11 @@ export class AddUserProfileComponent implements OnInit {
   @Input() userId: number
   @Input() structureId: number
   @Output() alertMessage = new EventEmitter()
-  @Output() alertMessageUser = new EventEmitter()
   toggleAddProfile: boolean = true
   toggleListProfile: boolean = true
   modeProfile: string = 'add'
   userProfile: UserProfile
+  selectedPosition = new Position()
   userProfileList: UserProfile[] = []
 
   nowDate: Date
@@ -139,15 +139,21 @@ export class AddUserProfileComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.userProfileList = []
-        this.userProfileList = response as UserProfile[]
-        this.userProfileList.forEach(userProfile => {
-          if (userProfile.position === null) {
-            userProfile.position = new Position()
-          }
-          if (userProfile.positionType === null) {
-            userProfile.positionType = new PositionType()
-          }
-        })
+        if (response) {
+          this.userProfileList = response as UserProfile[]
+          this.userProfileList.forEach(userProfile => {
+            if (userProfile.position === null) {
+              userProfile.position = new Position()
+            } else {
+              this.selectedPosition = this.positions.find(position => position.id == userProfile.position.id)
+            }
+            if (userProfile.positionType === null) {
+              userProfile.positionType = new PositionType()
+            }
+          })
+        } else {
+          this.userProfile = new UserProfile()
+        }
       })
   }
 
@@ -172,12 +178,17 @@ export class AddUserProfileComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         if (response.result) {
-          this.alertMessage.emit(true)
+          this.alertMessage.emit({
+            severity: 'error',
+            summary: 'เพิ่มผู้ใช้งานไม่สำเร็จ',
+            detail: 'รหัสพนักงาน ซ้ำ'
+          })
         } else {
-          this.userProfile.user.id = this.userId
+          this.userProfile.user.id = this.userId, this
           this.userProfile.fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName
           this.userProfile.fullNameEng = this.userProfile.firstNameEng + ' ' + this.userProfile.lastNameEng
-          
+          this.userProfile.position = this.selectedPosition
+
           this._loadingService.register('main')
           this._userProfileService
             .createUserProfile(this.userProfile)
@@ -188,6 +199,11 @@ export class AddUserProfileComponent implements OnInit {
               let userProfile = response as UserProfile
               this.createUserProfileFolder(userProfile)
               this.showUserProfileList = true
+              this.alertMessage.emit({
+                severity: 'success',
+                summary: 'เพิ่มผู้ใช้งานสำเร็จ',
+                detail: 'คุณได้ทำการเพิ่มผู้ใช้งานiรหัส ' + this.userProfile.code
+              })
             })
         }
       })
@@ -260,7 +276,6 @@ export class AddUserProfileComponent implements OnInit {
     if (updateProfile.userProfileType.id === 3 && updateProfile.idCard == null) {
       this.isValid = true
     }
-
     if (!this.isValid) {
       this._loadingService.register('main')
       this._userProfileService
@@ -268,24 +283,31 @@ export class AddUserProfileComponent implements OnInit {
         .subscribe(response => {
           this._loadingService.resolve('main')
           if (response.result) {
-            this.alertMessage.emit(true)
+            this.alertMessage.emit({
+              severity: 'error',
+              summary: 'อก้ไขผู้ใช้งานไม่สำเร็จ',
+              detail: 'รหัสพนักงาน ซ้ำ'
+            })
           } else {
+            this.userProfile.position = this.selectedPosition
             this._loadingService.register('main')
             this._userProfileService
               .updateUserProfile(updateProfile)
               .subscribe(response => {
                 this._loadingService.resolve('main')
-                this.alertMessageUser.emit(true)
                 this.getUserProfilesByUserId(this.userId)
                 this.toggleAddProfile = !this.toggleAddProfile
                 this.toggleCommand = false
                 this.toggleListProfile = false
                 this.showUserProfileList = true
+                this.alertMessage.emit({
+                  severity: 'success',
+                  summary: 'แก้ไขผู้ใช้งานสำเร็จ',
+                  detail: 'คุณได้ทำการเพิ่มผู้ใช้งานรหัส ' + this.userProfile.code
+                })
               })
           }
         })
-    } else {
-      this.alertMessageUser.error(true)
     }
   }
 
@@ -345,20 +367,19 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   positionFilter(event) {
-    this.filteredPosition = []
-    this.filteredPosition = this.positions.filter(position => {
+    this.filteredPosition = this.positions.filter((position: Position) => {
       return event.query ? position.name.toLowerCase().indexOf(event.query.toLowerCase()) > -1 : false
     })
   }
 
-  handleDropdown(event) {
+  handlePositionDropdown(event) {
     this.filteredPosition = this.positions
-    event.originalEvent.preventDefault();
-    event.originalEvent.stopPropagation();
+    event.originalEvent.preventDefault()
+    event.originalEvent.stopPropagation()
     if (this.acPosition.panelVisible) {
-      this.acPosition.hide();
+      this.acPosition.hide()
     } else {
-      this.acPosition.show();
+      this.acPosition.show()
     }
   }
 

@@ -192,22 +192,9 @@ export class UserComponent implements OnInit {
     this.toggleCommand = !this.toggleCommand
   }
 
-  alertMessage() {
+  alertMessage(msg: Message) {
     this.msgs = [];
-    this.msgs.push({
-      severity: 'warn',
-      summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
-      detail: 'รหัสพนักงาน ซ้ำ'
-    })
-  }
-
-  alertMessageUser() {
-    this.msgs = [];
-    this.msgs.push({
-      severity: 'info',
-      summary: 'บันทึกสำเร็จ',
-      detail: 'แก้ไขรายชื่อเรียบร้อย'
-    })
+    this.msgs.push(msg)
   }
 
 }
