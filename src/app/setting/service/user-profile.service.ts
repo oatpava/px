@@ -417,11 +417,11 @@ export class UserProfileService {
     }
   }
 
-  getlistStatusByStucture(parentKey: string, jobType: string): Observable<any> {
+  getlistStatusByStucture(structureId: number, jobType: string): Observable<any> {
     let params = new URLSearchParams()
     if (environment.production) {
         this._options.search = params
-        return this._http.get(this._apiUrl + '/v1/userProfiles/userStatus/' + parentKey + '/report/' + jobType, this._options)
+        return this._http.get(this._apiUrl + '/v1/userProfiles/userStatus/' + structureId + '/report/' + jobType, this._options)
             .map((response: Response) => {
                 return this.pxService.verifyResponseArray(response.json().data)
             })
