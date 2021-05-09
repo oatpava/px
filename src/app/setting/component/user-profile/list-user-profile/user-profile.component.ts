@@ -1,13 +1,11 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnInit, EventEmitter } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog } from '@angular/material';
 import { URLSearchParams } from '@angular/http'
-
-import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core'
-import { IPageChangeEvent } from '@covalent/core'
+import { TdDataTableSortingOrder, ITdDataTableColumn } from '@covalent/core'
+import { Message } from 'primeng/primeng'
 
 import { MoveProfileComponent } from '../../../component/move-profile/move-profile.component'
 import { MoveStructureComponent } from '../../../component/move-structure/move-structure.component'
@@ -19,11 +17,8 @@ import { LockUserComponent } from '../../../component/lock-user/lock-user.compon
 import { UserService } from '../../../service/user.service'
 import { UserProfileService } from '../../../service/user-profile.service'
 import { User } from '../../../model/user.model'
-import { USERS } from '../../../model/user-mock'
 import { UserProfile } from '../../../model/user-profile.model'
 import { Observable } from 'rxjs/Observable'
-import { Observer } from 'rxjs/Observer'
-import { Structure } from '../../../model/structure.model'
 import { StructureService } from '../../structure/structure.service';
 import { PxService } from '../../../../main/px.service'
 
@@ -74,7 +69,6 @@ export class UserProfileComponent implements OnInit {
     private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
-    private _dataTableService: TdDataTableService,
     private _userService: UserService,
     private _userProfileService: UserProfileService,
     private _dialog: MdDialog,
@@ -90,7 +84,7 @@ export class UserProfileComponent implements OnInit {
 
 
   selectStructure(event) {
-    console.log(event)
+    console.log('selected structure', event)
     this.parentStructure = event
     this.showMenu = true
     if (this.parentStructure.type === 'U') {
@@ -129,7 +123,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   manageUser(modeSelect: string, modeTitleSelect: string) {
-    console.log('manageUser', this.parentStructure)
     let uId: number = 0
     let stu: number = 0
 
@@ -250,21 +243,17 @@ export class UserProfileComponent implements OnInit {
   }
 
   manageResetPassword() {
-    console.log(this.parentStructure)
     this._loadingService.register('main')
     this._userService
       .resetPassword(this.parentStructure.id)
       .subscribe(response => {
-        this.msgs = [];
-        this.msgs.push(
-          {
-            severity: 'warn',
-            summary: 'รีเซ็ตรหัสผ่านสำเร็จ',
-            detail: 'ทำการตั้งรหัสผ่านใหม่ให้ผู้ใช้งานแล้ว',
-          },
-        );
-        console.log(response)
         this._loadingService.resolve('main')
+        this.msgs = []
+        this.msgs.push({
+          severity: 'warn',
+          summary: 'รีเซ็ตรหัสผ่านสำเร็จ',
+          detail: 'ทำการตั้งรหัสผ่านใหม่ให้ผู้ใช้งานแล้ว'
+        })
       })
   }
 
@@ -286,7 +275,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   edit(editUser: any) {
-    console.log(editUser)
     let param = {
       mode: 'edit',
       modeTitle: 'แก้ไข',
@@ -307,7 +295,6 @@ export class UserProfileComponent implements OnInit {
   rootStructureId = 0
 
   structureMove() {
-    console.log('structureMove', this.parentStructure)
     let dialogRef = this._dialog.open(MoveStructureComponent, {
       width: '40%',
     });
@@ -374,7 +361,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   orderStructure() {
-    console.log(this.parentStructure.id)
     let dialogRef = this._dialog.open(OrderStructureComponent, {
       width: '40%',
     });
@@ -434,7 +420,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   orderUser() {
-    console.log(this.parentStructure.id)
     let dialogRef = this._dialog.open(OrderStructureComponent, {
       width: '40%',
     });
@@ -494,7 +479,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   userProfileMove() {
-    console.log('userProfileMove', this.parentStructure)
     let dialogRef = this._dialog.open(MoveProfileComponent, {
       width: '40%',
     });
@@ -555,8 +539,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   lockuser() {
-    console.log(this.parentStructure)
-
     let dialogRef = this._dialog.open(LockUserComponent, {
       width: '50%',
     });
@@ -564,17 +546,12 @@ export class UserProfileComponent implements OnInit {
     instance.userProfileId = this.parentStructure.id
     instance.structureId = this.parentStructure.structure.id
     instance.status = this.parentStructure.userStatus
-    // instance.status = this.parentStructure.user.status
     dialogRef.afterClosed().subscribe(result => {
       if (typeof result != 'undefined') {
-        console.log(result)
-        // this.userProfile = this.parentStructure
         delete this.parentStructure["type"]
         this.parentStructure.userStatus = result
         this.parentStructure.user.status = result
         this._loadingService.register('main')
-        console.log(this.parentStructure)
-        console.log(this.parentStructure.user)
 
         this._userService
           .updateUser(this.parentStructure.user)
@@ -582,7 +559,6 @@ export class UserProfileComponent implements OnInit {
             this._userProfileService
               .updateUserProfile(this.parentStructure)
               .subscribe(response => {
-                console.log('updateUserProfile ', response)
               })
             this.structureTree = []
             this._structureService
@@ -651,7 +627,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   mergStructure() {
-    console.log(this.parentStructure)
     let dialogRef = this._dialog.open(MergeStructureComponent, {
       width: '70%',
     });
@@ -664,14 +639,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   mergUser() {
-    console.log(this.parentStructure)
     let dialogRef = this._dialog.open(MergeUserComponent, {
       width: '70%',
     });
     let instance = dialogRef.componentInstance
     instance.userProfileId = this.parentStructure.id
     instance.structureId = this.parentStructure.structure.id
-    // instance.structureData = this.parentStructure
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
       }
@@ -680,19 +653,17 @@ export class UserProfileComponent implements OnInit {
   }
 
   genReport(reportType: string) {
-    console.log(this.parentStructure)
     let data = this.parentStructure.parentKey
     this._loadingService.register('main')
     this._userProfileService
       .getlistStatusByStucture(data, 'user_status')
       .subscribe(response => {
-        console.log(response)
         this._loadingService.resolve('main')
         let params = new URLSearchParams()
         params.set("jobType", 'user_status')
         params.set("createdBy", '1')
         this._pxService.report('user_status', reportType, params)
-      });
+      })
   }
 
 }
