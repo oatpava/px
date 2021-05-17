@@ -12,6 +12,7 @@ import { PxService, } from '../../main/px.service'
 import { HistoryLogService } from './history-log.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
 import { ListReturn } from '../../main/model/listReturn.model'
+import { UserProfile } from '../model/user-profile.model'
 
 const limit: number = 1000
 @Component({
@@ -157,10 +158,10 @@ export class HistoryLogComponent implements OnInit {
     let dialogRef = this._dialog.open(ListHisttoryUserComponent, {
       width: '50%',
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== false) {
+    dialogRef.afterClosed().subscribe((result: UserProfile) => {
+      if (result) {
         this.searchField.userName = result.fullName
-        this.searchField.createdBy = result.id
+        this.searchField.createdBy = '' + result.user.id
       }
     })
   }
