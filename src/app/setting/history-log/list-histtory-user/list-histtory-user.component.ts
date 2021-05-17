@@ -31,7 +31,7 @@ export class ListHisttoryUserComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close(false)
+    this.dialogRef.close(null)
   }
 
 }
