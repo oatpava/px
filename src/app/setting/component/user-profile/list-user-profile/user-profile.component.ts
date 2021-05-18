@@ -675,7 +675,7 @@ export class UserProfileComponent implements OnInit {
   genReportExcel() {
     this._loadingService.register('main')
     this._userProfileService
-      .getlistStatusByStucture(this.parentStructure.id, 'user_status2')
+      .getlistStatusByStucture(this.parentStructure.parentKey, 'user_status2')
       .subscribe(response => {
         this._loadingService.resolve('main')
         let params = new URLSearchParams()
