@@ -662,7 +662,7 @@ export class UserProfileComponent implements OnInit {
   genReportPDF() {
     this._loadingService.register('main')
     this._userProfileService
-      .getlistStatusByStucture(this.parentStructure.id, 'user_status')
+      .getlistStatusByStucture(this.parentStructure.parentKey, 'user_status')
       .subscribe(response => {
         this._loadingService.resolve('main')
         let params = new URLSearchParams()
