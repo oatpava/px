@@ -58,6 +58,7 @@ export class LoginComponent implements OnInit {
       .checkLogin(user)
       .subscribe(response => {
         console.log('login', response)
+        this._paramSarabanService.clientIp = response.clientIp
         this._paramSarabanService.userProfiles = response.message
         this._loadingService.resolve('main')
         if (response.data.result) {

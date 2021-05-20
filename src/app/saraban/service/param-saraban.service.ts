@@ -9,6 +9,7 @@ import { UserProfile } from '../../shared'
 
 @Injectable()
 export class ParamSarabanService {
+  clientIp: string = ''
   contentNoFormat: string = '000000'
   bookNoFormat: string = '000000'
   orderNoFormat: string = '000'
@@ -152,7 +153,7 @@ export class ParamSarabanService {
     }
     return node
   }
-  
+
   private findNodeRecursive(node: TreeNode, id: number, isUser: boolean, parentKey: number[], level: number, currentLevel: number): any {
     if (currentLevel != level) {
       currentLevel++
