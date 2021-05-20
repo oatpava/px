@@ -13,7 +13,7 @@ import { FileAttach } from './model/file-attach.model'
 // import { FileAttachList } from './model/file-attach-list.model'
 // import { TempTable } from './model/temp-table.model'
 import * as crypto from 'crypto-js'
-
+import { ParamSarabanService } from '../saraban/service/param-saraban.service'
 
 @Injectable()
 export class PxService {
@@ -22,7 +22,11 @@ export class PxService {
   _token: string
   _options: RequestOptions
 
-  constructor(private _http: Http, private loggerService: LoggerService) {
+  constructor(
+    private _http: Http,
+    private loggerService: LoggerService,
+    private _paramSarabanService: ParamSarabanService
+  ) {
     this._apiUrl = environment.apiServer + environment.apiName
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
@@ -338,6 +342,20 @@ export class PxService {
     } else {
 
     }
+  }
+
+  getExpiredPath(fileAttach: any): string {
+    const tmp: string[] = fileAttach.url.split('/document/Temp/')
+
+    const uri: string = '/viewFile/' + tmp[1].replace(fileAttach.linkType + '/', '')
+    const expires: string = (Math.ceil(Date.now() / 1000) + 1).toString()
+    const md5: string = this.generateSecurePathHash(expires, uri, this._paramSarabanService.clientIp)
+    return tmp[0] + uri + '?linkType=' + fileAttach.linkType + '&md5=' + md5 + '&expires=' + expires
+  }
+
+  private generateSecurePathHash(expires: string, uri: string, clientIp: string): string {
+    const base64Value: string = crypto.MD5(expires + uri + clientIp + ' ' + 'oatis').toString(crypto.enc.Base64)
+    return base64Value.replace(/\=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
   }
 
 }
