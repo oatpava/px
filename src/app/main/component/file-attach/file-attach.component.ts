@@ -404,7 +404,7 @@ export class FileAttachComponent implements OnInit {
   }
 
   viewImage(fileAttach: any) {
-    window.open(fileAttach.url, '_blank', "height=600,width=1000")
+    window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
   }
 
   // viewImage(fileAttach: any) {
