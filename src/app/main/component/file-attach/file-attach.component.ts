@@ -5,7 +5,6 @@ import { FolderService } from '../../../dms/service/folder.service'
 
 
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload'
-import * as FileSaver from 'file-saver'
 
 
 import { FileAttach } from '../../../main/model/file-attach.model'

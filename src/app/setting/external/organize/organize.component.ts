@@ -1,16 +1,15 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { Message } from 'primeng/primeng'
+import { MdDialog } from '@angular/material'
+import { ITdDataTableColumn } from '@covalent/core'
+import { Observable } from 'rxjs/Observable'
 
-import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core'
-import { IPageChangeEvent } from '@covalent/core'
 import { MoveStructureComponent } from '../../component/move-structure/move-structure.component'
 import { OrderStructureComponent } from '../../component/order-structure/order-structure.component'
-import { StructureService } from '../../component/structure/structure.service'
-import { Observable } from 'rxjs/Observable'
+import { StructureService } from '../../service/structure.service'
 
 @Component({
   selector: 'app-organize',
@@ -43,7 +42,6 @@ export class OrganizeComponent implements OnInit {
     private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
-    private _dataTableService: TdDataTableService,
     private _dialog: MdDialog,
     private _structureService: StructureService
   ) {
@@ -52,7 +50,6 @@ export class OrganizeComponent implements OnInit {
 
   ngOnInit() {
   }
-
 
   selectStructure(event) {
     this.parentStructure = event
@@ -204,7 +201,6 @@ export class OrganizeComponent implements OnInit {
 
   searchOrganize() {
     this.datas = []
-
     this._loadingService.register('main')
     this._structureService
       .listAllByName(this.organizeName)

@@ -14,6 +14,6 @@ export const environment = {
   apiName: '/pxservice-px8/api',
   plugIn: 'http://127.0.0.1:82',
   url: 'http://127.0.0.1/praxticol8_px8/#',
-  DMS: false
+  DMS: true
 };
 

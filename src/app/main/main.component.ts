@@ -1,24 +1,19 @@
 import { Component, OnInit, trigger, state, animate, transition, style } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { environment } from '../../environments/environment'
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog } from '@angular/material';
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core'
 
 import { UserProfileService } from '../setting/service/user-profile.service'
 import { SettingService } from '../setting/service/setting.service'
-// import { ParamAdminService } from '../setting/service/param-admin.service'
 
 import { UserProfile } from '../setting/model/user-profile.model'
-import { Keepalive } from '@ng-idle/keepalive'
 import { AlertLogOffComponent } from '../alert-log-off/alert-log-off.component'
 
 import { ParamSarabanService } from '../saraban/service/param-saraban.service'
 import { Location } from '@angular/common'
 import { ChangePasswordComponent } from '../login/change-password/change-password.component'
 import { AlertMessageComponent } from '../login/alert-message/alert-message.component'
-// import { SetPasswordComponent } from '../setting/component/set-password/set-password.component'
-import { SettingDefultProfileComponent } from '../main/component/setting-defult-profile/setting-defult-profile.component'
-import { Response } from '@angular/http/src/static_response';
 
 import { LoginService } from '../login/login.service'
 import { DialogInstructionComponent } from './component/dialog-instruction/dialog-instruction.component'
@@ -151,9 +146,9 @@ export class MainComponent implements OnInit {
     this._paramSarabanService.folder = null
     let param = {}
     switch (moduleId) {
-      case (2): param = { 
+      case (2): param = {
         parentId: 0,
-        path: 'ทะเบียนส่วนกลาง' 
+        path: 'ทะเบียนส่วนกลาง'
       }; break;
       case (3): param = {
         parentId: 1,
@@ -184,13 +179,10 @@ export class MainComponent implements OnInit {
           .checkLogout('1.0')
           .subscribe(response => {
           })
-        // this._loginService
-        //   .changeapiUrl()
         this._router.navigate(['/login'])
-        setTimeout(() => {    //<<<---    using ()=> syntax
+        setTimeout(() => {
           window.location.reload()
-        }, 500);
-
+        }, 500)
       }
     })
   }
@@ -214,18 +206,6 @@ export class MainComponent implements OnInit {
     if (!environment.DMS) {
       this.routes = this.routes.filter(route => route.type != 'DMS')
     }
-  }
-
-  settingProfile() {
-    let dialogRef = this._dialog.open(SettingDefultProfileComponent, {
-      width: '70%',
-    });
-    let instance = dialogRef.componentInstance
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-      }
-    })
   }
 
   openDialogChangePassword(): void {

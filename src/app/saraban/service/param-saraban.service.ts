@@ -5,7 +5,7 @@ import { Structure } from '../../setting/model/structure.model'
 import { ListReturn } from '../../main/model/listReturn.model'
 import { Subscription } from 'rxjs/Rx'
 import { SarabanFolder } from '../model/sarabanFolder.model'
-import { UserProfile } from '../../shared'
+import { UserProfile } from '../../setting/model/user-profile.model'
 
 @Injectable()
 export class ParamSarabanService {

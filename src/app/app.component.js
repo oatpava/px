@@ -1,5 +1,5 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length,
         r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
         d;
@@ -9,7 +9,7 @@ var __decorate = (this && this.__decorate) || function(decorators, target, key, 
             if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function(k, v) {
+var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
@@ -25,13 +25,13 @@ Dynamsoft.WebTwainEnv.ActiveXInstallWithCAB = false;
 Dynamsoft.WebTwainEnv.Debug = false;
 /*Dynamsoft Code*/
 console.log('---- AppComponent js 99----')
-var AppComponent = (function() {
+var AppComponent = (function () {
     function AppComponent() {
         this.webTwain = null;
         this.twainSources = [];
         this.selectedTwainSource = null;
     }
-    AppComponent.prototype.AcquireImage = function() {
+    AppComponent.prototype.AcquireImage = function () {
         var param = {
             IfShowUI: false,
             IfFeederEnabled: true,
@@ -42,17 +42,17 @@ var AppComponent = (function() {
         if (this.selectedTwainSource) {
             if (!this.webTwain.SelectSourceByIndex(this.selectedTwainSource.idx) ||
                 !this.webTwain.OpenSource() ||
-                !this.webTwain.AcquireImage(param, function() {}, function(errorCode, errorString) {
+                !this.webTwain.AcquireImage(param, function () { }, function (errorCode, errorString) {
                     console.dir({ errorCode: errorCode, errorString: errorString });
                 })) {
                 console.dir({ errorCode: this.webTwain.ErrorCode, errorString: this.webTwain.ErrorString });
             }
         }
     };
-    AppComponent.prototype.ngAfterViewInit = function() {
+    AppComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         Dynamsoft.WebTwainEnv.Load();
-        Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', function() {
+        Dynamsoft.WebTwainEnv.RegisterEvent('OnWebTwainReady', function () {
             console.log("OnWebTwainReady");
             _this.webTwain = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
             if (_this.webTwain) {

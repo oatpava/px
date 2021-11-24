@@ -1,11 +1,9 @@
 export * from '../main/main.component'
 export * from '../main/logger.service'
 export * from '../main/px.service'
-export * from '../main/model/file-attach.model'
 export * from '../main/directive/image-preview.directive'
 export * from '../main/directive/only-number.directive'
 export * from '../main/component/upload-file-attach/upload-file-attach.component'//
-export * from '../main/location-history.service'
 
 
 export * from '../main/component/dynamic-web-twain/dynamic-web-twain.component'
@@ -13,7 +11,6 @@ export * from '../main/component/file-attach/file-attach.component'
 export * from '../main/component/flow-chart/flow-chart.component'//
 export * from '../main/component/delete-dialog/delete-dialog.component'
 export * from '../main/component/file-attach-saraban/file-attach-saraban.component'
-export * from '../main/component/setting-defult-profile/setting-defult-profile.component'
 export * from '../main/component/dialog-instruction/dialog-instruction.component'
 export * from '../main/directive/loadMore.component'
 export * from '../main/component/file-attach-saraban/dialog-view-image/dialog-view-image.component'
@@ -26,16 +23,13 @@ export * from '../login/alert-message/alert-message.component'
 export * from '../login/update-password/update-password.component';
 export * from '../dms/component/folder/folder.component'
 export * from '../dms/service/folder.service'
-export * from '../dms/model/folder.model'
-export * from '../dms/model/menu.model'
-export * from '../dms/component/list-folder/list-folder.component'
 export * from '../dms/component/add-folder/add-folder.component'
 export * from '../dms/component/list-document/list-document.component'
 export * from '../dms/component/add-document/add-document.component'
 export * from '../dms/component/re-order/re-order.component'
 export * from '../dms/component/email/email.component'
 export * from '../dms/component/auth/auth.component'
-export * from '../dms/component/auth/auth.model'
+export * from '../dms/component/auth/structure.1/structure.component'
 export * from '../dms/component/search-all/search-all.component'
 export * from '../dms/component/search/search.component'
 export * from '../dms/component/view-document-search/view-document.component'
@@ -47,8 +41,6 @@ export * from '../dms/component/borrow/borrow.component';
 export * from '../dms/component/dialog-list-user/list-user.component';
 export * from '../dms/component/list-folder-by-doctype/list-folder-by-doctype.component';
 export * from '../dms/component/list-doc-by-doctype/list-doc-by-doctype.component';
-export * from '../dms/component/dialog-list-wf-type/dialog-list-wf-type.component';
-export * from '../dms/component/list-folder-and-doc/list-folder-and-doc.component';
 export * from '../dms/component/list-folder-and-document/list-folder-and-document.component';
 export * from '../dms/component/dms-menu/dms-menu.component';
 export * from '../dms/component/dialog-list-folder/dialog-list-folder.component';
@@ -63,7 +55,6 @@ export * from '../dms/component/list-doc-exp/list-doc-exp.component';
 
 export * from '../mwp/component/mwp-main/mwp.component'
 export * from '../mwp/service/mwp.service'
-export * from '../mwp/model/mwp.model'
 
 export * from '../mwp/component/list-mwp/list-mwp.component'
 export * from '../mwp/component/inbox/inbox.component'
@@ -118,63 +109,26 @@ export * from '../saraban/component/report/report.component'
 
 
 export * from '../setting/component/setting.component'
-export * from '../setting/model/setting.model'
 
-export * from '../setting/model/user.model'
-export * from '../setting/model/structure.model'
-export * from '../setting/model/user-profile.model'
-export * from '../setting/model/title.model'
 export * from '../setting/component/user/user.component'
-export * from '../setting/component/user-profile/list-user-profile/user-profile.component'
-export * from '../setting/component/user-profile/add-user-profile/add-user-profile.component'
+export * from '../setting/component/user-profile/user-profile.component'
 export * from '../setting/component/structure/add-structure/add-structure.component'
 export * from '../setting/component/move-profile/move-profile.component'
 export * from '../setting/component/move-structure/move-structure.component'
 export * from '../setting/component/order-structure/order-structure.component'
-export * from '../setting/component/merge-structure/merge-structure.component'
-export * from '../setting/component/merge-user/merge-user.component'
 export * from '../setting/component/lock-user/lock-user.component'
 export * from '../setting/hrs/hrs.component'
 export * from '../setting/hrs-user/hrs-user.component'
-export * from '../setting/list-merge-structure/list-merge-structure.component'
-export * from '../setting/list-merge-users/list-merge-users.component'
 
 export * from '../setting/setting-search/setting-search.component'
 
 export * from '../setting/history-log/history-log.component'
-export * from '../setting/history-log/model/history-log.model'
-
-export * from '../setting/holiday/holiday.component'
-export * from '../setting/holiday/model/holiday.model'
-export * from '../setting/holiday/edit/holiday-add.component'
-
-export * from '../setting/lookup/lookup.component'
-export * from '../setting/lookup/model/lookup.model'
-export * from '../setting/lookup/edit-lookup/edit-lookup.component'
-
-export * from '../setting/grop/grop.component'
-export * from '../setting/document-type/component/list-document-type/list-document-type.component';
-export * from '../setting/document-type/component/edit-document-type/edit-document-type.component';
 
 export * from '../setting/component/structure/structure.component'
-export * from '../setting/component/structure.1/structure.component'
 
-export * from '../setting/grop/grop.component'
 export * from '../setting/dms-document-type/dms-document-type.component'
 export * from '../setting/dms-document-type/dms-document-type-detail/dms-document-type-detail.component'
 
-
-export * from '../setting/model/position.model'
-export * from '../setting/model/position-type.model'
-export * from '../setting/model/user-profile-type.model'
-export * from '../setting/model/user-status.model'
-export * from '../setting/master-data/model/user-type-order.model'
-
-export * from '../setting/content/component/list-content/list-content.component'
-export * from '../setting/content/component/assign-content/assign-content.component'
-export * from '../setting/content/component/permission-input/permission-input.component'
-export * from '../setting/content/component/list-structure/list-structure.component'
-export * from '../setting/content/component/assign-content-structure/assign-content-structure.component'
 
 export * from '../setting/update-department/component/list-department/list-department.component'
 export * from '../setting/update-department/component/detail-department/detail-department.component'
@@ -182,13 +136,6 @@ export * from '../setting/update-user/component/list-user/list-user.component'
 export * from '../setting/update-user/component/detail-user/detail-user.component'
 export * from '../setting/types/component/list-type/list-type.component'
 export * from '../setting/types/component/edit-type/edit-type.component'
-
-export * from '../setting/content/component/list-content-permission-input/list-content-permission-input.component'
-export * from '../setting/content/component/list-structure-permission-input/list-structure-permission-input.component'
-export * from '../setting/content/component/permission-input-structure/permission-input-structure.component'
-export * from '../setting/content/component/permission-input-update/permission-input-update.component';
-export * from '../setting/document-type/component/list-document-type/list-document-type.component';
-export * from '../setting/document-type/component/edit-document-type/edit-document-type.component';
 
 export * from '../setting/folder-auth/folder-auth.component'
 export * from '../setting/inbox-auth/inbox-auth.component'
@@ -206,7 +153,6 @@ export * from '../setting/report/dms-folder-auth/dms-folder-auth.component'
 export * from '../setting/report/wf-folder-auth/wf-folder-auth.component'
 export * from '../setting/report/dms-folder-user-auth/dms-folder-user-auth.component'
 export * from '../setting/report/wf-folder-user-auth/wf-folder-user-auth.component'
-export * from '../setting/component/auth-admin/auth-admin.component'
 
 export * from '../ecms/component/status-ecms/status-ecms.component'
 export * from '../ecms/component/check-status-ecms/check-status-ecms.component'

@@ -1,12 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
-import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
-import { TdLoadingService } from '@covalent/core'
-import { StepState } from '@covalent/core'
-import 'rxjs/add/operator/switchMap'
-
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { Component, OnInit } from '@angular/core'
+import { MdDialogRef } from '@angular/material'
 
 @Component({
   selector: 'app-list-histtory-user',

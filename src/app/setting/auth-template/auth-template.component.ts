@@ -210,14 +210,6 @@ export class SubmoduleAuthTemplate {
   submoduleAuthTemplateVal: any[]
   updatedDate: string
 
-  // constructor(values: Object = {}, submoduleId: number) {
-  //   this.id = 0
-  //   this.submoduleAuthTemplateName = ''
-  //   this.submodule = new Submodule({ id: submoduleId })
-  //   this.submoduleAuthTemplateVal = []
-  //   this.updatedDate = ''
-  //   Object.assign(this, values)
-  // }
   constructor(values: Object = {}) {
     this.id = 0
     this.submoduleAuthTemplateName = ''

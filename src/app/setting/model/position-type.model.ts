@@ -3,6 +3,7 @@ export class PositionType {
     id: number
     name: string
     abbr: string
+
     constructor(values: Object = {}) {
         this.version = 1
         this.id = 1

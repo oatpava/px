@@ -22,9 +22,6 @@ import { UserProfile } from '../../../setting/model/user-profile.model'
 
 import { ListUserDmsComponent } from '../dialog-list-user/list-user.component'
 
-import { DialogListWfTypeComponent } from '../dialog-list-wf-type/dialog-list-wf-type.component'
-import { FormsModule } from '@angular/forms';
-
 @Component({
   selector: 'app-add-folder',
   templateUrl: './add-folder.component.html',
@@ -352,16 +349,6 @@ export class AddFolderComponent implements OnInit {
     });
   }
 
-  listWfdocType() {
-    console.log('-- listWfdocType --')
 
-    let dialogRef = this._dialog.open(DialogListWfTypeComponent, {
-      width: '50%',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result.name);
-      this.folderName = result.name
-    });
-  }
 
 }

@@ -903,19 +903,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
     // this._loadingService.resolve('main')
   }
 
-  // change() {
-  //   this._router.navigate(
-  //     [{
-  //       outlets: {
-  //         contentCenter: ['ListFolderByDoctypeComponent', {
-  //           parentId: 0,
-  //           t: new Date().getTime(),
-  //           folderName: 'ระบบจัดเก็บเอกสารฯ',
-  //         }],
-  //       }
-  //     }], { relativeTo: this._route })
-  // }
-
   checkDocInFolder() {
     this._folderService
       .checkDocumentsInFolderByFolderId(this.parentId)
@@ -1080,19 +1067,6 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
 
   change() {
-    // this._router.navigate(
-    //   ['../',{
-    //     outlets: {
-    //       contentCenter: ['ListFolderByDoctypeComponent', {
-    //         folderId: this.folderId,
-    //         parentId: this.folderId,
-
-    //         folderName: this.dmsfolderName,
-    //          t: new Date().getTime()
-    //       }],
-    //     }
-    //   }], { relativeTo: this._route })
-
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
         t: new Date().getTime(),

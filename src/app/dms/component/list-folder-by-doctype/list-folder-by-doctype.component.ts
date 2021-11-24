@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core'
-
+import { Component, OnInit } from '@angular/core'
 import { FolderService } from '../../service/folder.service'
 import { DmsFieldService } from '../../service/dmsField.service'
 import { Folder } from '../../model/folder.model'
@@ -8,21 +7,16 @@ import { TdLoadingService } from '@covalent/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { DmsField } from '../../model/dmsField.model';
 import { Menu } from '../../model/menu.model'
-import { IMyOptions, IMyDateModel } from 'mydatepicker'
-
+import { IMyOptions } from 'mydatepicker'
 import { Location } from '@angular/common'
 
-import { DocumentTypeService } from '../../../setting/document-type/service/document-type.service'
-import { WfDocumentType } from '../../../setting/document-type/model/wfDocumentType.model'
 @Component({
   selector: 'app-list-folder-by-doctype',
   templateUrl: './list-folder-by-doctype.component.html',
   styleUrls: ['./list-folder-by-doctype.component.styl'],
-  providers: [FolderService, DmsFieldService, DocumentTypeDetailService, DocumentTypeService],
-
+  providers: [FolderService, DmsFieldService, DocumentTypeDetailService]
 })
 export class ListFolderByDoctypeComponent implements OnInit {
-
   parentId: number
   folderId: number
   folders: Folder[] = []
@@ -51,8 +45,6 @@ export class ListFolderByDoctypeComponent implements OnInit {
   nowDate: Date
   typeSerach: string = 'normal'
 
-  dataWfTypeParent: any[]
-  Listchild: any[]
   folderDocType: number = 0
   isWfFolderFromType: String
   isFormListByDocType = 'Y'
@@ -62,10 +54,10 @@ export class ListFolderByDoctypeComponent implements OnInit {
   attachName: string
 
   typeSearchInput: string = 'a'
-  
-    typeSearchInputData: any[] = [
-      { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
-    ]
+
+  typeSearchInputData: any[] = [
+    { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
+  ]
 
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
@@ -85,7 +77,6 @@ export class ListFolderByDoctypeComponent implements OnInit {
     private _folderService: FolderService,
     private _route: ActivatedRoute,
     private _router: Router,
-    private _documentTypeService: DocumentTypeService,
     private _location: Location,
     private _documentTypeDetailService: DocumentTypeDetailService,
   ) {
@@ -94,228 +85,60 @@ export class ListFolderByDoctypeComponent implements OnInit {
     this.documentTypeId = 2
     this.isWfFolderFromType = 'N'
     this.isFormListByDocType = 'Y'
-
-
   }
 
   ngOnInit() {
-    console.log('---ListFolderComponent---')
     this._route.params
       .subscribe((params: Params) => {
         if (params['folderName'] !== undefined) {
-        this.dmsHeaderName = params['folderName']
-
+          this.dmsHeaderName = params['folderName']
           let str = this.dmsHeaderName
           str = str.replace('(', "1%#1%#1");
           str = str.replace(')', "2%#2%#2");
-
           str = str.replace('1%#1%#1', "(");
           str = str.replace('2%#2%#2', ")");
-
           this.dmsHeaderName = str
         }
-
-
         else { this.dmsHeaderName = 'ระบบจัดเก็บเอกสารฯ' }
         if (!isNaN(params['parentId'])) this.parentId = +params['parentId']
-
         if (!isNaN(params['folderId'])) this.folderId = +params['folderId']
         if (!isNaN(params['documentTypeId'])) this.documentTypeId = +params['documentTypeId']
         if (params['isWfFolderFromType'] !== undefined) this.isWfFolderFromType = params['isWfFolderFromType']
-        console.log('---this.parentId---', this.parentId)
-        console.log('---this.folderId---', this.folderId)
-        console.log('---this.dmsHeaderName---', this.dmsHeaderName)
-        console.log('---this.isWfFolderFromType---', this.isWfFolderFromType)
         this.getParam()
         this.getDocumentTypeDetail(this.documentTypeId)
-        // this.getFolders();
-
       })
-
-    // this.getFolders();
-    // this.getDocumentType();
   }
 
   getFolders(): void {
-    console.log('---getFolders ---')//เอาของพี่พลมาเพิ่มที่นี้
     if (this.parentId == 0) {
-      console.log('--getFolders if -- ')
       this._loadingService.register('main')
       this._folderService
         .ConverseDocTypeToFolder()
         .subscribe(response => {
           this.folders = response as Folder[]
-          console.log('this.folders', this.folders)
-          this._documentTypeService
-            .getParent()
-            .subscribe(response => {
-              this.dataWfTypeParent = response as WfDocumentType[]
-
-
-              for (let dataParent of this.dataWfTypeParent) {
-                // console.log(dataParent.id, dataParent.name)
-                let folderTemp = new Folder
-                folderTemp.id = dataParent.id
-                folderTemp.folderName = dataParent.name
-                folderTemp.icon = 'folder'
-                folderTemp.iconColor = '#e6b800'
-                folderTemp.folderDescription = dataParent.detail
-                folderTemp.isWfFolderFromType = 'Y'
-                folderTemp.documentTypeId = this.folderDocType
-                this.folders.push(folderTemp)
-              }
-              console.log('-- this.folders --', this.folders)
-            })
-
         })
       this._loadingService.resolve('main')
     } else {
-      console.log('--getFolders else -- ')
-      this._documentTypeService
-        .getListchildByParent(this.parentId)
-        .subscribe(response => {
-          this.Listchild = response as WfDocumentType[]
-          console.log('this.Listchild', this.Listchild)
-          this.folders = []
-          if (this.Listchild.length > 0) {
-            // console.log('--- child 999---')
-
-
-            for (let dataParent of this.Listchild) {
-              // console.log(dataParent.id, dataParent.name)
-              let folderTemp = new Folder
-              folderTemp.id = dataParent.id
-              folderTemp.folderName = dataParent.name
-              folderTemp.icon = 'folder'
-              folderTemp.iconColor = '#e6b800'
-              folderTemp.folderDescription = dataParent.detail
-              folderTemp.isWfFolderFromType = 'Y'
-              folderTemp.documentTypeId = this.folderDocType
-
-              this.folders.push(folderTemp)
-            }
-            // console.log(' --- folders ---', this.folders)
-          }
-
-
-        })
-
+      this.folders = []
     }
   }
-
-  hoverEdit: string = ''
-  over(value: string) {
-    this.hoverEdit = value
-  }
-  leave() {
-    this.hoverEdit = ''
-  }
-
 
   selectFolder(selectFolder: Folder) {
-
-    console.log('---selectFolder---', selectFolder)
-
-
-    if (selectFolder.isWfFolderFromType == 'Y') {
-      // getListchildByParent
-      this._documentTypeService
-        .getListchildByParent(selectFolder.id)
-        .subscribe(response => {
-          this.Listchild = response as WfDocumentType[]
-          console.log('this.Listchild', this.Listchild)
-
-          if (this.Listchild.length > 0) {
-            console.log('--- child ---')
-            this.dmsHeaderName = selectFolder.folderName
-
-            // this.folders = []
-            // for (let dataParent of this.Listchild) {
-            //   console.log(dataParent.id, dataParent.name)
-            //   let folderTemp = new Folder
-            //   folderTemp.id = dataParent.id
-            //   folderTemp.folderName = dataParent.name
-            //   folderTemp.icon = 'folder'
-            //   folderTemp.iconColor = '#e6b800'
-            //   folderTemp.folderDescription = dataParent.detail
-            //   folderTemp.isWfFolderFromType = 'Y'
-
-            //   this.folders.push(folderTemp)
-            // }
-
-            console.log('parentId', selectFolder.id)
-            console.log('documentTypeId', selectFolder.documentTypeId)
-            this._router.navigate(
-              ['.', {
-                parentId: selectFolder.id,
-                folderType: selectFolder.folderType,
-                folderName: selectFolder.folderName,
-                documentTypeId: selectFolder.documentTypeId,
-                isWfFolderFromType: selectFolder.isWfFolderFromType,
-                t: new Date().getTime()
-              }],
-              { relativeTo: this._route })
-
-
-
-
-
-
-          } else {
-            console.log('--- not child ---', this.folderId)//get by wftypeId
-            let str = selectFolder.folderName
-            str = str.replace('(', "1%#1%#1");
-            str = str.replace(')', "2%#2%#2");
-            this._router.navigate(
-              ['../ListDocByDoctypeComponent/', {
-                documentTypeId: selectFolder.documentTypeId,
-                folderName: str,
-                folderId: this.folderId,
-                wfTypeId: selectFolder.id,
-                t: new Date().getTime()
-              }],
-              { relativeTo: this._route })
-
-          }
-
-
-        })
-
-    } else {
-      let str = selectFolder.folderName
-      str = str.replace('(', "1%#1%#1");
-      str = str.replace(')', "2%#2%#2");
-      this._router.navigate(
-        ['../ListDocByDoctypeComponent/', {
-          documentTypeId: selectFolder.documentTypeId,
-          folderName: str,
-          folderId: this.folderId,
-          wfTypeId: 0,
-
-          t: new Date().getTime()
-        }],
-        { relativeTo: this._route })
-    }
+    let str = selectFolder.folderName
+    str = str.replace('(', "1%#1%#1");
+    str = str.replace(')', "2%#2%#2");
+    this._router.navigate(
+      ['../ListDocByDoctypeComponent/', {
+        documentTypeId: selectFolder.documentTypeId,
+        folderName: str,
+        folderId: this.folderId,
+        wfTypeId: 0,
+        t: new Date().getTime()
+      }],
+      { relativeTo: this._route })
   }
 
-
-
   change() {
-
-    // let param = {
-    //   t: new Date().getTime(),
-    //   parentId: 1,
-    //   folderType: 'A',
-    // }
-
-    // this._router.navigate(
-    //   [{
-    //     outlets: {
-    //       center: ['folders', param],
-    //     }
-    //   }],
-    //   { relativeTo: this._route })
-
     this._router.navigate(
       ['../folders/', {
         t: new Date().getTime(),
@@ -323,18 +146,6 @@ export class ListFolderByDoctypeComponent implements OnInit {
         folderType: 'A',
       }],
       { relativeTo: this._route })
-
-  }
-
-  getDocumentType(): void {
-    this._loadingService.register('main')
-    this._documentTypeService
-      .getParent()
-      .subscribe(response => {
-        this.dataWfTypeParent = response as WfDocumentType[]
-        console.log(this.dataWfTypeParent)
-      })
-    this._loadingService.resolve('main')
   }
 
   sideNavAlert(e): void {
@@ -358,35 +169,22 @@ export class ListFolderByDoctypeComponent implements OnInit {
   }
 
   getDocumentTypeDetail(documentTypeId: number): void {//หัว columns
-    console.log('documentTypeId =', documentTypeId)
-
     this._loadingService.register('main')
     this._documentTypeDetailService
       .getDocumentTypeDetailMap(documentTypeId)
       .subscribe(response => {
-        console.log('getDocumentTypeDetail', response)
         this.documentTypeDetails = response as any[]
-        // console.log(this.documentTypeDetails)
-        // for (let dtd of this.documentTypeDetails) {
-        // if(dtd.dmsFieldMap == 'createdBy'){
-        //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
-        // }
-        // this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
-        // }
-        // console.log(this.columns)
       })
 
     this._loadingService.resolve('main')
   }
 
   getParam(): void {
-    console.log('--- getParam ---')
     this._loadingService.register('main')
     this._folderService
       .getParam()
       .subscribe(response => {
         this.getFolders();
-        console.log('response--', response)
         this.folderDocType = +response.data.paramValue
       })
     this._loadingService.resolve('main')
@@ -396,28 +194,10 @@ export class ListFolderByDoctypeComponent implements OnInit {
   dmsSearch() {
     let typeSearch = this.typeSearchInput
     this.nowDate = new Date()
-    console.log('---dmsSearch----')
-    console.log('allField', this.allField)
-    console.log('fullText ', this.fullText)
-    console.log('attachName', this.attachName)
-
-
-    console.log(typeSearch)
-
-    // console.log("this.documentIntComma = " + this.documentIntComma)
     if (this.documentIntComma != null) {
       this.search["documentIntComma"] = this.documentIntComma
     }
-
-    // console.log(this.search);
-    // console.log(this.parentId)
-    // console.log(this.documentTypeId)
-
-    // console.log(this.search)
     let dataSearch: any = this.search
-    //  if (this.search[documentName] != undefined){
-    //  console.log(dataSearch.createdDateForm.formatted)
-    //  }
     let createdDateForm = ''
     let createdDateTo = ''
     let updatedDateForm = ''
@@ -462,20 +242,14 @@ export class ListFolderByDoctypeComponent implements OnInit {
     if (typeSearch == 'b') {//เอกสารหมดอายุ
       this.typeSerach = 'expier'
       let expForm = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
-      let expTo = { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } }
       let day = expForm.date.day
       let month = expForm.date.month
       let dayS = ""
       let monthS = ""
       if (day < 10) { dayS = '0' + day; } else { dayS = String(day) }
       if (month < 10) { monthS = '0' + month; } else { monthS = String(month) }
-
       // documentExpireDateForm = dayS+'/'+monthS+'/'+expForm.date.year
       documentExpireDateTo = dayS + '/' + monthS + '/' + expForm.date.year
-
-      // console.log(documentExpireDateForm)
-      // console.log(documentExpireDateTo)
-
     }
 
     if (dataSearch.createdDateForm != undefined) { createdDateForm = dataSearch.createdDateForm.formatted }
@@ -522,8 +296,6 @@ export class ListFolderByDoctypeComponent implements OnInit {
     if (this.allField == undefined) { this.allField = '' }
     if (this.fullText == undefined) { this.fullText = '' }
     if (this.attachName == undefined) { this.attachName = '' }
-
-
 
     this._router.navigate(
       [{
@@ -584,18 +356,9 @@ export class ListFolderByDoctypeComponent implements OnInit {
             allField: this.allField,
             fullText: this.fullText,
             fileAttachName: this.attachName,
-
-
-
-
-
-
           }],
         }
       }], { relativeTo: this._route })
-
   }
-
-
 
 }

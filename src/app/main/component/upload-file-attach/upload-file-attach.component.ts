@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Directive, Output, EventEmitter } from '@angu
 import { FormControl } from '@angular/forms'
 import { PxService, } from '../../../main/px.service'
 import { FileUploader, FileSelectDirective, FileDropDirective, } from 'ng2-file-upload'
-import * as FileSaver from 'file-saver'
 import { Location } from '@angular/common'
 
 import { FileAttach } from '../../../main/model/file-attach.model'

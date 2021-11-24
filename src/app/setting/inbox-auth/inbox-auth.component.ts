@@ -5,7 +5,7 @@ import { TdLoadingService } from '@covalent/core'
 import { Location } from '@angular/common'
 import { URLSearchParams } from '@angular/http'
 
-import { StructureService } from '../component/structure/structure.service'
+import { StructureService } from '../service/structure.service'
 import { InoutAssignService } from '../../mwp/service/inout-assign.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
 import { PxService } from '../../main/px.service'

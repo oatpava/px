@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms'
 import { PxService } from '../../../main/px.service'
 
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload'
-import * as FileSaver from 'file-saver'
 import * as es6printJS from "print-js";
 
 import { MdDialog } from '@angular/material'

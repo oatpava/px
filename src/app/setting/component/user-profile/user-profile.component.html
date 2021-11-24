@@ -1,0 +1,138 @@
+<div layout="column" flex>
+    <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
+        <button *ngIf="!showSearch" md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+            <md-icon>person_add</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>รายชื่อบุคลากร</span>
+        </div>
+    </div>
+</div>
+<div layout="column" flex>
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="70">
+                    <md-list>
+                        <div layout="row" layout-align="left start" class="blockSearch">
+                            <md-input-container style="width: 100%;">
+                                <!-- (ngModelChange)="searchUserProfiles()" -->
+                                <input md-input type="text" flex placeholder="รหัสผู้ใช้งาน" name="search" [(ngModel)]="userName">
+                            </md-input-container>
+                            <button *ngIf="showButton1" md-icon-button title="ค้นหา" (click)="searchUserProfiles(true)" [disabled]="userName.length==0"><i class="material-icons">search</i></button>
+                            <button *ngIf="!showButton1" md-icon-button title="ยกเลิกการค้นหา" (click)="cancelSearch()"><i class="material-icons">refresh</i></button>
+                        </div>
+                        <div layout="row" layout-align="left start" class="blockSearch">
+                            <md-input-container style="width: 100%;">
+                                <!-- (ngModelChange)="searchUserProfiles()" -->
+                                <input md-input type="text" flex placeholder="ค้นหาชื่อผู้ใช้งาน" name="search" [(ngModel)]="userProfileName">
+                            </md-input-container>
+                            <button *ngIf="showButton2" md-icon-button title="ค้นหา" (click)="searchUserProfiles(false)" [disabled]="userProfileName.length==0"><i class="material-icons">search</i></button>
+                            <button *ngIf="!showButton2" md-icon-button title="ยกเลิกการค้นหา" (click)="cancelSearch()"><i class="material-icons">refresh</i></button>
+                        </div>
+                        <md-card *ngIf="showSearchResult" style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <table td-data-table>
+                                    <th td-data-table-column *ngFor="let column of columns" [numeric]="column.numeric">
+                                        {{column.label}}
+                                    </th>
+                                    <tr td-data-table-row *ngFor="let row of datas">
+                                        <td td-data-table-cell *ngFor="let column of columns" [numeric]="column.numeric" (click)="edit(row)">
+                                            <label class="hover" *ngIf="column.name!=='Edit'">{{row[column.name]}}</label>
+                                            <div *ngIf="column.name==='edit'" class="block-icon-Option">
+                                                <i class="material-icons icon-button" (click)="edit(row)">edit</i>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </md-card-content>
+                        </md-card>
+                        <md-card *ngIf="!showSearchResult" style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <px-structure [selectDepartment]="true" [structureTree]="structureTree" (onselectData)="selectStructure($event)"></px-structure>
+                            </md-card-content>
+                        </md-card>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div [tdToggle]="hoverMenuEdit">
+        <!-- Users -->
+        <div *ngIf="showEditUser" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="ย้าย" color="accent" (click)="userProfileMove()">
+                <md-icon>swap_vert</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditUser" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="จำกัดผู้ใช้งาน" [style.background]="'#0d47a1'" color="accent" (click)="lockuser()">
+                <md-icon>lock_open</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditUser" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="แก้ไขผู้ใช้งาน" [style.background]="'#00AAFF'" color="accent" (click)="manageUser('edit','แก้ไข')">
+                <md-icon>edit</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditUser" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="รีเซ็ตรหัสผ่าน" [style.background]="'#e53935'" color="accent" (click)="manageResetPassword('edit','แก้ไข')">
+                <md-icon>settings_backup_restore</md-icon>
+            </button>
+        </div>
+        <!-- Users -->
+
+        <!-- Structure -->
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน PDF)" color="accent" [style.background]="'#cc7a00'" (click)="genReport('pdf')">
+                <md-icon>assignment</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="พิมพ์สถานะผู้ใช้งาน (รายงาน Excel)" color="accent" [style.background]="'#cc7a00'" (click)="genReport('xls')">
+                <md-icon>grid_on</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="ย้าย" color="accent" (click)="structureMove()">
+                <md-icon>swap_vert</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="จัดลำดับผู้ใช้งาน" color="accent" [style.background]="'#66cc00'" (click)="orderUser()">
+                <md-icon>list</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="จัดลำดับหน่วยงาน" color="accent" [style.background]="'#336600'" (click)="orderStructure()">
+                <md-icon>line_weight</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="เพิ่มผู้ใช้งาน" [style.background]="'#0000FF'" color="accent" (click)="manageUser('add','เพิ่ม')">
+                <i class="fa fa-user"></i>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="แก้ไขหน่วยงาน" [style.background]="'#00AAFF'" color="accent" (click)="manageStructure('edit','แก้ไข')">
+                <md-icon>edit</md-icon>
+            </button>
+        </div>
+        <div *ngIf="showEditStructure" class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="เพิ่มหน่วยงาน" [style.background]="'#0000FF'" color="accent" (click)="manageStructure('add','เพิ่ม'); ">
+                <i class="fa fa-tag"></i>
+            </button>
+        </div>
+        <!-- Structure -->
+    </div>
+    <button *ngIf="showMenu" md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>ห

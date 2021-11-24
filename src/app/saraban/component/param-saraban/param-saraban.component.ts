@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
 import { TreeNode } from 'primeng/primeng'
 
-import { StructureService } from '../../../setting/component/structure/structure.service'
+import { StructureService } from '../../../setting/service/structure.service'
 import { ParamSarabanService } from '../../service/param-saraban.service'
 
 @Component({

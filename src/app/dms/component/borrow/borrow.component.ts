@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { BorrowService } from '../../service/borrow.service'
 import { Borrow } from '../../model/borrow.model'
-import { StructureService } from '../../../setting/component/structure/structure.service'
+import { StructureService } from '../../../setting/service/structure.service'
 import { UserProfileService } from '../../../setting/service/user-profile.service'
 import { UserProfile } from '../../../setting/model/user-profile.model'
 

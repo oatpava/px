@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable'
-import { StructureService } from '../../service/structure.service';
+import { StructureService } from './structure.service';
 import { TreeNode, Message } from 'primeng/primeng';
 @Component({
-  selector: 'px-structure',
+  selector: 'px-structure2',
   templateUrl: './structure.component.html',
   styleUrls: ['./structure.component.styl'],
-  providers: [StructureService,],
+  providers: [StructureService]
 })
 
-export class StructureComponent implements OnInit {
+export class StructureComponent2 implements OnInit {
   @Input("selectDepartment") selectDepartment: boolean
   @Input("noneUser") noneUser: boolean
   @Output("onselectData") onselectData = new EventEmitter();
@@ -21,19 +21,18 @@ export class StructureComponent implements OnInit {
   selectedStructure: TreeNode;
   msgs: Message[] = [];
   firstList: any
-  icon: string
   constructor(
     private _structureService: StructureService,
   ) {
   }
 
   ngOnInit() {
-    this.structureTree = []
+    console.log(this.noneUser)
     this._structureService
-      .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
-      .subscribe(response => {
+      .getStructuresV2()
+      .subscribe(res => {
         let i = 0
-        for (let node of response) {
+        for (let node of res.data) {
           this.structureTree.push({
             "label": node.name,
             "data": node.id,
@@ -44,37 +43,32 @@ export class StructureComponent implements OnInit {
             "dataObj": node,
             "children": []
           })
+
           Observable.forkJoin(
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
-            for (let structure of response[0]) {
-              this.structureTree[i].children.push({
-                "label": structure.name + ' (' + structure.shortName + ')',
-                "data": structure.id,
-                "expandedIcon": "fa-tag",
-                "collapsedIcon": "fa-tag",
-                "leaf": false,
-                "selectable": true,
-                "dataObj": structure
-              })
+            if (res.userProfileType == 1) {
+              for (let structure of response[0]) {
+                this.structureTree[i].children.push({
+                  "label": structure.name,
+                  "data": structure.id,
+                  "expandedIcon": "fa-tag",
+                  "collapsedIcon": "fa-tag",
+                  "leaf": false,
+                  "selectable": true,
+                  "dataObj": structure
+                })
+              }
             }
             if (!this.noneUser) {
+              let userProfiles = []
               for (let userProfile of response[1]) {
-                if (userProfile.userStatus.id === 1) {
-                  this.icon = "fa-user";
-                } else if (userProfile.userStatus.id === 2) {
-                  this.icon = "fa-user-times";
-                } else if (userProfile.userStatus.id === 3) {
-                  this.icon = "fa-user-circle";
-                } else {
-                  this.icon = "fa-user";
-                }
                 this.structureTree[i].children.push({
                   "label": userProfile.fullName,
                   "data": userProfile.id,
-                  "expandedIcon": this.icon,
-                  "collapsedIcon": this.icon,
+                  "expandedIcon": "fa-user",
+                  "collapsedIcon": "fa-user",
                   "leaf": true,
                   "selectable": true,
                   "dataObj": userProfile
@@ -89,7 +83,7 @@ export class StructureComponent implements OnInit {
 
   loadData() {
     this._structureService
-      .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
+      .getStructuresV2()
       .subscribe(response => {
         let i = 0
         for (let node of response) {
@@ -107,9 +101,10 @@ export class StructureComponent implements OnInit {
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
+            let structures = []
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
-                "label": structure.name + ' (' + structure.shortName + ')',
+                "label": structure.name,
                 "data": structure.id,
                 "expandedIcon": "fa-tag",
                 "collapsedIcon": "fa-tag",
@@ -120,20 +115,11 @@ export class StructureComponent implements OnInit {
             }
             if (!this.noneUser) {
               for (let userProfile of response[1]) {
-                if (userProfile.userStatus.id === 1) {
-                  this.icon = "fa-user";
-                } else if (userProfile.userStatus.id === 2) {
-                  this.icon = "fa-user-times";
-                } else if (userProfile.userStatus.id === 3) {
-                  this.icon = "fa-user-circle";
-                } else {
-                  this.icon = "fa-user";
-                }
                 this.structureTree[i].children.push({
                   "label": userProfile.fullName,
                   "data": userProfile.id,
-                  "expandedIcon": this.icon,
-                  "collapsedIcon": this.icon,
+                  "expandedIcon": "fa-user",
+                  "collapsedIcon": "fa-user",
                   "leaf": true,
                   "selectable": true,
                   "dataObj": userProfile
@@ -155,7 +141,7 @@ export class StructureComponent implements OnInit {
         let structures = []
         for (let structure of response[0]) {
           structures.push({
-            "label": structure.name + ' (' + structure.shortName + ')',
+            "label": structure.name,
             "data": structure.id,
             "expandedIcon": "fa-tag",
             "collapsedIcon": "fa-tag",
@@ -166,20 +152,11 @@ export class StructureComponent implements OnInit {
         }
         if (!this.noneUser) {
           for (let userProfile of response[1]) {
-            if (userProfile.userStatus.id === 1) {
-              this.icon = "fa-user";
-            } else if (userProfile.userStatus.id === 2) {
-              this.icon = "fa-user-times";
-            } else if (userProfile.userStatus.id === 3) {
-              this.icon = "fa-user-circle";
-            } else {
-              this.icon = "fa-user";
-            }
             structures.push({
               "label": userProfile.fullName,
               "data": userProfile.id,
-              "expandedIcon": this.icon,
-              "collapsedIcon": this.icon,
+              "expandedIcon": "fa-user",
+              "collapsedIcon": "fa-user",
               "leaf": true,
               "selectable": true,
               "dataObj": userProfile
@@ -196,14 +173,12 @@ export class StructureComponent implements OnInit {
       //เชค selectDepartment สามารถเลือกหน่วยงานได้หรือไม่
       if (this.selectDepartment) {
         event.node.dataObj.type = 'S'
-        // if (event.node.expandedIcon === 'fa-user') {
-        if (event.node.expandedIcon.indexOf('fa-user') === 0) {
+        if (event.node.expandedIcon === 'fa-user') {
           event.node.dataObj.type = 'U'
         }
         this.onselectData.emit(event.node.dataObj)
       } else {
-        // if (event.node.expandedIcon === 'fa-user') {
-        if (event.node.expandedIcon.indexOf('fa-user') === 0) {
+        if (event.node.expandedIcon === 'fa-user') {
           this.onselectData.emit(event.node.dataObj)
         } else {
           if (this.aletMsgTo) {
@@ -220,7 +195,7 @@ export class StructureComponent implements OnInit {
                 summary: 'เพิ่มได้เฉพาะผู้ใช้งานเท่านั้น',
                 detail: event.node.label,
               },
-            )
+            );
           }
         }
       }

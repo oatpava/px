@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TdLoadingService } from '@covalent/core'
 import { Observable } from 'rxjs/Observable'
-import { StructureService } from '../../component/structure/structure.service'
+import { StructureService } from '../../service/structure.service'
 import { TreeNode, Message } from 'primeng/primeng'
 
 @Component({

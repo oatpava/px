@@ -4,13 +4,13 @@
             <md-icon>arrow_back</md-icon>
         </button>
         <button md-icon-button disabled>
-          <md-icon>folder</md-icon>
+            <md-icon>folder</md-icon>
         </button>
         <div flex class="menu-showLabel">
             <span>{{dmsHeaderName}}</span>
         </div>
         <button md-icon-button (click)="change()">
-          <md-icon>undo</md-icon>
+            <md-icon>undo</md-icon>
         </button>
 
         <button hide-gt-md md-icon-button [md-menu-trigger-for]="menu">
@@ -18,8 +18,8 @@
         </button>
         <md-menu #menu="mdMenu" x-position="before">
             <div *ngFor="let menu of menus">
-                <button *ngIf="menu.nameEng!=='search'" md-menu-item (click)="add(menu)"> เพิ่ม{{menu.name}} </button>
-                <button *ngIf="menu.nameEng==='search'" md-menu-item (click)="sideSubMenu.open(); ModeSearch = false"> ค้นหา </button>
+                <button *ngIf="menu.nameEng!=='search'" md-menu-item (click)="add(menu)">เพิ่ม{{menu.name}}</button>
+                <button *ngIf="menu.nameEng==='search'" md-menu-item (click)="sideSubMenu.open(); ModeSearch = false">ค้นหา</button>
             </div>
         </md-menu>
     </div>
@@ -29,44 +29,66 @@
         <md-sidenav #sideSubMenu align="end">
 
 
-            <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
-                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ค้นหาทั้งหมด" name="allField" [(ngModel)]="allField ">
+            <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm"
+                layout-align="center start">
+                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ค้นหาทั้งหมด"
+                    name="allField" [(ngModel)]="allField ">
                 </md-input>
-                <div *ngFor="let df of documentTypeDetails" layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px;">
+                <div *ngFor="let df of documentTypeDetails" layout="row" layout-align="left start"
+                    style="width: 100%; margin-bottom: 10px;">
                     <div *ngIf="df.dmsFieldType==='DATETIME'">
 
 
-                        <my-date-picker [options]="myDatePickerOptions" flex placeholder="{{df.documentTypeDetailName}} จาก" locale="th" name="{{df.documentTypeDetailName}}จาก" [(ngModel)]="search[df.dmsFieldMap+'Form']">
+                        <my-date-picker [options]="myDatePickerOptions" flex
+                            placeholder="{{df.documentTypeDetailName}} จาก" locale="th"
+                            name="{{df.documentTypeDetailName}}จาก" [(ngModel)]="search[df.dmsFieldMap+'Form']">
                         </my-date-picker>
 
-                        <my-date-picker [options]="myDatePickerOptions" flex placeholder="{{df.documentTypeDetailName}} ถึง" locale="th" name="{{df.documentTypeDetailName}}ถึง" [(ngModel)]="search[df.dmsFieldMap+'To']">
+                        <my-date-picker [options]="myDatePickerOptions" flex
+                            placeholder="{{df.documentTypeDetailName}} ถึง" locale="th"
+                            name="{{df.documentTypeDetailName}}ถึง" [(ngModel)]="search[df.dmsFieldMap+'To']">
                         </my-date-picker>
 
                     </div>
-                    <md-input *ngIf="df.dmsFieldType !=='DATETIME' && df.dmsFieldMap !=='documentIntComma' && df.documentTypeDetailLookup === 0 " flex placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}" [(ngModel)]="search[df.dmsFieldMap]">
+                    <md-input
+                        *ngIf="df.dmsFieldType !=='DATETIME' && df.dmsFieldMap !=='documentIntComma' && df.documentTypeDetailLookup === 0 "
+                        flex placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}"
+                        [(ngModel)]="search[df.dmsFieldMap]">
                     </md-input>
 
-                    <md-input *ngIf="df.dmsFieldMap ==='documentIntComma' " flex placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}" [(ngModel)]="documentIntComma " (focus)=" removeCommas() " (blur)="addCommas() ">
+                    <md-input *ngIf="df.dmsFieldMap ==='documentIntComma' " flex
+                        placeholder="{{df.documentTypeDetailName}}" name="{{df.documentTypeDetailName }}"
+                        [(ngModel)]="documentIntComma " (focus)=" removeCommas() " (blur)="addCommas() ">
                     </md-input>
 
-                    <md-select *ngIf="df.dmsFieldType==='TEXT' && df.documentTypeDetailLookup > 0" flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
-                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                    <md-select *ngIf="df.dmsFieldType==='TEXT' && df.documentTypeDetailLookup > 0" flex
+                        style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}'
+                        [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name">
+                            {{lookupDetail.name}}
                         </md-option>
                     </md-select>
 
-                    <md-select *ngIf="df.dmsFieldType==='VARCHAR' && df.documentTypeDetailLookup > 0 && df.dmsFieldMap != 'documentName' " flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}' [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
-                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
+                    <md-select
+                        *ngIf="df.dmsFieldType==='VARCHAR' && df.documentTypeDetailLookup > 0 && df.dmsFieldMap != 'documentName' "
+                        flex style="width: 100% ;margin-top: 20px;" placeholder='{{df.documentTypeDetailName}}'
+                        [(ngModel)]="search[df.dmsFieldMap]" name="{{df.documentTypeDetailName }}">
+                        <md-option *ngFor="let lookupDetail of df.lookupDetail" [value]="lookupDetail.name">
+                            {{lookupDetail.name}}
                         </md-option>
                     </md-select>
                 </div>
 
-                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ข้อความในเอกสารแนบ" name="fullText" [(ngModel)]="fullText ">
+                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;"
+                    placeholder="ข้อความในเอกสารแนบ" name="fullText" [(ngModel)]="fullText ">
                 </md-input>
 
-                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;" placeholder="ชื่อเอกสารแนบ" name="attachName" [(ngModel)]="attachName ">
+                <md-input layout-align="left start" style="width: 100%; margin-bottom: 10px;"
+                    placeholder="ชื่อเอกสารแนบ" name="attachName" [(ngModel)]="attachName ">
                 </md-input>
 
-                <md-select layout-align="left start" style="width: 100%" md-input type="text" placeholder="เอกสาร" name="typeSearchInput" [(ngModel)]="typeSearchInput">
+                <md-select layout-align="left start" style="width: 100%" md-input type="text" placeholder="เอกสาร"
+                    name="typeSearchInput" [(ngModel)]="typeSearchInput">
                     <md-option *ngFor="let data of typeSearchInputData" [value]="data.val"> {{data.name}}
                     </md-option>
                 </md-select>
@@ -83,36 +105,15 @@
                     <md-list>
 
                         <template let-item let-last="last" ngFor [ngForOf]="folders">
-                            <md-list-item  [ngClass]="{'bgSelectfolder' : item.icon == 'done'}" (mouseover)="over(item.id);" (mouseleave)="leave();"  >
-                                <!--<md-icon (click)="selectOther(item)" md-list-avatar style="background: #f93550; cursor: pointer;" *ngIf="item.folderType==='C'">dashboard</md-icon>
-                                <md-icon (click)="selectOther(item)" md-list-avatar style="background: #4ee832; cursor: pointer;" *ngIf="item.folderType==='D'">dns</md-icon>
-                                <md-icon (click)="selectOther(item)" md-list-avatar style="background: #e6b800; cursor: pointer;" *ngIf="item.folderType==='F'">folder</md-icon>            -->
-                                
-                                <md-icon md-list-avatar (click)="selectOther(item)" style="cursor: pointer" [ngClass]="{'fontIcon' : item.icon == 'done'}"
-                                 [style.background]="item.iconColor">{{item.icon}}</md-icon>
-                                
+                            <md-list-item [ngClass]="{'bgSelectfolder' : item.icon == 'done'}"
+                                (mouseover)="over(item.id);" (mouseleave)="leave();">
+                                <md-icon md-list-avatar (click)="selectOther(item)" style="cursor: pointer"
+                                    [ngClass]="{'fontIcon' : item.icon == 'done'}" [style.background]="item.iconColor">
+                                    {{item.icon}}</md-icon>
                                 <h3 md-line class="hover" (click)="selectFolder(item)"> {{item.folderName}} </h3>
-                                <p md-line class="hover"(click)="selectFolder(item)"> {{item.folderDescription}} </p>
-                                
-                                <!--<div hide show-gt-md  class="block-icon-Option" [hidden]="hoverEdit == item.id">
-                                    <i [hidden]="hoverEdit !== item.id" 
-                                    [ngClass]="{'displayShow': hoverEdit == item.id, 'displayIconNone': hoverEdit !== item.id}" 
-                                    class="material-icons icon-button"  (click)="edit(item)" title="แก้ไข" >edit</i>
-
-
-                                    <i [hidden]="hoverEdit !== item.id" 
-                                    [ngClass]="{'displayShow': hoverEdit == item.id, 'displayIconNone': hoverEdit !== item.id}" 
-                                    class="material-icons icon-button"  (click)="auth(item)" title="สิทธิ์" >settings</i>
-                                
-                                </div>-->
-
-                                <!--<div hide-gt-md class="block-icon-Option" >
-                                    <i class="material-icons icon-button"  (click)="edit(item)"  title="แก้ไข" >edit</i>
-                                     <i class="material-icons icon-button"  (click)="auth(item)" title="สิทธิ์" >settings</i>
-                                </div>-->
-                                
+                                <p md-line class="hover" (click)="selectFolder(item)"> {{item.folderDescription}} </p>
                             </md-list-item>
-                            <md-divider  md-inset></md-divider>
+                            <md-divider md-inset></md-divider>
                         </template>
 
                     </md-list>
@@ -121,25 +122,15 @@
         </div>
     </md-sidenav-layout>
 </div>
-<!--<button md-fab [style.background]="'#FF0000'" title="ทดสอบส่งเมล์เอกสารหมดอายุ" style="margin-bottom: 3px;" (click)="testemail()">
-                <md-icon>update</md-icon>
-            </button>-->
-<div hide show-gt-md [tdToggle]="!ModeSearch && stetaPaste" layout="column" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
 
-
+<div hide show-gt-md [tdToggle]="!ModeSearch && stetaPaste" layout="column" id="fixedbutton" (click)="overMenu();"
+    (mouseleave)="leaveMenu();">
     <div class="showbutton" [tdToggle]="hoverMenuEdit" style="padding-bottom: 3px;">
-
-
-
-        <button md-fab [style.background]="'#1976d2'" title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
-                <md-icon>search</md-icon>
-            </button>
-
+        <button md-fab [style.background]="'#1976d2'" title="ค้นหา" color="accent"
+            (click)="sideSubMenu.open(); ModeSearch = false">
+            <md-icon>search</md-icon>
+        </button>
     </div>
-
-
-
-
     <button md-fab color="accent" title="รายการเมนู">
         <md-icon>{{listMenu}}</md-icon>
     </button>
@@ -149,9 +140,6 @@
     <button md-fab [style.background]="'#1976d2'" color="accent" title="ค้นหา" (click)="dmsSearch()">
         <md-icon>search</md-icon>
     </button>
-    <!--<button md-fab [style.background]="'#f93550'" color="accent" title="ค้นหาเอกสารหมดอายุ" (click)="dmsSearch('b')">
-        <md-icon>search</md-icon>
-    </button>-->
 </div>
 
 

@@ -56,14 +56,14 @@ export class ListDocByDoctypeComponent implements OnInit {
   attachName: string
 
   typeSearchInput: string = 'a'
-  
-    typeSearchInputData: any[] = [
-      { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
-    ]
 
-    nowDate: Date
+  typeSearchInputData: any[] = [
+    { id: 1, name: 'เอกสารปกติ', val: 'a' }, { id: 2, name: 'เอกสารหมดอายุ', val: 'b' }
+  ]
 
-    typeSerach: string = 'normal'
+  nowDate: Date
+
+  typeSerach: string = 'normal'
 
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
@@ -102,17 +102,17 @@ export class ListDocByDoctypeComponent implements OnInit {
         if (!isNaN(params['documentTypeId'])) this.documentTypeId = +params['documentTypeId']
         if (!isNaN(params['folderId'])) this.folderId = +params['folderId']
         if (!isNaN(params['wfTypeId'])) this.wfTypeId = +params['wfTypeId']
-          if (params['folderName'] !== undefined) {
-            this.dmsfolderName = params['folderName']
-            let str = this.dmsfolderName
-            str = str.replace('(', "1%#1%#1");
-            str = str.replace(')', "2%#2%#2");
-  
-            str = str.replace('1%#1%#1', "(");
-            str = str.replace('2%#2%#2', ")");
-  
-            this.dmsfolderName = str
-          }
+        if (params['folderName'] !== undefined) {
+          this.dmsfolderName = params['folderName']
+          let str = this.dmsfolderName
+          str = str.replace('(', "1%#1%#1");
+          str = str.replace(')', "2%#2%#2");
+
+          str = str.replace('1%#1%#1', "(");
+          str = str.replace('2%#2%#2', ")");
+
+          this.dmsfolderName = str
+        }
         this.dmsfolderName = params['folderName']
         console.log('this.dmsfolderName ', this.dmsfolderName)
         this.getDocumentByDoctype(this.documentTypeId)
@@ -158,7 +158,7 @@ export class ListDocByDoctypeComponent implements OnInit {
           // }
           this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
         }
-        this.columns.push({name:'fullPathName',label:'ตำแหน่งเอกสาร'})
+        this.columns.push({ name: 'fullPathName', label: 'ตำแหน่งเอกสาร' })
 
         this.widthSize = this.columns.length * 250
         console.log('this.columns', this.columns)
@@ -181,19 +181,6 @@ export class ListDocByDoctypeComponent implements OnInit {
 
 
   selectDocument(selectDoc: Document) {
-    console.log('---selectDoc---', selectDoc)
-    // this._router.navigate(
-    // ['../', {
-    //   outlets: {
-    //     contentCenter: ['createDoc', {
-    //       documentId: selectDoc.id,
-    //       folderId: this.folderId,
-    //       documentTypeId: this.documentTypeId,
-    //       t: new Date().getTime()
-    //     }],
-    //   }
-    // }], { relativeTo: this._route })
-
     this._router.navigate(
       ['../createDoc/', {
         documentId: selectDoc.id,
@@ -202,8 +189,6 @@ export class ListDocByDoctypeComponent implements OnInit {
         t: new Date().getTime()
       }],
       { relativeTo: this._route })
-
-
   }
 
   addDocument() {
@@ -220,7 +205,6 @@ export class ListDocByDoctypeComponent implements OnInit {
   }
 
   onDateChanged(event: any) {
-    // console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
   }
 
 
@@ -448,15 +432,15 @@ export class ListDocByDoctypeComponent implements OnInit {
   }
 
   change() {
-    
-        this._router.navigate(
-          ['../folders/', {
-            t: new Date().getTime(),
-            parentId: 1,
-            folderType: 'A',
-          }],
-          { relativeTo: this._route })
-    
-      }
+
+    this._router.navigate(
+      ['../folders/', {
+        t: new Date().getTime(),
+        parentId: 1,
+        folderType: 'A',
+      }],
+      { relativeTo: this._route })
+
+  }
 
 }

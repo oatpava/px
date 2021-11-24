@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
-import { TdLoadingService, LoadingType, LoadingMode } from '@covalent/core'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
+import { TdLoadingService } from '@covalent/core'
+import { Message } from 'primeng/primeng'
 import { Location } from '@angular/common'
 
 import { FileAttach } from '../../main/model/file-attach.model'
 import { FileUploader } from 'ng2-file-upload'
 import { PxService } from '../../main/px.service'
-
-
-import { Structure } from '../../setting/model/structure.model'
-import { StructureService } from '../../setting/component/structure/structure.service'
+import { StructureService } from '../service/structure.service'
 
 @Component({
   selector: 'app-hrs',
@@ -20,7 +16,6 @@ import { StructureService } from '../../setting/component/structure/structure.se
 })
 export class HrsComponent implements OnInit {
   msgs: Message[] = []
-  //fileAttach
   uploader: FileUploader = new FileUploader({})
   fileAttach: FileAttach
   fileAttachRemoved: FileAttach[] = []
@@ -29,30 +24,23 @@ export class HrsComponent implements OnInit {
   hasBaseDropZoneOver: boolean = false
   fileType: string = 'excel'
   timeAttachFile: any
-  //fileAttach
+
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
     private _loadingService: TdLoadingService,
     private _pxService: PxService,
     private _location: Location,
-    private _structureService: StructureService,
+    private _structureService: StructureService
   ) { }
 
   ngOnInit() {
   }
 
   saveFile(data) {
-    console.log(data)
     this.timeAttachFile = Math.floor(Math.random() * (1 - 999 + 1)) + 999
     this.uploadFile(this.timeAttachFile, this.linkType)
   }
 
   uploadFile(linkId: number, linkType: string) {
-    console.log('--- uploadFile ---')
-    console.log(linkId)
-    console.log(linkType)
-    console.log(this.uploader)
     let fileAttachDetail = new FileAttach({
       version: 1,
       linkType: linkType,
@@ -66,7 +54,7 @@ export class HrsComponent implements OnInit {
   }
 
   alertMsg(event) {
-    this.msgs = [];
+    this.msgs = []
     this.msgs.push(event)
   }
 
@@ -76,12 +64,9 @@ export class HrsComponent implements OnInit {
     this._pxService
       .getFileAttachs(this.linkType, this.timeAttachFile, 'asc')
       .subscribe(response => {
-        // console.log(response)
-
         this._structureService
           .structureImport('1.0', response[0].id)
           .subscribe(response => {
-            console.log(response)
             this.msgs = []
             this.msgs.push(
               {

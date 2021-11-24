@@ -4,7 +4,7 @@
             <md-icon>arrow_back</md-icon>
         </button>
         <button md-icon-button disabled>
-          <md-icon>{{iconHeader}}</md-icon>
+            <md-icon>{{iconHeader}}</md-icon>
         </button>
         <div flex class="menu-showLabel">
             <span>การจัดการประเภทเอกสาร</span>
@@ -23,24 +23,28 @@
                         <md-card-title style="background: #8fc2f5;">
                             <span class="md-headline">{{title}}</span>
                         </md-card-title>
-                        <!--<md-card-title>{{title}}</md-card-title>-->
-                        <!--<md-divider></md-divider>-->
                         <md-card-content>
                             <form #editDocumentForm="ngForm">
                                 <div layout="row" layout-margin>
                                     <md-input-container flex>
-                                        <input md-input type="text" placeholder="ชื่อประเภทเอกสาร" name="documentTypeName" [(ngModel)]="documentType.documentTypeName" [value]='documentType.documentTypeName' required/>
+                                        <input md-input type="text" placeholder="ชื่อประเภทเอกสาร"
+                                            name="documentTypeName" [(ngModel)]="documentType.documentTypeName"
+                                            [value]='documentType.documentTypeName' required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row" layout-margin>
                                     <md-input-container flex>
-                                        <input md-input type="text" placeholder="รายละเอียดประเภทเอกสาร" name="documentTypeDescription" [(ngModel)]="documentType.documentTypeDescription" [value]='documentType.documentTypeDescription' required/>
+                                        <input md-input type="text" placeholder="รายละเอียดประเภทเอกสาร"
+                                            name="documentTypeDescription"
+                                            [(ngModel)]="documentType.documentTypeDescription"
+                                            [value]='documentType.documentTypeDescription' required />
                                     </md-input-container>
                                 </div>
                                 <table td-data-table id="idTableDetail">
                                     <tr td-data-table-row>
                                         <th>
-                                            <md-checkbox name="checkBoxAll" [checked]="checkBoxAll" (change)="checkAll($event)">
+                                            <md-checkbox name="checkBoxAll" [checked]="checkBoxAll"
+                                                (change)="checkAll($event)">
                                             </md-checkbox>
                                         </th>
                                         <th td-data-table-column *ngFor="let column of columns">
@@ -49,7 +53,8 @@
                                     </tr>
                                     <tr td-data-table-row *ngFor="let row of allData; let i = index">
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="flagCheck[i]" name="checkSave" (change)="clickSave(i,$event)">
+                                            <md-checkbox [checked]="flagCheck[i]" name="checkSave"
+                                                (change)="clickSave(i,$event)">
                                             </md-checkbox>
                                         </td>
                                         <td td-data-table-cell>
@@ -58,50 +63,59 @@
                                         <td td-data-table-cell>{{dmsFields[i].fieldType}}</td>
                                         <td td-data-table-cell>
                                             <md-input-container flex>
-                                                <input md-input type="text" name="documentTypeDetailName" [value]='row.documentTypeDetailName' (keyup)="onKey(i,$event)" />
+                                                <input md-input type="text" name="documentTypeDetailName"
+                                                    [value]='row.documentTypeDetailName' (keyup)="onKey(i,$event)" />
                                             </md-input-container>
                                         </td>
                                         <td td-data-table-cell>
                                             <md-input-container flex>
-                                                <input md-input type="text" name="order" [value]='row.order' (keyup)="onKey2(i,$event)" />
+                                                <input md-input type="text" name="order" [value]='row.order'
+                                                    (keyup)="onKey2(i,$event)" />
                                             </md-input-container>
                                         </td>
-                                       
+
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="row.documentTypeDetailView === 'Y'" name="documentTypeDetailView" (change)="row.documentTypeDetailView = $event.checked ? 'Y' : 'N' ;">
+                                            <md-checkbox [checked]="row.documentTypeDetailView === 'Y'"
+                                                name="documentTypeDetailView"
+                                                (change)="row.documentTypeDetailView = $event.checked ? 'Y' : 'N' ;">
                                             </md-checkbox>
                                         </td>
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="row.documentTypeDetailSearch === 'Y'" name="documentTypeDetailSearch" (change)="row.documentTypeDetailSearch = $event.checked ? 'Y' : 'N' ">
+                                            <md-checkbox [checked]="row.documentTypeDetailSearch === 'Y'"
+                                                name="documentTypeDetailSearch"
+                                                (change)="row.documentTypeDetailSearch = $event.checked ? 'Y' : 'N' ">
                                             </md-checkbox>
                                         </td>
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="row.documentTypeDetailEdit === 'Y'" name="documentTypeDetailEdit" (change)="row.documentTypeDetailEdit = $event.checked ? 'Y' : 'N' ">
+                                            <md-checkbox [checked]="row.documentTypeDetailEdit === 'Y'"
+                                                name="documentTypeDetailEdit"
+                                                (change)="row.documentTypeDetailEdit = $event.checked ? 'Y' : 'N' ">
                                             </md-checkbox>
                                         </td>
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="row.documentTypeDetailUnique === 'Y'" name="documentTypeDetailUnique" (change)="row.documentTypeDetailUnique = $event.checked ? 'Y' : 'N' ">
+                                            <md-checkbox [checked]="row.documentTypeDetailUnique === 'Y'"
+                                                name="documentTypeDetailUnique"
+                                                (change)="row.documentTypeDetailUnique = $event.checked ? 'Y' : 'N' ">
                                             </md-checkbox>
                                         </td>
                                         <td td-data-table-cell class="md-checkbox-cell">
-                                            <md-checkbox [checked]="row.documentTypeDetailRequire === 'Y'" name="documentTypeDetailRequire" (change)="row.documentTypeDetailRequire = $event.checked ? 'Y' : 'N' ">
+                                            <md-checkbox [checked]="row.documentTypeDetailRequire === 'Y'"
+                                                name="documentTypeDetailRequire"
+                                                (change)="row.documentTypeDetailRequire = $event.checked ? 'Y' : 'N' ">
                                             </md-checkbox>
                                         </td>
-
-
-                                    
-
-
-
-
                                     </tr>
                                 </table>
                             </form>
                         </md-card-content>
                         <md-divider></md-divider>
                         <md-card-actions layout="row" layout-align="center start">
-                            <button *ngIf="mode==='Add'" md-button [ngClass]="{'md-primary': editDocumentForm.form.valid}" [disabled]="!editDocumentForm.form.valid" (click)="save()">บันทึก</button>
-                            <button *ngIf="mode==='Edit'" md-button [ngClass]="{'md-primary': editDocumentForm.form.valid}" [disabled]="!editDocumentForm.form.valid" (click)="update()">บันทึก</button>
+                            <button *ngIf="mode==='Add'" md-button
+                                [ngClass]="{'md-primary': editDocumentForm.form.valid}"
+                                [disabled]="!editDocumentForm.form.valid" (click)="save()">บันทึก</button>
+                            <button *ngIf="mode==='Edit'" md-button
+                                [ngClass]="{'md-primary': editDocumentForm.form.valid}"
+                                [disabled]="!editDocumentForm.form.valid" (click)="update()">บันทึก</button>
                             <button *ngIf="mode==='Edit'" md-button [ngClass]="'md-warn'" (click)="delete()">ลบ</button>
                             <button md-button (click)="cancel()">ยกเลิก</button>
                         </md-card-actions>

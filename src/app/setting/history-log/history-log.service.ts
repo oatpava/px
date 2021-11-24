@@ -2,12 +2,8 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../../environments/environment'
 import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/operator/map'
 import { PxService } from '../../main/px.service'
 import { LoggerService } from '../../main/logger.service'
-
-import { HistoryLog } from './model/history-log.model'
-import { HISTORYLOG } from './model/mock-history-log'
 
 @Injectable()
 export class HistoryLogService {
@@ -33,8 +29,6 @@ export class HistoryLogService {
           return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
-    } else {
-      return this.pxService.createObservable(HISTORYLOG)
     }
   }
 
@@ -50,8 +44,6 @@ export class HistoryLogService {
           return this.pxService.verifyResponseArray(response.json())
         })
         .catch(this.loggerService.handleError)
-    } else {
-      return this.pxService.createObservable(HISTORYLOG)
     }
   }
 

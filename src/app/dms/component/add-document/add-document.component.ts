@@ -1,49 +1,29 @@
-// / <reference types="dwt" />
-import { Component, OnInit, Input, Directive, ViewEncapsulation } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnInit, ViewEncapsulation } from '@angular/core'
+import { ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
 import { TdLoadingService } from '@covalent/core'
-import { IMyOptions, IMyDateModel, IMyDate } from 'mydatepicker'
+import { IMyOptions, IMyDate } from 'mydatepicker'
 import { PxService, } from '../../../main/px.service'
 import { FileUploader } from 'ng2-file-upload'
-
 import { Document } from '../../model/document.model'
 import { DocumentService } from '../../service/document.service'
-
-import { DmsField } from '../../model/dmsField.model'
-import { DmsFieldService } from '../../service/dmsField.service'
-
-
-
-import { DocumentTypeDetail } from '../../model/documentTypeDetail.model'
 import { DocumentTypeDetailService } from '../../service/documentTypeDetail.service'
-
 import { FileAttach } from '../../../main/model/file-attach.model'
-
-//import { MyCurrencyPipe } from '../list-document/test.pipe'
-
 import { DocumentFile } from '../../model/documentFile.model'
-import { DocumentFileService } from '../../service/documentFile.service'
 import { FolderService } from '../../service/folder.service'
-
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-
 import { environment } from '../../../../environments/environment'
-
-import { DialogListWfTypeComponent } from '../dialog-list-wf-type/dialog-list-wf-type.component'
-
-import { MdDialog, MdDialogRef } from '@angular/material';
-
+import { MdDialog } from '@angular/material';
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component';
 import { EmailComponent } from '../email/email.component'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 import { Message } from 'primeng/primeng'
+
 @Component({
   selector: 'app-add-document',
   templateUrl: './add-document.component.html',
   styleUrls: ['./add-document.component.styl'],
-  providers: [DocumentService, DmsFieldService, DocumentTypeDetailService, PxService, DocumentFileService, FolderService],
+  providers: [DocumentService, DocumentTypeDetailService, PxService, FolderService],
   encapsulation: ViewEncapsulation.None,
 })
 export class AddDocumentComponent implements OnInit {
@@ -153,14 +133,11 @@ export class AddDocumentComponent implements OnInit {
   constructor(
 
     private _route: ActivatedRoute,
-    private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
-    private _dmsFieldService: DmsFieldService,
     private _documentTypeDetailService: DocumentTypeDetailService,
     private _documentService: DocumentService,
     private _pxService: PxService,
-    private _documentFileService: DocumentFileService,
     private _folderService: FolderService,
     private _dialog: MdDialog,
     private _paramSarabanService: ParamSarabanService
@@ -315,46 +292,6 @@ export class AddDocumentComponent implements OnInit {
     this._loadingService.resolve('main')
   }
 
-  getDocumentFile(data: any): void {
-    console.log('---getDocumentFile ---')
-    this._loadingService.register('main')
-    this._documentFileService
-      .getListDocumentFile(data)
-      .subscribe(response => {
-        this.docFiles = response as DocumentFile[]
-        // console.log(this.docFiles)
-        if (this.docFiles.length > 0) {
-          for (let i of this.docFiles) {
-            if (i.referenceId == 0) {
-              this.dataDocFile.push({
-                id: i.id,
-                title: i.documentFileName,
-                status: 'old',
-                children: []
-              })
-            }
-          }
-
-          for (let i = 0; i < this.dataDocFile.length; i++) {
-            for (let j of this.docFiles) {
-              if (this.dataDocFile[i].id == j.referenceId) {
-                this.dataDocFile[i].children.push({
-                  id: j.id,
-                  title: j.documentFileName,
-                  status: 'old',
-                  children: []
-                })
-              }
-            }
-          }
-        }
-
-        // console.log(this.dataDocFile)
-
-      })
-    this._loadingService.resolve('main')
-  }
-
   checkInCheckOutOwnrtStatus: boolean = false
   checkInCheckOutLockStatus: boolean = false
 
@@ -381,7 +318,7 @@ export class AddDocumentComponent implements OnInit {
                   {
                     severity: 'warn',
                     summary: response.name + ' ได้จองเอกสาร',
-                
+
                   })
 
               }
@@ -389,8 +326,8 @@ export class AddDocumentComponent implements OnInit {
               console.log('checkInOutUser - ', response)
               console.log('this.authEditDoc - ', !this.authEditDoc)
               console.log('this.checkInCheckOutLockStatus - ', this.checkInCheckOutLockStatus)
-              console.log('this.authCreDocFile = ',!this.authCreDocFile)
-              console.log('---aaa---',!this.authDelDoc || this.checkInCheckOutLockStatus)
+              console.log('this.authCreDocFile = ', !this.authCreDocFile)
+              console.log('---aaa---', !this.authDelDoc || this.checkInCheckOutLockStatus)
 
 
             })
@@ -952,7 +889,7 @@ export class AddDocumentComponent implements OnInit {
             this._loadingService.resolve('main')
           })
 
-          this._paramSarabanService.ScanSubscription.unsubscribe()
+        this._paramSarabanService.ScanSubscription.unsubscribe()
         localStorage.setItem('activeX', 'uncomplete')
 
       }
@@ -983,25 +920,9 @@ export class AddDocumentComponent implements OnInit {
 
 
       })
-
-
   }
 
-  listWfdocType() {
-    console.log('-- listWfdocType --')
 
-    let dialogRef = this._dialog.open(DialogListWfTypeComponent, {
-      width: '50%',
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result.name, result.id);
-      // this.folderName = result.name
-      this.wfDocTypeId = result.id
-      this.dmsDocument.documentText02 = result.name
-      this.dmsDocument.wfTypeId = result.id
-
-    });
-  }
 
   scan() {
 
@@ -1024,9 +945,9 @@ export class AddDocumentComponent implements OnInit {
 
         if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
         const timer = TimerObservable.create(5000, 3000);
-        this._paramSarabanService.ScanSubscription = timer.subscribe(t =>  {
+        this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
           if (t == 60) this._paramSarabanService.ScanSubscription.unsubscribe()
-           else {
+          else {
 
             this._pxService
               .checkHaveAttach(res.id)

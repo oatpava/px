@@ -4,7 +4,7 @@ import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
 import { IMyOptions } from 'mydatepicker'
 import { PxService, } from '../../../main/px.service'
-import { StructureService } from '../structure/structure.service'
+import { StructureService } from '../../service/structure.service'
 import { UserService } from '../../service/user.service'
 import { UserProfileService } from '../../service/user-profile.service'
 import { DeleteDialogComponent } from '../../../main/component/delete-dialog/delete-dialog.component'
@@ -15,7 +15,7 @@ import { Structure } from '../../model/structure.model'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
-  selector: 'pxc-user',
+  selector: 'px-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.styl'],
   providers: [UserService, PxService, StructureService]
@@ -72,7 +72,6 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('AddUserComponent')
     this._route.params
       .subscribe((params: Params) => {
         this.mode = params['mode']

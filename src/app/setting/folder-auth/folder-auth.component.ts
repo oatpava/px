@@ -7,7 +7,7 @@ import { URLSearchParams } from '@angular/http'
 
 import { SarabanService } from '../../saraban/service/saraban.service'
 import { ParamSarabanService } from '../../saraban/service/param-saraban.service'
-import { StructureService } from '../../setting/component/structure/structure.service'
+import { StructureService } from '../service/structure.service'
 import { PxService } from '../../main/px.service'
 
 import { SarabanFolder } from '../../saraban/model/sarabanFolder.model'
