@@ -614,5 +614,15 @@ export class DocumentService {
 
   }
 
+  //oat-add
+  permanentDeleteDocument(id: number): Observable<boolean> {
+    if (environment.production) {
+      return this._http.delete(this._apiUrl + '/v1/dmsDocuments/delete/' + id, { headers: this._headers })
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    }
+  }
 
 }
