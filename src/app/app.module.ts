@@ -69,10 +69,6 @@ import {
     FlowChartComponent,
     ReportSarabanComponent,
     ReportComponent,
-    ListDepartmentComponent,
-    DetailDepartmentComponent,
-    ListUserComponent,
-    DetailUserComponent,
     ListTypeComponent,
     EditTypeComponent,
 
@@ -205,10 +201,6 @@ import {
         FlowChartComponent,
         ReportSarabanComponent,
         ReportComponent,
-        ListDepartmentComponent,
-        DetailDepartmentComponent,
-        ListUserComponent,
-        DetailUserComponent,
         ListTypeComponent,
         EditTypeComponent,
 
