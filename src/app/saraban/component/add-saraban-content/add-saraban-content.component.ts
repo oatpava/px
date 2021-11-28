@@ -816,6 +816,8 @@ export class AddSarabanContentComponent implements OnInit {
                   (data) => {
                     this._loadingService.resolve('main')
                     this.sarabanContent.id = content.id
+                    if (errorCounter) this.updateBookNo(content)
+
                     this.createWorkflow()
                     //this.genBarcode(content.wfContentFolderId, content.id)
                     if (this.sharedFolder) this.updateSharedContentBookNo(sharedContent, content)
@@ -840,6 +842,8 @@ export class AddSarabanContentComponent implements OnInit {
             (data) => {
               this._loadingService.resolve('main')
               this.sarabanContent.id = content.id
+              if (errorCounter) this.updateBookNo(content)
+
               this.createWorkflow()
               //this.genBarcode(content.wfContentFolderId, content.id)
               if (this.sharedFolder) this.updateSharedContentBookNo(sharedContent, content)
@@ -860,6 +864,8 @@ export class AddSarabanContentComponent implements OnInit {
           (data) => {
             this._loadingService.resolve('main')
             this.sarabanContent.id = content.id
+            if (errorCounter) this.updateBookNo(content)
+
             this.createWorkflow()
             if (this.folderId == this.sarabanContent.wfContentFolderId) {
               this.pushParamData(content)
@@ -890,6 +896,14 @@ export class AddSarabanContentComponent implements OnInit {
       }
       this.backWithMsg('error', action + 'หนังสือไม่สำเร็จ', '', false)
     }
+  }
+
+  private updateBookNo(content: SarabanContent) {
+    this.sarabanContent.wfContentBookNumber = content.wfContentContentNumber
+    if (this.folderBookNoType != 0) this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, content.wfContentContentYear)
+    this.openDialogWarning(false, "แจ้งเตือน", "ลำดับเลขทะเบียนนี้มีในระบบแล้ว ระบบจะใช้เลขถัดไปคือ " + content.wfContentContentNumber
+      + "\nเลขทะเบียน: " + this.sarabanContent.wfContentContentNo
+      + "\nเลขที่หนังสือ: " + this.sarabanContent.wfContentBookNo)
   }
 
   createSarabanContentNoWorkflow(sharedFolder: SarabanFolder) {
