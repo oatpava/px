@@ -786,58 +786,109 @@ export class AddSarabanContentComponent implements OnInit {
     }
   }
 
-  createSarabanContent(sharedContent: SarabanContent) {//add || register
-    this.prepareTo()
-    this.prepareDate(this.sarabanContent.wfContentBookDate)
+  createSarabanContent(sharedContent: SarabanContent, errorCounter?: number) {//add || register  
+    if (!errorCounter) {
+      this.prepareTo()
+      this.prepareDate(this.sarabanContent.wfContentBookDate)
+    } 
+    
     if (this.mode == "add") {
-      let document = new Document()
-      document.documentTypeId = 4//***** */
+      if (this.sarabanContent.wfDocumentId == 0) {
+        let document = new Document()
+        document.documentTypeId = 4//***** */
 
-      let newDoc: any
-      this._loadingService.register('main')
-      this._documentService
-        .createCreateDocument(document)
-        .map(response => newDoc = response as Document)
-        .subscribe(
-          (data) => {
-            this._loadingService.resolve('main')
-            this.sarabanContent.wfDocumentId = newDoc.id
+        let newDoc: Document
+        this._loadingService.register('main')
+        this._documentService
+          .createCreateDocument(document)
+          .map(response => newDoc = response)
+          .subscribe(
+            (data) => {
+              this._loadingService.resolve('main')
+              this.sarabanContent.wfDocumentId = newDoc.id
 
-            this._loadingService.register('main')
-            this._sarabanContentService
-              .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
-              .subscribe(response => {
-                this._loadingService.resolve('main')
-                this.sarabanContent.id = response.id
-                this.createWorkflow()
-                //this.genBarcode(response.wfContentFolderId, response.id)
-                if (this.sharedFolder) this.updateSharedContentBookNo(sharedContent, response)
-                this.pushParamData(response)
-              })
-          },
-          (err) => {
-            this._loadingService.resolve('main')
-            let dialogRef = this._dialog.open(DialogWarningComponent)
-            dialogRef.componentInstance.header = "แจ้งเตือน"
-            dialogRef.componentInstance.message = "ไม่สามารถสร้างหนังสือ เนื่องจากระบบจัดเก็บเอกสารมีปัญหา"
-            dialogRef.componentInstance.confirmation = false
-            dialogRef.afterClosed().subscribe(result => {
-              this.backWithMsg('error', 'สร้างหนังสือไม่สำเร็จ', '', false)
+              let content: SarabanContent
+              this._loadingService.register('main')
+              this._sarabanContentService
+                .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
+                .map(response => content = response)
+                .subscribe(
+                  (data) => {
+                    this._loadingService.resolve('main')
+                    this.sarabanContent.id = content.id
+                    this.createWorkflow()
+                    //this.genBarcode(content.wfContentFolderId, content.id)
+                    if (this.sharedFolder) this.updateSharedContentBookNo(sharedContent, content)
+                    this.pushParamData(content)
+                  },
+                  (err) => {
+                    this._loadingService.resolve('main')
+                    this.openRedoDialog(sharedContent, errorCounter, newDoc.id)
+                  })
+            },
+            (err) => {
+              this._loadingService.resolve('main')
+              this.openRedoDialog(sharedContent, errorCounter)
             })
-          })
-
+      } else {//redo after create content error (not create document again)
+        let content: SarabanContent
+        this._loadingService.register('main')
+        this._sarabanContentService
+          .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
+          .map(response => content = response)
+          .subscribe(
+            (data) => {
+              this._loadingService.resolve('main')
+              this.sarabanContent.id = content.id
+              this.createWorkflow()
+              //this.genBarcode(content.wfContentFolderId, content.id)
+              if (this.sharedFolder) this.updateSharedContentBookNo(sharedContent, content)
+              this.pushParamData(content)
+            },
+            (err) => {
+              this._loadingService.resolve('main')
+              this.openRedoDialog(sharedContent, errorCounter, this.sarabanContent.wfDocumentId)
+            })
+      }
     } else {//mode = register
+      let content: SarabanContent
       this._loadingService.register('main')
       this._sarabanContentService
         .createSarabanContent(this.sarabanContent, this.preBookNoIndex)
-        .subscribe(response => {
-          this._loadingService.resolve('main')
-          this.sarabanContent.id = response.id
-          this.createWorkflow()
-          if (this.folderId == this.sarabanContent.wfContentFolderId) {
-            this.pushParamData(response)
-          }
-        })
+        .map(response => content = response)
+        .subscribe(
+          (data) => {
+            this._loadingService.resolve('main')
+            this.sarabanContent.id = content.id
+            this.createWorkflow()
+            if (this.folderId == this.sarabanContent.wfContentFolderId) {
+              this.pushParamData(content)
+            }
+          },
+          (err) => {
+            this._loadingService.resolve('main')
+            this.openRedoDialog(sharedContent, errorCounter)
+          })
+    }
+  }
+
+  private openRedoDialog(sharedContent: SarabanContent, errorCounter: number, documentId?: number) {
+    const action = (this.mode == 'add') ? 'สร้าง' : 'ลงทะเบียน'
+    const counter = (errorCounter) ? errorCounter + 1 : 1
+    if (counter < 3) {
+      let dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = 'ไม่สามารถ' + action + 'หนังสือ คุณต้องการบันทึกข้อมูลอีกครั้งใช่ หรือ ไม่'
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.createSarabanContent(sharedContent, counter)
+        }
+      })
+    } else {
+      if (documentId) {
+        this._documentService.permanentDeleteDocument(documentId).subscribe()
+      }
+      this.backWithMsg('error', action + 'หนังสือไม่สำเร็จ', '', false)
     }
   }
 
