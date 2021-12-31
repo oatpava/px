@@ -27,6 +27,7 @@ export class AddUserProfileComponent implements OnInit {
   @Input() toggleCommand: boolean = true
   @Input() userId: number
   @Input() structureId: number
+  @Input() structure = new Structure()
   @Output() alertMessage = new EventEmitter()
   toggleAddProfile: boolean = true
   toggleListProfile: boolean = true
@@ -78,7 +79,7 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('AddUserProfileComponent')
+    console.log('AddUserProfileComponent', this.structureId)
     this.getTitle()
   }
 
@@ -166,6 +167,8 @@ export class AddUserProfileComponent implements OnInit {
     if (node) {
       this.selectedStructure = node
       this.userProfile.structure = node.data.profile
+    } else {//tree not update when add new structure
+      this.userProfile.structure = this.structure
     }
     this.showUserProfileList = false
     this.title = 'สร้างรายละเอียดผู้ใช้งาน'
