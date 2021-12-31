@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { PxService, } from '../../../../main/px.service'
-import { TreeNode, Message, AutoComplete } from 'primeng/primeng'
+import { TreeNode, AutoComplete } from 'primeng/primeng'
 
 import { UserService } from '../../../service/user.service'
 import { UserProfileService } from '../../../service/user-profile.service'
@@ -16,6 +16,7 @@ import { UserProfileType } from '../../../model/user-profile-type.model'
 import { Position } from '../../../model/position.model'
 import { PositionType } from '../../../model/position-type.model'
 import { UserProfileFolder } from '../../../model/user-profile-folder.model'
+import { User } from '../../../model/user.model'
 
 @Component({
   selector: 'app-add-user-profile',
@@ -25,10 +26,12 @@ import { UserProfileFolder } from '../../../model/user-profile-folder.model'
 })
 export class AddUserProfileComponent implements OnInit {
   @Input() toggleCommand: boolean = true
-  @Input() userId: number
-  @Input() structureId: number
+  @Input() user: User
+  @Input() addUserform: any
   @Input() structure = new Structure()
   @Output() alertMessage = new EventEmitter()
+  @Output() cancel = new EventEmitter()
+  @Output() createdUser = new EventEmitter()
   toggleAddProfile: boolean = true
   toggleListProfile: boolean = true
   modeProfile: string = 'add'
@@ -41,7 +44,6 @@ export class AddUserProfileComponent implements OnInit {
   userProfileTypes: UserProfileType[] = []
   positions: Position[] = []
   positionTypes: PositionType[] = []
-  msgs: Message[] = []
   isValid: boolean = false;
 
   posLevel = [
@@ -67,20 +69,29 @@ export class AddUserProfileComponent implements OnInit {
 
   constructor(
     private _loadingService: TdLoadingService,
+    private _userService: UserService,
     private _userProfileService: UserProfileService,
     private _masterDataService: MasterDataService,
     private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.userProfile = new UserProfile({
-      structure: new Structure({ id: this.structureId })
+      structure: new Structure({ id: this.structure.id })
     })
     Object.assign(this.structureTree, this._paramSarabanService.structureTree)
   }
 
   ngOnInit() {
-    console.log('AddUserProfileComponent', this.structureId)
+    console.log('AddUserProfileComponent', this.user, this.structure)
     this.getTitle()
+    this.getPosition()
+    this.getPositionType()
+    this.getUserProfileType()
+    if (this.user.id != 0) {
+      this.getUserProfilesByUserId(this.user.id)
+    } else {
+      this.openFormAddProfile()
+    }
   }
 
   getTitle() {
@@ -90,8 +101,6 @@ export class AddUserProfileComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.titles = response as Title[]
-
-        this.getUserProfileType()
       })
   }
 
@@ -103,8 +112,6 @@ export class AddUserProfileComponent implements OnInit {
         this._loadingService.resolve('main')
         this.userProfileTypes = response as UserProfileType[]
         if (this.userProfileTypes.length == 3) this.userProfileTypes.pop()
-
-        this.getPosition()
       })
   }
 
@@ -116,8 +123,6 @@ export class AddUserProfileComponent implements OnInit {
         this._loadingService.resolve('main')
         this.positions = response as Position[]
         this.selectedPosition = response[0]
-
-        this.getPositionType()
       })
   }
 
@@ -128,8 +133,6 @@ export class AddUserProfileComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.positionTypes = response as PositionType[]
-
-        this.getUserProfilesByUserId(this.userId)
       })
   }
 
@@ -163,7 +166,7 @@ export class AddUserProfileComponent implements OnInit {
     this.toggleCommand = !this.toggleCommand
     this.userProfile = new UserProfile()
     this.modeProfile = 'add'
-    let node = this.findNode(this.structureTree, this.structureId)
+    let node = this.findNode(this.structureTree, this.structure.id)
     if (node) {
       this.selectedStructure = node
       this.userProfile.structure = node.data.profile
@@ -183,32 +186,67 @@ export class AddUserProfileComponent implements OnInit {
         if (response.result) {
           this.alertMessage.emit({
             severity: 'error',
-            summary: 'เพิ่มผู้ใช้งานไม่สำเร็จ',
+            summary: 'ไม่สามารถสร้างบัญชีผู้ใช้',
             detail: 'รหัสพนักงาน ซ้ำ'
           })
         } else {
-          this.userProfile.user.id = this.userId, this
-          this.userProfile.fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName
-          this.userProfile.fullNameEng = this.userProfile.firstNameEng + ' ' + this.userProfile.lastNameEng
-          this.userProfile.position = this.selectedPosition
-
-          this._loadingService.register('main')
-          this._userProfileService
-            .createUserProfile(this.userProfile)
-            .subscribe(response => {
-              this.userProfileList.push(response)
-              this.toggleAddProfile = !this.toggleAddProfile
-              this.toggleCommand = !this.toggleCommand
-              let userProfile = response as UserProfile
-              this.createUserProfileFolder(userProfile)
-              this.showUserProfileList = true
-              this.alertMessage.emit({
-                severity: 'success',
-                summary: 'เพิ่มผู้ใช้งานสำเร็จ',
-                detail: 'คุณได้ทำการเพิ่มผู้ใช้งานiรหัส ' + this.userProfile.code
+          if (this.user.id == 0) {
+            this._loadingService.register('main')
+            this._userService
+              .checkUserNameExist('1.0', this.user.name)
+              .subscribe(response => {
+                this._loadingService.resolve('main')
+                if (!response) {
+                  this._loadingService.register('main')
+                  this._userService
+                    .createUser(this.user)
+                    .subscribe(response => {
+                      this._loadingService.resolve('main')
+                      this.user.id = response.id
+                      this.createdUser.emit(response.id)
+                      this.alertMessage.emit({
+                        severity: 'success',
+                        summary: 'เพิ่มบัญชีผู้ใช้สำเร็จ',
+                        detail: '',
+                      })
+                      this.createUserProfile(response)
+                    })
+                } else {
+                  this.alertMessage.emit({
+                    severity: 'error',
+                    summary: 'ไม่สามารถสร้างบัญชีผู้ใช้',
+                    detail: 'ชื่อผู้ใช้ ซ้ำ',
+                  })
+                }
               })
-            })
+          } else {
+            this.createUserProfile(this.user)
+          }
         }
+      })
+  }
+
+  createUserProfile(user: User) {
+    this.userProfile.user.id = user.id
+    this.userProfile.fullName = this.userProfile.firstName + ' ' + this.userProfile.lastName
+    this.userProfile.fullNameEng = this.userProfile.firstNameEng + ' ' + this.userProfile.lastNameEng
+    this.userProfile.position = this.selectedPosition
+
+    this._loadingService.register('main')
+    this._userProfileService
+      .createUserProfile(this.userProfile)
+      .subscribe(response => {
+        this.userProfileList.push(response)
+        this.toggleAddProfile = !this.toggleAddProfile
+        this.toggleCommand = !this.toggleCommand
+        let userProfile = response as UserProfile
+        this.createUserProfileFolder(userProfile)
+        this.showUserProfileList = true
+        this.alertMessage.emit({
+          severity: 'success',
+          summary: 'เพิ่มรายละเอียดผู้ใช้งานสำเร็จ',
+          detail: '',
+        })
       })
   }
 
@@ -270,9 +308,13 @@ export class AddUserProfileComponent implements OnInit {
   }
 
   cancelCreateProfile() {
-    this.toggleAddProfile = !this.toggleAddProfile
-    this.toggleCommand = !this.toggleCommand
-    this.showUserProfileList = true
+    if (this.user.id == 0) {
+      this.cancel.emit()
+    } else {
+      this.toggleAddProfile = !this.toggleAddProfile
+      this.toggleCommand = !this.toggleCommand
+      this.showUserProfileList = true
+    }
   }
 
   updateProfile(updateProfile: UserProfile) {
@@ -288,7 +330,7 @@ export class AddUserProfileComponent implements OnInit {
           if (response.result) {
             this.alertMessage.emit({
               severity: 'error',
-              summary: 'อก้ไขผู้ใช้งานไม่สำเร็จ',
+              summary: 'ไม่สามารถเพิ่มผู้ใช้งาน',
               detail: 'รหัสพนักงาน ซ้ำ'
             })
           } else {
@@ -298,15 +340,15 @@ export class AddUserProfileComponent implements OnInit {
               .updateUserProfile(updateProfile)
               .subscribe(response => {
                 this._loadingService.resolve('main')
-                this.getUserProfilesByUserId(this.userId)
+                this.getUserProfilesByUserId(this.user.id)
                 this.toggleAddProfile = !this.toggleAddProfile
                 this.toggleCommand = false
                 this.toggleListProfile = false
                 this.showUserProfileList = true
                 this.alertMessage.emit({
                   severity: 'success',
-                  summary: 'แก้ไขผู้ใช้งานสำเร็จ',
-                  detail: 'คุณได้ทำการเพิ่มผู้ใช้งานรหัส ' + this.userProfile.code
+                  summary: 'เพิ่มผู้ใช้งานสำเร็จ',
+                  detail: 'คุณได้ทำการเพิ่มผู้ใช้งาน รหัส: ' + this.userProfile.code
                 })
               })
           }
@@ -318,7 +360,7 @@ export class AddUserProfileComponent implements OnInit {
     this._userProfileService
       .setDefaultProfile(updateProfile)
       .subscribe(response => {
-        this.getUserProfilesByUserId(this.userId)
+        this.getUserProfilesByUserId(this.user.id)
       })
   }
 
@@ -339,8 +381,7 @@ export class AddUserProfileComponent implements OnInit {
       }
     } else {
       this.selectedStructure = null
-      this.msgs = []
-      this.msgs.push({ severity: 'warn', summary: 'เลือกได้เฉพาะหน่วยงานเท่านั้น', detail: node.label })
+      this.alertMessage.emit({ severity: 'warn', summary: 'เลือกได้เฉพาะหน่วยงานเท่านั้น', detail: node.label })
     }
   }
 

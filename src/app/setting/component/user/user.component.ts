@@ -23,20 +23,12 @@ import { ParamSarabanService } from '../../../saraban/service/param-saraban.serv
 export class UserComponent implements OnInit {
   mode: string = 'add'
   modeTitle: string = 'เพิ่ม'
-  iconHeader: string = 'person_add'
   structure = new Structure()
-  userId: number
   user: User
-  userResult: User
   nowDate: Date
   toggleAddUser: boolean = true
   toggleCommand: boolean = true
-  toggleAddProfile: boolean = true
-  toggleEditProfile: boolean = true
-  toggleListProfile: boolean = true
-
-  userProfileId: number
-  structureId: number
+  showUserProfile: boolean = false
 
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
@@ -58,11 +50,12 @@ export class UserComponent implements OnInit {
     private _userService: UserService,
     private _userProfileService: UserProfileService,
     private _dialog: MdDialog,
-    private _strucctureService: StructureService,
+    private _structureService: StructureService,
     private _paramSarabanService: ParamSarabanService
   ) {
     this.nowDate = new Date()
     this.user = new User({
+      id: 0,
       name: "",
       passwords: "",
       activeDate: { date: { year: (this.nowDate.getFullYear() + 543), month: this.nowDate.getMonth() + 1, day: this.nowDate.getDate() } },
@@ -76,31 +69,21 @@ export class UserComponent implements OnInit {
       .subscribe((params: Params) => {
         this.mode = params['mode']
         this.modeTitle = params['modeTitle']
-        this.structureId = +params['structureId']
-        this.getStructure()
-        if (this.mode === 'add') {
-          this.userId = 0
-        } else if (this.mode === 'edit') {
-          this.userId = +params['userId']
-          this.getUser(this.userId)
-          this.toggleAddUser = false
-          this.toggleCommand = false
-        }
+        this._structureService.getStructure('1', +params['structureId'])
+          .subscribe(response => {
+            this.structure = response
+            if (this.mode == 'add') {
+              this.showUserProfile = true
+              console.log('xxxxx', response, this.showUserProfile)
+            } else if (this.mode == 'edit') {
+              this.getUser(+params['userId'])
+            }
+          })
       })
   }
 
   goBack() {
     this._location.back()
-  }
-
-  getStructure() {
-    this._loadingService.register('main')
-    this._strucctureService
-      .getStructure('1', this.structureId)
-      .subscribe(response => {
-        this._loadingService.resolve('main')
-        this.structure = response as Structure
-      })
   }
 
   getUser(userId: number) {
@@ -109,40 +92,10 @@ export class UserComponent implements OnInit {
       .getUser(userId, '1.1')
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this.userResult = this.user = response as User
-      })
-  }
-
-  createUser(createUser: User) {
-    this._loadingService.register('main')
-    this._userService
-      .checkUserNameExist('1.0', createUser.name)
-      .subscribe(response => {
-        this._loadingService.resolve('main')
-        if (!response) {
-          this._loadingService.register('main')
-          this._userService
-            .createUser(createUser)
-            .subscribe(response => {
-              this._loadingService.resolve('main')
-              this.userId = response.id
-              this.userResult = response as User
-              this.toggleEditUser()
-              this.msgs = []
-              this.msgs.push({
-                severity: 'error',
-                summary: 'เพิ่มบัญชีผู้ใช้สำเร็จ',
-                detail: 'คุณได้ทำการเพิ่มบัญชีผู้ใช้ ' + createUser.name,
-              })
-            })
-        } else {
-          this.msgs = []
-          this.msgs.push({
-            severity: 'error',
-            summary: 'เพิ่มบัญชีผู้ใช้ไม่สำเร็จ',
-            detail: 'ชื่อผู้ใช้ ซ้ำ',
-          })
-        }
+        this.user = response
+        this.toggleAddUser = false
+        this.toggleCommand = false
+        this.showUserProfile = true
       })
   }
 
@@ -152,12 +105,14 @@ export class UserComponent implements OnInit {
       .updateUser(this._userService.convertDateFormat(updateUser))
       .subscribe(response => {
         this._loadingService.resolve('main')
-        this._paramSarabanService.msg = {
-          severity: 'success',
-          summary: 'แก้ไขวันที่หมดอายุของรหัสผ่านและการใช้งานสำเร็จ',
-          detail: 'คุณได้ทำการแก้ไขบัญชีผู้ใช้ ' + updateUser.name
-        }
-        this.goBack()
+        // this._paramSarabanService.msg = {
+        //   severity: 'success',
+        //   summary: 'แก้ไขวันที่หมดอายุของรหัสผ่านและการใช้งานสำเร็จ',
+        //   detail: 'คุณได้ทำการแก้ไขบัญชีผู้ใช้ ' + updateUser.name
+        // }
+        // this.goBack()
+        this.user = response
+        this._location.back()
       })
   }
 
@@ -205,6 +160,7 @@ export class UserComponent implements OnInit {
     this.mode = 'edit'
     this.toggleAddUser = !this.toggleAddUser
     this.toggleCommand = !this.toggleCommand
+    this.showUserProfile = true
   }
 
   alertMessage(msg: Message) {
