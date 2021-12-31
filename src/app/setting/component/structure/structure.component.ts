@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
-import { StructureService } from '../../service/structure.service';
-import { TreeNode, Message } from 'primeng/primeng';
+import { StructureService } from '../../service/structure.service'
+import { TreeNode, Message } from 'primeng/primeng'
+import { TdLoadingService } from '@covalent/core'
+
 @Component({
   selector: 'px-structure',
   templateUrl: './structure.component.html',
@@ -23,17 +25,20 @@ export class StructureComponent implements OnInit {
   firstList: any
   icon: string
   constructor(
-    private _structureService: StructureService,
+    private _loadingService: TdLoadingService,
+    private _structureService: StructureService
   ) {
   }
 
   ngOnInit() {
     this.structureTree = []
+    this._loadingService.register('main')
     this._structureService
       .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
       .subscribe(response => {
         let i = 0
         for (let node of response) {
+          this._loadingService.resolve('main')
           this.structureTree.push({
             "label": node.name,
             "data": node.id,
@@ -44,10 +49,12 @@ export class StructureComponent implements OnInit {
             "dataObj": node,
             "children": []
           })
+          this._loadingService.register('main')
           Observable.forkJoin(
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
+            this._loadingService.resolve('main')
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
                 "label": structure.name + ' (' + structure.shortName + ')',
@@ -88,9 +95,11 @@ export class StructureComponent implements OnInit {
   }
 
   loadData() {
+    this._loadingService.register('main')
     this._structureService
       .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
       .subscribe(response => {
+        this._loadingService.resolve('main')
         let i = 0
         for (let node of response) {
           this.structureTree.push({
@@ -103,10 +112,12 @@ export class StructureComponent implements OnInit {
             "dataObj": node,
             "children": []
           })
+          this._loadingService.register('main')
           Observable.forkJoin(
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
+            this._loadingService.resolve('main')
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
                 "label": structure.name + ' (' + structure.shortName + ')',
@@ -148,10 +159,12 @@ export class StructureComponent implements OnInit {
 
   loadNode(event) {
     if (event.node) {
+      this._loadingService.register('main')
       Observable.forkJoin(
         this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', event.node.data),
         this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', event.node.data),
       ).subscribe((response: Array<any>) => {
+        this._loadingService.resolve('main')
         let structures = []
         for (let structure of response[0]) {
           structures.push({
