@@ -112,6 +112,7 @@ export * from '../setting/component/setting.component'
 
 export * from '../setting/component/user/user.component'
 export * from '../setting/component/user-profile/user-profile.component'
+export * from '../setting/component/user-profile/add-user-profile/add-user-profile.component'
 export * from '../setting/component/structure/add-structure/add-structure.component'
 export * from '../setting/component/move-profile/move-profile.component'
 export * from '../setting/component/move-structure/move-structure.component'
