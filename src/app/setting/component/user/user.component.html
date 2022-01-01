@@ -7,7 +7,7 @@
           <md-icon>person_add</md-icon>
         </button>
         <div flex class="menu-showLabel">
-            <span>{{modeTitle}}ผู้ใช้งาน  หน่วยงาน: {{structure.name}}</span>
+            <span>{{modeTitle}}บัญชีผู้ใช้  หน่วยงาน: {{structure.name}}</span>
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
                 <div flex-gt-md="70">
                     <md-card>
                         <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
-                            <span class="md-headline">{{modeTitle}}บัญชีผู้ใช้</span>
+                            <span class="md-headline">บัญชีผู้ใช้</span>
                         </md-card-title>
                         <md-card-content class="push-bottom-none">
                             <md-list *ngIf="user.id!=0" [tdToggle]="toggleAddUser">

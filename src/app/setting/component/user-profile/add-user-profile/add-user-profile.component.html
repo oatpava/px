@@ -34,12 +34,14 @@
     <md-card-content class="push-bottom-none">
         <form #addUserProfileform="ngForm" [tdToggle]="formAddProfile">
             <div layout="row" llayout-xs="column" layout-margin>
-                <md-input-container style="width:100%;">
-                    <input md-input type="text" placeholder="หน่วยงาน" name="structure" [(ngModel)]="userProfile.structure.name" required disabled>
-                </md-input-container>
-                <button *ngIf="!toggleAddProfile && userProfile.id==0" md-icon-button (click)="dialog=true">
-                    <md-icon>supervisor_account</md-icon>
-                </button>
+                <div flex="100" flex-xs="100">
+                    <md-input-container flex="95" style="width:100%;">
+                        <input md-input type="text" placeholder="หน่วยงาน" name="structure" [(ngModel)]="userProfile.structure.name" required disabled>
+                    </md-input-container>
+                    <button *ngIf="!toggleAddProfile && userProfile.id==0" flex="5" md-icon-button (click)="dialog=true">
+                        <md-icon>supervisor_account</md-icon>
+                    </button>
+                </div>
             </div>
             <p-dialog [(visible)]="dialog" [responsive]="true">
                 <p-header>
@@ -126,9 +128,9 @@
                 </div>
             </div>
 
-            <div layout="row" layout-xs="column" layout-margin>
+            <div *ngIf="userProfile.id!=0" layout="row" layout-xs="column" layout-margin>
                 <div flex="100" flex-xs="100">
-                    สถานะผู้ใช้งาน : {{userProfile.userStatus.name}}
+                    สถานะผู้ใช้งาน: {{userProfile.userStatus.name}}
                 </div>
             </div>
         </form>
@@ -140,7 +142,7 @@
         <button md-raised-button md-ripple [disabled]="isDisabled" (click)="cancelCreateProfile()">ยกเลิก</button>
     </md-card-actions>
 </md-card>
-<md-card *ngIf="user.id!=0" [tdToggle]="toggleCommand" style="background-color: #efb3a5;">
+<md-card *ngIf="user.id!=0" [tdToggle]="toggleCommand" style="background-color: #8fc2f5;">
     <md-card-content>
         <md-list>
             <md-list-item class="hover" (click)="openFormAddProfile()">
