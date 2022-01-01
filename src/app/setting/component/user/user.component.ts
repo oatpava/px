@@ -74,7 +74,6 @@ export class UserComponent implements OnInit {
             this.structure = response
             if (this.mode == 'add') {
               this.showUserProfile = true
-              console.log('xxxxx', response, this.showUserProfile)
             } else if (this.mode == 'edit') {
               this.getUser(+params['userId'])
             }
@@ -93,9 +92,7 @@ export class UserComponent implements OnInit {
       .subscribe(response => {
         this._loadingService.resolve('main')
         this.user = response
-        this.toggleAddUser = false
-        this.toggleCommand = false
-        this.showUserProfile = true
+        this.toggleEditUser()
       })
   }
 
@@ -149,15 +146,16 @@ export class UserComponent implements OnInit {
     })
   }
 
-  editMode = (updateUser: User) => {
+  editMode(updateUser: User) {
     this.user = updateUser
     this.user.passwordExpireDate = this._userService.convertStringToDate(this.user.passwordExpireDate)
     this.user.expireDate = this._userService.convertStringToDate(this.user.expireDate)
     this.toggleEditUser()
   }
 
-  toggleEditUser = () => {
+  toggleEditUser() {
     this.mode = 'edit'
+    this.modeTitle = 'แก้ไข'
     this.toggleAddUser = !this.toggleAddUser
     this.toggleCommand = !this.toggleCommand
     this.showUserProfile = true

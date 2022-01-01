@@ -237,16 +237,14 @@ export class AddUserProfileComponent implements OnInit {
       .createUserProfile(this.userProfile)
       .subscribe(response => {
         this.userProfileList.push(response)
-        this.toggleAddProfile = !this.toggleAddProfile
-        this.toggleCommand = !this.toggleCommand
-        let userProfile = response as UserProfile
-        this.createUserProfileFolder(userProfile)
-        this.showUserProfileList = true
+        this.createUserProfileFolder(response)
         this.alertMessage.emit({
           severity: 'success',
           summary: 'เพิ่มรายละเอียดผู้ใช้งานสำเร็จ',
           detail: '',
         })
+        this.toggleCommand = !this.toggleCommand
+        this.cancelCreateProfile()
       })
   }
 
