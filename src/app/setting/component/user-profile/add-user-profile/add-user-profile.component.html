@@ -1,6 +1,6 @@
 <md-card *ngIf="userProfileList.length>0 && showUserProfileList">
     <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
-        <span class="md-headline">ประวัติรายละเอียดผู้ใช้งาน</span>
+        <span class="md-headline">รายการผู้ใช้งาน</span>
     </md-card-title>
     <md-card-content class="push-bottom-none">
         <md-list ngInit="showEdit=-1">
@@ -9,8 +9,8 @@
                 <h3 md-line>{{upl.fullName}}
                     <!-- <md-icon *ngIf="upl.defaultSelect === 0" class="md-18" style="vertical-align: bottom;">grade</md-icon> -->
                 </h3>
-                <h5 md-line>ตำแหน่ง : {{upl.position?.name}}</h5>
-                <p md-line>หน่วยงาน : {{upl.structure?.name}}</p>
+                <h5 md-line>หน่วยงาน: {{upl.structure?.name}}</h5>
+                <p md-line>ตำแหน่ง: {{upl.position?.name}}</p>
                 <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="editProfile(upl)">
                     <md-icon alt="แก้ไข">edit</md-icon>
                 </button>
@@ -146,7 +146,7 @@
             <md-list-item class="hover" (click)="openFormAddProfile()">
                 <md-icon md-list-avatar class="hover">add_circle_outline</md-icon>
                 <h4 md-line style="font-weight: bold;" title="Create : New User Profiles">สร้าง: รายละเอียดผู้ใช้งาน</h4>
-                <p md-line title="Create : New Profiles">เพิ่มรายการผู้ใช้งานสำหรับบัญชีผู้ใช้นี้..</p>
+                <p md-line title="Create : New Profiles">เพิ่มผู้ใช้งานสำหรับบัญชีผู้ใช้นี้</p>
             </md-list-item>
         </md-list>
     </md-card-content>

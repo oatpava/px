@@ -174,7 +174,7 @@ export class AddUserProfileComponent implements OnInit {
       this.userProfile.structure = this.structure
     }
     this.showUserProfileList = false
-    this.title = 'สร้างรายละเอียดผู้ใช้งาน'
+    this.title = 'รายละเอียดผู้ใช้งาน'
   }
 
   createProfile(addUserProfiles: UserProfile) {
