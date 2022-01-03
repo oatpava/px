@@ -35,7 +35,7 @@
         "@types/jspdf": "1.1.31",
         "angular-2-data-table": "0.1.2",
         "angular-tree-component": "3.2.0",
-        "chart.js": "2.6.0",
+        "chart.js": "2.9.4",
         "core-js": "2.4.1",
         "font-awesome": "4.7.0",
         "gojs": "1.7.5",
