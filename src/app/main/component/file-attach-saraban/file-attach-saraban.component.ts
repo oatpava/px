@@ -15,7 +15,6 @@ import { DialogWarningComponent } from '../../../saraban/component/add-saraban-c
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
-import { DialogViewImageComponent } from './dialog-view-image/dialog-view-image.component'
 
 @Component({
   selector: 'app-file-attach-saraban',
@@ -252,115 +251,6 @@ export class FileAttachSarabanComponent implements OnInit {
     //http://127.0.0.1:83/document/Temp/dms/EXT45/45139.PDF
     window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
   }
-
-  // viewImage(fileAttach: any) {
-  //   let dialogRef = this._dialog.open(DialogViewImageComponent, {
-  //     width: '90%', height: '90%'
-  //   })
-  //   dialogRef.componentInstance.type = fileAttach.type
-  //   dialogRef.componentInstance.url = fileAttach.url
-  //   dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
-  // }
-
-  //   viewImage(fileAttach: any) {
-  //     // console.log(encodeURIComponent(fileAttach.url))
-  //     // console.log(decodeURIComponent(fileAttach.url))
-
-  //     // window.location.href = fileAttach.url
-  //     //window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     //window.open(fileAttach.url,'','toolbar=no,height=600,width=1000')
-  //     // window.open(fileAttach.url,'winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
-  //     // this._pxService
-  //     //     .viewFileAttach(fileAttach)
-  //     // window.open(fileAttach.url, 'xxxx','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=720,height=800')
-
-
-
-  //     // this.onURLinserted(fileAttach.url +'/?api_key=praXis')
-  //     //let url = encodeURIComponent(fileAttach.url)
-  // ////http://127.0.0.1:8080/document/Temp/dms/EXT45/45127.PDF
-  //     /////http://127.0.0.1:8080/document/Temp/dms/EXT45/45126.PNG
-  //     // let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = fileAttach.url
-
-
-
-  //     //   this._pxService.downloadPDF(fileAttach.url).subscribe(response => {
-  //     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = response
-  //     //   })
-  //     //   window.addEventListener('unload', function(event) {
-  //     //     console.log('Navigation occuring');
-  //     // });
-  //     // let newWin = window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     // newWin.onload = function () {
-  //     //   console.log('on load')
-  //     //   newWin.addEventListener('click', function (event) {
-  //     //     this.console.log('sss', event)
-  //     //   })
-  //     // }
-  //     // newWin.onclick = function () {
-  //     //   console.log('on click')
-  //     // }
-  //     // this.viewWindow = window.open(fileAttach.url, "_blank", "height=600,width=1000")
-  //     // // this.viewWindow.document.addEventListener('click', function (event) {
-  //     // //        this.console.log('sss', event)
-  //     // // })
-  //     // this.viewWindow.onload = function() {
-  //     //   setTimeout(function(){ 
-  //     //     let tmp = this.viewWindow.document.documentElement.outerHTML
-  //     //     console.log(tmp) 
-  //     //         let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = tmp
-  //     // this.viewWindow.close()
-  //     //   }, 2000);
-  //     // }
-  //     // console.log(this.viewWindow.document.documentElement)
-  //     // console.log(this.viewWindow.document.documentElement.innerHTML)
-  //     // console.log(this.viewWindow.document.documentElement.outerHTML)
-
-
-  //     // let tmp = this.viewWindow.document.documentElement.innerHTML
-  //     // let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //     // dialogRef.componentInstance.img = tmp
-  //     // this.viewWindow.close()
-  //     let dialogRef = this._dialog.open(DialogViewImageComponent, {
-  //       width: '90%', height: '90%'
-  //     })
-  //     dialogRef.componentInstance.type = fileAttach.type
-  //     dialogRef.componentInstance.url = fileAttach.url
-  //     dialogRef.componentInstance.trimmedName = fileAttach.trimmedName
-  //   }
-
-  //   // onURLinserted(myURL) {
-  //   //   this.getImage(myURL).subscribe(data => {
-  //   //     this.createImageFromBlob(data);
-  //   //   }, error => {
-  //   //     console.log("Error occured",error);
-  //   //   });
-  //   // }
-
-  //   // getImage(imageUrl: string): Observable<any> {
-  //   //   let headers={ responseType: ResponseContentType.Blob }
-  //   //   return this.http
-  //   //       .get(imageUrl, headers)
-  //   //       .map(res => res.blob());
-  //   // }
-
-  //   // createImageFromBlob(image: Blob) {
-  //   // let imageToShow
-  //   //  let reader = new FileReader(); //you need file reader for read blob data to base64 image data.
-  //   //  reader.addEventListener("load", () => {
-  //   //     imageToShow = reader.result; // here is the result you got from reader
-  //   //     let dialogRef = this._dialog.open(DeleteDialogComponent)
-  //   //     dialogRef.componentInstance.img = imageToShow
-  //   //  }, false);
-
-  //   //  if (image) {
-  //   //     reader.readAsDataURL(image);
-  //   //  }
-  //   // }
-  //   ///////
 
 }
 

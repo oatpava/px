@@ -13,7 +13,6 @@ export * from '../main/component/delete-dialog/delete-dialog.component'
 export * from '../main/component/file-attach-saraban/file-attach-saraban.component'
 export * from '../main/component/dialog-instruction/dialog-instruction.component'
 export * from '../main/directive/loadMore.component'
-export * from '../main/component/file-attach-saraban/dialog-view-image/dialog-view-image.component'
 
 export * from '../login/login.component'
 export * from '../login/forgot-password/forgot-password.component'

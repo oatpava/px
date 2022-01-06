@@ -14,7 +14,6 @@ import {
 } from 'primeng/primeng'
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'
 import { AlertLogOffComponent } from './alert-log-off/alert-log-off.component'
-import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AppComponent } from './app.component'
 import { appRoutes, appRoutingProviders } from './app.routes'
 import {
@@ -147,8 +146,7 @@ import {
     FileEcmsComponent,
     ListMenuEcmsComponent,
     DialogsShowThEGifComponent,
-    AuthTemplateComponent,
-    DialogViewImageComponent
+    AuthTemplateComponent
 } from './shared';
 
 @NgModule({
@@ -281,8 +279,7 @@ import {
         FileEcmsComponent,
         ListMenuEcmsComponent,
         DialogsShowThEGifComponent,
-        AuthTemplateComponent,
-        DialogViewImageComponent
+        AuthTemplateComponent
     ],
     imports: [
         BrowserModule,
@@ -309,8 +306,7 @@ import {
         TabViewModule,
         BlockUIModule,
         NgIdleKeepaliveModule.forRoot(),
-        GalleriaModule,
-        PdfViewerModule
+        GalleriaModule
     ],
     entryComponents: [
         AlertLogOffComponent
