@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../../environments/environment'
 import { Observable } from 'rxjs/Observable'
-import { Observer } from 'rxjs/Observer'
-import 'rxjs/add/operator/map'
 import { PxService } from '../../main/px.service'
 import { LoggerService } from '../../main/logger.service'
 
@@ -12,9 +10,8 @@ import { Search } from '../model/search.model'
 import { DOCUMENTS, DOCUMENTSEARCHS } from '../model/document.mock'
 import { FileAttach } from '../../main/model/file-attach.model'
 import { UserProfile } from '../../setting/model/user-profile.model'
-import { USERPROFILES } from '../../setting/model/user-profile-mock'
 import { email } from '../model/email.model'
-import { ReportInput } from '../model/ReportInput.model';
+import { ReportInput } from '../model/ReportInput.model'
 
 @Injectable()
 export class DocumentService {
@@ -29,15 +26,13 @@ export class DocumentService {
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
     this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
     this._options = new RequestOptions({ headers: this._headers })
-    
+
     let params = new URLSearchParams()
-    params.set('t', ''+new Date().getTime())
+    params.set('t', '' + new Date().getTime())
     this._options.search = params
-    // ''+new Date().getTime()
   }
 
-  getDocuments(folderId: number,offset:any,limit:any): Observable<any> {
-    // console.log('getDocuments waiting use rest. - O')
+  getDocuments(folderId: number, offset: any, limit: any): Observable<any> {
     let params = new URLSearchParams()
     params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=desc&offset=' + offset + '&limit=' + limit + '&folderId=' + folderId))
     if (environment.production) {
@@ -53,7 +48,6 @@ export class DocumentService {
   }
 
   getDocumentsExp(folderId: number): Observable<Document[]> {
-    // console.log('getDocuments waiting use rest. - O')
     let params = new URLSearchParams()
     params.set('version', '1.0')
     params.set('offset', '0')
@@ -61,7 +55,7 @@ export class DocumentService {
     params.set('sort', 'createdDate')
     params.set('dir', 'desc')
     params.set('folderId', '' + folderId)
-    params.set('t', ''+new Date().getTime())
+    params.set('t', '' + new Date().getTime())
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/dmsDocuments/exp/' + folderId, this._options)
@@ -75,8 +69,6 @@ export class DocumentService {
   }
 
   createDocument(newDoc: Document): Observable<Document> {
-    // console.log('createDocument waiting use rest. - O')
-    // console.log(newDoc)
     if (environment.production) {
       return this._http.post(this._apiUrl + '/v1/dmsDocuments', newDoc, this._options)
         .map((response: Response) => {
@@ -296,10 +288,10 @@ export class DocumentService {
     if (dataSearch.documentVarchar10 === undefined || dataSearch.documentName === 'undefined') { newDataSearch.documentVarchar10 = ''; } else { newDataSearch.documentVarchar10 = dataSearch.documentVarchar10 }
 
     if (dataSearch.documentIntComma === undefined || dataSearch.documentName === 'undefined') { newDataSearch.documentIntComma = 0; } else { newDataSearch.documentIntComma = dataSearch.documentIntComma }
-    
+
     if (dataSearch.fullText === undefined || dataSearch.documentName === 'undefined') { newDataSearch.fullText = ''; } else { newDataSearch.fullText = dataSearch.fullText }
 
-    console.log('service - ',newDataSearch)
+    console.log('service - ', newDataSearch)
     // console.log(dataSearch)
 
 
@@ -372,11 +364,11 @@ export class DocumentService {
     }
   }
 
-  createAdocument(folderId: number,CustomerName: string, ProjectName: string): Observable<Document> {
+  createAdocument(folderId: number, CustomerName: string, ProjectName: string): Observable<Document> {
     let params = new URLSearchParams()
     params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/dmsDocuments/createADocument/' + folderId+'/'+CustomerName+'/'+ProjectName, this._options)
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/createADocument/' + folderId + '/' + CustomerName + '/' + ProjectName, this._options)
         .map((response: Response) => {
           return response.json().data as Document
         })
@@ -474,7 +466,7 @@ export class DocumentService {
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('version=1.0&sort=createdDate&dir=asc&offset=0&limit=1000'))
-      return this._http.post(this._apiUrl + '/v1/dmsDocuments/searchDocumentWithDocType/'+docTyped+'/'+isWfType, newDataSearch, this._options)
+      return this._http.post(this._apiUrl + '/v1/dmsDocuments/searchDocumentWithDocType/' + docTyped + '/' + isWfType, newDataSearch, this._options)
         .map((response: Response) => {
           return response.json().data as Document[]
         })
@@ -490,15 +482,15 @@ export class DocumentService {
 
   updateFileAttach(updatedFileAttach: FileAttach) {
     // console.log('updateDocument waiting use rest. - O')
-    console.log('updateAtt',updatedFileAttach)
+    console.log('updateAtt', updatedFileAttach)
     if (environment.production) {
       return this._http.put(this._apiUrl + '/v1/fileAttachs/update/' + updatedFileAttach.id, updatedFileAttach, { headers: this._headers })
         .map((response: Response) => {
-          return response.json().data 
+          return response.json().data
         })
         .catch(this.loggerService.handleError)
     } else {
-     
+
     }
   }
 
@@ -534,12 +526,12 @@ export class DocumentService {
     }
   }
 
-  moveDocument(listdocId: String , folderId:number) {
+  moveDocument(listdocId: String, folderId: number) {
     // console.log('getDocument waiting use rest. - '+docId)
     let params = new URLSearchParams()
     params.set('q', this.pxService.encrypt('version=1.0'))
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/dmsDocuments/' + listdocId+'/'+folderId, this._options)
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/' + listdocId + '/' + folderId, this._options)
         .map((response: Response) => {
           return response.json()
         })
@@ -551,29 +543,25 @@ export class DocumentService {
     }
   }
 
-  getUserProfile(userProfileId: number,version: string): Observable<UserProfile>{
-    // console.log('getUserProfile waiting use rest. - O',USERPROFILES,userProfileId)
+  getUserProfile(userProfileId: number, version: string): Observable<UserProfile> {
     let params = new URLSearchParams()
     params.set('q', this.pxService.encrypt('version=' + version))
     if (environment.production) {
       this._options.search = params
       return this._http.get(this._apiUrl + '/v1/userProfiles/' + userProfileId, this._options)
         .map((response: Response) => {
-          return response.json().data 
+          return response.json().data
         })
         .catch(this.loggerService.handleError)
-    } else {
-      return this.pxService.createObservable(USERPROFILES.filter(userProfile => userProfile.id === 1)[0])
-      // return this.pxService.createObservable(USERPROFILES.filter(UserProfile => UserProfile.userId === userId))
     }
   }
 
   sendEmail(emailData: email) {
     // console.log('getDocument waiting use rest. - '+docId)
-   
+
     if (environment.production) {
       return this._http.post(this._apiUrl + '/v1/dmsDocuments/sendEmail', emailData, this._options)
-      // return this._http.get(this._apiUrl + '/v1/dmsDocuments/sendEmail', emailData , this._options)
+        // return this._http.get(this._apiUrl + '/v1/dmsDocuments/sendEmail', emailData , this._options)
         .map((response: Response) => {
           return response.json()
         })
@@ -585,46 +573,56 @@ export class DocumentService {
     }
   }
 
-  createReport(data:ReportInput) {
-   
+  createReport(data: ReportInput) {
+
     if (environment.production) {
-      return this._http.post(this._apiUrl + '/v1/dmsDocuments/createDynamicReportDataFromSearch',data, this._options)
+      return this._http.post(this._apiUrl + '/v1/dmsDocuments/createDynamicReportDataFromSearch', data, this._options)
         .map((response: Response) => {
           return response.json()
         })
         .catch(this.loggerService.handleError)
     } else {
-      
+
     }
   }
 
-  checkIncheckOut(docIn:number){
+  checkIncheckOut(docIn: number) {
 
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOut/'+docIn, this._options)
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOut/' + docIn, this._options)
         .map((response: Response) => {
           return response.json()
         })
         .catch(this.loggerService.handleError)
     } else {
-      
+
     }
 
   }
 
-  checkInOutUser(userId:number){
+  checkInOutUser(userId: number) {
 
     if (environment.production) {
-      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOutUser/'+userId, this._options)
+      return this._http.get(this._apiUrl + '/v1/dmsDocuments/checkInOutUser/' + userId, this._options)
         .map((response: Response) => {
           return response.json()
         })
         .catch(this.loggerService.handleError)
     } else {
-      
+
     }
 
   }
 
+  //oat-add
+  permanentDeleteDocument(id: number): Observable<boolean> {
+    if (environment.production) {
+      return this._http.delete(this._apiUrl + '/v1/dmsDocuments/delete/' + id, { headers: this._headers })
+        .map((response: Response) => {
+          return response.json().data
+        })
+        .catch(this.loggerService.handleError)
+    }
+  }
 
 }

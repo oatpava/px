@@ -1,15 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
-import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
-import { TdLoadingService } from '@covalent/core'
-import { StepState } from '@covalent/core';
-import 'rxjs/add/operator/switchMap'
-
-import { Structure } from '../../model/structure.model';
-
-import { MdDialog, MdDialogRef } from '@angular/material'
-import { StructureService } from '../structure/structure.service'
+import { Component, OnInit } from '@angular/core'
+import { MdDialogRef } from '@angular/material'
+import { StructureService } from '../../service/structure.service'
 
 @Component({
   selector: 'app-order-structure',
@@ -23,10 +14,6 @@ export class OrderStructureComponent implements OnInit {
   dataList: any[]
   typeName: string
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _loadingService: TdLoadingService,
-    private _location: Location,
     private _structureService: StructureService,
     public dialogRef: MdDialogRef<OrderStructureComponent>
   ) { }
@@ -62,10 +49,10 @@ export class OrderStructureComponent implements OnInit {
 
   loadParentOrganize() {
     this._structureService
-    .getOutStructures('1.0', '0', '200', 'orderNo', 'asc', this.structureId)
+      .getOutStructures('1.0', '0', '200', 'orderNo', 'asc', this.structureId)
       .subscribe(response => {
         this.dataList = response
-      })  
+      })
   }
 
   selectMove() {
@@ -114,9 +101,7 @@ export class OrderStructureComponent implements OnInit {
           })
       }
     }
-
   }
-
 
   close(): void {
     this.dialogRef.close()

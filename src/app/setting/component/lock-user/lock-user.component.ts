@@ -1,15 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
-import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
-import { TdLoadingService } from '@covalent/core'
-import { StepState } from '@covalent/core';
-import 'rxjs/add/operator/switchMap'
-
-import { Structure } from '../../model/structure.model'
+import { Component, OnInit } from '@angular/core'
 import { UserStatus } from '../../model/user-status.model'
-
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { MdDialogRef } from '@angular/material'
 import { UserProfileService } from '../../service/user-profile.service'
 
 @Component({
@@ -23,20 +14,14 @@ export class LockUserComponent implements OnInit {
   structureId: number
   status: any
   statusData: UserStatus
-  // status: UserStatus
   userStatus: UserStatus[] = []
+
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _loadingService: TdLoadingService,
-    private _location: Location,
     private _userProfileService: UserProfileService,
     public dialogRef: MdDialogRef<LockUserComponent>
   ) { }
 
   ngOnInit() {
-    console.log(this.structureId)
-    console.log(this.status)
     this.getUserStatus()
   }
 
@@ -51,12 +36,10 @@ export class LockUserComponent implements OnInit {
   }
 
   change(event) {
-    console.log(event)
     this.status.id = event
   }
 
   save(status) {
-    console.log(status)
     this.dialogRef.close(status)
   }
 

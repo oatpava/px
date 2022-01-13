@@ -21,15 +21,16 @@ export class Structure {
     nodeLevel: number
     parentId: number
     parentKey: string
+
     constructor(values: Object = {}) {
         this.version = 1
-        this.id = 1,
-        this.name = "",
-        this.shortName = "",
-        this.detail = "",
-        this.code = "",
-        this.nodeLevel = 0,
-        this.parentId = 0,
+        this.id = 1
+        this.name = ""
+        this.shortName = ""
+        this.detail = ""
+        this.code = ""
+        this.nodeLevel = 0
+        this.parentId = 0
         this.parentKey = "฿0฿"
         Object.assign(this, values)
     }

@@ -1,32 +1,19 @@
-import {DialogReportOptionComponent} from '../dialog-report-option/dialog-report-option.component';
-import { Component, OnInit, Input } from '@angular/core'
+import { DialogReportOptionComponent } from '../dialog-report-option/dialog-report-option.component';
+import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
 import { TdLoadingService } from '@covalent/core'
-import 'rxjs/add/operator/switchMap'
-import { URLSearchParams } from '@angular/http'//report
-import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/data-table'
-import { IPageChangeEvent } from '@covalent/paging'
-
+import { ITdDataTableColumn } from '@covalent/data-table'
 import { Document } from '../../model/document.model'
 import { DocumentService } from '../../service/document.service'
-
 import { DmsField } from '../../model/dmsField.model'
 import { DmsFieldService } from '../../service/dmsField.service'
-
-import { DocumentTypeDetail } from '../../model/documentTypeDetail.model'
 import { DocumentTypeDetailService } from '../../service/documentTypeDetail.service'
-
-import { IMyOptions, IMyDateModel } from 'mydatepicker'
-
-import { Pipe, PipeTransform } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { IMyOptions } from 'mydatepicker'
+import { MdDialog } from '@angular/material';
 import { DmService } from '../../service/dmsSearch.service'
-import { DmsSearchInPut } from '../../model/dmsSearchInput.model'
 import { PxService, } from '../../../main/px.service'
 import { FolderService } from '../../service/folder.service'
-import { ReportInput } from '../../model/ReportInput.model';
 
 @Component({
   selector: 'app-view-document',
@@ -120,26 +107,19 @@ export class ViewDocumentComponent implements OnInit {
     private _loadingService: TdLoadingService,
     private _location: Location,
     private _documentService: DocumentService,
-
-    private _elasticService: DmService,
-
     private _dmsFieldService: DmsFieldService,
     private _documentTypeDetailService: DocumentTypeDetailService,
-    private _pxService: PxService,
     private _folderService: FolderService,
     private _dialog: MdDialog,
   ) {
     this.folderId = 1
     this.documentTypeId = 2
     this.isFormListByDocType = 'N'
-
   }
 
   ngOnInit() {
-    console.log('--- ViewDocumentComponent ---')
     this._route.params
       .subscribe((params: Params) => {
-        // console.log('ListDocumentComponent ngOnInit this.parentId = ' + this.folderId)
         if (!isNaN(params['folderId'])) this.folderId = +params['folderId']
         if (!isNaN(params['documentTypeId'])) this.documentTypeId = +params['documentTypeId']
         this.dmsfolderName = params['folderName']
@@ -149,7 +129,6 @@ export class ViewDocumentComponent implements OnInit {
         console.log(this.typeSerach)
         if (params['isFormListByDocType'] != undefined) this.isFormListByDocType = params['isFormListByDocType'];
         if (params['isWfFolderFromType'] != undefined) this.isWfFolderFromType = params['isWfFolderFromType'];
-
         if (params['documentName'] != undefined) this.documentName = params['documentName'];
         if (params['createdDateForm'] != undefined) this.createdDateForm = params['createdDateForm'];
         if (params['createdDateTo'] != undefined) this.createdDateTo = params['createdDateTo'];
@@ -262,58 +241,26 @@ export class ViewDocumentComponent implements OnInit {
     dataSearch['documentVarchar08'] = this.documentVarchar08.toLowerCase();
     dataSearch['documentVarchar09'] = this.documentVarchar09.toLowerCase();
     dataSearch['documentVarchar10'] = this.documentVarchar10.toLowerCase();
-
     dataSearch['documentIntComma'] = this.documentIntComma
     dataSearch['folderId'] = this.folderId
-
     // dataSearch['allField'] = this.allField.toLowerCase();
     dataSearch['fullText'] = this.fullText.toLowerCase();
     // dataSearch['fileAttachName'] = this.fileAttachName.toLowerCase();
 
-
-
-
-
-
-    console.log("dataSearch ",dataSearch);
-    console.log('--isFormListByDocType =', this.isFormListByDocType)
-    console.log('--isWfFolderFromType =', this.isWfFolderFromType)
-
     if (this.isFormListByDocType == 'Y') {
-      console.log('---aa --')
       this._documentService
         .searchFolder(dataSearch)
         .subscribe(response => {
           this.datas = response as Document[]
           console.log(this.datas)
         })
-
     } else {
-      console.log('---yyy --')
-      // let tempSearch = new DmsSearchInPut(dataSearch)
-
-      // console.log('dataSearch', dataSearch)
-      // // tempSearch.form = dataSearch
-      // console.log('tempSearch', tempSearch)
-
-      // this._loadingService.register('main')
-      // this._elasticService
-      //   .getDmsSearch(tempSearch)
-      //   .subscribe(response => {
-      //     console.log('response', response)
-      //     this.datas = response.data.searchResult
-      //     this._loadingService.resolve('main')
-
-      //   })
-
       this._documentService
         .searchFolder(dataSearch)
         .subscribe(response => {
           this.datas = response as Document[]
           console.log(this.datas)
         })
-
-
     }
   }
 
@@ -325,14 +272,10 @@ export class ViewDocumentComponent implements OnInit {
         this.documentTypeDetails = response as any[]
         console.log(this.documentTypeDetails)
         for (let dtd of this.documentTypeDetails) {
-          // if(dtd.dmsFieldMap == 'createdBy'){
-          //    this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
-          // }
           this.columns.push({ name: '' + dtd.dmsFieldMap, label: dtd.documentTypeDetailName, })
         }
         this.columns.push({ name: 'fullPathName', label: 'ที่เก็บเอกสาร', })
         this.widthSize = this.columns.length * 250
-        console.log(this.columns)
       })
 
     this._loadingService.resolve('main')
@@ -366,13 +309,6 @@ export class ViewDocumentComponent implements OnInit {
       }], { relativeTo: this._route })
   }
 
-  // getDocument(document: Document){
-
-  // }
-
-  // updateDocument(newDocument: Document){}
-  // deleteDocument(document: Document){}
-
   hoverMenuEdit: boolean = true
   overMenu(value: string) {
     this.hoverMenuEdit = false
@@ -394,19 +330,7 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   dmsSearch() {
-    console.log('--- dmsSearch ---')
-    // console.log("this.documentIntComma = " + this.documentIntComma)
-    // if (this.documentIntComma != null) {
-    //   this.search["documentIntComma"] = this.documentIntComma
-    // }
-
-
-
     this.search["folderId"] = this.folderId
-    console.log(this.search);
-
-
-
     this._documentService
       .searchDocument(this.search)
       .subscribe(response => {
@@ -416,7 +340,6 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   onDateChanged(event: any) {
-    // console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
   }
 
   //--- pipe
@@ -428,21 +351,9 @@ export class ViewDocumentComponent implements OnInit {
 
 
   removeCommas() {
-    // console.log('--- removeCommas ---')
-    // console.log(this.documentIntComma != null)
-    // if (this.documentIntComma != null) {
-
-    //   this.documentIntComma = this.documentIntComma.replace(/,/g, "");
-    //   console.log(this.documentIntComma)
-    // }
   }
 
   addCommas() {
-    // console.log('--- addCommas ---')
-    // this.documentIntComma = this.documentIntComma.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    // this.documentIntComma = this.documentIntComma
-    // console.log(this.documentIntComma)
-
   }
 
   goBack() {
@@ -450,8 +361,6 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   changeIdUserToName(userId: string): string {
-    console.log('--- changeIdUserToName ---')
-    console.log(userId)
     userId = '1'
     let a = ''
     if (userId !== '0') {
@@ -466,13 +375,11 @@ export class ViewDocumentComponent implements OnInit {
 
         })
     }
-    console.log('--- changeIdUserToName end---')
     return a
 
   }
 
   report() {
-    console.log('--report--', this.datas)
     let docid = ''
     if (this.datas.length > 0) {
       for (let temp of this.datas) {
@@ -483,17 +390,8 @@ export class ViewDocumentComponent implements OnInit {
         }
 
       }
-      console.log('docid = ', docid)
-      // let stringQurey = 'pc_dms_document.DMS_DOCUMENT_ID IN (' + docid + ')'
-      // console.log('stringQurey = ', stringQurey)       
-      // let params = new URLSearchParams() 
-      // params.set('Parameter1', docid )
-      // this._pxService.report('report_nha_search', 'pdf', params)
-
-
 
       let dialogRef = this._dialog.open(DialogReportOptionComponent, {
-
       });
       dialogRef.componentInstance.docTypeId = this.documentTypeId
       dialogRef.componentInstance.folderId = 0
@@ -506,22 +404,13 @@ export class ViewDocumentComponent implements OnInit {
     this._folderService
       .getMenu(folderId)
       .subscribe(response => {
-        console.log('response ', response)
-
         this.authDocRe = false
-
         for (let i of response.data) {
-
-
           if (i.menuFunction == 'docRe') {
             this.authDocRe = true
           }
         }
-
-
-
       })
-
   }
 
 }

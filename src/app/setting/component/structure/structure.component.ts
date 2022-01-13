@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
-import { StructureService } from './structure.service';
-import { TreeModule, TreeNode, Message } from 'primeng/primeng';
+import { StructureService } from '../../service/structure.service'
+import { TreeNode, Message } from 'primeng/primeng'
+import { TdLoadingService } from '@covalent/core'
+
 @Component({
   selector: 'px-structure',
   templateUrl: './structure.component.html',
   styleUrls: ['./structure.component.styl'],
   providers: [StructureService,],
 })
-
 
 export class StructureComponent implements OnInit {
   @Input("selectDepartment") selectDepartment: boolean
@@ -24,19 +25,20 @@ export class StructureComponent implements OnInit {
   firstList: any
   icon: string
   constructor(
-    private _structureService: StructureService,
+    private _loadingService: TdLoadingService,
+    private _structureService: StructureService
   ) {
-
   }
 
   ngOnInit() {
-    console.log(this.noneUser)
     this.structureTree = []
+    this._loadingService.register('main')
     this._structureService
       .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
       .subscribe(response => {
         let i = 0
         for (let node of response) {
+          this._loadingService.resolve('main')
           this.structureTree.push({
             "label": node.name,
             "data": node.id,
@@ -47,11 +49,12 @@ export class StructureComponent implements OnInit {
             "dataObj": node,
             "children": []
           })
+          this._loadingService.register('main')
           Observable.forkJoin(
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
-            let structures = []
+            this._loadingService.resolve('main')
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
                 "label": structure.name + ' (' + structure.shortName + ')',
@@ -64,15 +67,14 @@ export class StructureComponent implements OnInit {
               })
             }
             if (!this.noneUser) {
-              let userProfiles = []
               for (let userProfile of response[1]) {
-                if(userProfile.userStatus.id === 1){
+                if (userProfile.userStatus.id === 1) {
                   this.icon = "fa-user";
-                }else if(userProfile.userStatus.id === 2) {
+                } else if (userProfile.userStatus.id === 2) {
                   this.icon = "fa-user-times";
-                }else if(userProfile.userStatus.id === 3) {
+                } else if (userProfile.userStatus.id === 3) {
                   this.icon = "fa-user-circle";
-                }else{
+                } else {
                   this.icon = "fa-user";
                 }
                 this.structureTree[i].children.push({
@@ -86,18 +88,18 @@ export class StructureComponent implements OnInit {
                 })
               }
             }
-            i++;
-          });
-
+            i++
+          })
         }
-
-      });
+      })
   }
 
   loadData() {
+    this._loadingService.register('main')
     this._structureService
       .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
       .subscribe(response => {
+        this._loadingService.resolve('main')
         let i = 0
         for (let node of response) {
           this.structureTree.push({
@@ -110,11 +112,12 @@ export class StructureComponent implements OnInit {
             "dataObj": node,
             "children": []
           })
+          this._loadingService.register('main')
           Observable.forkJoin(
             this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
             this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', node.id),
           ).subscribe((response: Array<any>) => {
-            let structures = []
+            this._loadingService.resolve('main')
             for (let structure of response[0]) {
               this.structureTree[i].children.push({
                 "label": structure.name + ' (' + structure.shortName + ')',
@@ -127,15 +130,14 @@ export class StructureComponent implements OnInit {
               })
             }
             if (!this.noneUser) {
-              let userProfiles = []
               for (let userProfile of response[1]) {
-                if(userProfile.userStatus.id === 1){
+                if (userProfile.userStatus.id === 1) {
                   this.icon = "fa-user";
-                }else if(userProfile.userStatus.id === 2) {
+                } else if (userProfile.userStatus.id === 2) {
                   this.icon = "fa-user-times";
-                }else if(userProfile.userStatus.id === 3) {
+                } else if (userProfile.userStatus.id === 3) {
                   this.icon = "fa-user-circle";
-                }else{
+                } else {
                   this.icon = "fa-user";
                 }
                 this.structureTree[i].children.push({
@@ -149,20 +151,20 @@ export class StructureComponent implements OnInit {
                 })
               }
             }
-            i++;
-          });
-
+            i++
+          })
         }
-
-      });
+      })
   }
 
   loadNode(event) {
     if (event.node) {
+      this._loadingService.register('main')
       Observable.forkJoin(
         this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', event.node.data),
         this._structureService.getUserProfiles('1.1', '0', '200', 'orderNo', 'asc', event.node.data),
       ).subscribe((response: Array<any>) => {
+        this._loadingService.resolve('main')
         let structures = []
         for (let structure of response[0]) {
           structures.push({
@@ -176,15 +178,14 @@ export class StructureComponent implements OnInit {
           })
         }
         if (!this.noneUser) {
-          let userProfiles = []
           for (let userProfile of response[1]) {
-            if(userProfile.userStatus.id === 1){
+            if (userProfile.userStatus.id === 1) {
               this.icon = "fa-user";
-            }else if(userProfile.userStatus.id === 2) {
+            } else if (userProfile.userStatus.id === 2) {
               this.icon = "fa-user-times";
-            }else if(userProfile.userStatus.id === 3) {
+            } else if (userProfile.userStatus.id === 3) {
               this.icon = "fa-user-circle";
-            }else{
+            } else {
               this.icon = "fa-user";
             }
             structures.push({
@@ -199,7 +200,7 @@ export class StructureComponent implements OnInit {
           }
         }
         event.node.children = structures
-      });
+      })
     }
   }
 
@@ -232,7 +233,7 @@ export class StructureComponent implements OnInit {
                 summary: 'เพิ่มได้เฉพาะผู้ใช้งานเท่านั้น',
                 detail: event.node.label,
               },
-            );
+            )
           }
         }
       }

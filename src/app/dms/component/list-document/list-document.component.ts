@@ -48,7 +48,7 @@ export class ListDocumentComponent implements OnInit {
   nameUpdate: string = ''
 
   documentIntComma: string = null
-  
+
   private myDatePickerOptions: IMyOptions = {
     dateFormat: 'dd/mm/yyyy',
     editableDateField: false,
@@ -274,20 +274,6 @@ export class ListDocumentComponent implements OnInit {
   }
 
   change() {
-    console.log('-- cached --')
-    // this._router.navigate(
-    //   ['../',{
-    //     outlets: {
-    //       contentCenter: ['ListFolderByDoctypeComponent', {
-    //         folderId: this.folderId,
-    //         parentId: this.folderId,
-
-    //         folderName: this.dmsfolderName,
-    //          t: new Date().getTime()
-    //       }],
-    //     }
-    //   }], { relativeTo: this._route })
-
     this._router.navigate(
       ['../ListFolderByDoctypeComponent/', {
         t: new Date().getTime(),
@@ -297,9 +283,6 @@ export class ListDocumentComponent implements OnInit {
 
       }],
       { relativeTo: this._route })
-
-
-
   }
 
 

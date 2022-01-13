@@ -19,7 +19,7 @@
                         <span><b>ผู้จอง : </b>{{userName}}</span>
                     </div>
                     <div style="margin-top:0.5rem;">
-                        <md-input flex style="width:100%" type="number" min="1" placeholder="จำนวนเลขที่ต้องการ" name="amountReserve" [(ngModel)]="amountReserve" [disabled]="noContent"></md-input>
+                        <md-input flex style="width:100%" type="number" min="1" max="50" placeholder="จำนวนเลขที่ต้องการ (1-50)" name="amountReserve" [(ngModel)]="amountReserve" [disabled]="noContent"></md-input>
                     </div>
                 </div>
                 <div *ngIf="!reserveMode && lastContentNumber!=0">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
-                    <button *ngIf="reserveMode" md-raised-button md-ripple color="primary" [disabled]="amountReserve < 1 || noContent" (click)="reserve(amountReserve, 0)" [style.margin-right]="'5px'">จองเลข</button>
+                    <button *ngIf="reserveMode" md-raised-button md-ripple color="primary" [disabled]="amountReserve < 1 || amountReserve > 50 || noContent" (click)="reserve(amountReserve, 0)" [style.margin-right]="'5px'">จองเลข</button>
                     <button *ngIf="!reserveMode" md-raised-button md-ripple color="primary" [disabled]="amountReserve < (lastContentNumber+1) || lastContentNumber==0" (click)="reserve(amountReserve-lastContentNumber, 1)" [style.margin-right]="'5px'">บันทึก</button>
                     <button md-raised-button md-ripple (click)="cancel()">ยกเลิก</button>
                 </div>

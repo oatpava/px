@@ -1,17 +1,11 @@
 import { Injectable, } from '@angular/core'
-import { Http, Response, Headers, RequestOptions, URLSearchParams, ResponseContentType } from '@angular/http'
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../environments/environment'
 import { Observable } from 'rxjs/Observable'
 import { Observer } from 'rxjs/Observer'
-import 'rxjs/add/operator/map'
-import * as FileSaver from 'file-saver'
-
 import { LoggerService } from './logger.service'
-
 import { FileUploader } from 'ng2-file-upload'
 import { FileAttach } from './model/file-attach.model'
-// import { FileAttachList } from './model/file-attach-list.model'
-// import { TempTable } from './model/temp-table.model'
 import * as crypto from 'crypto-js'
 import { ParamSarabanService } from '../saraban/service/param-saraban.service'
 
@@ -32,9 +26,6 @@ export class PxService {
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
     this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
     this._options = new RequestOptions({ headers: this._headers })
-    // let params = new URLSearchParams()
-    // params.set('t', ''+new Date().getTime())
-    // this._options.search = params
   }
 
   createObservable(data: any): Observable<any> {
@@ -52,8 +43,6 @@ export class PxService {
   }
 
   convertStringToDate(input: string): Object {
-    // let input1: string = '01/03/2560 15:28:10'
-    // console.log('input',input)
     if (input === null || input === '') return null
     let inputArray: string[] = input.split(' ')
     let inputDate: string = inputArray[0]
@@ -73,16 +62,7 @@ export class PxService {
       authToken: localStorage.getItem('px-auth-token'),
       additionalParameter: fileAttachDetail
     }
-    // fileAttachDetail. options.additionalParameter
-    // uploader.onBuildItemForm = function(fileItem, form){ 
-    //   form.append('linkId', fileAttachDetail.linkId)
-    //   form.append('linkType', fileAttachDetail.linkType)
-    //   return {fileItem, form}
-    // };
-    console.log('--etc--', uploader.queue.length)
-    console.log('--fileAttachDetail--', fileAttachDetail)
     uploader.setOptions(params)
-    console.log('--uploader--', uploader)
     uploader.onBeforeUploadItem = (item) => {
       item.withCredentials = false
     }
@@ -90,7 +70,6 @@ export class PxService {
   }
 
   uploadFileAttach(uploader: FileUploader, fileAttachDetail: FileAttach): any {
-    console.log('--- uploadFileAttach ---')
     let params = {
       url: this._apiUrl + '/v1/fileAttachs',
       authTokenHeader: 'px-auth-token',
@@ -128,7 +107,6 @@ export class PxService {
       if (deleteFileAttachs.length > 0) {
         deleteFileAttachs.forEach((delFile: FileAttach) => {
           listHttp.push(this._http.delete(this._apiUrl + '/v1/fileAttachs/' + delFile.id, this._options).map(res => res.json()))
-          // this._http.delete(this._apiUrl+'/v1/fileAttachs/'+delFile.id,this._options).map(res => res.json())
         })
         return Observable.forkJoin(listHttp)
           .map((data: any[]) => {
@@ -154,11 +132,7 @@ export class PxService {
       authToken: localStorage.getItem('px-auth-token'),
       // additionalParameter: fileAttachDetail
     }
-
-    // console.log('--etc--',uploader.queue.length)
-    //  console.log('--fileAttachDetail--',fileAttachDetail)
     uploader.setOptions(params)
-    console.log('--uploader--', uploader)
     uploader.onBeforeUploadItem = (item) => {
       item.withCredentials = false
     }
@@ -177,25 +151,6 @@ export class PxService {
     }
   }
 
-  // uploadFileAttachsByItem(uploader: FileUploader, fileAttachDetail: FileAttach, index: number): any {
-  //   let params = {
-  //     url: this._apiUrl + '/v1/fileAttachs',
-  //     authTokenHeader: 'px-auth-token',
-  //     authToken: localStorage.getItem('px-auth-token'),
-  //     additionalParameter: fileAttachDetail,
-  //     t: '' + new Date().getTime()
-  //   }
-  //   uploader.setOptions(params)
-  //   uploader.onBeforeUploadItem = (item) => {
-  //     item.withCredentials = false
-  //   }
-  //   console.log("index ",index)
-  //   console.log("secret ", fileAttachDetail.secrets)
-  //   console.log("ref ", fileAttachDetail.referenceId)
-  //   console.log("uploader", uploader.queue[index])
-  //   console.log("+++++++++++")
-  //   return uploader.uploadItem(uploader.queue[index])
-  // }
   uploadFileAttachsByItem(uploader: FileUploader, fileAttachDetail: FileAttach, index: number): any {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs/createList',
@@ -238,44 +193,10 @@ export class PxService {
     }
   }
 
-  // updateLinkType(linkId: number) {
-  //   if (environment.production) {
-  //     let fileAttach_tmp = new FileAttach()
-  //     fileAttach_tmp.linkId = linkId
-  //     return this._http.put(this._apiUrl + '/v1/fileAttachs/updateLinkType/', fileAttach_tmp, { headers: this._headers })
-  //       .map((response: Response) => {
-  //         return response.json().data
-  //       })
-  //       .catch(this.loggerService.handleError)
-  //   } else {
-
-  //   }
-  // }
-
   report(reportName: string, reportOutput: string, params = new URLSearchParams()) {
     const url = environment.reportServer + params.toString() + '&_flowId=viewReportFlow&standAlone=true&_flowId=viewReportFlow&ParentFolderUri=%2Freports%2F' + environment.reportSite + '&reportUnit=%2Freports%2F' + environment.reportSite + '%2F' + reportName + '&j_acegi_security_check&j_username=' + environment.reportUser + '&j_password=' + environment.reportPass + '&decorate=no&output=' + reportOutput
     window.open(url, 'report')
   }
-
-  // getFileAttachsAfterAdd(linkType: string, linkId: number, secrets: number[]): Observable<FileAttach[]> {
-  //   let params = new URLSearchParams()
-  //   params.set('version', '1.0')
-  //   params.set('offset', '0')
-  //   params.set('limit', '200')
-  //   params.set('sort', 'orderNo')
-  //   params.set('dir', 'asc')
-  //   params.set('t', '' + new Date().getTime())
-  //   if (environment.production) {
-  //     this._options.search = params
-  //     return this._http.post(this._apiUrl + '/v1/fileAttachs/afterAdd/linkType/' + linkType + '/linkId/' + linkId, secrets, this._options)
-  //       .map((response: Response) => {
-  //         return this.verifyResponseArray(response.json().data)
-  //       })
-  //       .catch(this.loggerService.handleError)
-  //   } else {
-  //     return
-  //   }
-  // }
 
   updateESFolderId(contentId: number) {
     if (environment.production) {

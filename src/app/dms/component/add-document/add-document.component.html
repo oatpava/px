@@ -111,17 +111,6 @@
                                         <md-option *ngFor="let lookupDetail of dtd.lookupDetail" [value]="lookupDetail.name"> {{lookupDetail.name}}
                                         </md-option>
                                     </md-select>
-                                    <!-- /////// wf type  -->
-                                    <!-- <md-input-container *ngIf="dtd.dmsFieldMap ==='documentText02'&& documentTypeId === 2 " flex style="width: 100% ;margin-top: 20px;" (click)="listWfdocType()">
-                                        <md-input md-input placeholder="{{dtd.documentTypeDetailName}}" name="{{dtd.dmsFieldMap}}" maxlength="255" [(ngModel)]="dmsDocument.documentText02"></md-input>
-
-                                    </md-input-container> -->
-
-                                    <!-- <md-input *ngIf="dtd.dmsFieldMap ==='documentText02' && documentTypeId === 2" flex style="width: 100% ;margin-top: 20px;" placeholder='{{dtd.documentTypeDetailName}}' [(ngModel)]="dmsDocument.documentText02" name="{{dtd.documentTypeDetailName }}" (click)="listWfdocType()"
-                                        [(ngModel)]="search[df.dmsFieldMap]">
-                                      
-
-                                    </md-input> -->
 
 
                                     <md-input-container *ngIf="dtd.dmsFieldMap==='documentText03'&& dtd.documentTypeDetailLookup === 0" flex style="width: 100% ;margin-top: 20px;">

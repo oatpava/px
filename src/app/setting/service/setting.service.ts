@@ -2,13 +2,10 @@ import { Injectable } from '@angular/core'
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { environment } from '../../../environments/environment'
 import { Observable } from 'rxjs/Observable'
-import { Observer } from 'rxjs/Observer'
-import 'rxjs/add/operator/map'
 import { PxService } from '../../main/px.service'
 import { LoggerService } from '../../main/logger.service'
-
 import { Setting } from '../model/setting.model'
-import { SETTINGS } from '../model/mock-settings'
+import { SETTINGS } from '../model/SETTINGS'
 import { Param } from '../model/param.model'
 import { userParam } from '../model/param.model'
 
@@ -27,7 +24,6 @@ export class SettingService {
   }
 
   getSettings(): Observable<Setting[]> {
-    console.log('getSettings waiting use rest. - O')
     let modules = SETTINGS
     if (!environment.DMS) modules = modules.filter(x => x.type != 'DMS')
     if (environment.production) {

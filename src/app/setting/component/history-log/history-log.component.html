@@ -1,0 +1,141 @@
+<div layout="column" flex>
+    <div class="bgc-blue-700" [style.color]="'#fff'" layout="row">
+        <button md-icon-button (click)="goBack()">
+            <md-icon>arrow_back</md-icon>
+        </button>
+        <button md-icon-button disabled>
+            <md-icon>history</md-icon>
+        </button>
+        <div flex class="menu-showLabel">
+            <span>ประวัติการใช้งาน</span>
+        </div>
+    </div>
+</div>
+<div layout="column" flex (click)="sideNavAlert($event)">
+    <md-sidenav-layout layout="column" flex fullscreen>
+        <md-sidenav #sideSubMenu align="end">
+            <form #form="ngForm" layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
+                <div layout="column" layout-align="left start" style="width: 100%; margin-bottom: 10px; ">
+
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" placeholder="วันที่จาก" locale="th" name="dateBegin" [(ngModel)]="searchField.dateBegin">
+                    </my-date-picker>
+                    <my-date-picker style="padding-top: 10px; padding-bottom: 10px;" flex [options]="myDatePickerOptions" placeholder="วันที่ถึง" locale="th" name="dateEnd" [(ngModel)]="searchField.dateEnd">
+                    </my-date-picker>
+                    <md-select style="width: 100%; padding-top: 10px; padding-bottom: 10px;" placeholder="Module" [(ngModel)]="searchField.moduleName" name="Module">
+                        <md-option *ngFor="let module of modules" [value]="module.code">
+                            {{module.name}}
+                        </md-option>
+                    </md-select>
+                    <form class="additional" layout-align="center">
+                        <div layout="row">ประเภทงาน</div>
+                        <div layout="row" *ngFor="let logType of logTypes">
+                            <md-checkbox [name]="logType.name" [(ngModel)]="logType.checked">{{logType.label}}</md-checkbox>
+                        </div>
+                    </form>
+                    <md-input-container class="setWidth">
+                        <span style="cursor: pointer;" (click)="openDialogUser()" md-prefix>
+                            <md-icon>supervisor_account</md-icon>
+                        </span>
+                        <input md-input type="text" placeholder="บุคลากร" name="userName" disabled [(ngModel)]="searchField.userName">
+                        <span style="cursor: pointer;" (click)="clearUser()" md-suffix>
+                            <md-icon>close</md-icon>
+                        </span>
+                    </md-input-container>
+                </div>
+            </form>
+        </md-sidenav>
+        <div class="body-showCenter">
+            <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
+                <div flex-gt-md="90">
+                    <md-list>
+                        <md-card style="margin-left: 0px; margin-right: 0px;">
+                            <md-card-content>
+                                <p-dataTable #dt [value]="datas" [rows]="100" [paginator]="true" [rowsPerPageOptions]="[100,300,500]" [resizableColumns]="false"[responsive]="true" styleClass="fixed-size">
+                                    <p-header>
+                                        <div layout="row" layout-align="space-between start">
+                                            <div></div>
+                                            <div>
+                                                <span>รายการประวัติการใช้งาน</span>
+                                            </div>
+                                            <div>
+                                                <button (click)="resetDataTable()"><i class="fa fa-refresh"></i></button>
+                                            </div>
+                                        </div>
+                                    </p-header>
+                                    <p-footer>
+                                        <loadMore [listReturn]="listReturn" (load)=loadMoreContents()></loadMore>
+                                    </p-footer>
+                                    <p-column field="moduleName" header="Modules" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'120px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.moduleName}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="userProfileName" header="ผู้ใช้งาน" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'350px', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.userProfileName}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="createdDate" header="วันที่" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'100px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.createdDate.substr(0,10)}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="createdDate" header="เวลา" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'70px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.createdDate.substr(11,5)}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="ipAddress" header="IP Address" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'width':'120px', 'text-align':'center', 'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.ipAddress}}</span>
+                                        </template>
+                                    </p-column>
+                                    <p-column field="description" header="รายละเอียด" [sortable]="true" [filter]="true" filterMatchMode="contains" filterPlaceholder="กรอง" [style]="{'vertical-align':'top', 'word-wrap':'break-word'}">
+                                        <template pTemplate="body" let-row="rowData">   
+                                            <span>{{row.description}}</span>
+                                        </template>
+                                    </p-column>
+                                </p-dataTable>
+                            </md-card-content>
+                        </md-card>
+                    </md-list>
+                </div>
+            </div>
+        </div>
+    </md-sidenav-layout>
+</div>
+
+<div layout="column" [tdToggle]="!ModeSearch" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
+    <div [tdToggle]="hoverMenuEdit">
+
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
+                <md-icon>search</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#00cc00'" title="กราฟ" color="accent" (click)="report();">
+                <md-icon>pie_chart</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#cc7a00'" title="รายงาน PDF" color="accent" (click)="reportpdf('pdf');">
+                <md-icon>assignment</md-icon>
+            </button>
+        </div>
+        <div class="showbutton" style="padding-bottom: 3px;">
+            <button md-fab [style.background]="'#cc7a00'" title="รายงาน Excel" color="accent" (click)="reportpdf('xls');">
+                <md-icon>grid_on</md-icon>
+            </button>
+        </div>
+    </div>
+    <button *ngIf="showMenu" md-fab color="accent" title="รายการเมนู">
+        <md-icon>{{listMenu}}</md-icon>
+    </button>
+</div>
+
+<div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
+    <button md-fab [style.background]="'#1976d2'" title="ค้นหา" [color]="form.valid ? 'accent':''" [disabled]="!form.valid" (click)="searchLog(searchField,additional);">
+        <md-icon>search</md-icon>
+    </button>
+</div>

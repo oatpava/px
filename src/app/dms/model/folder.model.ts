@@ -21,10 +21,10 @@ export class Folder {
       removeDate: string
       upDateDate: string
       userProfileCreate: any
-      dmsUserPreExpire:number
-      dmsEmailUserPreExpire:string
+      dmsUserPreExpire: number
+      dmsEmailUserPreExpire: string
       dmsUserProfilePreExpire: any
-      isWfFolderFromType:string
+      isWfFolderFromType: string
 
       userProfileUpdate: any
       constructor(values: Object = {}) {
@@ -46,7 +46,7 @@ export class Folder {
             this.documentTypeId = 1
             this.iconColor = ''
             this.icon = ''
-            this.isWfFolderFromType ='N'
+            this.isWfFolderFromType = 'N'
             this.userProfileCreate = {
                   "id": 1,
                   "structure": {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions, URLSearchParams, ResponseContentType } from '@angular/http'
+import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http'
 import { Router } from '@angular/router'
 import { environment } from '../../environments/environment'
 import { PxService } from '../main/px.service'
@@ -22,17 +22,16 @@ export class AuthService {
         this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
         this._options = new RequestOptions({ headers: this._headers })
         let params = new URLSearchParams()
-        params.set('t', ''+new Date().getTime())
+        params.set('t', '' + new Date().getTime())
         this._options.search = params
     }
 
     check(): Observable<any> {
         return this._http.get(this._apiUrl + '/checkAuth', this._options)
             .map((response: Response) => {
-                if(response.status===200){
+                if (response.status === 200) {
                     return this.pxService.createObservable(true)
-                }else{
-                    // this.router.navigate(['/login']);
+                } else {
                     return this.pxService.createObservable(false)
                 }
             })

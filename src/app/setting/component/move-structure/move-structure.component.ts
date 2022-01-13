@@ -1,16 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
-import { Location } from '@angular/common'
-import { Observable } from 'rxjs/Observable'
-import { TdLoadingService } from '@covalent/core'
-import { StepState } from '@covalent/core';
-import 'rxjs/add/operator/switchMap'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
-
-import { Structure } from '../../model/structure.model';
-
+import { Component, OnInit } from '@angular/core'
+import { Message } from 'primeng/primeng'
+import { Structure } from '../../model/structure.model'
 import { MdDialog, MdDialogRef } from '@angular/material'
-import { StructureService } from '../structure/structure.service'
+import { StructureService } from '../../service/structure.service'
 import { ConfirmDialogComponent } from '../../../main/component/confirm-dialog/confirm-dialog.component'
 
 @Component({
@@ -25,16 +17,12 @@ export class MoveStructureComponent implements OnInit {
   selectStructureData: any
   structure: Structure
   isOrganize: boolean = false
+
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _loadingService: TdLoadingService,
-    private _location: Location,
     private _structureService: StructureService,
     public dialogRef: MdDialogRef<MoveStructureComponent>,
-    private _dialog: MdDialog,
+    private _dialog: MdDialog
   ) { }
-
 
   ngOnInit() {
     this.structure = new Structure()
@@ -77,7 +65,6 @@ export class MoveStructureComponent implements OnInit {
       }
     })
   }
-
 
   close(): void {
     this.dialogRef.close()

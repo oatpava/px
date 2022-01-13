@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { ActivatedRoute, Params } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
-import { MdDialog, MdDialogRef } from '@angular/material'
+import { Message } from 'primeng/primeng'
+import { MdDialog } from '@angular/material'
 import { Observable } from 'rxjs/Observable'
 
 import { DeleteDialogComponent } from '../../../../main/component/delete-dialog/delete-dialog.component'
 import { ConfirmDialogComponent } from '../../../../main/component/confirm-dialog/confirm-dialog.component'
 
 import { Structure } from '../../../model/structure.model'
-import { StructureService } from '../structure.service'
+import { StructureService } from '../../../service/structure.service'
 import { StructureFolder } from '../../../model/structure-folder.model'
 
 import { SarabanFolder } from '../../../../saraban/model/sarabanFolder.model'
@@ -33,7 +33,6 @@ export class AddStructureComponent implements OnInit {
   structureFolders: StructureFolder[]
   constructor(
     private _route: ActivatedRoute,
-    private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
     private _structureService: StructureService,
@@ -42,7 +41,6 @@ export class AddStructureComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.parentStructure = new Structure()
     this.structure = new Structure({ name: '', code: '', detail: '' })
     this._route.params
       .subscribe((params: Params) => {
@@ -54,14 +52,11 @@ export class AddStructureComponent implements OnInit {
   }
 
   createStructure(structure: Structure) {
-    //check Code
     this._structureService
       .checkStructureCode(structure.code, structure.name, 0)
       .subscribe(response => {
-        console.log(response)
-        //check Code
         if (response.result) {
-          this.msgs = [];
+          this.msgs = []
           this.msgs.push({
             severity: 'warn',
             summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
@@ -74,10 +69,8 @@ export class AddStructureComponent implements OnInit {
           let instance = dialogRef.componentInstance
           instance.dataName = 'เพิ่ม หน่วยงาน' + structure.name
           dialogRef.afterClosed().subscribe(result => {
-
             if (result) {
-
-              this.msgs = [];
+              this.msgs = []
               this.msgs.push({
                 severity: 'info',
                 summary: 'กำลังดำเนินการ',
@@ -86,12 +79,11 @@ export class AddStructureComponent implements OnInit {
               this._structureService
                 .createStructure(structure)
                 .subscribe(response => {
-                    this.createStructureFolders(response)
+                  this.createStructureFolders(response)
                 })
             }
           })
         }
-        //check Code
       })
   }
 
@@ -115,7 +107,6 @@ export class AddStructureComponent implements OnInit {
           .createStructureFolder(structureFolder)
           .subscribe(response => {
             this._loadingService.resolve('main')
-
             if (structure.parentId != 1) {//get folder type 3 of parent Structure to use folderId as parentFodlerId
               this._sarabanService
                 .listSarabanFoldersByStructureId(structure.parentId)
@@ -135,51 +126,28 @@ export class AddStructureComponent implements OnInit {
   }
 
   updateStructure(structure: Structure) {
-    // //check Code
-    // this._structureService
-    //   .checkStructureCode(structure.code, structure.name, structure.id)
-    //   .subscribe(response => {
-    //     console.log(response)
-    //     //check Code
-    //     if (response.result) {
-    //       this.msgs = [];
-    //       this.msgs.push({
-    //         severity: 'warn',
-    //         summary: 'ไม่สามารถเพิ่มได้เนื่องจาก',
-    //         detail: 'รหัสหน่วยงาน ซ้ำ'
-    //       })
-    //     } else {
-
-          let dialogRef = this._dialog.open(ConfirmDialogComponent, {
-            width: '50%',
-          });
-          let instance = dialogRef.componentInstance
-          instance.dataName = 'แก้ไข หน่วยงาน' + structure.name
-          dialogRef.afterClosed().subscribe(result => {
-
-            if (result) {
-
-              this.msgs = [];
-              this.msgs.push({
-                severity: 'success',
-                summary: 'บันทึกสำเร็จ',
-                detail: 'แก้ไขหน่วยงาน' + structure.name
-              })
-              this._structureService
-                .updateStructure(structure)
-                .subscribe(response => {
-
-                  setTimeout(() => {
-                    this.updateStructureFolders(structure)
-                  }, 1000);
-
-                })
-            }
+    let dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      width: '50%',
+    })
+    let instance = dialogRef.componentInstance
+    instance.dataName = 'แก้ไข หน่วยงาน' + structure.name
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.msgs = []
+        this.msgs.push({
+          severity: 'success',
+          summary: 'บันทึกสำเร็จ',
+          detail: 'แก้ไขหน่วยงาน' + structure.name
+        })
+        this._structureService
+          .updateStructure(structure)
+          .subscribe(response => {
+            setTimeout(() => {
+              this.updateStructureFolders(structure)
+            }, 1000)
           })
-
-      //   }
-      //   //check Code
-      // })
+      }
+    })
   }
 
   updateStructureFolders(structure: Structure) {
@@ -201,11 +169,10 @@ export class AddStructureComponent implements OnInit {
   deleteStructure(structure: Structure) {
     let dialogRef = this._dialog.open(DeleteDialogComponent, {
       width: '50%',
-    });
+    })
     let instance = dialogRef.componentInstance
     instance.dataName = 'หน่วยงาน' + structure.name
     dialogRef.afterClosed().subscribe(result => {
-
       if (result) {
         this._structureService
           .deleteStructure(structure)
@@ -216,13 +183,10 @@ export class AddStructureComponent implements OnInit {
               summary: 'ลบข้อมูลสำเร็จ',
               detail: 'หน่วยงาน' + structure.name
             })
-
             this.deleteStructureFolders()
           })
       }
     })
-
-
   }
 
   deleteStructureFolders() {
@@ -308,7 +272,7 @@ export class AddStructureComponent implements OnInit {
     })
     folder13.wfContentType.id = 1
     folder13.wfContentType2.id = 3
-  
+
 
     let folder22 = new SarabanFolder({
       parentId: parentFolder.id,

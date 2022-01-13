@@ -4,7 +4,7 @@ import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
 import { Message } from 'primeng/primeng'
 import { SarabanService } from '../../service/saraban.service'
-import { AuthTemplateService } from '../../../setting/auth-template/auth-template.service'
+import { AuthTemplateService } from '../../../setting/service/auth-template.service'
 import { SarabanAuth } from '../../model/sarabanAuth.model'
 
 @Component({

@@ -3,12 +3,12 @@
 
 /* Variables */
 
-$md-primary: #0D47A1;
+$md-primary: #0d47a1;
 $md-primary-opacity: rgba(0, 151, 167, 0.12);
 $md-accent: #ff9800;
 $md-accent-opacity: rgba(255, 145, 0, 0.12);
-$md-warn: #E53935;
-$background: #BBBBBB;
+$md-warn: #e53935;
+$background: #bbbbbb;
 
 /* :host /deep/ lets shadowdom style child elements */
 
@@ -94,7 +94,7 @@ $background: #BBBBBB;
     .md-progress-bar-buffer {
         background-color: lighten($md-primary, 40%) !important;
     }
-    md-progress-bar[color='accent'] {
+    md-progress-bar[color="accent"] {
         .md-progress-bar-fill::after,
         .md-input-underline .md-input-ripple {
             background-color: $md-accent !important;
@@ -103,7 +103,7 @@ $background: #BBBBBB;
             background-color: lighten($md-accent, 40%) !important;
         }
     }
-    md-progress-bar[color='warn'] {
+    md-progress-bar[color="warn"] {
         .md-progress-bar-fill::after,
         .md-input-underline .md-input-ripple {
             background-color: $md-warn !important;
@@ -117,12 +117,12 @@ $background: #BBBBBB;
         path {
             stroke: $md-primary !important;
         }
-        &[color='accent'] {
+        &[color="accent"] {
             path {
                 stroke: $md-accent !important;
             }
         }
-        &[color='warn'] {
+        &[color="warn"] {
             path {
                 stroke: $md-warn !important;
             }
@@ -197,7 +197,7 @@ $background: #BBBBBB;
     .md-sort-header {
         padding: 10px;
         &:hover {
-            background-color: #EEEEEE;
+            background-color: #eeeeee;
             cursor: pointer;
         }
     }

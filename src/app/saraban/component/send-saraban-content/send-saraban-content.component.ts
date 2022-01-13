@@ -25,7 +25,7 @@ import { Structure } from '../../../setting/model/structure.model'
 
 import { environment } from '../../../../environments/environment'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
-import { FileAttach } from '../../../shared'
+import { FileAttach } from '../../../main/model/file-attach.model'
 import { DialogViewComponent } from '../add-saraban-content/dialog-view/dialog-view.component'
 
 @Component({

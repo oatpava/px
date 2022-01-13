@@ -1,7 +1,6 @@
 import { Structure } from './structure.model'
 import { Title } from './title.model'
 import { UserProfileType } from './user-profile-type.model'
-import { UserTypeOrder } from '../master-data/model/user-type-order.model'
 import { Position } from './position.model'
 import { PositionType } from './position-type.model'
 import { User } from './user.model'
@@ -116,13 +115,13 @@ export class vUserProfile {
 
 export class convertUserPorfile {
     status: number
-    userProfile: UserProfile 
+    userProfile: UserProfile
     vUserProfile: vUserProfile
 
     constructor(values: Object = {}) {
         this.status = 1
-        this.userProfile =  new UserProfile()
-        this.vUserProfile =  new vUserProfile()
+        this.userProfile = new UserProfile()
+        this.vUserProfile = new vUserProfile()
         Object.assign(this, values)
     }
 }

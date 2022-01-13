@@ -1,6 +1,6 @@
 <md-card *ngIf="userProfileList.length>0 && showUserProfileList">
     <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
-        <span class="md-headline">ประวัติรายละเอียดผู้ใช้งาน</span>
+        <span class="md-headline">รายการผู้ใช้งาน</span>
     </md-card-title>
     <md-card-content class="push-bottom-none">
         <md-list ngInit="showEdit=-1">
@@ -9,8 +9,8 @@
                 <h3 md-line>{{upl.fullName}}
                     <!-- <md-icon *ngIf="upl.defaultSelect === 0" class="md-18" style="vertical-align: bottom;">grade</md-icon> -->
                 </h3>
-                <h5 md-line>ตำแหน่ง : {{upl.position?.name}}</h5>
-                <p md-line>หน่วยงาน : {{upl.structure?.name}}</p>
+                <h5 md-line>หน่วยงาน: {{upl.structure?.name}}</h5>
+                <p md-line>ตำแหน่ง: {{upl.position?.name}}</p>
                 <button show-gt-md md-icon-button *ngIf="showEdit === i" (click)="editProfile(upl)">
                     <md-icon alt="แก้ไข">edit</md-icon>
                 </button>
@@ -34,12 +34,14 @@
     <md-card-content class="push-bottom-none">
         <form #addUserProfileform="ngForm" [tdToggle]="formAddProfile">
             <div layout="row" llayout-xs="column" layout-margin>
-                <md-input-container style="width:100%;">
-                    <input md-input type="text" placeholder="หน่วยงาน" name="structure" [(ngModel)]="userProfile.structure.name" required disabled>
-                </md-input-container>
-                <button *ngIf="!toggleAddProfile && userProfile.id==0" md-icon-button (click)="dialog=true">
-                    <md-icon>supervisor_account</md-icon>
-                </button>
+                <div flex="100" flex-xs="100">
+                    <md-input-container flex="95" style="width:100%;">
+                        <input md-input type="text" placeholder="หน่วยงาน" name="structure" [(ngModel)]="userProfile.structure.name" required disabled>
+                    </md-input-container>
+                    <button *ngIf="!toggleAddProfile && userProfile.id==0" flex="5" md-icon-button (click)="dialog=true">
+                        <md-icon>supervisor_account</md-icon>
+                    </button>
+                </div>
             </div>
             <p-dialog [(visible)]="dialog" [responsive]="true">
                 <p-header>
@@ -126,26 +128,27 @@
                 </div>
             </div>
 
-            <div layout="row" layout-xs="column" layout-margin>
+            <div *ngIf="userProfile.id!=0" layout="row" layout-xs="column" layout-margin>
                 <div flex="100" flex-xs="100">
-                    สถานะผู้ใช้งาน : {{userProfile.userStatus.name}}
+                    สถานะผู้ใช้งาน: {{userProfile.userStatus.name}}
                 </div>
             </div>
         </form>
     </md-card-content>
     <md-card-actions [tdToggle]="toggleAddProfile" layout="row" layout-align="center center">
         <button *ngIf="modeProfile==='edit'" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid}" [disabled]="!addUserProfileform.form.valid" (click)="updateProfile(userProfile)" class="push-right">บันทึก</button>
-        <button *ngIf="modeProfile==='add'" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid}" [disabled]="!addUserProfileform.form.valid" (click)="createProfile(userProfile)" color="primary" [style.margin-right]="'5px'">บันทึก</button>
+        <button *ngIf="modeProfile==='add' && user.id==0" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid && addUserform.form.valid}" [disabled]="!addUserProfileform.form.valid || !addUserform.form.valid" (click)="createProfile(userProfile)" color="primary" [style.margin-right]="'5px'">บันทึก</button>
+        <button *ngIf="modeProfile==='add' && user.id!=0" md-raised-button [ngClass]="{'md-primary': addUserProfileform.form.valid}" [disabled]="!addUserProfileform.form.valid" (click)="createProfile(userProfile)" color="primary" [style.margin-right]="'5px'">บันทึก</button>
         <button md-raised-button md-ripple [disabled]="isDisabled" (click)="cancelCreateProfile()">ยกเลิก</button>
     </md-card-actions>
 </md-card>
-<md-card [tdToggle]="toggleCommand" style="background-color: #8fc2f5;">
+<md-card *ngIf="user.id!=0" [tdToggle]="toggleCommand" style="background-color: #8fc2f5;">
     <md-card-content>
         <md-list>
             <md-list-item class="hover" (click)="openFormAddProfile()">
                 <md-icon md-list-avatar class="hover">add_circle_outline</md-icon>
-                <h4 md-line style="font-weight: bold;" title="Create : New User Profiles">สร้าง : รายละเอียดผู้ใช้งาน</h4>
-                <p md-line title="Create : New Profiles">สร้างรายละเอียดผู้ใช้งาน..</p>
+                <h4 md-line style="font-weight: bold;" title="Create : New User Profiles">สร้าง: รายละเอียดผู้ใช้งาน</h4>
+                <p md-line title="Create : New Profiles">เพิ่มผู้ใช้งานสำหรับบัญชีผู้ใช้นี้</p>
             </md-list-item>
         </md-list>
     </md-card-content>

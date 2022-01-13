@@ -4,10 +4,10 @@
             <md-icon>arrow_back</md-icon>
         </button>
         <button md-icon-button disabled>
-          <md-icon>{{iconHeader}}</md-icon>
+          <md-icon>person_add</md-icon>
         </button>
         <div flex class="menu-showLabel">
-            <span>{{modeTitle}}ผู้ใช้งาน  {{structure.name}}</span>
+            <span>{{modeTitle}}บัญชีผู้ใช้  หน่วยงาน: {{structure.name}}</span>
         </div>
     </div>
 </div>
@@ -18,9 +18,19 @@
                 <div flex-gt-md="70">
                     <md-card>
                         <md-card-title class="push-bottom-none" style="background: #8fc2f5;">
-                            <span class="md-headline">{{modeTitle}}บัญชีผู้ใช้</span>
+                            <span class="md-headline">บัญชีผู้ใช้</span>
                         </md-card-title>
                         <md-card-content class="push-bottom-none">
+                            <md-list *ngIf="user.id!=0" [tdToggle]="toggleAddUser">
+                                <md-list-item>
+                                    <md-icon md-list-avatar>lock</md-icon>
+                                    <h3 md-line class="hover">ชื่อผู้ใช้: {{user.name}}</h3>
+                                    <h4 md-line> รหัสผ่าน: ******** </h4>
+                                    <button md-icon-button (click)="editMode(user)">
+                                        <md-icon alt="แก้ไข">edit</md-icon>
+                                    </button>
+                                </md-list-item>
+                            </md-list>
                             <form #addUserform="ngForm" [tdToggle]="!toggleAddUser">
                                 <div layout="row" layout-xs="column" layout-margin>
                                     <div flex="50" flex-xs="100">
@@ -40,43 +50,34 @@
                                         </md-input-container>
                                     </div>
                                 </div>
-                                <div layout="row" layout-xs="column" layout-margin>
-                                    <div flex="100" flex-xs="100">
-                                        <span style="font-size: 11.5px; color: #a8a8a8;">วันที่หมดอายุของรหัสผ่าน : &nbsp;</span>
+                                <div flex="100" layout="row" layout-xs="column" layout-margin>
+                                    <div flex="50" flex-xs="100">
+                                        <span style="font-size: 11.5px; color: #a8a8a8;">
+                                            <a *ngIf="user.passwordExpireDate">วันที่หมดอายุของรหัสผ่าน</a>
+                                            <a *ngIf="!user.passwordExpireDate">&nbsp;</a>
+                                        </span>
                                         <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="วันที่หมดอายุของรหัสผ่าน" locale="th" name="passwordExpireDate" [(ngModel)]="user.passwordExpireDate"></my-date-picker>
                                     </div>
-                                </div>
-                                <div layout="row" layout-xs="column" layout-margin>
-                                    <div flex="100" flex-xs="100">
-                                        <span style="font-size: 11.5px; color: #a8a8a8;">วันที่หมดอายุการใช้งาน : &nbsp;</span>
+                                    <div flex="50" flex-xs="100">
+                                        <span style="font-size: 11.5px; color: #a8a8a8;">
+                                            <a *ngIf="user.expireDate">วันที่หมดอายุการใช้งาน</a>
+                                            <a *ngIf="!user.expireDate">&nbsp;</a>
+                                        </span>
                                         <my-date-picker style="width:42%;" [options]="myDatePickerOptions" placeholder="วันที่หมดอายุการใช้งาน" locale="th" name="expireDate" [(ngModel)]="user.expireDate"></my-date-picker>
                                     </div>
                                 </div>
                             </form>
-                            <md-list [tdToggle]="toggleAddUser">
-                                <md-list-item>
-                                    <md-icon md-list-avatar>lock</md-icon>
-                                    <h3 md-line class="hover">ชื่อผู้ใช้: {{userResult?.name}}</h3>
-                                    <h4 md-line> รหัสผ่าน: ******** </h4>
-                                    <button md-icon-button (click)="editMode(userResult)">
-                                        <md-icon alt="แก้ไข">edit</md-icon>
-                                    </button>
-                                </md-list-item>
-                            </md-list>
                         </md-card-content>
-                        <!--<md-divider></md-divider>
-                        <md-card-content>
-                            <app-file-attach [uploader]="uploader " [fileAttachs]="fileAttachs " [fileAttachRemoved]="fileAttachRemoved " [isAttach]="!addUserform.form.valid"></app-file-attach>
-                        </md-card-content>-->
-                        <md-card-actions [tdToggle]="!toggleAddUser" layout="row" layout-align="center center" class="pad-bottom">
-                            <button *ngIf="mode==='edit'" md-raised-button color="warn" (click)="deleteUser(user)" class="push-right">ลบ</button>
-                            <button *ngIf="mode==='edit'" md-raised-button [ngClass]="{'md-primary': addUserform.form.valid}" [disabled]="!addUserform.form.valid" (click)="updateUser(user)" class="push-right">บันทึก</button>
-                            <button *ngIf="mode==='add'" md-raised-button [ngClass]="{'md-primary': addUserform.form.valid}" [disabled]="!addUserform.form.valid" (click)="createUser(user)" class="push-right">บันทึก</button>
+                        <md-card-actions *ngIf="mode=='edit'" [tdToggle]="!toggleAddUser" layout="row" layout-align="center center" class="pad-bottom">
+                            <button md-raised-button color="warn" (click)="deleteUser(user)" class="push-right">ลบ</button>
+                            <button md-raised-button [ngClass]="{'md-primary': addUserform.form.valid}" [disabled]="!addUserform.form.valid" (click)="updateUser(user)" class="push-right">บันทึก</button>
                             <button md-raised-button md-ripple [disabled]="isDisabled" (click)="goBack()">ยกเลิก</button>
                         </md-card-actions>
                     </md-card>
 
-                    <app-add-user-profile *ngIf="mode==='edit'" [toggleCommand]="toggleCommand" (alertMessage)="alertMessage($event)" [userId]="userId" [structureId]="structureId"></app-add-user-profile>
+                    <app-add-user-profile *ngIf="showUserProfile" [toggleCommand]="toggleCommand" (createdUser)="getUser($event)" 
+                        (alertMessage)="alertMessage($event)" [addUserform]="addUserform"
+                        [user]="user" [structure]="structure" (cancel)="goBack()"></app-add-user-profile>
                 </div>
             </div>
         </div>

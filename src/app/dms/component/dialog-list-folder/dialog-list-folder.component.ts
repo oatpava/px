@@ -1,18 +1,14 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
-import { TreeModule, TreeNode, Message } from 'primeng/primeng';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { TreeNode, Message } from 'primeng/primeng';
 import { Observable } from 'rxjs/Observable'
-import { DocumentTypeService } from '../../../setting/document-type/service/document-type.service'
-import { WfDocumentType } from '../../../setting/document-type/model/wfDocumentType.model';
-import { MdDialog, MdDialogRef } from '@angular/material'
-
+import { MdDialogRef } from '@angular/material'
 import { FolderService } from '../../service/folder.service'
-import { Folder } from '../../model/folder.model'
 
 @Component({
   selector: 'app-dialog-list-folder',
   templateUrl: './dialog-list-folder.component.html',
   styleUrls: ['./dialog-list-folder.component.styl'],
-  providers: [DocumentTypeService, FolderService]
+  providers: [FolderService]
 })
 export class DialogListFolderComponent implements OnInit {
 
@@ -29,7 +25,6 @@ export class DialogListFolderComponent implements OnInit {
   FolderId: number
 
   constructor(
-    private _documentTypeService: DocumentTypeService,
     private _folderService: FolderService,
     public dialogRef: MdDialogRef<DialogListFolderComponent>
   ) { }
@@ -45,16 +40,11 @@ export class DialogListFolderComponent implements OnInit {
       "dataObj": null,
       "children": []
     })
-    //dashboard
-    //dns  fa-server
-    //folder fa-folder-o
     this._folderService
       // .getFolders(1) // with out auth
       .getFoldersWithAuth(1) // with  auth
       .subscribe(response => {
-        let structures = []
         for (let folder of response) {
-          // console.log(folder)
           if (folder.folderType == 'C') {
             this.iconDms = 'fa-th-large'
           } else if (folder.folderType == 'D') {
@@ -88,7 +78,6 @@ export class DialogListFolderComponent implements OnInit {
       ).subscribe((response: Array<any>) => {
         let structures = []
         for (let folder of response[0]) {
-          // console.log(folder)
           if (folder.folderType == 'C') {
             this.iconDms = 'fa-th-large'
           } else if (folder.folderType == 'D') {
@@ -96,7 +85,6 @@ export class DialogListFolderComponent implements OnInit {
           } else if (folder.folderType == 'F') {
             this.iconDms = 'fa-folder-o'
           }
-          // this.iconDms = 'fa-folder-o'
           structures.push({
             "label": folder.folderName,
             "data": folder.id,
@@ -109,45 +97,12 @@ export class DialogListFolderComponent implements OnInit {
         }
 
         event.node.children = structures
-      });
+      })
     }
   }
 
   nodeSelect(event) {
     if (event.node) {
-      console.log(event.node)
-      console.log('id click ', event.node.dataObj.id)
-      //เชค selectDepartment สามารถเลือกหน่วยงานได้หรือไม่
-      // if (this.selectDepartment) {
-      //   event.node.dataObj.type = 'S'
-      //   if (event.node.expandedIcon === 'fa-user') {
-      //     event.node.dataObj.type = 'U'
-      //   }
-      //   this.onselectData.emit(event.node.dataObj)
-      // } else {
-      //   if (event.node.expandedIcon === 'fa-user') {
-      //     this.onselectData.emit(event.node.dataObj)
-      //   } else {
-      //     if (this.aletMsgTo) {
-      //       this.msgTo.emit({
-      //         severity: 'warn',
-      //         summary: 'เพิ่มได้เฉพาะผู้ใช้งานเท่านั้น',
-      //         detail: event.node.label,
-      //       })
-      //     } else {
-      //       this.msgs = [];
-      //       this.msgs.push(
-      //         {
-      //           severity: 'warn',
-      //           summary: 'เพิ่มได้เฉพาะผู้ใช้งานเท่านั้น',
-      //           detail: event.node.label,
-      //         },
-      //       );
-      //     }
-      //   }
-      // }
-      //เชค selectDepartment สามารถเลือกหน่วยงานได้หรือไม่
-      // console.log(event.node.dataObj)
       if (event.node.expandedIcon === 'fa-th-large' || event.node.expandedIcon === 'fa-tasks') {
         this.msgs.push(
           {
@@ -157,7 +112,6 @@ export class DialogListFolderComponent implements OnInit {
           });
       }
       if (event.node.expandedIcon === 'fa-folder-o') {
-        //  this.dialogRef.close(event.node.dataObj); 
         this._folderService
           .getFoldersWithAuth(event.node.data)
           .subscribe((response: Array<any>) => {
@@ -173,15 +127,13 @@ export class DialogListFolderComponent implements OnInit {
                     severity: 'warn',
                     summary: 'ที่เก็บเอกสารนี้เป็นที่อยู่ของเอกสาร ณ ปัจจุบันแล้ว',
                     // detail: event.node.label,
-                  });
+                  })
               } else {
                 this.dialogRef.close(event.node.dataObj);
               }
             }
           })
       }
-
-
     }
   }
 

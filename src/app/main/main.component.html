@@ -25,11 +25,6 @@
                 <span hide show-gt-md>{{appNameEng}}</span>
             </div>
             <span hide show-gt-md flex style="padding-left: 1rem;"><b>{{archiveHeader}}</b></span>
-            <!-- <button md-icon-button [mdMenuTriggerFor]="notificationsMenu" [style.background]="'#f44336'">
-                <td-notification-count [notifications]="10">
-                <md-icon>notifications</md-icon>
-                </td-notification-count>
-            </button> -->
             <button hide show-gt-md md-icon-button [mdMenuTriggerFor]="personProfiles" [style.background]="'#4470b6'"
                 title="{{userProfile.fullName}}">
                 <md-icon>person</md-icon>
@@ -92,24 +87,6 @@
                     ออกจากระบบ
                 </button>
             </div>
-            <!-- <md-menu #notificationsMenu="mdMenu">
-                <td-menu>
-                    <div td-menu-header class="md-subhead">Notifications</div>
-                    <md-nav-list dense>
-                        <template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
-                            <a md-list-item>
-                                <md-icon md-list-avatar>today</md-icon>
-                                <h4 md-line><span class="text-wrap">หนังสือเข้า : หน่วยงานพัฒนาสังคมและการศึกษาภายในองค์กร</span></h4>
-                                <p md-line>22 minutes ago</p>
-                            </a>
-                            <md-divider *ngIf="!last"></md-divider>
-                        </template>
-                    </md-nav-list>
-                    <button md-button color="accent" td-menu-footer>
-                            See All Notifications
-                    </button>
-                </td-menu>
-            </md-menu> -->
             <span hide show-gt-md>
                 <span style="margin-right: 20px; display: grid;">
                     <span style="font-size: 15px"> {{userProfile.fullName}} </span>

@@ -28,7 +28,7 @@ export class SarabanReserveContentService {
   getSarabanReserveContents(folderId: number, dateBegin: string, dateEnd: string): Observable<SarabanReserveContent[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=100&sort=orderNo&dir=desc'))
+      params.set('q', this.pxService.encrypt('version=1.0&offset=0&limit=100&sort=reserveContentNoContentNumber&dir=desc'))
       this._options.search = params
       return this._http.get(this._apiUrl + '/' + folderId + '/' + dateBegin + '/' + dateEnd, this._options)      
         .map((response: Response) => {
@@ -70,7 +70,7 @@ export class SarabanReserveContentService {
   getListByUser(folderId: number): Observable<SarabanReserveContent[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&sort=orderNo&dir=desc'))
+      params.set('q', this.pxService.encrypt('version=1.0&sort=reserveContentNoContentNumber&dir=desc'))
       this._options.search = params
       return this._http.get(this._apiUrl + '/user/' + folderId, this._options)
         .map((response: Response) => {
@@ -84,7 +84,7 @@ export class SarabanReserveContentService {
   getListCanceled(folderId: number): Observable<SarabanReserveContent[]> {
     if (environment.production) {
       let params = new URLSearchParams()
-      params.set('q', this.pxService.encrypt('version=1.0&sort=orderNo&dir=desc'))
+      params.set('q', this.pxService.encrypt('version=1.0&sort=reserveContentNoContentNumber&dir=desc'))
       this._options.search = params
       return this._http.get(this._apiUrl + '/canceled/' + folderId, this._options)
         .map((response: Response) => {
