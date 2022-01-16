@@ -10,8 +10,8 @@ export const environment = {
   reportUser: 'jasperadmin',
   reportPass: 'jasperadmin',
   //ng build --prod -bh /DMSC/
-  apiServer: 'http://192.168.200.110:8080',
-  apiName: '/dmscService/api',
+  apiServer: 'http://localhost:8080',
+  apiName: '/pxservice-px8/api',
   plugIn: 'http://192.168.200.110:82',
   url: 'http://192.168.200.110/DMSC#',
   DMS: false
