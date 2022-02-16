@@ -22,6 +22,23 @@ export class UploadFileAttachComponent implements OnInit {
   @Input() fileType: string = ''
   @Output('msgs') msgs = new EventEmitter()
   @Output('saveUploadfile') saveUploadfile = new EventEmitter()
+
+  readonly allowedMimeType: any = [
+    'image/png',
+    'image/jpeg',
+    'image/tiff',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'compress/zip',
+    'compress/rar',
+    'compress/7z'
+  ];
+
   constructor(
     private _pxService: PxService,
     private _location: Location,

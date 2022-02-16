@@ -37,5 +37,5 @@
         </div>
     </label>
     <!-- [accept]="isCheck ? 'image/*' : '' "  -->
-    <input type="file" #file ng2FileSelect [uploader]="uploader" [disabled]="isAttach" id="uploader-input" style="display:none" (change)="checkTypeFile()" [accept]="isCheck ? 'image/*' : '' " />
+    <input type="file" #file ng2FileSelect [uploader]="uploader" [accept]="allowedMimeType.toString()" [disabled]="isAttach" id="uploader-input" style="display:none" (change)="checkTypeFile()" [accept]="isCheck ? 'image/*' : '' " />
 </div>

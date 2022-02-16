@@ -62,6 +62,22 @@ export class FileAttachComponent implements OnInit {
     { id: 1, name: 'ปกติ' }, { id: 2, name: 'ลับ' }, { id: 3, name: 'ลับมาก' }, { id: 4, name: 'ลับที่สุด' }
   ]
 
+  readonly allowedMimeType: any = [
+    'image/png',
+    'image/jpeg',
+    'image/tiff',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'compress/zip',
+    'compress/rar',
+    'compress/7z'
+  ];
+
   constructor(
     private _pxService: PxService,
     private _folderService: FolderService,

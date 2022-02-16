@@ -50,7 +50,7 @@ export class FileAttachSarabanComponent implements OnInit {
     { label: 'ลับมาก', value: 3 },
     { label: 'ลับที่สุด', value: 4 }
   ]
-  allowedMimeType: any = [
+  readonly allowedMimeType: any = [
     'image/png',
     'image/jpeg',
     'image/tiff',
@@ -61,7 +61,9 @@ export class FileAttachSarabanComponent implements OnInit {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'application/vnd.ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-
+    'compress/zip',
+    'compress/rar',
+    'compress/7z'
   ];
   // auth: { label: string, auth: boolean }[] = [
   //   { label: 'dl', auth: true },

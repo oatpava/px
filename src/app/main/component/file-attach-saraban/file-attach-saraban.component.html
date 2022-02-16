@@ -61,7 +61,7 @@
             <button md-icon-button title="นำเข้าไฟล์เอกสาร" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
             <span>วางเอกสารแนบ</span>
             <span>(drag & drop files)</span>
-            <input type="file" ng2FileSelect #file [uploader]="uploader" (change)="add()" style="display:none;" [accept]="allowedMimeType.toString()">
+            <input type="file" ng2FileSelect #file [uploader]="uploader" [accept]="allowedMimeType.toString()" (change)="add()" style="display:none;">
         </div>
     </div>
     <div *ngIf="fileAttachRemoved.length > 0" style="padding-top:1rem;">
@@ -87,7 +87,7 @@
             </md-select>
             <button *ngIf="!item.uploaded" md-icon-button title="นำเข้าไฟล์เอกสารแก้ไข" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
             <button *ngIf="item.uploaded" md-icon-button title="มีการแก้ไขเอกสาร" disabled><md-icon>playlist_add_check</md-icon></button>
-            <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" (change)="update(item ,i)" style="display:none" [accept]="allowedMimeType.toString()">
+            <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" [accept]="allowedMimeType.toString()" (change)="update(item ,i)" style="display:none" >
         </md-list-item>
         <md-divider md-inset></md-divider>
     </md-list>
