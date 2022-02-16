@@ -25,7 +25,7 @@ export class DialogSettingSearchFilterComponent implements OnInit {
       { selected: true, name: "ถึง" },
       { selected: true, name: "เรื่อง" },
       { selected: true, name: "หมายเหตุ" },
-      { selected: true, name: "ผู้รับผิดชอบ" },
+      { selected: true, name: "ผู้บันทึก" },
       { selected: true, name: "ข้อความในเอกสารแนบ" },
       { selected: true, name: "ไปรษณีย์ลงทะเบียน" }
     ]

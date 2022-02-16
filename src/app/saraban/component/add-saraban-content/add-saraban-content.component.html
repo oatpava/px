@@ -143,7 +143,7 @@
                         <md-textarea rows="5" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
                         </md-textarea>
                         <div layout="row" flex-gt-md="100" layout-align="left start" style="margin-top:1rem; margin-bottom: 2rem; align-items: center;">
-                            <span flex="50"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                            <span flex="50"><b>ผู้บันทึก : </b>{{sarabanContent.wfContentOwnername}}</span>
                             <div flex="50" layout="row" layout-align="space-between start" style="align-items: center;"> 
                                 <!-- <md-checkbox color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()" [disabled]="disabledHardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox> -->
                                 <md-checkbox *ngIf="!disabledHardCopyRecieved" color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()">ได้รับเอกสารตัวจริงแล้ว</md-checkbox>
@@ -231,7 +231,7 @@
                                 <span class="show-enter"><b>หมายเหตุ : </b>{{sarabanContent.wfContentDescription}}</span>
                             </div>
                             <div style="margin-top:1rem;" layout="row">
-                                <span style="width:50%;"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
+                                <span style="width:50%;"><b>ผู้บันทึก : </b>{{sarabanContent.wfContentOwnername}}</span>
                                 <span *ngIf="!hardCopyRecieved"><b>รอเอกสารตัวจริง</b></span>
                                 <span *ngIf="hardCopyRecieved"><b>ได้รับเอกสารตัวจริงแล้ว</b> ({{sarabanContent.wfContentDate01.substr(0, 10)}} {{sarabanContent.wfContentDate01.substr(11, 5)}})</span>
                             </div>

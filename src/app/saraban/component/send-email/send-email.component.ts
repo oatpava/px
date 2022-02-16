@@ -119,7 +119,7 @@ export class SendEmailComponent implements OnInit {
       "เอกสารส่วนตัว" + "\n" +
       "เรื่อง" + '\t\t\t' + ": " + myWork.wfContentTitle + "\n" +
       "วันที่" + '\t\t\t' + ": " + ("" + myWork.wfContentContentDate).substr(0, 10) + "\n" +
-      "ผู้รับผิดชอบ" + '\t' + ": " + myWork.wfContentOwnername;
+      "ผู้บันทึก" + '\t' + ": " + myWork.wfContentOwnername;
     this.contentEmailTitle = '[เอกสารส่วนตัว] ' + myWork.wfContentTitle;
   }
 
