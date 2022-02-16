@@ -365,14 +365,14 @@ export class InboxAuthComponent implements OnInit {
         if (addedNum > 0) {
           this.msgs.push({
             severity: 'success',
-            summary: 'กำหนดสิทธิ์หนังสือเข้าสำเร็จ',
+            summary: 'กำหนดสิทธิ์หนังสือเข้า (inbox) สำเร็จ',
             detail: 'คุณได้ทำการกำหนดสิทธิ์หนังสือเข้า ' + addedNum + ' รายการ'
           })
         }
         if (removedNum > 0) {
           this.msgs.push({
             severity: 'success',
-            summary: 'แก้ไขสิทธิ์หนังสือเข้าสำเร็จ',
+            summary: 'แก้ไขสิทธิ์หนังสือเข้า (inbox) สำเร็จ',
             detail: 'คุณได้ทำการแก้ไขสิทธิ์หนังสือเข้า ' + removedNum + ' รายการ'
           })
         }

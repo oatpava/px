@@ -30,7 +30,7 @@ export class InboxComponent implements OnInit {
   listMenu: string = 'menu'
 
   @ViewChild('dt') dt: DataTable
-  path: string[] = ['หนังสือเข้า', 'หนังสือเข้า / ผลการค้นหา']
+  path: string[] = ['หนังสือเข้า (inbox)', 'หนังสือเข้า (inbox) / ผลการค้นหา']
   inboxAssign: { label: string, value: number, id: number, isUser: boolean }[]
   index: number = 0
   inboxs: Inbox[][][]//[index][searched][data] //[2..][2][0..]
@@ -289,11 +289,11 @@ export class InboxComponent implements OnInit {
     this._paramSarabanService.inboxId = inbox.id
     this._paramSarabanService.inboxFlag = { open: inbox.inboxOpenFlag, action: inbox.inboxActionFlag, finish: inbox.inboxFinishFlag }
     this._paramSarabanService.folderId = null
-    this._paramSarabanService.folderName = "หนังสือเข้า"
+    this._paramSarabanService.folderName = "หนังสือเข้า (inbox)"
     this._paramSarabanService.folderIcon = "move_to_inbox"
-    this._paramSarabanService.pathOld = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
-    this._paramSarabanService.path = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
-    this._paramSarabanService.inboxPath = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.pathOld = 'หนังสือเข้า (inbox): ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.path = 'หนังสือเข้า (inbox): ' + this.inboxAssign[this.index].label + searchedPath
+    this._paramSarabanService.inboxPath = 'หนังสือเข้า (inbox): ' + this.inboxAssign[this.index].label + searchedPath
     this._paramSarabanService.mwp = {
       fromMwp: true,
       isUser: this.inboxAssign[this.index].isUser,

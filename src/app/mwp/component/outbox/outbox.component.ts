@@ -37,7 +37,7 @@ export class OutboxComponent implements OnInit {
   menuOver: boolean = false
   menus: Menu[] = []
   msgs: Message[] = []
-  path: string[] = ['หนังสือออก', 'หนังสือออก / ผลการค้นหา']
+  path: string[] = ['หนังสือออก (outbox)', 'หนังสือออก (outbox) / ผลการค้นหา']
 
   @ViewChild('dt') dt: DataTable
   datas: Outbox[][]
@@ -220,7 +220,7 @@ export class OutboxComponent implements OnInit {
     this._paramSarabanService.mode = "show"
     this._paramSarabanService.sarabanContentId = outbox.linkId2
     this._paramSarabanService.menuType = "outbox"
-    this._paramSarabanService.folderName = "หนังสือออก"
+    this._paramSarabanService.folderName = "หนังสือออก (outbox)"
     this._paramSarabanService.folderIcon = "assignment_return"
     this._paramSarabanService.pathOld = this.path[this.searched]
     this._paramSarabanService.path = this.path[this.searched]

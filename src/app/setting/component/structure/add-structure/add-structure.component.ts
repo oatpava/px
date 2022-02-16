@@ -90,7 +90,7 @@ export class AddStructureComponent implements OnInit {
   createStructureFolders(structure: Structure) {
     let structureFolder = new StructureFolder({
       structureId: structure.id,
-      structureFolderName: 'กล่องหนังสือเข้า',
+      structureFolderName: 'กล่องหนังสือเข้า (inbox)',
       structureFolderType: 'I',
       structureFolderDetail: 'หนังสือเข้าของ ' + structure.name
     })
@@ -99,7 +99,7 @@ export class AddStructureComponent implements OnInit {
       .subscribe(response => {
         structureFolder = new StructureFolder({
           structureId: structure.id,
-          structureFolderName: 'กล่องหนังสือออก',
+          structureFolderName: 'กล่องหนังสือออก (outbox)',
           structureFolderType: 'O',
           structureFolderDetail: 'หนังสือออกของ ' + structure.name
         })
