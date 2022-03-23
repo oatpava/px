@@ -88,7 +88,7 @@ export class ParamSarabanComponent implements OnInit {
     let child: TreeNode[] = []
     let parentKey = this._paramSarabanService.convertParentKey(structure.parentKey)
     return {
-      label: structure.name + ' (' + structure.shortName + ')',
+      label: (!structure.shortName || structure.shortName.length == 0) ? structure.name : structure.name + ' (' + structure.shortName + ')',
       icon: "fa-tag",
       leaf: true,
       data: { id: structure.id, userType: 1, isUser: false, parentKey: parentKey },
@@ -96,7 +96,7 @@ export class ParamSarabanComponent implements OnInit {
       children: child
     }
   }
-  
+
   genNode_PG(user: any, parentNode: TreeNode): TreeNode {
     let child: TreeNode[] = []
     let parentKey = this._paramSarabanService.convertParentKey(user.structure.parentKey)
@@ -132,7 +132,7 @@ export class ParamSarabanComponent implements OnInit {
             let tmp = this.genExternalParentNode(structure, node)
             node.children.push(tmp)
             this._paramSarabanService.externalTree_filter.push(tmp)
-          })         
+          })
           node.children.forEach(childNode => {
             this.getExternalStructuresTreeRecursive(childNode)
           })
@@ -143,7 +143,7 @@ export class ParamSarabanComponent implements OnInit {
   genExternalParentNode(structure: any, parentNode: TreeNode): TreeNode {
     let child: TreeNode[] = []
     return {
-      label: structure.name + ' (' + structure.shortName + ')',
+      label: (!structure.shortName || structure.shortName.length == 0) ? structure.name : structure.name + ' (' + structure.shortName + ')',
       icon: "fa-external-link-square",
       leaf: false,
       data: { id: structure.id, userType: 3, name: structure.name, profile: structure },
