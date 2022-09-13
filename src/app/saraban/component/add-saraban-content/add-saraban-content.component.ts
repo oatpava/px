@@ -939,12 +939,12 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   send(sarabanContent: SarabanContent) {
-    if (this.numFileAttach == 0) {
-      let dialogRef = this._dialog.open(DialogWarningComponent)
-      dialogRef.componentInstance.header = "แจ้งเตือน"
-      dialogRef.componentInstance.message = "ไม่สามารถส่งหนังสือ เนื่องจากยังไม่ได้แนบเอกสาร"
-      dialogRef.componentInstance.confirmation = false
-    } else {
+    // if (this.numFileAttach == 0) {
+    //   let dialogRef = this._dialog.open(DialogWarningComponent)
+    //   dialogRef.componentInstance.header = "แจ้งเตือน"
+    //   dialogRef.componentInstance.message = "ไม่สามารถส่งหนังสือ เนื่องจากยังไม่ได้แนบเอกสาร"
+    //   dialogRef.componentInstance.confirmation = false
+    // } else {
       let dialogRef = (window.innerWidth < 960) ?
         this._dialog.open(SendSarabanContentComponent) :
         this._dialog.open(SendSarabanContentComponent, {
@@ -988,7 +988,7 @@ export class AddSarabanContentComponent implements OnInit {
 
         }
       })
-    }
+    // }
   }
 
   reply(sarabanContent: SarabanContent) {
