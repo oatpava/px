@@ -131,7 +131,7 @@ export class UserComponent implements OnInit {
               this.toggleEditUser()
               this.msgs = []
               this.msgs.push({
-                severity: 'error',
+                severity: 'success',
                 summary: 'เพิ่มบัญชีผู้ใช้สำเร็จ',
                 detail: 'คุณได้ทำการเพิ่มบัญชีผู้ใช้ ' + createUser.name,
               })
