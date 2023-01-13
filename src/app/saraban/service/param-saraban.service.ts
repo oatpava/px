@@ -78,6 +78,19 @@ export class ParamSarabanService {
   userProfileIndex: number
   lastSendTo: TreeNode[] = []
 
+  readonly allowedMimeType: any = [
+    'image/png',
+    'image/jpeg',
+    'image/tiff',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  ]
+
   setMode(mode: string) {
     this.mode = mode
   }

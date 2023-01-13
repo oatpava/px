@@ -36,6 +36,5 @@
             <span >Drop Files Here</span>
         </div>
     </label>
-    <!-- [accept]="isCheck ? 'image/*' : '' "  -->
-    <input type="file" #file ng2FileSelect [uploader]="uploader" [disabled]="isAttach" id="uploader-input" style="display:none" (change)="checkTypeFile()" [accept]="isCheck ? 'image/*' : '' " />
+    <input type="file" #file ng2FileSelect [uploader]="uploader" [disabled]="isAttach" id="uploader-input" style="display:none" (change)="checkTypeFile()" [accept]="isCheck ? 'image/*' : 'allowedMimeType.toString()' " />
 </div>

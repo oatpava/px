@@ -1,11 +1,8 @@
-import { Component, OnInit, Input, Directive, Output, EventEmitter } from '@angular/core'
-import { FormControl } from '@angular/forms'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { PxService, } from '../../../main/px.service'
-import { FileUploader, FileSelectDirective, FileDropDirective, } from 'ng2-file-upload'
-import * as FileSaver from 'file-saver'
-import { Location } from '@angular/common'
-
+import { FileUploader } from 'ng2-file-upload'
 import { FileAttach } from '../../../main/model/file-attach.model'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'app-upload-file-attach',
@@ -23,14 +20,14 @@ export class UploadFileAttachComponent implements OnInit {
   @Input() fileType: string = ''
   @Output('msgs') msgs = new EventEmitter()
   @Output('saveUploadfile') saveUploadfile = new EventEmitter()
+  readonly allowedMimeType = this._paramSarabanService.allowedMimeType
+
   constructor(
     private _pxService: PxService,
-    private _location: Location,
+    private _paramSarabanService: ParamSarabanService,
   ) { }
 
   ngOnInit() {
-    console.log(this.isCheck)
-    console.log(this.uploader)
   }
 
   deleteFileAttach(deleteFileAttach: FileAttach) {

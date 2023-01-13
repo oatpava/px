@@ -138,10 +138,11 @@
         </div>
 
     </label>
-    <input type="file" #file ng2FileSelect (change)="addFileAttach($event)" [uploader]="uploader"
+    <input type="file" #file ng2FileSelect (change)="addFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"
         [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
 
-    <!--<input type="file " #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [disabled]="isAttach " id="uploader-input " style="display:none " multiple />-->
-    <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader"
+    <!--<input type="file " #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"> 
+        [disabled]="isAttach " id="uploader-input " style="display:none " multiple />-->
+    <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()">
         [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
 </div>

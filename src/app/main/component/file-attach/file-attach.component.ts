@@ -64,6 +64,8 @@ export class FileAttachComponent implements OnInit {
     { id: 1, name: 'ปกติ' }, { id: 2, name: 'ลับ' }, { id: 3, name: 'ลับมาก' }, { id: 4, name: 'ลับที่สุด' }
   ]
 
+  readonly allowedMimeType = this._paramSarabanService.allowedMimeType
+
   constructor(
     private _pxService: PxService,
     private _folderService: FolderService,
