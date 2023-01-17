@@ -58,8 +58,8 @@
             </md-list-item>
         </md-list>
         <div layout="column" layout-align="center center">
-            <button md-icon-button title="นำเข้าไฟล์เอกสาร" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
-            <span>วางเอกสารแนบ</span>
+            <button md-icon-button title="นำเข้าไฟลล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
+            <span>วางเอกสารแนบ ขนาดไม่เกิน {{fileSizeLimit}} MB</span>
             <span>(drag & drop files)</span>
             <input type="file" ng2FileSelect #file [uploader]="uploader" (change)="add()" style="display:none;" [accept]="allowedMimeType.toString()">
         </div>
@@ -85,7 +85,7 @@
             <md-select placeholder="ชั้นความลับ" [(ngModel)]="item.secrets" (ngModelChange)="edit(item ,i)" [disabled]="!auth[item.secrets] || !item.owner">
                 <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
             </md-select>
-            <button *ngIf="!item.uploaded" md-icon-button title="นำเข้าไฟล์เอกสารแก้ไข" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
+            <button *ngIf="!item.uploaded" md-icon-button title="นำเข้าไฟล์เอกสารแก้ไข ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file2.click();" [disabled]="!auth[item.secrets] || !item.owner"><i class="material-icons">file_upload</i></button>
             <button *ngIf="item.uploaded" md-icon-button title="มีการแก้ไขเอกสาร" disabled><md-icon>playlist_add_check</md-icon></button>
             <input type="file" ng2FileSelect #file2 [uploader]="uploaderUpdate" (change)="update(item ,i)" style="display:none" [accept]="allowedMimeType.toString()">
         </md-list-item>

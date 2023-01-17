@@ -35,10 +35,18 @@ export class SarabanFileAttachComponent implements OnInit {
   fileAttachs: any[] = []
   fileAttachRemoved: any[] = []
   uploader: FileUploader = new FileUploader({})
+  // uploader: FileUploader = new FileUploader({ 
+  //   allowedMimeType: this._paramSarabanService.allowedMimeType,
+  //   maxFileSize: this._paramSarabanService.fileSizeLimitByte
+  // })
   secrets: number[] = []
   types: String[] = []
   editMode: boolean = false
   uploaderUpdate: FileUploader = new FileUploader({})
+  // uploaderUpdate: FileUploader = new FileUploader({ 
+  //   allowedMimeType: this._paramSarabanService.allowedMimeType,
+  //   maxFileSize: this._paramSarabanService.fileSizeLimitByte
+  // })
   uploaderUpdateIndex: number
 
   deleted: boolean = false

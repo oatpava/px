@@ -53,6 +53,8 @@ export class FileAttachSarabanComponent implements OnInit {
     { label: 'ลับที่สุด', value: 4 }
   ]
   readonly allowedMimeType = this._paramSarabanService.allowedMimeType
+  readonly fileSizeLimit = this._paramSarabanService.fileSizeLimit
+  readonly fileSizeLimitByte = this._paramSarabanService.fileSizeLimit * 1024 * 1024
   // auth: { label: string, auth: boolean }[] = [
   //   { label: 'dl', auth: true },
   //   { label: 's1', auth: true },
@@ -80,32 +82,76 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   add() {
-    let last: number = this.uploader.queue.length - 1
-    //console.log("addFile", this.uploader.queue[last].file)
-    let name: string = this.uploader.queue[last].file.name
-    let typePos: number = name.lastIndexOf(".")
-    //name = name.substr(name.lastIndexOf("."))
-    //console.log("type", name)
-    //console.log("addFile", this.uploader)
-    this.secret.push(1)
-    this.type.push(name.substr(typePos))
-    this.uploader.queue[last].file.name = name.substr(0, typePos)
-    this.addFileAttach.emit(true)
-    //console.log(this.type[last])
+    // console.log("add", this.uploader.queue)
+    const last: number = this.uploader.queue.length - 1
+    const file: any = this.uploader.queue[last].file
+    const fileTypePos: string = file.name.lastIndexOf('.')
+    const fileType: string = file.name.substr(fileTypePos)
+
+    const isFileTypeValid = this.isFileTypeValid(file.type)
+    const isFileSizeValid = this.isFileSizeValid(file.size)
+    if (isFileTypeValid && isFileSizeValid) {
+      this.secret.push(1)
+      this.type.push(fileType)
+      this.uploader.queue[last].file.name = file.name.substr(0, fileTypePos)
+      this.addFileAttach.emit(true)
+    } else {
+      this.uploader.queue.pop()
+      const msg1 = !isFileTypeValid ? `ไม่อนุญาติให้แนบเอกสารประเภท ${fileType}` : null
+      const msg2 = !isFileSizeValid ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+      const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
 
   addByDrop(event) {
-    let num: number = this.uploader.queue.length - event.length
-    //console.log(event.length)//cant use foreach
-    for (let i = 0; i < event.length; i++) {
-      let index: number = num + i
-      let name: string = this.uploader.queue[index].file.name
-      let typePos: number = name.lastIndexOf(".")
+    // console.log("addByDrop", this.uploader.queue)
+    let invalidFileTypes: string[] = []
+    let invalidFileSize: boolean = false
+    let invalidIndexs: number[] = []
+
+    const num: number = this.uploader.queue.length - event.length
+    let length: number = event.length
+    for (let i = 0; i < length; i++) {
+      const index: number = num + i
+      const file: any = this.uploader.queue[index].file
+      const fileTypePos: string = file.name.lastIndexOf('.')
+      const fileType: string = file.name.substr(fileTypePos)
+
+      const isFileTypeValid = this.isFileTypeValid(file.type)
+      const isFileSizeValid = this.isFileSizeValid(file.size)
       this.secret.push(1)
-      this.type.push(name.substr(typePos))
-      this.uploader.queue[index].file.name = name.substr(0, typePos)
+      this.type.push(fileType)
+      this.uploader.queue[index].file.name = file.name.substr(0, fileTypePos)
+
+      if (isFileTypeValid && isFileSizeValid) {
+        this.addFileAttach.emit(true)
+      } else {
+        invalidIndexs.push(index)
+        if (!isFileTypeValid) {
+          if (invalidFileTypes.indexOf(fileType) == -1) invalidFileTypes.push(fileType)
+        } else invalidFileSize = true
+      }
     }
-    this.addFileAttach.emit(true)
+
+    for (let i = invalidIndexs.length - 1; i >= 0; i--) {
+      this.secret.splice(invalidIndexs[i], 1)
+      this.type.splice(invalidIndexs[i], 1)
+      this.uploader.queue.splice(invalidIndexs[i], 1)
+    }
+
+    const msg1 = invalidFileTypes.length != 0 ? `ไม่อนุญาติให้แนบเอกสารประเภท ${this.getListString(invalidFileTypes)}` : null
+    const msg2 = invalidFileSize ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+    const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+    if (msg) {
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
 
   selectSecret(value: number, index: number) {
@@ -194,28 +240,38 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   update(fileAttach: any, index: number) {
-    //console.log("uploadderUpdateIndex", this.uploaderUpdateIndex)
-    //console.log("uploadderUpdate ", this.uploaderUpdate.queue[this.uploaderUpdateIndex].file)
-    let last: number = this.uploaderUpdate.queue.length - 1
-    let name: string = this.uploaderUpdate.queue[last].file.name
-    let typePos: number = name.lastIndexOf(".")
-    let uploadedFileAttach = new FileAttach(
-      {
-        //fileAttachName: this.uploaderUpdate.queue[last].file.name,
-        fileAttachName: name.substr(0, typePos),
+    // console.log("update", this.uploader.queue)
+    const last: number = this.uploaderUpdate.queue.length - 1
+    const file: any = this.uploaderUpdate.queue[last].file
+    const fileTypePos: string = file.name.lastIndexOf('.')
+    const fileType: string = file.name.substr(fileTypePos)
+
+    const isFileTypeValid = this.isFileTypeValid(file.type)
+    const isFileSizeValid = this.isFileSizeValid(file.size)
+    if (isFileTypeValid && isFileSizeValid) {
+      const uploadedFileAttach = new FileAttach({
+        fileAttachName: file.name.substr(0, fileTypePos),
         linkType: 'dms',
         linkId: fileAttach.linkId,
         referenceId: fileAttach.id,
         secrets: fileAttach.secrets
       })
-    this.fileAttachs[index] = uploadedFileAttach
-    this.fileAttachs[index].type = name.substr(typePos)
-    this.fileAttachs[index].uploaded = true
-    this.fileAttachs[index].uploadIndex = this.uploaderUpdateIndex
-    this.editFileAttach.emit(1)
-    this.uploadFileAttach.emit()
-    //console.log('uploadFileattach', this.fileAttachs[index])
-
+      this.fileAttachs[index] = uploadedFileAttach
+      this.fileAttachs[index].type = fileType
+      this.fileAttachs[index].uploaded = true
+      this.fileAttachs[index].uploadIndex = this.uploaderUpdateIndex
+      this.editFileAttach.emit(1)
+      this.uploadFileAttach.emit()
+    } else {
+      this.uploaderUpdate.queue.pop()
+      const msg1 = !isFileTypeValid ? `ไม่อนุญาติให้แนบเอกสารประเภท ${fileType}` : null
+      const msg2 = !isFileSizeValid ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+      const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
 
   ngAfterViewInit() {
@@ -351,9 +407,24 @@ export class FileAttachSarabanComponent implements OnInit {
   //   // }
   //   ///////
 
+  private isFileTypeValid(mimeType: string) {
+    return this._paramSarabanService.allowedMimeType.includes(mimeType)
+  }
+
+  private isFileSizeValid(fileSize: number) {
+    return fileSize <= this.fileSizeLimitByte
+  }
+
+  private getListString(stringArr: string[]): string {
+    if (!stringArr || stringArr.length == 0) {
+      return ''
+    } else {
+      let tmp: string = stringArr[0]
+      for (let i = 1; i < stringArr.length; i++) {
+        tmp = tmp + ', ' + stringArr[i]
+      }
+      return tmp
+    }
+  }
+
 }
-
-
-
-
-
