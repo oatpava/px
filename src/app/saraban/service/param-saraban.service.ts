@@ -90,6 +90,7 @@ export class ParamSarabanService {
     'application/vnd.ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   ]
+  fileSizeLimit: number
 
   setMode(mode: string) {
     this.mode = mode

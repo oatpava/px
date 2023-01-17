@@ -125,6 +125,7 @@ export class MainComponent implements OnInit {
     //   this._loginService
     //     .changeSetapiUrl()
     // }
+    this.getParam()
     this.getSarabanParam()
     this.checkAD()
   }
@@ -151,9 +152,9 @@ export class MainComponent implements OnInit {
     this._paramSarabanService.folder = null
     let param = {}
     switch (moduleId) {
-      case (2): param = { 
+      case (2): param = {
         parentId: 0,
-        path: 'ทะเบียนส่วนกลาง' 
+        path: 'ทะเบียนส่วนกลาง'
       }; break;
       case (3): param = {
         parentId: 1,
@@ -314,6 +315,17 @@ export class MainComponent implements OnInit {
         }
       })
     }
+  }
+
+  getParam() {
+    this._settingService.getParams('FILE_SIZE_LIMIT')
+      .subscribe(response => {
+        if (response != null && response.paramValue && !isNaN(+response.paramValue)) {
+          this._paramSarabanService.fileSizeLimit = (+response.paramValue)
+        } else {
+          this._paramSarabanService.fileSizeLimit = 100
+        }
+      })
   }
 
   getSarabanParam() {
