@@ -143,6 +143,6 @@
 
     <!--<input type="file " #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"> 
         [disabled]="isAttach " id="uploader-input " style="display:none " multiple />-->
-    <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()">
+    <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"
         [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
 </div>
