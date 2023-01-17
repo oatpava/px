@@ -17,6 +17,7 @@ import { DeleteDialogComponent } from '../../../main/component/delete-dialog/del
 import * as es6printJS from "print-js";
 import { DialogViewImageComponent } from '../file-attach-saraban/dialog-view-image/dialog-view-image.component'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
+import { DialogWarningComponent } from '../../../shared'
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -65,6 +66,8 @@ export class FileAttachComponent implements OnInit {
   ]
 
   readonly allowedMimeType = this._paramSarabanService.allowedMimeType
+  readonly fileSizeLimit = this._paramSarabanService.fileSizeLimit
+  readonly fileSizeLimitByte = this._paramSarabanService.fileSizeLimit * 1024 * 1024
 
   constructor(
     private _pxService: PxService,
@@ -150,7 +153,7 @@ export class FileAttachComponent implements OnInit {
   }
 
   downloadFile(fileAttach: FileAttach) {
-  
+
     let tmp = new FileAttach(fileAttach)
     // this._pxService
     //   .downloadFileAttach(tmp)
@@ -164,7 +167,7 @@ export class FileAttachComponent implements OnInit {
 
   }
 
-  view(fileAttach: any ,staus:any) {
+  view(fileAttach: any, staus: any) {
 
 
     console.log('view att', fileAttach.url)
@@ -233,32 +236,32 @@ export class FileAttachComponent implements OnInit {
 
   editFile2(fileAttach: FileAttach, staus: number) {
 
-    console.log('fileAttach - ',fileAttach)
-    console.log('staus - ',staus)
-    console.log('this.authEditDocFile - ',this.authEditDocFile)
+    console.log('fileAttach - ', fileAttach)
+    console.log('staus - ', staus)
+    console.log('this.authEditDocFile - ', this.authEditDocFile)
 
 
 
 
     let temp = environment.plugIn
-      console.log('temp url', temp)
-      let auth = 0
-      if (this.authEditDocFile ) {
-        auth = 1
-      }
-      // let url = 'http://192.168.1.8/scan/?'
-      let url = temp + '/scan/?'
-      let mode = 'view'
+    console.log('temp url', temp)
+    let auth = 0
+    if (this.authEditDocFile) {
+      auth = 1
+    }
+    // let url = 'http://192.168.1.8/scan/?'
+    let url = temp + '/scan/?'
+    let mode = 'view'
 
-      // window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
+    // window.open(url + "mode=" + mode + "&attachId=" + fileAttach.id + "&auth=" + auth, 'scan', "height=600,width=1000")
 
-      this._pxService
+    this._pxService
       .createEmptyData(fileAttach.linkType, fileAttach.linkId, fileAttach.id)
       .subscribe(res => {
         window.open(url + "mode=" + mode + "&linkType=" + fileAttach.linkType + "&fileAttachName=" + fileAttach.fileAttachName
-        + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
-        + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
-        
+          + "&secret=" + fileAttach.secrets + "&documentId=" + fileAttach.linkId + "&urlNoName=" + ''
+          + "&fileAttachId=" + res.id + "&auth=" + auth + "&attachId=" + fileAttach.id, 'scan', "height=600,width=1000")
+
         if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
         const timer = TimerObservable.create(5000, 3000)
         this._paramSarabanService.ScanSubscription = timer.subscribe(t => {
@@ -268,7 +271,7 @@ export class FileAttachComponent implements OnInit {
             this._pxService
               .checkHaveAttach(res.id)
               .subscribe(res2 => {
-      
+
                 if (res2.data == 'true') {
                   this._paramSarabanService.ScanSubscription.unsubscribe()
                   this._pxService
@@ -309,40 +312,99 @@ export class FileAttachComponent implements OnInit {
 
       })
 
-   
- 
+
+
 
 
   }
 
   addFileAttach(data: any) {
-    // console.log('-- addFileAttach --')
-    // console.log('--$event', data)
-    let temp = this.uploader;
-    // console.log('temp', temp.queue[0].file.name)
-    this.addAttachFile.emit(temp.queue[0].file.name)
+    const last: number = this.uploader.queue.length - 1
+    const file: any = this.uploader.queue[last].file
+    const fileTypePos: string = file.name.lastIndexOf('.')
+    const fileType: string = file.name.substr(fileTypePos)
+
+    const isFileTypeValid = this.isFileTypeValid(file.type)
+    const isFileSizeValid = this.isFileSizeValid(file.size)
+    if (isFileTypeValid && isFileSizeValid) {
+      this.addAttachFile.emit(this.uploader.queue[0].file.name)
+    } else {
+      this.uploader.queue.pop()
+      const msg1 = !isFileTypeValid ? `ไม่อนุญาติให้แนบเอกสารประเภท ${fileType}` : null
+      const msg2 = !isFileSizeValid ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+      const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
 
   addByDrop(event) {
-    console.log('event -', event)
-    console.log('this.uploader -', this.uploader)
-    let temp = this.uploader;
-    this.addAttachFile.emit(this.uploader)
+    let invalidFileTypes: string[] = []
+    let invalidFileSize: boolean = false
+    let invalidIndexs: number[] = []
 
+    const num: number = this.uploader.queue.length - event.length
+    let length: number = event.length
+    for (let i = 0; i < length; i++) {
+      const index: number = num + i
+      const file: any = this.uploader.queue[index].file
+      const fileTypePos: string = file.name.lastIndexOf('.')
+      const fileType: string = file.name.substr(fileTypePos)
+
+      const isFileTypeValid = this.isFileTypeValid(file.type)
+      const isFileSizeValid = this.isFileSizeValid(file.size)
+
+      if (isFileTypeValid && isFileSizeValid) {
+        this.addAttachFile.emit(this.uploader)
+      } else {
+        invalidIndexs.push(index)
+        if (!isFileTypeValid) {
+          if (invalidFileTypes.indexOf(fileType) == -1) invalidFileTypes.push(fileType)
+        } else invalidFileSize = true
+      }
+    }
+
+    for (let i = invalidIndexs.length - 1; i >= 0; i--) {
+      this.uploader.queue.splice(invalidIndexs[i], 1)
+    }
+
+    const msg1 = invalidFileTypes.length != 0 ? `ไม่อนุญาติให้แนบเอกสารประเภท ${this.getListString(invalidFileTypes)}` : null
+    const msg2 = invalidFileSize ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+    const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+    if (msg) {
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
 
   updateFileAttach(data: any) {
-    console.log('-- updateFileAttach --')
+    const last: number = this.uploader.queue.length - 1
+    const file: any = this.uploader.queue[last].file
+    const fileTypePos: string = file.name.lastIndexOf('.')
+    const fileType: string = file.name.substr(fileTypePos)
 
-    console.log('this.uploader', this.uploader)
-    this.updateAtt.emit(true)
-    this.editMode = false
-    this.referenceFileAttachId.emit(0)
-    this.fileAttachUpdate = []
-    this.uploader.queue = []
-
-
-
+    const isFileTypeValid = this.isFileTypeValid(file.type)
+    const isFileSizeValid = this.isFileSizeValid(file.size)
+    if (isFileTypeValid && isFileSizeValid) {
+      this.updateAtt.emit(true)
+      this.editMode = false
+      this.referenceFileAttachId.emit(0)
+      this.fileAttachUpdate = []
+      this.uploader.queue = []
+    } else {
+      this.uploader.queue.pop()
+      const msg1 = !isFileTypeValid ? `ไม่อนุญาติให้แนบเอกสารประเภท ${fileType}` : null
+      const msg2 = !isFileSizeValid ? `ขนาดของเอกสารแนบต้องไม่เกิน ${this.fileSizeLimit} MB` : null
+      const msg = (msg1 && msg2) ? `${msg1}\nและ${msg2}` : msg1 ? msg1 : msg2
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = 'แจ้งเตือน'
+      dialogRef.componentInstance.message = msg
+      dialogRef.componentInstance.confirmation = false
+    }
   }
   updateSecrets(data: FileAttach, secrets: any) {
     // console.log('secrets',secrets)
@@ -375,7 +437,7 @@ export class FileAttachComponent implements OnInit {
 
   }
 
-  authDocfileSecrets:number=1
+  authDocfileSecrets: number = 1
   authMenu(folderId: number) {
     this._folderService
       .getMenu(folderId)
@@ -418,5 +480,25 @@ export class FileAttachComponent implements OnInit {
   //   dialogRef.componentInstance.url = fileAttach.url
   //   dialogRef.componentInstance.trimmedName = fileAttach.fileAttachName
   // }
+
+  private isFileTypeValid(mimeType: string) {
+    return this._paramSarabanService.allowedMimeType.includes(mimeType)
+  }
+
+  private isFileSizeValid(fileSize: number) {
+    return fileSize <= this.fileSizeLimitByte
+  }
+
+  private getListString(stringArr: string[]): string {
+    if (!stringArr || stringArr.length == 0) {
+      return ''
+    } else {
+      let tmp: string = stringArr[0]
+      for (let i = 1; i < stringArr.length; i++) {
+        tmp = tmp + ', ' + stringArr[i]
+      }
+      return tmp
+    }
+  }
 
 }

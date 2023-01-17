@@ -122,27 +122,19 @@
     </md-list>
 
     <label for="uploader-input" *ngIf='!editMode'>
-
         <div layout="column" layout-align="center center" flex ng2FileDrop
             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
             (onFileDrop)="addByDrop($event)">
-            <!--<md-icon *ngIf="!hasBaseDropZoneOver && (!uploader?.queue?.length > 0)">cloud_upload</md-icon>
-                    <span *ngIf="!hasBaseDropZoneOver && (!uploader?.queue?.length > 0)">Drop Files Here</span>-->
-            <!--<button md-icon-button [disabled]="!addDocumentForm.form.valid" (click)="file.click()">
-                        -->
-            <button md-icon-button (click)="file.click()" [disabled]="isAttach || !authCreDocFile || checkInCheckOutLockStatus">
-                <md-icon alt="นำเข้าไฟล์">cloud_upload</md-icon>
+            <button md-icon-button title="นำเข้าไฟลล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()" [disabled]="isAttach || !authCreDocFile || checkInCheckOutLockStatus">
+                <i class="material-icons">cloud_upload</i>
             </button>
-            <!--<md-icon>cloud_upload</md-icon>-->
-            <span>วางเอกสาร</span>
+            <span>วางเอกสารแนบ ขนาดไม่เกิน {{fileSizeLimit}} MB</span>
+            <span>(drag & drop files)</span>
         </div>
-
     </label>
     <input type="file" #file ng2FileSelect (change)="addFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"
         [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
 
-    <!--<input type="file " #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"> 
-        [disabled]="isAttach " id="uploader-input " style="display:none " multiple />-->
     <input type="file" #file2 ng2FileSelect (change)="updateFileAttach($event)" [uploader]="uploader" [accept]="allowedMimeType.toString()"
         [disabled]="!authCreDocFile " id="uploader-input " style="display:none " />
 </div>
