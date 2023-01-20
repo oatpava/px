@@ -484,25 +484,32 @@ export class ListSarabanContentComponent implements OnInit {
   }
 
   send(content: SarabanContent) {
-    this._paramSarabanService.isContent = true
-    this._paramSarabanService.sarabanContentId = content.id
-    let dialogRef = this._dialog.open(SendSarabanContentComponent, {
-      width: '65%', height: '90%'
-    })
-    dialogRef.componentInstance.mode = 'send'
-    dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + content.wfContentTitle
-    dialogRef.afterClosed().subscribe(result => {
-      if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
-      if (result) {
-        content.wfContentInt03 = 1
-        if (this._paramSarabanService.msg != null) {
-          this.msgs = []
-          this.msgs.push(this._paramSarabanService.msg)
-          this._paramSarabanService.msg = null
-          setTimeout(() => this.msgs = [], 3000)
+    if (content.numFileAttach == 0) {
+      let dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = "แจ้งเตือน"
+      dialogRef.componentInstance.message = "ไม่สามารถส่งหนังสือ เนื่องจากยังไม่ได้แนบเอกสาร"
+      dialogRef.componentInstance.confirmation = false
+    } else {
+      this._paramSarabanService.isContent = true
+      this._paramSarabanService.sarabanContentId = content.id
+      let dialogRef = this._dialog.open(SendSarabanContentComponent, {
+        width: '65%', height: '90%'
+      })
+      dialogRef.componentInstance.mode = 'send'
+      dialogRef.componentInstance.title = 'ส่งหนังสือ: ' + content.wfContentTitle
+      dialogRef.afterClosed().subscribe(result => {
+        if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
+        if (result) {
+          content.wfContentInt03 = 1
+          if (this._paramSarabanService.msg != null) {
+            this.msgs = []
+            this.msgs.push(this._paramSarabanService.msg)
+            this._paramSarabanService.msg = null
+            setTimeout(() => this.msgs = [], 3000)
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   showRegistedInfo() {
