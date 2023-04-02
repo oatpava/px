@@ -1129,7 +1129,7 @@ export class AddSarabanContentComponent implements OnInit {
       if (sarabanContent.wfContentInt01 == 1) {
         let dialogWarn = this._dialog.open(DialogWarningComponent)
         dialogWarn.componentInstance.header = "แจ้งเตือน"
-        dialogWarn.componentInstance.message = "การทำเรื่องเสร็จจากต้นเรื่องจะเป็นการทำเรื่องเส็จหนังสือทั้ง Flow\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
+        dialogWarn.componentInstance.message = "การทำเรื่องเสร็จจากต้นเรื่องจะเป็นการทำเรื่องเสร็จหนังสือทั้ง Flow\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
         dialogWarn.componentInstance.confirmation = true
         dialogWarn.afterClosed().subscribe(result => {
           if (result) {
