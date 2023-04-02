@@ -72,7 +72,7 @@
                             </md-menu>
                         </div>
                         <div *ngIf="!useAD" layout="row" layout-align="space-between start">
-                            <button flex="50" md-button color="primary" (click)="openDialogChangePassword();">
+                            <button flex="50" md-button color="primary" (click)="openDialogChangePassword();" disabled>
                                 <md-icon>swap_horiz</md-icon>เปลี่ยนรหัสผ่าน
                             </button>
                             <button flex="50" md-button color="accent" style="width: 100%;" (click)="logOut()">
@@ -100,7 +100,7 @@
                 </td-menu>
             </md-menu>
             <div hide-gt-md>
-                <!-- <button style="margin-left: 10px; margin-right: 10px; text-align: left" md-button (click)="openDialogChangePassword();">
+                <!-- <button style="margin-left: 10px; margin-right: 10px; text-align: left" md-button (click)="openDialogChangePassword();" disabled>
                     <md-icon>swap_horiz</md-icon>
                     รหัสผ่าน
                 </button> -->
