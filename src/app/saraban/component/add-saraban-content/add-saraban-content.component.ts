@@ -60,6 +60,7 @@ export class AddSarabanContentComponent implements OnInit {
   isFinish: boolean
   isKeeped: boolean
   isCanceled: boolean
+  isHeadContent: boolean
 
   numFileAttach: number = 0
   numRecord: number = 0
@@ -326,6 +327,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.isFinish = this.sarabanContent.hasFinish
         this.isCanceled = this.sarabanContent.isCanceled
         this.isKeeped = this.sarabanContent.isKeeped
+        this.isHeadContent = (this.sarabanContent.wfContentInt01 == 1)
 
         this.sarabanContent.wfContentSpeedStr = this.sarabanSpeeds[this.sarabanContent.wfContentSpeed - 1].sarabanSpeedName
         this.sarabanContent.wfContentSecretStr = this.sarabanSecrets[this.sarabanContent.wfContentSecret - 1].sarabanSecretName
@@ -1073,7 +1075,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   finish(sarabanContent: SarabanContent) {
     if (this.hardCopyRecieved) {
-      if (sarabanContent.wfContentInt01 == 1) {
+      if (this.isHeadContent) {
         let dialogWarn = this._dialog.open(DialogWarningComponent)
         dialogWarn.componentInstance.header = "แจ้งเตือน"
         dialogWarn.componentInstance.message = "การทำเรื่องเสร็จจากต้นเรื่องจะเป็นการทำเรื่องเสร็จหนังสือทั้ง Flow\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
@@ -1192,7 +1194,7 @@ export class AddSarabanContentComponent implements OnInit {
             dialogRef.componentInstance.note,
             dialogRef.componentInstance.description,
             dialogRef.componentInstance.finishDate_str,
-            (sarabanContent.wfContentInt01 == 1))
+            this.isHeadContent)
         }
       })
     }
@@ -1242,7 +1244,7 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   cancelContent(sarabanContent: SarabanContent) {
-    if (sarabanContent.wfContentInt01 == 1) {
+    if (this.isHeadContent) {
       let dialogWarn = this._dialog.open(DialogWarningComponent)
       dialogWarn.componentInstance.header = "แจ้งเตือน"
       dialogWarn.componentInstance.message = "การยกเลิกหนังสือจากต้นเรื่องจะเป็นการยกเลิกหนังสือทั้ง Flow\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่"
@@ -1327,7 +1329,7 @@ export class AddSarabanContentComponent implements OnInit {
             dialogRef.componentInstance.note,
             dialogRef.componentInstance.description,
             dialogRef.componentInstance.finishDate_str,
-            (sarabanContent.wfContentInt01 == 1))
+            this.isHeadContent)
         }
       })
     }
@@ -1430,6 +1432,18 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   update() {//edit
+    if (this.isHeadContent) {
+      const dialogRef = this._dialog.open(DialogWarningComponent)
+      dialogRef.componentInstance.header = "แจ้งเตือน"
+      dialogRef.componentInstance.message = `การแก้ไขหนังสือจากต้นเรื่องจะเป็นการแก้ไขหนังสือทั้ง Flow\n(ยกเว้น "ไปรษณีย์ลงทะเบียน" และ "ได้รับเอกสารตัวจริงแล้ว")\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่`
+      dialogRef.componentInstance.confirmation = true
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) this.updateAction()
+      })
+    } else this.updateAction()
+  }
+
+  private updateAction() {
     this.prepareTo()
     this.prepareDate(this.sarabanContent.wfContentBookDate)
     this._loadingService.register('main')
@@ -1439,16 +1453,34 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         this.bookDate_str = response.wfContentBookDate.substr(0, 10)
         if (this._paramSarabanService.datas) {
-          let tmp = this._paramSarabanService.datas[0].find(content => content.id == this.sarabanContent.id)
-          if (tmp) Object.assign(tmp, response)
+          this.updateTmpData(this._paramSarabanService.datas[0], response)
+
           if (this._paramSarabanService.searchFilters) {
-            let tmp1 = this._paramSarabanService.datas[1].find(content => content.id == this.sarabanContent.id)
-            if (tmp1) Object.assign(tmp1, response)
+            this.updateTmpData(this._paramSarabanService.datas[1], response)
           }
         }
         if (this.hardCopyRecievedUpdate) this.updateSendNote(response)
         this.show('แก้ไข')
       })
+  }
+
+  private updateTmpData(contents: SarabanContent[], content: SarabanContent) {
+    let tmp = contents.find(c => c.id == content.id)
+    if (tmp) Object.assign(tmp, content)
+
+    if (this.isHeadContent) {
+      let tmpFlow = contents.filter(c => (c.wfDocumentId == content.wfDocumentId) && (c.id != content.id))
+      if (tmpFlow) {
+        tmpFlow.forEach(tmp => {
+          tmp.wfContentSpeed = content.wfContentSpeed
+          tmp.wfContentBookNo = content.wfContentBookNo
+          tmp.wfContentFrom = content.wfContentFrom
+          tmp.wfContentTo = content.wfContentTo
+          tmp.wfContentTitle = content.wfContentTitle
+          tmp.wfContentSecret = content.wfContentSecret
+        })
+      }
+    }
   }
 
   backWithMsg(severity: string, summary: string, detail: string, returnToContent: boolean) {

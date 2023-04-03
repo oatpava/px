@@ -41,108 +41,153 @@
                             <md-input style="width:50%;" placeholder="ไปรษณีย์ลงทะเบียน" type="text" name="wfContentStr03" [(ngModel)]="sarabanContent.wfContentStr03">
                             </md-input>
                         </div>
-                        <div layout="row" style="font-size: 16px; margin-bottom:0.5rem; align-items:baseline;">
-                            <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}
-                                    <i class="material-icons contentNo" *ngIf="mode!='edit' && !useReserve && !usePoint" title="แก้ไขเลขทะเบียน" (click)="editContentNo()">mode_edit</i>
-                                    <i class="material-icons contentNo" *ngIf="mode!='edit' && (useReserve || usePoint)" title="ใช้เลขล่าสุด" (click)="useContentNo()">redo</i>                                  
-                            </span>
-                            <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
-                            <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
-                        </div>
-                        <div layout="row" style="font-size: 16px; align-items: baseline;">
-                            <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()" required>
-                            </md-input>
-                            <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
-                                <i *ngIf="!usePoint" class="material-icons contentNo" [title]="mode=='register' ? 'แก้ไขเลขที่หนังสือ' : 'แก้ไขคำนำหน้าเลขที่หนังสือ'" (click)="editBookNo()">mode_edit</i>
-                            </span>
-                            <span *ngIf="diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
-                            </span>
-                            <div layout="row" layout-align="space-between start" style="width:50%; white-space:nowrap; align-items:center;">
-                                <b>ลงวันที่ : &nbsp;</b>
-                                <my-date-picker style="width: 100%;" [options]="myDatePickerOptions" placeholder="*" locale="th" name="wfContentBookDate" [(ngModel)]="sarabanContent.wfContentBookDate" (dateChanged)="onDateChanged($event)" required>
-                                </my-date-picker>
+
+                        <div *ngIf="isHeadContent">
+                            <div layout="row" style="font-size: 16px; margin-bottom:0.5rem; align-items:baseline;">
+                                <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}
+                                        <i class="material-icons contentNo" *ngIf="mode!='edit' && !useReserve && !usePoint" title="แก้ไขเลขทะเบียน" (click)="editContentNo()">mode_edit</i>
+                                        <i class="material-icons contentNo" *ngIf="mode!='edit' && (useReserve || usePoint)" title="ใช้เลขล่าสุด" (click)="useContentNo()">redo</i>                                  
+                                </span>
+                                <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
+                                <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
                             </div>
-                        </div>
-                        <div layout="row" layout-align="left start" style="width: 100%; margin-top: 0.5rem;">
-                            <div style="width:50%;">
-                                <md-select style="margin-top:15px; margin-bottom:10px;" placeholder="ชั้นเร่งด่วน" [(ngModel)]="sarabanContent.wfContentSpeed" name="wfContentSpeed">
-                                    <md-option *ngFor="let sarabanSpeed of sarabanSpeeds" [value]="sarabanSpeed.id">
-                                        {{sarabanSpeed.sarabanSpeedName}}
-                                    </md-option>
-                                </md-select>
+                            <div layout="row" style="font-size: 16px; align-items: baseline;">
+                                <md-input *ngIf="folderBookNoType==0 && !diableEditBookNo" style="width:50%;" placeholder="เลขที่หนังสือ" type="text" name="wfContentBookNo" [(ngModel)]="sarabanContent.wfContentBookNo" (ngModelChange)="trimBookno()" required>
+                                </md-input>
+                                <span *ngIf="folderBookNoType!=0 && !diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
+                                    <i *ngIf="!usePoint" class="material-icons contentNo" [title]="mode=='register' ? 'แก้ไขเลขที่หนังสือ' : 'แก้ไขคำนำหน้าเลขที่หนังสือ'" (click)="editBookNo()">mode_edit</i>
+                                </span>
+                                <span *ngIf="diableEditBookNo" style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}
+                                </span>
+                                <div layout="row" layout-align="space-between start" style="width:50%; white-space:nowrap; align-items:center;">
+                                    <b>ลงวันที่ : &nbsp;</b>
+                                    <my-date-picker style="width: 100%;" [options]="myDatePickerOptions" placeholder="*" locale="th" name="wfContentBookDate" [(ngModel)]="sarabanContent.wfContentBookDate" (dateChanged)="onDateChanged($event)" required>
+                                    </my-date-picker>
+                                </div>
                             </div>
-                            <div style="width:50%;">
-                                <md-select style="margin-top: 15px; margin-bottom:10px;" placeholder="ชั้นความลับ" [(ngModel)]="sarabanContent.wfContentSecret" name="wfContentSecret">
-                                    <md-option *ngFor="let sarabanSecret of sarabanSecrets" [value]="sarabanSecret.id">
-                                        {{sarabanSecret.sarabanSecretName}}
-                                    </md-option>
-                                </md-select>
+                            <div layout="row" layout-align="left start" style="width: 100%; margin-top: 0.5rem;">
+                                <div style="width:50%;">
+                                    <md-select style="margin-top:15px; margin-bottom:10px;" placeholder="ชั้นเร่งด่วน" [(ngModel)]="sarabanContent.wfContentSpeed" name="wfContentSpeed">
+                                        <md-option *ngFor="let sarabanSpeed of sarabanSpeeds" [value]="sarabanSpeed.id">
+                                            {{sarabanSpeed.sarabanSpeedName}}
+                                        </md-option>
+                                    </md-select>
+                                </div>
+                                <div style="width:50%;">
+                                    <md-select style="margin-top: 15px; margin-bottom:10px;" placeholder="ชั้นความลับ" [(ngModel)]="sarabanContent.wfContentSecret" name="wfContentSecret">
+                                        <md-option *ngFor="let sarabanSecret of sarabanSecrets" [value]="sarabanSecret.id">
+                                            {{sarabanSecret.sarabanSecretName}}
+                                        </md-option>
+                                    </md-select>
+                                </div>
                             </div>
+                            <div layout="row" layout-align="left start" style="align-items: center;">
+                                <p-autoComplete #acFrom flex="95" placeholder="จาก*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
+                                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                                </p-autoComplete>
+                                <button md-icon-button flex="5" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
+                            </div>
+                            <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
+                                <p-header><span>จาก</span></p-header>
+                                <p-tabView>
+                                    <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                        <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                        <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </p-dialog>
+                            <div layout="row" layout-align="left start" style="align-items: center;">
+                                <p-autoComplete #acTo flex="95" placeholder="เรียน*" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
+                                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                                </p-autoComplete>
+                                <template></template>
+                                <button md-icon-button flex="5" title="เรียน" (click)="openStructureDialog(1)"><md-icon>person_add</md-icon></button>
+                            </div>
+                            <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
+                                <p-header><span>เรียน</span></p-header>
+                                <p-tabView>
+                                    <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                        <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                        <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </p-dialog>
+                            <div layout="row" layout-align="left start" style="align-items: center;">
+                                <p-autoComplete #acThru flex="95" placeholder="ผ่าน" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
+                                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
+                                </p-autoComplete>
+                                <template></template>
+                                <button md-icon-button flex="5" title="ผ่าน" (click)="openStructureDialog(2)"><md-icon>person_add</md-icon></button>
+                            </div>
+                            <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
+                                <p-header><span>ผ่าน</span></p-header>
+                                <p-tabView>
+                                    <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
+                                        <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
+                                        <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </p-dialog>
+                            <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="wfContentTitle" [(ngModel)]="sarabanContent.wfContentTitle" required>
+                            </md-textarea>
+                            <md-textarea rows="3" style="width: 100%;" placeholder="อ้างถึง" type="text" name="wfContentReference" [(ngModel)]="sarabanContent.wfContentReference">
+                            </md-textarea>
+                            <md-textarea rows="5" style="width: 100%;" placeholder="สิ่งที่ส่งมาด้วย" type="text" name="wfContentAttachment" [(ngModel)]="sarabanContent.wfContentAttachment">
+                            </md-textarea>
+                            <md-textarea rows="5" style="width: 100%;" placeholder="การปฏิบัติ" type="text" name="wfContentText01" [(ngModel)]="sarabanContent.wfContentText01">
+                            </md-textarea>
+                            <md-textarea rows="5" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
+                            </md-textarea>
                         </div>
-                        <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #acFrom flex="95" placeholder="จาก*" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
-                            </p-autoComplete>
-                            <button md-icon-button flex="5" title="จาก" (click)="openStructureDialog(0)"><md-icon>person_add</md-icon></button>
+
+                        <div *ngIf="!isHeadContent" style="font-size: 16px;">
+                            <div layout="row">
+                                <span style="width:50%;"><b>เลขทะเบียน : </b>{{sarabanContent.wfContentContentNo}}</span>
+                                <span style="width:30%;"><b>วันที่ : </b>{{contentDate_str}}</span>
+                                <span><b>เวลา : </b>{{sarabanContent.wfContentContentTime}}</span>
+                            </div>
+                            <div layout="row">
+                                <span style="width:50%;"><b>เลขที่หนังสือ : </b>{{sarabanContent.wfContentBookNo}}</span>
+                                <span><b>ลงวันที่ : </b>{{bookDate_str}}</span>
+                            </div>
+                            <div layout="row">
+                                <span style="width:50%;"><b>ชั้นเร่งด่วน : </b>{{sarabanContent.wfContentSpeedStr}}</span>
+                                <span style="width:50%;"><b>ชั้นความลับ : </b>{{sarabanContent.wfContentSecretStr}}</span>
+                            </div>
+                            <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                                <span><b>จาก : </b>{{sarabanContent.wfContentFrom}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>เรียน : </b>{{sarabanContent.wfContentTo}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>ผ่าน : </b>{{sarabanContent.wfContentText03}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span style="word-wrap: break-word;"><b>เรื่อง : </b>{{sarabanContent.wfContentTitle}}</span>
+                            </div>
+                            <div style="margin-top:1rem; margin-bottom:0.2rem;">
+                                <span *ngIf="sarabanContent.wfContentInt02==0" style="word-wrap: break-word;"><b>อ้างถึง : </b>{{sarabanContent.wfContentReference}}</span>
+                                <span *ngIf="sarabanContent.wfContentInt02!=0" style="word-wrap: break-word;"><b>อ้างถึง : </b><a class="link" (click)="openViewDialog(sarabanContent.wfContentInt02)">{{sarabanContent.wfContentReference}}</a></span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span class="show-enter"><b>สิ่งที่ส่งมาด้วย : </b>{{sarabanContent.wfContentAttachment}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span class="show-enter"><b>การปฏิบัติ : </b>{{sarabanContent.wfContentText01}}</span>
+                            </div>
+                            <div style="margin-bottom:0.2rem;">
+                                <span class="show-enter"><b>หมายเหตุ : </b>{{sarabanContent.wfContentDescription}}</span>
+                            </div>  
                         </div>
-                        <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
-                            <p-header><span>จาก</span></p-header>
-                            <p-tabView>
-                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
-                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
-                                </p-tabPanel>
-                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
-                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[0]" (onNodeSelect)="nodeSelect($event, 0)" (onNodeUnselect)="nodeUnSelect($event, 0)"></p-tree>
-                                </p-tabPanel>
-                            </p-tabView>
-                        </p-dialog>
-                        <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #acTo flex="95" placeholder="เรียน*" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
-                            </p-autoComplete>
-                            <template></template>
-                            <button md-icon-button flex="5" title="เรียน" (click)="openStructureDialog(1)"><md-icon>person_add</md-icon></button>
-                        </div>
-                        <p-dialog [(visible)]="dialogTo[1]" [responsive]="true">
-                            <p-header><span>เรียน</span></p-header>
-                            <p-tabView>
-                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
-                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
-                                </p-tabPanel>
-                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
-                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[1]" (onNodeSelect)="nodeSelect($event, 1)" (onNodeUnselect)="nodeUnSelect($event, 1)"></p-tree>
-                                </p-tabPanel>
-                            </p-tabView>
-                        </p-dialog>
-                        <div layout="row" layout-align="left start" style="align-items: center;">
-                            <p-autoComplete #acThru flex="95" placeholder="ผ่าน" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (keydown.tab)="checkInput()">
-                            </p-autoComplete>
-                            <template></template>
-                            <button md-icon-button flex="5" title="ผ่าน" (click)="openStructureDialog(2)"><md-icon>person_add</md-icon></button>
-                        </div>
-                        <p-dialog [(visible)]="dialogTo[2]" [responsive]="true">
-                            <p-header><span>ผ่าน</span></p-header>
-                            <p-tabView>
-                                <p-tabPanel header="หน่วยงานภายใน" leftIcon="fa-home">
-                                    <p-tree [value]="structureTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedStructure[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
-                                </p-tabPanel>
-                                <p-tabPanel header="หน่วยงานภายนอก" leftIcon="fa-building">
-                                    <p-tree [value]="externalTree" selectionMode="multiple" [metaKeySelection]="false" [(selection)]="selectedExternal[2]" (onNodeSelect)="nodeSelect($event, 2)" (onNodeUnselect)="nodeUnSelect($event, 2)"></p-tree>
-                                </p-tabPanel>
-                            </p-tabView>
-                        </p-dialog>
-                        <md-textarea rows="3" style="width: 100%;" placeholder="เรื่อง" name="wfContentTitle" [(ngModel)]="sarabanContent.wfContentTitle" required>
-                        </md-textarea>
-                        <md-textarea rows="3" style="width: 100%;" placeholder="อ้างถึง" type="text" name="wfContentReference" [(ngModel)]="sarabanContent.wfContentReference">
-                        </md-textarea>
-                        <md-textarea rows="5" style="width: 100%;" placeholder="สิ่งที่ส่งมาด้วย" type="text" name="wfContentAttachment" [(ngModel)]="sarabanContent.wfContentAttachment">
-                        </md-textarea>
-                        <md-textarea rows="5" style="width: 100%;" placeholder="การปฏิบัติ" type="text" name="wfContentText01" [(ngModel)]="sarabanContent.wfContentText01">
-                        </md-textarea>
-                        <md-textarea rows="5" style="width: 100%;" placeholder="หมายเหตุ" type="text" name="wfContentDescription" [(ngModel)]="sarabanContent.wfContentDescription">
-                        </md-textarea>
-                        <div layout="row" flex-gt-md="100" layout-align="left start" style="margin-top:1rem; margin-bottom: 2rem; align-items: center;">
+
+                        <div layout="row" flex-gt-md="100" layout-align="left start" style="font-size: 16px; margin-top:1rem; margin-bottom: 2rem; align-items: center;">
                             <span flex="50"><b>ผู้รับผิดชอบ : </b>{{sarabanContent.wfContentOwnername}}</span>
                             <div flex="50" layout="row" layout-align="space-between start" style="align-items: center;"> 
                                 <!-- <md-checkbox color="primary" name="hardCopyRecieved" [(ngModel)]="hardCopyRecieved" (change)="onHardCopyRecievedCheck()" [disabled]="disabledHardCopyRecieved">ได้รับเอกสารตัวจริงแล้ว</md-checkbox> -->
