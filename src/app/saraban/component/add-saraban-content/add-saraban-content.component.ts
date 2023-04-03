@@ -717,6 +717,11 @@ export class AddSarabanContentComponent implements OnInit {
 
     updateContent.wfContentText03 = this.sarabanContent.wfContentText03
     updateContent.wfContentStr04 = this.sarabanContent.wfContentStr04
+
+    updateContent.wfContentStr01 = this.sarabanContent.wfContentStr01
+    updateContent.wfContentInt01 = this.sarabanContent.wfContentInt01
+    updateContent.wfContentInt02 = this.sarabanContent.wfContentInt02
+    updateContent.wfContentInt03 = this.sarabanContent.wfContentInt03
     return updateContent
   }
 
