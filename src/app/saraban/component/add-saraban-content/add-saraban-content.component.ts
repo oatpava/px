@@ -537,14 +537,12 @@ export class AddSarabanContentComponent implements OnInit {
     } else {
       this.sarabanContent.wfContentContentNo = this.sarabanContent.wfContentContentPre + (this.contentNoFormat + this.sarabanContent.wfContentContentNumber).substr(-this.contentNoFormat.length) + "/" + contentYear//praxis00001/2560 pre+no+/year
     }
-    this.sarabanContent.wfContentBookPre = this.preBookNos[0]
-    this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
-    this.sarabanContent.wfContentBookPoint = 0
-    this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, contentYear)
-    this.sarabanContent.wfContentBookDate = registerContent.wfContentBookDate
 
     this.sarabanContent.wfContentSpeed = registerContent.wfContentSpeed
     this.sarabanContent.wfContentSecret = registerContent.wfContentSecret
+    this.sarabanContent.wfContentSpeedStr = this.sarabanSpeeds[this.sarabanContent.wfContentSpeed - 1].sarabanSpeedName
+    this.sarabanContent.wfContentSecretStr = this.sarabanSecrets[this.sarabanContent.wfContentSecret - 1].sarabanSecretName
+
     this.sarabanContent.wfContentFrom = registerContent.wfContentFrom
     this.sarabanContent.wfContentTo = registerContent.wfContentTo
     this.sarabanContent.wfContentTitle = registerContent.wfContentTitle
@@ -556,7 +554,6 @@ export class AddSarabanContentComponent implements OnInit {
       this.sarabanContent.wfContentInt02 = registerContent.id
     } else {
       this.sarabanContent.wfContentReference = registerContent.wfContentReference
-      this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
     }
     this.sarabanContent.wfContentOwnername = this._paramSarabanService.userName
     this.sarabanContent.wfDocumentId = registerContent.wfDocumentId
@@ -570,18 +567,35 @@ export class AddSarabanContentComponent implements OnInit {
     this.sarabanContent.wfContentStr02 = registerContent.wfContentStr02
     this.sarabanContent.wfContentText03 = registerContent.wfContentText03
     this.sarabanContent.wfContentStr04 = registerContent.wfContentStr04
-    if (!this.isMyWork) this.prepareShowFromTo()
-    else {
-      this.sarabanContent.wfContentInt01 = registerContent.wfContentInt01 //first content
+    
+    if (!this.isMyWork) {
+      this.sarabanContent.wfContentBookPre = registerContent.wfContentBookPre
+      this.sarabanContent.wfContentBookNumber = registerContent.wfContentBookNumber
+      this.sarabanContent.wfContentBookPoint = registerContent.wfContentBookPoint
+      this.sarabanContent.wfContentBookYear = registerContent.wfContentBookYear
+      this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
+  
+      this.prepareShowFromTo()
+      this.sarabanContent.wfContentInt01 = 0
+      this.isHeadContent = false
+    } else {
+      this.sarabanContent.wfContentBookPre = this.preBookNos[0]
+      this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
+      this.sarabanContent.wfContentBookPoint = 0
+      this.sarabanContent.wfContentBookYear = contentYear
+      this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, contentYear)
+
+      this.sarabanContent.wfContentInt01 = 1 //first content
       this.sarabanContent.wfContentStr01 = registerContent.wfContentStr01 //ES searchId
+      this.isHeadContent = true
     }
+    this.sarabanContent.wfContentBookDate = registerContent.wfContentBookDate
     this.sarabanContent.wfContentStr03 = registerContent.wfContentStr03
 
     this.disable = false
 
     /////after create2
     this.sarabanContent.wfContentContentYear = contentYear
-    this.sarabanContent.wfContentBookYear = contentYear
 
     this._paramSarabanService.path = this._paramSarabanService.pathOld
     this._paramSarabanService.path += ' / เลขทะเบียน: ' + this.sarabanContent.wfContentContentNo
@@ -1886,8 +1900,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.path = this._paramSarabanService.path
         this.title = this.trimTitle(response.wfContentTitle)
         this.numFileAttach = response.numFileAttach
-
-        response.wfContentBookNo = ''
+        
         response.wfContentSpeed = 1
         response.wfContentSecret = 1
         this.register(response)
