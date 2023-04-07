@@ -254,6 +254,7 @@ export class AddSarabanContentComponent implements OnInit {
   addSarabanContent(folderId: number, folder: SarabanFolder) {
     this.title = "เพิ่มหนังสือ"
     this.disable = false
+    this.isHeadContent = true
     this.getReserveNo(folderId)
     this.getCanceledReserveNo(folderId)
 
