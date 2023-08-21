@@ -24,7 +24,7 @@ import { SarabanContent } from '../../model/sarabanContent.model'
 import { SarabanSpeed } from '../../model/sarabanSpeed.model'
 import { SarabanSecret } from '../../model/sarabanSecret.model'
 import { SarabanReserveContent } from '../../model/sarabanReserveContent.model'
-import { SarabanAuth } from '../../model/SarabanAuth.model'
+import { SarabanAuth } from '../../model/sarabanAuth.model'
 import { Workflow } from '../../../mwp/model/workflow.model'
 import { Document } from '../../../dms/model/document.model'
 import { Inbox } from '../../../mwp/model/inbox.model'
@@ -1447,15 +1447,9 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   update() {//edit
-    if (this.isHeadContent) {
-      const dialogRef = this._dialog.open(DialogWarningComponent)
-      dialogRef.componentInstance.header = "แจ้งเตือน"
-      dialogRef.componentInstance.message = `การแก้ไขหนังสือจากต้นเรื่องจะเป็นการแก้ไขหนังสือทั้ง Flow\n(ยกเว้น "ไปรษณีย์ลงทะเบียน" และ "ได้รับเอกสารตัวจริงแล้ว")\nคุณต้องการดำเนินการต่อใช่ หรือ ไม่`
-      dialogRef.componentInstance.confirmation = true
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) this.updateAction()
-      })
-    } else this.updateAction()
+    //for alert dialog
+    
+    this.updateAction()
   }
 
   private updateAction() {
