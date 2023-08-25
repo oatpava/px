@@ -567,14 +567,14 @@ export class AddSarabanContentComponent implements OnInit {
     this.sarabanContent.wfContentStr02 = registerContent.wfContentStr02
     this.sarabanContent.wfContentText03 = registerContent.wfContentText03
     this.sarabanContent.wfContentStr04 = registerContent.wfContentStr04
-    
+
     if (!this.isMyWork) {
       this.sarabanContent.wfContentBookPre = registerContent.wfContentBookPre
       this.sarabanContent.wfContentBookNumber = registerContent.wfContentBookNumber
       this.sarabanContent.wfContentBookPoint = registerContent.wfContentBookPoint
       this.sarabanContent.wfContentBookYear = registerContent.wfContentBookYear
       this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
-  
+
       this.prepareShowFromTo()
       this.sarabanContent.wfContentInt01 = 0
       this.isHeadContent = false
@@ -1448,7 +1448,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   update() {//edit
     //for alert dialog
-    
+
     this.updateAction()
   }
 
@@ -1480,14 +1480,7 @@ export class AddSarabanContentComponent implements OnInit {
     if (this.isHeadContent) {
       let tmpFlow = contents.filter(c => (c.wfDocumentId == content.wfDocumentId) && (c.id != content.id))
       if (tmpFlow) {
-        tmpFlow.forEach(tmp => {
-          tmp.wfContentSpeed = content.wfContentSpeed
-          tmp.wfContentBookNo = content.wfContentBookNo
-          tmp.wfContentFrom = content.wfContentFrom
-          tmp.wfContentTo = content.wfContentTo
-          tmp.wfContentTitle = content.wfContentTitle
-          tmp.wfContentSecret = content.wfContentSecret
-        })
+        tmpFlow.forEach(tmp => tmp.wfContentTitle = content.wfContentTitle)
       }
     }
   }
@@ -1894,7 +1887,7 @@ export class AddSarabanContentComponent implements OnInit {
         this.path = this._paramSarabanService.path
         this.title = this.trimTitle(response.wfContentTitle)
         this.numFileAttach = response.numFileAttach
-        
+
         response.wfContentSpeed = 1
         response.wfContentSecret = 1
         this.register(response)
