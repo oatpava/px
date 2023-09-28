@@ -569,11 +569,19 @@ export class AddSarabanContentComponent implements OnInit {
     this.sarabanContent.wfContentStr04 = registerContent.wfContentStr04
 
     if (!this.isMyWork) {
-      this.sarabanContent.wfContentBookPre = registerContent.wfContentBookPre
-      this.sarabanContent.wfContentBookNumber = registerContent.wfContentBookNumber
-      this.sarabanContent.wfContentBookPoint = registerContent.wfContentBookPoint
-      this.sarabanContent.wfContentBookYear = registerContent.wfContentBookYear
-      this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
+      if (folder.wfContentType.id == 2) {//แฟ้มประเภทส่ง ให้ใช้เลขรันนิ่งของแฟ้ม
+        this.sarabanContent.wfContentBookPre = this.preBookNos[0]
+        this.sarabanContent.wfContentBookNumber = (this.sharedFolder) ? this.sharedContentNumber : contentNumber
+        this.sarabanContent.wfContentBookPoint = 0
+        this.sarabanContent.wfContentBookYear = contentYear
+        this.sarabanContent.wfContentBookNo = this.setBookNo(this.folderBookNoType, this.sarabanContent.wfContentBookPre, this.sarabanContent.wfContentBookNumber, contentYear)
+      } else {//แฟ้มประเภทอื่น ๆ ให้ใช้เลขต้นทาง
+        this.sarabanContent.wfContentBookPre = registerContent.wfContentBookPre
+        this.sarabanContent.wfContentBookNumber = registerContent.wfContentBookNumber
+        this.sarabanContent.wfContentBookPoint = registerContent.wfContentBookPoint
+        this.sarabanContent.wfContentBookYear = registerContent.wfContentBookYear
+        this.sarabanContent.wfContentBookNo = registerContent.wfContentBookNo
+      }
 
       this.prepareShowFromTo()
       this.sarabanContent.wfContentInt01 = 0
