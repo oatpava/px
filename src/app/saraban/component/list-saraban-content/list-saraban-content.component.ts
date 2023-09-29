@@ -538,7 +538,7 @@ export class ListSarabanContentComponent implements OnInit {
     this._paramSarabanService.barcodeFilter = null
 
     if (registedFolder.wfFolderParentName == null) registedFolder.wfFolderParentName = ""
-    this._paramSarabanService.folderId = registedFolder.wfFolderLinkFolderId
+    this._paramSarabanService.folderId = registedFolder.id
     this._paramSarabanService.folderName = registedFolder.wfFolderName
     this._paramSarabanService.folderParentName = registedFolder.wfFolderParentName
     this._paramSarabanService.folderIcon = "list"
