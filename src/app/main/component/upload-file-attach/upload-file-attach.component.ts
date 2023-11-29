@@ -38,8 +38,6 @@ export class UploadFileAttachComponent implements OnInit {
 
   downloadFile(fileAttach: FileAttach) {
     this._pxService.downloadFileAttach(fileAttach)
-      // .subscribe(response => {
-      // })
   }
 
   openFile(file: FileAttach) {

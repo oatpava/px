@@ -147,6 +147,14 @@ export class PxService {
     window.open(this._apiUrl + '/v1/fileAttachs/' + fileAttach.id + '/dl?version=1&api_key=praXis')
   }
 
+  crateTmpFile(fileAttach: FileAttach): Observable<any> {
+    return this._http.get(this._apiUrl + '/v1/fileAttachs/' + fileAttach.id + '/dl', this._options)
+      .map((response: Response) => {
+        return
+      })
+      .catch(this.loggerService.handleError)
+  }
+
   updateFileAttachVersionControl(uploader: FileUploader, fileAttachId: number) {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs/versionControl/' + fileAttachId,
@@ -345,6 +353,7 @@ export class PxService {
   }
 
   getExpiredPath(fileAttach: any): string {
+    //http://127.0.0.1:83/document/Temp/dms/EXT45/45139.PDF
     const tmp: string[] = fileAttach.url.split('/document/Temp/')
 
     const uri: string = '/viewFile/' + tmp[1].replace(fileAttach.linkType + '/', '')

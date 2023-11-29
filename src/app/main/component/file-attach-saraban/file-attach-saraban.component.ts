@@ -201,13 +201,7 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   download(fileAttach: FileAttach) {
-    let tmp = new FileAttach(fileAttach)
-    if (fileAttach.fileAttachType == '.PDF') {
-      es6printJS(fileAttach.url, "pdf");
-    } else {
-      this._pxService
-        .downloadFileAttach(tmp)
-    }
+    this._pxService.downloadFileAttach(fileAttach)
   }
 
   delete(fileAttach: any) {
@@ -294,8 +288,9 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   viewImage(fileAttach: any) {
-    //http://127.0.0.1:83/document/Temp/dms/EXT45/45139.PDF
-    window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
+    this._pxService.crateTmpFile(fileAttach).subscribe(response => {
+      window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
+    })
   }
 
   // viewImage(fileAttach: any) {

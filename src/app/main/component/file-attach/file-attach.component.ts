@@ -153,18 +153,14 @@ export class FileAttachComponent implements OnInit {
   }
 
   downloadFile(fileAttach: FileAttach) {
+    this._pxService.downloadFileAttach(fileAttach)
 
-    let tmp = new FileAttach(fileAttach)
-    // this._pxService
-    //   .downloadFileAttach(tmp)
-
-    if (fileAttach.fileAttachType == '.PDF') {
-      es6printJS(fileAttach.url, "pdf");
-    } else {
-      this._pxService
-        .downloadFileAttach(tmp)
-    }
-
+    // if (fileAttach.fileAttachType == '.PDF') {
+    //   es6printJS(fileAttach.url, "pdf");
+    // } else {
+    //   this._pxService
+    //     .downloadFileAttach(tmp)
+    // }
   }
 
   view(fileAttach: any, staus: any) {
@@ -468,7 +464,9 @@ export class FileAttachComponent implements OnInit {
   }
 
   viewImage(fileAttach: any) {
-    window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
+    this._pxService.crateTmpFile(fileAttach).subscribe(response => {
+      window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
+    })
   }
 
   // viewImage(fileAttach: any) {
