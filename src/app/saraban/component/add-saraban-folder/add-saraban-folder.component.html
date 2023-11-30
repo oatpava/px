@@ -26,19 +26,17 @@
 
                                 <!-- <form #addFolderForm2="ngForm"> -->
                                 <div layout="column" layout-align="right start" style="margin-bottom: 15px; margin-top: 10px;">
-                                    <md-select style="width: 100%" placeholder="ประเภท{{type}}" name="wfContentType" [(ngModel)]="sarabanFolder.wfContentType.id" required>
-                                        <md-option *ngFor="let contentType of contentTypes" [value]="contentType.id" (click)="setContentTypes2(sarabanFolder.wfContentType.id); updateFolderName();" [disabled]="disableContentType">
+                                    <md-select style="width: 100%" placeholder="ประเภท{{type}}" name="wfContentType" [(ngModel)]="sarabanFolder.wfContentType.id" required [disabled]="disableContentType">
+                                        <md-option *ngFor="let contentType of contentTypes" [value]="contentType.id" (click)="setContentTypes2(sarabanFolder.wfContentType.id); updateFolderName();">
                                             {{contentType.contentTypeName}}
                                         </md-option>
-
                                     </md-select>
                                 </div>
                                 <div *ngIf="showType2" layout="column" layout-align="right start" style="margin-bottom: 10px; margin-top: 15px;">
-                                    <md-select style="width: 100%" placeholder="ประเภททะเบียนย่อย" name="wfContentType2" [(ngModel)]="sarabanFolder.wfContentType2.id" required>
-                                        <md-option *ngFor="let contentType2 of contentTypes2" [value]="contentType2.id" (click)="updateFolderName();" [disabled]="disableContentType">
+                                    <md-select style="width: 100%" placeholder="ประเภททะเบียนย่อย" name="wfContentType2" [(ngModel)]="sarabanFolder.wfContentType2.id" required [disabled]="disableContentType">
+                                        <md-option *ngFor="let contentType2 of contentTypes2" [value]="contentType2.id" (click)="updateFolderName();">
                                             {{contentType2.wfContentType2Name}}
                                         </md-option>
-
                                     </md-select>
                                 </div>
                                 <div layout="row" layout-align="left start" style="width: 100%;">
