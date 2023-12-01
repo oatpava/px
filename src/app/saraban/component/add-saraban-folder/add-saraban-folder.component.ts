@@ -24,7 +24,7 @@ import { DialogSettingSearchFilterComponent } from './dialog-setting-search-filt
 })
 export class AddSarabanFolderComponent implements OnInit {
   icon: string = 'book'
-  path: string =''
+  path: string = ''
   type: string = 'แฟ้มทะเบียน'
   title: string
   mode: string
@@ -121,7 +121,9 @@ export class AddSarabanFolderComponent implements OnInit {
         this._loadingService.resolve('main')
         this.contentTypes = response as ContentType[]
         if (this.isFolder) {
-          this.contentTypes = this.contentTypes.filter(ct => ct.id < 5)
+          if (this.mode == "add") {
+            this.contentTypes = this.contentTypes.filter(ct => ct.id < 5)
+          }
         } else {
           this.contentTypes = this.contentTypes.filter(ct => ct.id == 4)
           //this.sarabanFolder.wfContentType.id = 4
@@ -144,6 +146,8 @@ export class AddSarabanFolderComponent implements OnInit {
         if (folder.wfContentType.id == 3) {
           this.disableContentType = true
           this.showType2 = false
+        } else if (folder.wfContentType.id == 5) {
+          this.disableContentType = true
         }
         if (folder.wfFolderLinkId != 0) this.getStructureName(folder.wfFolderLinkId)
         this.sarabanFolder = folder
@@ -341,11 +345,11 @@ export class AddSarabanFolderComponent implements OnInit {
 
   preparePreBookNo(folder: SarabanFolder, preBookNos: string[]): SarabanFolder {
     folder.wfFolderPreBookNo = preBookNos[0]
-    for (let i=1;i<preBookNos.length;i++) {
+    for (let i = 1; i < preBookNos.length; i++) {
       folder.wfFolderPreBookNo += ", " + preBookNos[i]
     }
     return folder
   }
 
 }
- 
+

@@ -340,12 +340,24 @@ export class AddStructureComponent implements OnInit {
     folder4.wfContentType.id = 4
     folder4.wfContentType2.id = 1
 
+
+    let folder52 = new SarabanFolder({
+      parentId: parentFolder.id,
+      wfFolderType: 'T',
+      wfFolderLinkId: parentFolder.wfFolderLinkId,
+      wfFolderName: "รับคำขออิเล็กทรอนิกส์",
+      wfFolderDetail: "เชื่อมโยงข้อมูลหนังสือ (LDAP)"
+    })
+    folder52.wfContentType.id = 5
+    folder52.wfContentType2.id = 2
+
     let tmp: any[] = [
       this._sarabanService.createSarabanFolder(folder12),
       this._sarabanService.createSarabanFolder(folder13),
       this._sarabanService.createSarabanFolder(folder22),
       this._sarabanService.createSarabanFolder(folder23),
       this._sarabanService.createSarabanFolder(folder4),
+      this._sarabanService.createSarabanFolder(folder52),
     ]
     this._loadingService.register('main')
     Observable.forkJoin(tmp)
