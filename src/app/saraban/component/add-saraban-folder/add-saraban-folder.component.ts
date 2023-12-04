@@ -37,6 +37,7 @@ export class AddSarabanFolderComponent implements OnInit {
   linkStructure: string = ''
   budgetYear: boolean = false
   disableContentType: boolean = false
+  disableLinkStructure: boolean = false
 
   addSarabanFolderClick: boolean = true
 
@@ -148,6 +149,7 @@ export class AddSarabanFolderComponent implements OnInit {
           this.showType2 = false
         } else if (folder.wfContentType.id == 5) {
           this.disableContentType = true
+          this.disableLinkStructure = true
         }
         if (folder.wfFolderLinkId != 0) this.getStructureName(folder.wfFolderLinkId)
         this.sarabanFolder = folder

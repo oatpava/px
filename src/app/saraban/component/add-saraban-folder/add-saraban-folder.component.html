@@ -92,19 +92,20 @@
                                 <form #addFolderForm="ngForm">
                                     <div layout="row" layout-align="left start" style="width: 100%;">
                                         <md-input-container flex>
-                                            <input md-input type="text" placeholder="ชื่อ{{type}}" name="wfFolderName" [(ngModel)]="sarabanFolder.wfFolderName" required>
+                                            <input md-input type="text" placeholder="ชื่อ{{type}}" name="wfFolderName" [(ngModel)]="sarabanFolder.wfFolderName" required [disabled]="disableLinkStructure">
                                         </md-input-container>
                                     </div>
                                     <div layout="row" layout-align="left start" style="width: 100%;">
                                         <md-input-container flex>
-                                            <input md-input type="text" placeholder="รายละเอียด" name="wfFolderDetail" [(ngModel)]="sarabanFolder.wfFolderDetail">
+                                            <input md-input type="text" placeholder="รายละเอียด" name="wfFolderDetail" [(ngModel)]="sarabanFolder.wfFolderDetail" [disabled]="disableLinkStructure" >
                                         </md-input-container>
                                     </div>
+                                    
                                     <div layout="row" layout-align="left start" style="width: 100%;">
                                         <md-input-container flex>
                                             <input md-input type="text" placeholder="เชื่อมต่อหน่วยงาน" name="linkStructure" [(ngModel)]="linkStructure" disabled>
                                         </md-input-container>
-                                        <button md-icon-button (click)="dialog=true">
+                                        <button *ngIf="!disableLinkStructure" md-icon-button (click)="dialog=true">
                                             <md-icon>supervisor_account</md-icon>
                                         </button>
                                     </div>
