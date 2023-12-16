@@ -59,7 +59,7 @@
                             <md-icon *ngIf="folder.data.folder.wfContentType.id==2" md-list-avatar [ngStyle]="{'background': '#e65c00', 'color': (folder.data.folder.wfContentType2.id==2) ? 'white' : (folder.data.folder.wfContentType2.id==3) ? 'black' : '#cc9900', 'cursor': 'pointer'}">book</md-icon>
                             <!-- <md-icon *ngIf="folder.data.folder.wfContentType.id==4" md-list-avatar style="background: #186ba0; color: white; cursor: pointer">chrome_reader_mode</md-icon> -->
                             <md-icon *ngIf="folder.data.folder.wfContentType.id==4" md-list-avatar style="background: black; color: white; cursor: pointer">chrome_reader_mode</md-icon>
-                            <md-icon *ngIf="folder.data.folder.wfContentType.id==5" md-list-avatar style="background: #0073e6; color: white; cursor: pointer">book</md-icon>
+                            <md-icon *ngIf="folder.data.folder.wfContentType.id==5" md-list-avatar [ngStyle]="{'background': '#0073e6', 'color': (item.wfContentType2.id==2) ? 'white' : (item.wfContentType2.id==3) ? 'black' : '#cc9900', 'cursor': 'pointer'}">book</md-icon>
                             <h3 md-line>{{folder.data.folder.wfFolderName}} </h3>
                             <h4 md-line> {{folder.data.folder.wfFolderParentName}} </h4>
                             <p md-line> {{folder.data.folder.wfFolderDetail}} </p>
