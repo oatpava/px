@@ -378,6 +378,7 @@ export class ReceiveEcmsComponent implements OnInit {
     workflow.linkId = content.wfDocumentId
     workflow.linkId2 = content.id
     workflow.workflowTitle = content.wfContentTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "N"
     workflow.workflowNote = this.folder.wfFolderName
     workflow.workflowStr02 = content.wfContentDate01.substr(0, 16)//hardCopyReceived
