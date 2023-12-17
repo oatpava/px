@@ -347,6 +347,7 @@ export class OutboxComponent implements OnInit {
     workflow.workflowTitle = sarabanContent.wfContentTitle
     workflow.workflowDescription = cancelDescription
     workflow.workflowNote = cancelNote
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "D"
     workflow.workflowStr01 = canceledUsers
     workflow.workflowStr02 = sarabanContent.wfContentDescription

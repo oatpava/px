@@ -436,6 +436,7 @@ export class SendSarabanContentComponent implements OnInit {
     workflow.linkId2 = this.sarabanContent.id
 
     workflow.workflowTitle = this.sendTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = (this.mode == 'send') ? "S" : "A"
     workflow.workflowNote = this.sendNoteAll
     workflow.workflowDescription = this.sendDescription

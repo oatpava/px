@@ -757,6 +757,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.linkId = this.sarabanContent.wfDocumentId
     workflow.linkId2 = this.sarabanContent.id
     workflow.workflowTitle = this.sarabanContent.wfContentTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
 
     if (this.mode == "add") {
       workflow.workflowActionType = "N"
@@ -1177,6 +1178,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.linkId3 = sarabanContent.wfContentInt01//check ต้นเรื่อง->finish all flow
 
     workflow.workflowTitle = sarabanContent.wfContentTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "F"
     workflow.workflowNote = finishNote
     workflow.workflowDescription = finishDescription
@@ -1231,6 +1233,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.linkId2 = sarabanContent.id
 
     workflow.workflowTitle = sarabanContent.wfContentTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "E"
     workflow.workflowNote = note
     workflow.workflowDescription = description
@@ -1320,6 +1323,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.workflowTitle = sarabanContent.wfContentTitle
     workflow.workflowDescription = cancelDescription
     workflow.workflowNote = cancelNote
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "C"
     workflow.workflowStr02 = sarabanContent.wfContentDescription
     workflow.workflowStr03 = sarabanContent.wfContentContentNo
@@ -1365,6 +1369,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.linkId2 = sarabanContent.id
 
     workflow.workflowTitle = sarabanContent.wfContentTitle
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "B"
     workflow.workflowNote = note
     workflow.workflowDescription = description
@@ -2277,6 +2282,7 @@ export class AddSarabanContentComponent implements OnInit {
     workflow.workflowTitle = content.wfContentTitle
     workflow.workflowDescription = 'ย้ายหนังสือ'
     workflow.workflowNote = 'ไปยังแฟ้มทะเบียน ' + this.workflowFolderName
+    workflow.workflowActionId = this._paramSarabanService.userId
     workflow.workflowActionType = "C"
     workflow.workflowStr02 = content.wfContentDescription
     workflow.workflowStr03 = content.wfContentContentNo
