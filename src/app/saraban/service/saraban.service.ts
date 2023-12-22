@@ -52,16 +52,16 @@ export class SarabanService {
     }
   }
 
-  getSarabanFolderShortcuts(): Observable<SarabanFolder[]> {
-    if (environment.production) {
-      return this._http.get(this._apiUrl + '/listShortcutByUserProfileIdHeader', this._options)
-        .map((response: Response) => {
-          return this.pxService.verifyResponseArray(response.json().data)
-        })
-        .catch(this.loggerService.handleError)
-    } else {
-    }
-  }
+  // getSarabanFolderShortcuts(): Observable<SarabanFolder[]> {
+  //   if (environment.production) {
+  //     return this._http.get(this._apiUrl + '/listShortcutByUserProfileIdHeader', this._options)
+  //       .map((response: Response) => {
+  //         return this.pxService.verifyResponseArray(response.json().data)
+  //       })
+  //       .catch(this.loggerService.handleError)
+  //   } else {
+  //   }
+  // }
 
   getSarabanFolder(sarabanFolderId: number): Observable<SarabanFolder> {
     if (environment.production) {

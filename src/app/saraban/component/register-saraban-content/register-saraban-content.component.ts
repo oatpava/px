@@ -7,6 +7,7 @@ import { MdDialogRef } from '@angular/material'
 import { SarabanService } from '../../service/saraban.service'
 
 import { SarabanFolder } from '../../model/sarabanFolder.model'
+import { ParamSarabanService } from '../../service/param-saraban.service'
 
 @Component({
   selector: 'app-register-saraban-content',
@@ -27,6 +28,7 @@ export class RegisterSarabanContentComponent implements OnInit {
     private _loadingService: TdLoadingService,
     private _sarabanService: SarabanService,
     public dialogRef: MdDialogRef<RegisterSarabanContentComponent>,
+    private _paramSarabanService: ParamSarabanService,
   ) { }
 
   ngOnInit() {
@@ -41,7 +43,7 @@ export class RegisterSarabanContentComponent implements OnInit {
   getShortcutSarabanFolders(): void {
     this._loadingService.register('main')
     this._sarabanService
-      .getSarabanFolderShortcuts()
+      .listShortcutsByUserProfileId(this._paramSarabanService.userId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         if (this.isRegister) {//register
