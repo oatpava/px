@@ -30,7 +30,7 @@ export class PxService {
     this._apiUrl = environment.apiServer + environment.apiName
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.getToken())
     this._options = new RequestOptions({ headers: this._headers })
     // let params = new URLSearchParams()
     // params.set('t', ''+new Date().getTime())
@@ -70,7 +70,7 @@ export class PxService {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs',
       authTokenHeader: 'px-auth-token',
-      authToken: localStorage.getItem('px-auth-token'),
+      authToken: this.getToken(),
       additionalParameter: fileAttachDetail
     }
     // fileAttachDetail. options.additionalParameter
@@ -94,7 +94,7 @@ export class PxService {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs',
       authTokenHeader: 'px-auth-token',
-      authToken: localStorage.getItem('px-auth-token'),
+      authToken: this.getToken(),
       additionalParameter: fileAttachDetail,
       t: '' + new Date().getTime()
     }
@@ -159,7 +159,7 @@ export class PxService {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs/versionControl/' + fileAttachId,
       authTokenHeader: 'px-auth-token',
-      authToken: localStorage.getItem('px-auth-token'),
+      authToken: this.getToken(),
       // additionalParameter: fileAttachDetail
     }
 
@@ -189,7 +189,7 @@ export class PxService {
   //   let params = {
   //     url: this._apiUrl + '/v1/fileAttachs',
   //     authTokenHeader: 'px-auth-token',
-  //     authToken: localStorage.getItem('px-auth-token'),
+  //     authToken: this.getToken(),
   //     additionalParameter: fileAttachDetail,
   //     t: '' + new Date().getTime()
   //   }
@@ -208,7 +208,7 @@ export class PxService {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs/createList',
       authTokenHeader: 'px-auth-token',
-      authToken: localStorage.getItem('px-auth-token'),
+      authToken: this.getToken(),
       additionalParameter: fileAttachDetail
     }
     uploader.setOptions(params)
@@ -222,7 +222,7 @@ export class PxService {
     let params = {
       url: this._apiUrl + '/v1/fileAttachs/createList',
       authTokenHeader: 'px-auth-token',
-      authToken: localStorage.getItem('px-auth-token'),
+      authToken: this.getToken(),
       additionalParameter: fileAttachDetail,
     }
     uploader.setOptions(params)
@@ -297,7 +297,7 @@ export class PxService {
   }
 
   getFileAttachsNoLogin(linkType: string, linkId: number): Observable<FileAttach[]> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this.getToken())
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.encrypt('version=1.0&offset=0&limit=200&sort=orderNo&dir=asc'))
@@ -365,6 +365,10 @@ export class PxService {
   private generateSecurePathHash(expires: string, uri: string, clientIp: string): string {
     const base64Value: string = crypto.MD5(expires + uri + clientIp + ' ' + 'oatis').toString(crypto.enc.Base64)
     return base64Value.replace(/\=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+  }
+
+  getToken(): any {
+    return this._paramSarabanService.token
   }
 
 }

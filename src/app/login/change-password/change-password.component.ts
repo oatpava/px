@@ -86,7 +86,6 @@ export class ChangePasswordComponent implements OnInit {
       this._loadingService.register('main')
       this._loginService
         .checkRecentPassword(user)
-        // .checkRecentPassword(user.passwords)
         .subscribe(result => {
           console.log('result : ',result)
           this._loadingService.resolve('main')

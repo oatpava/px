@@ -34,7 +34,7 @@ export class SarabanContentService {
     this._apiUrl = environment.apiServer + environment.apiName + '/v1/wfContents'
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.pxService.getToken())
     this._options = new RequestOptions({ headers: this._headers })
   }
 
@@ -376,7 +376,7 @@ export class SarabanContentService {
   }
 
   getSarabanContentsNologin(sarabanFolderId: number, year: number, offset: number, limit: number): Observable<{ data: SarabanContent[], listReturn: ListReturn }> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token-mock'))
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('version=1.0&offset=' + offset + '&limit=' + limit))
