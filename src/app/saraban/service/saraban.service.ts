@@ -22,7 +22,7 @@ export class SarabanService {
     this._apiUrl = environment.apiServer + environment.apiName + '/v1/wfFolders'
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.pxService.getToken())
     this._options = new RequestOptions({ headers: this._headers })
   }
 
@@ -267,7 +267,7 @@ export class SarabanService {
   }
 
   listCNFoldersNoLogin(): Observable<SarabanFolder[]> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token-mock'))
     if (environment.production) {
       return this._http.get(this._apiUrl + '/listByContentTypeId/CN/4/0/0', this._options)
         .map((response: Response) => {

@@ -22,7 +22,7 @@ export class SettingService {
     this._apiUrl = environment.apiServer + environment.apiName
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.pxService.getToken())
     this._options = new RequestOptions({ headers: this._headers })
   }
 
@@ -154,7 +154,6 @@ export class SettingService {
 
   checkLogout(version: string): Observable<any> {
     console.log('checkLogout ')
-    // this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('version=1.0'))

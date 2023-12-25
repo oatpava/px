@@ -9,6 +9,7 @@ import { UserProfile } from '../../shared'
 
 @Injectable()
 export class ParamSarabanService {
+  token: string = ''//px-auth-token
   clientIp: string = ''
   contentNoFormat: string = '000000'
   bookNoFormat: string = '000000'

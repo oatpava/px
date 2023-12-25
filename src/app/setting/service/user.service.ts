@@ -21,14 +21,11 @@ export class UserService {
     this._apiUrl = environment.apiServer + environment.apiName
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.pxService.getToken())
     this._options = new RequestOptions({ headers: this._headers })
   }
 
   getUsers(version: string, offset: string, limit: string, sort: string, dir: string): Observable<any> {
-    // console.log('getUsers waiting use rest. - O')
-    
-    console.log('localStorage : ',localStorage.getItem('px-auth-token'))
     if (environment.production) {
       // return this.pxService.createObservable(USERS)
       let params = new URLSearchParams()
@@ -46,8 +43,6 @@ export class UserService {
   }
 
   getUser(userId: number, version: string): Observable<User> {
-    // console.log('getUser waiting use rest. - O')
-    console.log('localStorage : ',localStorage.getItem('px-auth-token'))
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('version=' + version))

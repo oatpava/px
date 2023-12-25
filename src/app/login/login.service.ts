@@ -11,6 +11,7 @@ import { LoggerService } from '../main/logger.service'
 import { User } from '../setting/model/user.model'
 import { USERS } from '../setting/model/user-mock'
 import { UserProfile } from '../shared'
+import { ParamSarabanService } from '../saraban/service/param-saraban.service'
 
 @Injectable()
 export class LoginService {
@@ -18,7 +19,7 @@ export class LoginService {
   private _headers: Headers
   private _apiUrlLogin: string
   _options: RequestOptions
-  constructor(private _http: Http, private pxService: PxService, private loggerService: LoggerService) {
+  constructor(private _http: Http, private pxService: PxService, private loggerService: LoggerService, private _paramSarabanService: ParamSarabanService) {
     this._apiUrl = environment.apiServer + environment.apiName + '/v1/users'
     this._apiUrlLogin = environment.apiServer + environment.apiName + '/v1/users'
     this._headers = new Headers()
@@ -50,6 +51,7 @@ export class LoginService {
           let result = response.json()
           if (result.data.result) {
             localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+            this._paramSarabanService.token = response.headers.get('px-auth-token')
           }
           // return response.json().data.result
           return this.pxService.verifyResponseArray(result)
@@ -62,7 +64,7 @@ export class LoginService {
   }
 
   checkChangePassword(user: User): Observable<any> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.post(this._apiUrl + '/checkChangePassword', user, { headers: this._headers })
         .map((response: Response) => {
@@ -78,7 +80,7 @@ export class LoginService {
   }
 
   checkEmail(username: String, email: String): Observable<any> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.get(this._apiUrl + '/checkEmail/' + username + '/email/' + email, { headers: this._headers })
         .map((response: Response) => {
@@ -95,9 +97,7 @@ export class LoginService {
   }
 
   updateStatusByUsername(user: User): Observable<any> {
-    // this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
-    // this._options = new RequestOptions({ headers: this._headers })
-    // console.log(this._headers)
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       let params = new URLSearchParams()
       params.set('q', this.pxService.encrypt('api_key=praXis'))
@@ -117,7 +117,7 @@ export class LoginService {
   }
 
   updatePassword(user: User): Observable<any> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.put(this._apiUrl + '/pw', user, { headers: this._headers })
         .map((response: Response) => {
@@ -133,7 +133,7 @@ export class LoginService {
   }
 
   updatePasswordByUrl(usernameUrl: String, user: User): Observable<any> {
-    // this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    // this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.put(this._apiUrl + '/changePass/' + usernameUrl, user, { headers: this._headers })
         .map((response: Response) => {
@@ -157,7 +157,7 @@ export class LoginService {
   }
 
   getParmUserChange(username: String, user: User): Observable<any> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       console.log(this._headers)
       return this._http.put(this._apiUrl + '/changePass/' + username, user, { headers: this._headers })
@@ -171,7 +171,7 @@ export class LoginService {
   }
 
   sendEmail(username: String, user: User) {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.post(this._apiUrl + '/sendEmail/' + username, user, { headers: this._headers })
         .map((response: Response) => {
@@ -182,15 +182,13 @@ export class LoginService {
     }
   }
 
-  // checkRecentPassword(newPassword: string): Observable<boolean> {
   checkRecentPassword(user: User): Observable<boolean> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
-    // console.log('newPassword : ',newPassword)
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
-      // return this._http.get(this._apiUrl + '/checkRecentPassword/' + user, { headers: this._headers })
       return this._http.post(this._apiUrl + '/checkRecentPassword', user, { headers: this._headers })
         .map((response: Response) => {
           localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          this._paramSarabanService.token = response.headers.get('px-auth-token')
           return this.pxService.verifyResponseArray(response.json().data)
         })
         .catch(this.loggerService.handleError)
@@ -202,7 +200,7 @@ export class LoginService {
     if (environment.production) {
       return this._http.get(this._apiUrlLogin + '/getMocktoken', { headers: this._headers })
         .map((response: Response) => {
-          localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
+          localStorage.setItem('px-auth-token-mock', response.headers.get('px-auth-token'))
           return response.json().data.result
         })
         .catch(this.loggerService.handleError)
@@ -211,14 +209,13 @@ export class LoginService {
   }
 
   swapUserProfile(userProfile: UserProfile): Observable<any> {
-    this._headers.set('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.set('px-auth-token', this._paramSarabanService.token)
     if (environment.production) {
       return this._http.post(this._apiUrl + '/swapUserProfile', userProfile, { headers: this._headers })
         .map((response: Response) => {
-          // console.log('xxx', response.headers.get('px-auth-token'))
           localStorage.removeItem('px-auth-token')
-          // localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
           localStorage.setItem('px-auth-token', response.json().data)
+          this._paramSarabanService.token = response.headers.get('px-auth-token')
           return this.pxService.verifyResponseArray(response)
         })
         .catch(this.loggerService.handleError)

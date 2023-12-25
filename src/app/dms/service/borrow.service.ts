@@ -20,7 +20,7 @@ export class BorrowService {
     this._apiUrl = environment.apiServer + environment.apiName + '/v1/borrow'
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    this._headers.append('px-auth-token', localStorage.getItem('px-auth-token'))
+    this._headers.append('px-auth-token', this.pxService.getToken())
     this._options = new RequestOptions({ headers: this._headers })
 
     let params = new URLSearchParams()
