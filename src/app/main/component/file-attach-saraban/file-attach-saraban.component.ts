@@ -17,6 +17,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable'
 
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 import { DialogViewImageComponent } from './dialog-view-image/dialog-view-image.component'
+import { DialogFileAttachApproveComponent } from '../dialog-file-attach-approve/dialog-file-attach-approve.component'
 
 @Component({
   selector: 'app-file-attach-saraban',
@@ -420,6 +421,16 @@ export class FileAttachSarabanComponent implements OnInit {
       }
       return tmp
     }
+  }
+
+  approve(fileAttach: any, showCaButton: boolean) {
+    const dialogRef = this._dialog.open(DialogFileAttachApproveComponent, {
+      width: '50%', height: '436px'
+    })
+    dialogRef.componentInstance.fileAttach = fileAttach
+    dialogRef.componentInstance.userProfile = this._paramSarabanService.userProfiles[this._paramSarabanService.userProfileIndex]
+    dialogRef.componentInstance.showCaButton = showCaButton
+    dialogRef.componentInstance.haveCa = this._paramSarabanService.haveCa
   }
 
 }
