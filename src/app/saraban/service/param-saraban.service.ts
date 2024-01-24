@@ -29,6 +29,7 @@ export class ParamSarabanService {
   structure: Structure
   sarabanContentId: number
   userProfileTypeId: number
+  haveCa: boolean
 
   isContent: boolean//content or myWork
   mwp: { fromMwp: boolean, isUser: boolean, id: number, replyTo: number, inboxIndex: number }
