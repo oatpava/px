@@ -20,6 +20,7 @@ export class DialogFileAttachApproveComponent implements OnInit {
   haveCa: boolean = false
 
   fileAttachApproves: FileAttachApprove[] = []
+  signed: boolean = false
   loading: boolean = false
   msgs: Message[] = []
 
@@ -38,10 +39,10 @@ export class DialogFileAttachApproveComponent implements OnInit {
     this._loadingService.register('main')
     this._pxService.getFileAttachApproves(this.fileAttach.id).subscribe(response => {
       this._loadingService.resolve('main')
-      this.fileAttachApproves = response
-      this.showCaButton = !response.some(fileAttachApprove => fileAttachApprove.userProfileId == this.userProfile.id)
-
       this.loading = false
+      this.fileAttachApproves = response
+      this.signed = response.some(fileAttachApprove => fileAttachApprove.userProfileId == this.userProfile.id)
+
       if (showMsg) {
         this.msgs = []
         this.msgs.push({ severity: 'success', summary: 'บันทึกข้อมูลสำเร็จ', detail: 'คุณได้ทำการยรับรองเอกสาร ' + this.fileAttach.fileAttachName })
@@ -65,11 +66,20 @@ export class DialogFileAttachApproveComponent implements OnInit {
 
     this.loading = true
     this._loadingService.register('main')
-    this._pxService.createFileAttachApprove(fileAttachApprove, password).subscribe(response => {
-      this._loadingService.resolve('main')
-      this.loading = false
-      this.getFileAttachApproves(true)
-    })
+    this._pxService.createFileAttachApprove(fileAttachApprove, password)
+      // .map(response => response)
+      .subscribe(
+        (data) => {
+          this._loadingService.resolve('main')
+          this.loading = false
+          this.getFileAttachApproves(true)
+        },
+        (err) => {
+          this._loadingService.resolve('main')
+          this.loading = false
+          this.msgs = []
+          this.msgs.push({ severity: 'error', summary: 'บันทึกข้อมูลไม่สำเร็จ', detail: err })
+        })
   }
 
 }

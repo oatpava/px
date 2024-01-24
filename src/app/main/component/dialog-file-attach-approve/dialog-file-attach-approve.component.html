@@ -1,4 +1,4 @@
-<div class="loading-message animated"><h2>กำลังดำเนินการ กรุณารอสักครู่...</h2></div>
+<div *ngIf="loading" class="loading-message animated"><h2>กำลังดำเนินการ กรุณารอสักครู่...</h2></div>
 
 <p-dataTable #dt [value]="fileAttachApproves" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,50]"
     [resizableColumns]="false" [responsive]="true" styleClass="fixed-size">
@@ -10,7 +10,7 @@
                 <span>{{fileAttach.fileAttachName}}</span>
             </div>
             <div>
-                <button *ngIf="showCaButton" (click)="approve()" title="รับรองเอกสาร" [disabled]="!haveCa || loading">
+                <button *ngIf="showCaButton" (click)="approve()" title="รับรองเอกสาร" [disabled]="!haveCa || signed || loading">
                     <i class="material-icons">check_circle</i>
                 </button>
             </div>

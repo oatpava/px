@@ -380,7 +380,7 @@ export class PxService {
       .catch(this.loggerService.handleError)
   }
 
-  createFileAttachApprove(fileAttachApprove: FileAttachApprove, caPassword: string): Observable<FileAttachApprove> {
+  createFileAttachApprove(fileAttachApprove: FileAttachApprove, caPassword: string): Observable<any> {
     let params = new URLSearchParams()
     params.set('q', this.encrypt(`version=1.0&caPassword=${caPassword}`))
     this._options.search = params
@@ -389,7 +389,9 @@ export class PxService {
       .map((response: Response) => {
         return this.verifyResponseArray(response.json().data)
       })
-      .catch(this.loggerService.handleError)
+      .catch((response: Response) => {
+        return Observable.throw(response.json().message)
+      })
   }
 
   checkpassword(username: string, password: string): Observable<boolean> {
