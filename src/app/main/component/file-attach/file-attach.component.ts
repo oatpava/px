@@ -17,7 +17,7 @@ import { DeleteDialogComponent } from '../../../main/component/delete-dialog/del
 import * as es6printJS from "print-js";
 import { DialogViewImageComponent } from '../file-attach-saraban/dialog-view-image/dialog-view-image.component'
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
-import { DialogWarningComponent } from '../../../shared'
+import { DialogFileAttachApproveComponent, DialogWarningComponent } from '../../../shared'
 @Component({
   selector: 'app-file-attach',
   templateUrl: './file-attach.component.html',
@@ -497,6 +497,16 @@ export class FileAttachComponent implements OnInit {
       }
       return tmp
     }
+  }
+
+  approve(fileAttach: any, showCaButton: boolean) {
+    const dialogRef = this._dialog.open(DialogFileAttachApproveComponent, {
+      width: '50%', height: '436px'
+    })
+    dialogRef.componentInstance.fileAttach = fileAttach
+    dialogRef.componentInstance.userProfile = this._paramSarabanService.userProfiles[this._paramSarabanService.userProfileIndex]
+    dialogRef.componentInstance.showCaButton = showCaButton
+    dialogRef.componentInstance.haveCa = this._paramSarabanService.haveCa
   }
 
 }

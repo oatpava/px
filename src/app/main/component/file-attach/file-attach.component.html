@@ -50,6 +50,12 @@
                     [disabled]="!authEditDocFile " md-icon-button alt="view" (click)="view(item,1)" title="ดูเอกสาร">
                     <md-icon>visibility</md-icon>
                 </button>
+
+                <button
+                    *ngIf="item.fileAttachType =='.PDF'"
+                    md-icon-button alt="approve" (click)="approve(item, true)" title="รับรองเอกสาร">
+                    <md-icon>check_circle</md-icon>
+                </button>
             </h3>
 
 
@@ -74,6 +80,11 @@
                     [disabled]="!authEditDocFile " md-icon-button alt="view" (click)="view(itemChildren,2)"
                     title="ดูเอกสาร">
                     <md-icon>visibility</md-icon>
+                </button>
+                <button
+                    *ngIf="item.fileAttachType =='.PDF'"
+                    md-icon-button alt="approve" (click)="approve(item, false)" title="รับรองเอกสาร">
+                    <md-icon>check_circle</md-icon>
                 </button>
             </h3>
         </md-list-item>
