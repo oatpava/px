@@ -14,6 +14,7 @@ import { FileAttach } from './model/file-attach.model'
 // import { TempTable } from './model/temp-table.model'
 import * as crypto from 'crypto-js'
 import { ParamSarabanService } from '../saraban/service/param-saraban.service'
+import { FileAttachApprove } from './model/file-attach-approve.model'
 
 @Injectable()
 export class PxService {
@@ -369,6 +370,18 @@ export class PxService {
 
   getToken(): any {
     return this._paramSarabanService.token
+  }
+
+  checkpassword(username: string, password: string): Observable<boolean> {
+    let params = new URLSearchParams()
+    params.set('q', this.encrypt(`version=1.0&username=${username}&password=${password}`))
+    this._options.search = params
+    
+    return this._http.get(this._apiUrl + '/v1/users/checkPassword', this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
   }
 
 }

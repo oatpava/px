@@ -189,7 +189,8 @@ import {
     ListMenuEcmsComponent,
     DialogsShowThEGifComponent,
     AuthTemplateComponent,
-    DialogViewImageComponent
+    DialogViewImageComponent,
+    DialogConfirmPasswordComponent
 } from './shared';
 
 @NgModule({
@@ -352,7 +353,8 @@ import {
         ListMenuEcmsComponent,
         DialogsShowThEGifComponent,
         AuthTemplateComponent,
-        DialogViewImageComponent
+        DialogViewImageComponent,
+        DialogConfirmPasswordComponent
     ],
     imports: [
         BrowserModule,
@@ -383,7 +385,8 @@ import {
         PdfViewerModule
     ],
     entryComponents: [
-        AlertLogOffComponent
+        AlertLogOffComponent,
+        DialogConfirmPasswordComponent
     ],
     providers: [
         appRoutingProviders,
