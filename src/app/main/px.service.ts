@@ -372,6 +372,26 @@ export class PxService {
     return this._paramSarabanService.token
   }
 
+  getFileAttachApproves(fileAttachId: number): Observable<FileAttachApprove[]> {
+    return this._http.get(this._apiUrl + '/v1/fileAttachApproves/all/' + fileAttachId, this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
+  }
+
+  createFileAttachApprove(fileAttachApprove: FileAttachApprove, caPassword: string): Observable<FileAttachApprove> {
+    let params = new URLSearchParams()
+    params.set('q', this.encrypt(`version=1.0&caPassword=${caPassword}`))
+    this._options.search = params
+
+    return this._http.post(this._apiUrl + '/v1/fileAttachApproves', fileAttachApprove, this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
+  }
+
   checkpassword(username: string, password: string): Observable<boolean> {
     let params = new URLSearchParams()
     params.set('q', this.encrypt(`version=1.0&username=${username}&password=${password}`))

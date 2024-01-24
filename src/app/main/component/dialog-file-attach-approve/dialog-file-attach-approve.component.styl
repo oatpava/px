@@ -1,0 +1,35 @@
+.fixed-size {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.loading-message {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+    background-color: grey;
+    -moz-opacity: 0.75;
+    opacity: 0.75;
+}
+.loading-message h2 {
+    position: fixed;
+    margin-left: 15%;
+    top: 45%;
+    font-size: 30px;
+    color: #969696;
+}
+
+.animated {
+    position: relative;
+    animation-name: fadein;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+@keyframes fadein {
+    0%   { opacity: 0; }
+    50%  { opacity: 0.5; }
+    100% { opacity: 1; }
+}

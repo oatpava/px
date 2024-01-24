@@ -190,6 +190,7 @@ import {
     DialogsShowThEGifComponent,
     AuthTemplateComponent,
     DialogViewImageComponent,
+    DialogFileAttachApproveComponent,
     DialogConfirmPasswordComponent
 } from './shared';
 
@@ -354,6 +355,7 @@ import {
         DialogsShowThEGifComponent,
         AuthTemplateComponent,
         DialogViewImageComponent,
+        DialogFileAttachApproveComponent,
         DialogConfirmPasswordComponent
     ],
     imports: [
@@ -386,6 +388,7 @@ import {
     ],
     entryComponents: [
         AlertLogOffComponent,
+        DialogFileAttachApproveComponent,
         DialogConfirmPasswordComponent
     ],
     providers: [

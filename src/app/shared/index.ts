@@ -17,6 +17,7 @@ export * from '../main/component/setting-defult-profile/setting-defult-profile.c
 export * from '../main/component/dialog-instruction/dialog-instruction.component'
 export * from '../main/directive/loadMore.component'
 export * from '../main/component/file-attach-saraban/dialog-view-image/dialog-view-image.component'
+export * from '../main/component/dialog-file-attach-approve/dialog-file-attach-approve.component'
 export * from '../main/component/dialog-confirm-password/dialog-confirm-password.component'
 
 export * from '../login/login.component'
