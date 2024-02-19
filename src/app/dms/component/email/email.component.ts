@@ -522,6 +522,10 @@ export class EmailComponent implements OnInit {
     }
   }
 
+  onFocus(ac: AutoComplete) {
+    if (ac.suggestions.length != 0) setTimeout(() => ac.show(), 100)
+  }
+
   getFavourite() {
     this._loadingService.register('main')
     this._mwpService

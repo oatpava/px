@@ -790,8 +790,8 @@ export class AddSarabanContentComponent implements OnInit {
     if (!errorCounter) {
       this.prepareTo()
       this.prepareDate(this.sarabanContent.wfContentBookDate)
-    } 
-    
+    }
+
     if (this.mode == "add") {
       if (this.sarabanContent.wfDocumentId == 0) {
         let document = new Document()
@@ -1930,6 +1930,10 @@ export class AddSarabanContentComponent implements OnInit {
         thru.value = ''
       }
     }
+  }
+
+  onFocus(ac: AutoComplete) {
+    if (ac.suggestions.length != 0) setTimeout(() => ac.show(), 100)
   }
 
   // genBarcode(folderId: number, contentId: number) {

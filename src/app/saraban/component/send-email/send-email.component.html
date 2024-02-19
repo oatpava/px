@@ -10,7 +10,7 @@
                     <md-card-content class="dl-card-content">
                         <div layout="row" layout-align="left start" style="align-items: center;">
                             <p-autoComplete #ac0 flex="85" placeholder="ถึง" [(ngModel)]="sendTo[0]" [suggestions]="filtered[0]" field="label" (completeMethod)="nodeFilter($event, 0)" [multiple]="true" (onSelect)="nodeAdd($event, 0)" (onUnselect)="nodeRemove($event, 0)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()" (onFocus)="onFocus(ac0)">
                             </p-autoComplete>
                             <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(0);"><md-icon>person_add</md-icon></button>
                             <p-dialog [(visible)]="dialogTo[0]" [responsive]="true">
@@ -63,7 +63,7 @@
 
                         <div layout="row" layout-align="left start" style="align-items: center;">
                             <p-autoComplete #ac1 flex="85" placeholder="สำเนา" [(ngModel)]="sendTo[1]" [suggestions]="filtered[1]" field="label" (completeMethod)="nodeFilter($event, 1)" [multiple]="true" (onSelect)="nodeAdd($event, 1)" (onUnselect)="nodeRemove($event, 1)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()" (onFocus)="onFocus(ac1)">
                             </p-autoComplete>
 
                             <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(1);"><md-icon>person_add</md-icon></button>
@@ -117,7 +117,7 @@
 
                         <div layout="row" layout-align="left start" style="align-items: center;">
                             <p-autoComplete #ac2 flex="85" placeholder="สำเนาลับ" [(ngModel)]="sendTo[2]" [suggestions]="filtered[2]" field="label" (completeMethod)="nodeFilter($event, 2)" [multiple]="true" (onSelect)="nodeAdd($event, 2)" (onUnselect)="nodeRemove($event, 2)" class="p-autocomplete"
-                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()">
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (keyup.enter)="checkInput()" (mouseleave)="checkInput()" (keydown.tab)="checkInput()" (onFocus)="onFocus(ac2)">
                             </p-autoComplete>
 
                             <button md-icon-button flex="5" title="โครงสร้างหน่วยงาน" (click)="showReceiverDialog(2);"><md-icon>person_add</md-icon></button>
