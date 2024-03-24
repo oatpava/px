@@ -1941,6 +1941,10 @@ export class AddSarabanContentComponent implements OnInit {
     }
   }
 
+  onFocus(ac: AutoComplete) {
+    if (ac.suggestions.length != 0) setTimeout(() => ac.show(), 100)
+  }
+
   // genBarcode(folderId: number, contentId: number) {
   //   let dialogRef = this._dialog.open(ReportSarabanComponent, {
   //     width: '60%'
