@@ -144,7 +144,8 @@ import {
     ListMenuEcmsComponent,
     DialogsShowThEGifComponent,
     AuthTemplateComponent,
-    DialogViewImageComponent
+    DialogViewImageComponent,
+    FileAttachTemplateComponent
 } from './shared'
 
 const routes: Routes = [
@@ -322,7 +323,8 @@ const routes: Routes = [
             { path: 'wf-user-auth', component: WfFolderUserAuthComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'auth-admin', component: AuthAdminComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'auth-template', component: AuthTemplateComponent, canActivate: [AuthGuard], outlet: 'center' },
-            { path: 'dialog-view-image', component: DialogViewImageComponent, canActivate: [AuthGuard], outlet: 'center' }
+            { path: 'dialog-view-image', component: DialogViewImageComponent, canActivate: [AuthGuard], outlet: 'center' },
+            { path: 'file-attach-template', component: FileAttachTemplateComponent, canActivate: [AuthGuard], outlet: 'center' }
         ]
     },
     { path: '**', component: LoginComponent },

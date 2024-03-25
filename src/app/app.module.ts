@@ -191,7 +191,8 @@ import {
     AuthTemplateComponent,
     DialogViewImageComponent,
     DialogFileAttachApproveComponent,
-    DialogConfirmPasswordComponent
+    DialogConfirmPasswordComponent,
+    FileAttachTemplateComponent
 } from './shared';
 
 @NgModule({
@@ -356,7 +357,8 @@ import {
         AuthTemplateComponent,
         DialogViewImageComponent,
         DialogFileAttachApproveComponent,
-        DialogConfirmPasswordComponent
+        DialogConfirmPasswordComponent,
+        FileAttachTemplateComponent
     ],
     imports: [
         BrowserModule,

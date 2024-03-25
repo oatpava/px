@@ -175,6 +175,12 @@ export const SETTINGS: Setting[] = [
       //   childIcon: 'reorder',
       //   subSetting: 'wf-user-auth',
       // },
+      {
+        childId: 56,//8,
+        childName: 'แบบฟอร์มเอกสารกรมอุตสาหกรรมพื้นฐานและการเหมืองแร่',
+        childIcon: 'description',
+        subSetting: 'file-attach-template',
+      },
     ]
 
   }
