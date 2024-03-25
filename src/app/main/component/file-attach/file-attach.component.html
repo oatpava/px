@@ -125,7 +125,7 @@
         <div layout="column" layout-align="center center" flex ng2FileDrop
             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
             (onFileDrop)="addByDrop($event)">
-            <button md-icon-button title="นำเข้าไฟลล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()" [disabled]="isAttach || !authCreDocFile || checkInCheckOutLockStatus">
+            <button md-icon-button title="นำเข้าไฟล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()" [disabled]="isAttach || !authCreDocFile || checkInCheckOutLockStatus">
                 <i class="material-icons">cloud_upload</i>
             </button>
             <span>วางเอกสารแนบ ขนาดไม่เกิน {{fileSizeLimit}} MB</span>
