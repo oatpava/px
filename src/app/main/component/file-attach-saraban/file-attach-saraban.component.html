@@ -62,7 +62,7 @@
             </md-list-item>
         </md-list>
         <div layout="column" layout-align="center center">
-            <button md-icon-button title="นำเข้าไฟลล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
+            <button md-icon-button title="นำเข้าไฟล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>
             <span>วางเอกสารแนบ ขนาดไม่เกิน {{fileSizeLimit}} MB</span>
             <span>(drag & drop files)</span>
             <input type="file" ng2FileSelect #file [uploader]="uploader" (change)="add()" style="display:none;" [accept]="allowedMimeType.toString()">
