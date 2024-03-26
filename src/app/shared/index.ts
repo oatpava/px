@@ -196,6 +196,7 @@ export * from '../setting/folder-auth/folder-auth.component'
 export * from '../setting/inbox-auth/inbox-auth.component'
 export * from '../setting/auth-template/auth-template.component'
 export * from '../setting/file-attach-template/file-attach-template.component'
+export * from '../setting/file-attach-template/dialog-add-file-attach-template/dialog-add-file-attach-template.component'
 
 export * from '../setting/history-log/list-histtory-user/list-histtory-user.component'
 export * from '../setting/history-log/report-log/report-log.component'
