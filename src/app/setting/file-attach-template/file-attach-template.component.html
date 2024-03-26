@@ -9,24 +9,21 @@
       <div flex class="menu-showLabel">
           <span>แบบฟอร์มเอกสารกรมอุตสาหกรรมพื้นฐานและการเหมืองแร่</span>
       </div>
-      <button md-icon-button>
-          <md-icon>more_vert</md-icon>
-      </button>
   </div>
 </div>
 <div layout="column" flex>
   <md-sidenav-layout layout="column" flex fullscreen>
-      <md-sidenav #sideSubMenu align="end">
+      <!-- <md-sidenav #sideSubMenu align="end">
           <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
               <div *ngFor="let col of columns" layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px;">
                   <div flex="100">
                       <md-input-container flex style="width: 100%">
-                          <input md-input type="text" placeholder="{{col.label}}" name="code">
+                          <input md-input type="text" placeholder="{{col.label}}" name="{{col.name}}">
                       </md-input-container>
                   </div>
               </div>
           </form>
-      </md-sidenav>
+      </md-sidenav> -->
       <div class="body-showCenter">
           <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
               <div flex-gt-md="90">
@@ -34,17 +31,28 @@
                       <md-card-content>
                           <table td-data-table>
                               <th td-data-table-column>
-                                <span class="column-header">รายละเอียดเอกสาร</span>
+                                <span class="column-header">ชื่อแบบฟอร์ม</span>
+                              </th>
+                              <th td-data-table-column>
+                                <span class="column-header">ผู้แก้ไข</span>
+                              </th>
+                              <th td-data-table-column>
+                                <span class="column-header">วันที่แก้ไข</span>
                               </th>
                               <tr td-data-table-row *ngFor="let fileAttach of fileAttachs" (mouseover)="hoverEdit=fileAttach.id" (mouseleave)="hoverEdit=-1">
                                   <td td-data-table-cell>
                                       <div>{{fileAttach.fileAttachName}}</div>
                                   </td>
                                   <td td-data-table-cell>
+                                    <div>{{fileAttach.updatedName}}</div>
+                                  </td>
+                                  <td td-data-table-cell width="120px">
+                                    <div>{{fileAttach.updatedDate?.substr(0, 16)}}</div>
+                                  </td>
+                                  <td td-data-table-cell width="120px">
                                       <div *ngIf="hoverEdit==fileAttach.id" style="text-align: right;" >
                                           <i class="material-icons icon-button" title="แก้ไข" (click)="edit(fileAttach)">edit</i>
                                           <i class="material-icons icon-button" title="ลบ" (click)="delete(fileAttach)">delete</i>
-                                          <i class="material-icons icon-button" title="แทนที่ไฟล์เอกสาร" (click)="upload(fileAttach)">cloud_upload</i>
                                           <i class="material-icons icon-button" title="ทำสำเนา" (click)="download(fileAttach)">file_download</i>
                                       </div>
                                   </td>

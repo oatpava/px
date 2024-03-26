@@ -9,8 +9,15 @@ export class FileAttach {
     url: string
     thumbnailUrl: string
     urlNoName: string
-    referenceId:number
-    secrets:number
+    referenceId: number
+    secrets: number
+
+    createdDate?: string
+    createdName?: string
+    createdBy?: number
+    updatedDate?: string
+    updatedName?: string
+    updatedBy?: number
 
     constructor(values: Object = {}) {
         this.version = 1
@@ -23,8 +30,8 @@ export class FileAttach {
         this.url = null
         this.thumbnailUrl = null
         this.urlNoName = null
-        this.referenceId=0
-        this.secrets=1
+        this.referenceId = 0
+        this.secrets = 1
         Object.assign(this, values)
     }
 }
