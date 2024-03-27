@@ -6,14 +6,9 @@
 .nv-file-over
     border: 3px dashed grey
 
-.animated {
-    position: relative;
-    animation-name: fadein;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
+:host/deep/md-list-item.md-3-line .md-list-item, {
+    height: auto;
 }
-@keyframes fadein {
-    0%   { opacity: 0; }
-    50%  { opacity: 0.5; }
-    100% { opacity: 1; }
+:host/deep/md-list-item.md-3-line .md-list-item:hover {
+    background: #dcdfe2;
 }

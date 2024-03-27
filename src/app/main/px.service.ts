@@ -398,8 +398,52 @@ export class PxService {
     let params = new URLSearchParams()
     params.set('q', this.encrypt(`version=1.0&username=${username}&password=${password}`))
     this._options.search = params
-    
+
     return this._http.get(this._apiUrl + '/v1/users/checkPassword', this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
+  }
+
+  removeFileAttach(id: number): Observable<FileAttach> {
+    return this._http.delete(this._apiUrl + '/v1/fileAttachs/' + id, this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
+  }
+
+  replaceFile(uploader: FileUploader, fileAttach: FileAttach): FileUploader {
+    const params = {
+      url: this._apiUrl + '/v1/fileAttachs/replaceFile',
+      authTokenHeader: 'px-auth-token',
+      authToken: this.getToken(),
+      additionalParameter: {
+        version: 1,
+        id: fileAttach.id
+      }
+    }
+    uploader.setOptions(params)
+    uploader.onBeforeUploadItem = (item) => {
+      item.withCredentials = false
+    }
+    uploader.uploadAll()
+    return uploader
+  }
+
+  updateFileAttachModel2(fileAttach: FileAttach): Observable<FileAttach> {
+    delete fileAttach.url
+    delete fileAttach.thumbnailUrl
+    delete fileAttach.urlNoName
+    delete fileAttach.createdDate
+    delete fileAttach.createdName
+    delete fileAttach.createdBy
+    delete fileAttach.updatedDate
+    delete fileAttach.updatedName
+    delete fileAttach.updatedBy
+
+    return this._http.put(this._apiUrl + '/v1/fileAttachs/updateModel2', fileAttach, this._options)
       .map((response: Response) => {
         return this.verifyResponseArray(response.json().data)
       })

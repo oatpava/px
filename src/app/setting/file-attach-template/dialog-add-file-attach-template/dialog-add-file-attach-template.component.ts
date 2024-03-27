@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material'
-import { Message } from 'primeng/primeng';
 import { FileUploader } from 'ng2-file-upload';
 import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 import { FileAttach } from '../../../main/model/file-attach.model';
@@ -18,13 +17,12 @@ export class DialogAddFileAttachTemplateComponent implements OnInit {
   uploader: FileUploader = new FileUploader({})
   fileName: string = ''
   fileType: string = '.unknown'
-  fileUpdated: boolean = false
   readonly allowedMimeType = this._paramSarabanService.allowedMimeType
   readonly fileSizeLimit = this._paramSarabanService.fileSizeLimit
   readonly fileSizeLimitByte = this._paramSarabanService.fileSizeLimit * 1024 * 1024
 
-  validateSave = () => this.uploader.queue.length != 0 && this.fileName.length != 0
-  validateEdit = () => this.fileName.length != 0
+  validateSave = () => this.uploader.queue.length != 0 && this.fileName
+  validateEdit = () => this.fileName
 
   constructor(
     private _dialog: MdDialog,
@@ -57,14 +55,13 @@ export class DialogAddFileAttachTemplateComponent implements OnInit {
     const last: number = this.uploader.queue.length - 1
     const file: any = this.uploader.queue[last].file
     const typePos: string = file.name.lastIndexOf('.')
-    this.fileName = file.name.substring(0, typePos)
+    if (this.fileAttach.id == 0) this.fileName = file.name.substring(0, typePos)
     this.fileType = file.name.substring(typePos)
 
     const isFileTypeValid = this.isFileTypeValid(file.type)
     const isFileSizeValid = this.isFileSizeValid(file.size)
     if (isFileTypeValid && isFileSizeValid) {
       this.uploader.queue = [this.uploader.queue[last]]
-      this.fileUpdated = true
       return
     } else this.clear()
 
@@ -90,11 +87,17 @@ export class DialogAddFileAttachTemplateComponent implements OnInit {
   clear() {
     this.uploader.queue = []
     this.fileType = '.unknown'
-    this.fileUpdated = false
   }
 
   save() {
-
+    let uploader: FileUploader = null
+    if (this.uploader.queue.length != 0) {
+      uploader = this.uploader
+      uploader.queue[0].file.name = `${this.fileName}${this.fileType}`
+    }
+    this.fileAttach.fileAttachName = `${this.fileName}${this.fileType}`
+    this.fileAttach.fileAttachType = this.fileType.toLowerCase()
+    this._dialogRef.close({ uploader: uploader, fileAttach: this.fileAttach })
   }
 
 }
