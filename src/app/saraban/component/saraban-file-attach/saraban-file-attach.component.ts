@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable'
 import { TdLoadingService } from '@covalent/core'
 import { FileUploader } from 'ng2-file-upload'
 import { Message, BlockUI } from 'primeng/primeng'
-import { MdProgressSpinner } from '@angular/material'
+import { MdDialog, MdProgressSpinner } from '@angular/material'
 import { TimerObservable } from 'rxjs/observable/TimerObservable'
 import { setTimeout } from 'timers'
 import { environment } from '../../../../environments/environment'
@@ -16,6 +16,7 @@ import { FileAttach } from '../../../main/model/file-attach.model'
 import { SarabanAuth } from '../../model/SarabanAuth.model'
 
 import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/dialog-warning.component'
+import { DialogListFileAttachTemplateComponent } from '../../../setting/file-attach-template/dialog-list-file-attach-template/dialog-list-file-attach-template.component'
 
 @Component({
   selector: 'app-saraban-file-attach',
@@ -60,11 +61,14 @@ export class SarabanFileAttachComponent implements OnInit {
   title: string
   loading: boolean = false
 
+  fileAttachTemplates: FileAttach[] = []
+
   constructor(
     private _loadingService: TdLoadingService,
     private _pxService: PxService,
     private _sarabanContentService: SarabanContentService,
     private _paramSarabanService: ParamSarabanService,
+    private _dialog: MdDialog
   ) {
     this.isArchive = this._paramSarabanService.isArchive
   }
@@ -77,6 +81,7 @@ export class SarabanFileAttachComponent implements OnInit {
     } else {
       this.editMode = false
     }
+    this.getFileAttachTemplates()
   }
 
   setAuth(auth: SarabanAuth[]) {
@@ -411,6 +416,26 @@ export class SarabanFileAttachComponent implements OnInit {
     } else {
       return title
     }
+  }
+
+  openDialogListTemplate() {
+    const dialog = this._dialog.open(DialogListFileAttachTemplateComponent, {
+      width: '50%'
+    })
+    dialog.componentInstance.fileAttachs = this.fileAttachTemplates
+    dialog.afterClosed().subscribe((result: any) => {
+      console.log('close', result)
+    })
+  }
+
+  private getFileAttachTemplates() {
+    this._loadingService.register('main')
+    this._pxService
+      .getFileAttachs('wf', 0, 'asc')
+      .subscribe((response: any[]) => {
+        this._loadingService.resolve('main')
+        this.fileAttachTemplates = response
+      })
   }
 
 }

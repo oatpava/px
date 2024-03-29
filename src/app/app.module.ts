@@ -193,7 +193,8 @@ import {
     DialogFileAttachApproveComponent,
     DialogConfirmPasswordComponent,
     FileAttachTemplateComponent,
-    DialogAddFileAttachTemplateComponent
+    DialogAddFileAttachTemplateComponent,
+    DialogListFileAttachTemplateComponent
 } from './shared';
 
 @NgModule({
@@ -360,7 +361,8 @@ import {
         DialogFileAttachApproveComponent,
         DialogConfirmPasswordComponent,
         FileAttachTemplateComponent,
-        DialogAddFileAttachTemplateComponent
+        DialogAddFileAttachTemplateComponent,
+        DialogListFileAttachTemplateComponent
     ],
     imports: [
         BrowserModule,
@@ -394,7 +396,8 @@ import {
         AlertLogOffComponent,
         DialogFileAttachApproveComponent,
         DialogConfirmPasswordComponent,
-        DialogAddFileAttachTemplateComponent
+        DialogAddFileAttachTemplateComponent,
+        DialogListFileAttachTemplateComponent
     ],
     providers: [
         appRoutingProviders,

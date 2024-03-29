@@ -1,0 +1,33 @@
+<md-card class="dl-card">
+  <md-card-title class="dl-card-title" layout="row" flex>
+    <span>แบบฟอร์มเอกสารกรมอุตสาหกรรมพื้นฐานและการเหมืองแร่</span>
+  </md-card-title>
+
+  <md-card-content class="dl-card-content">
+    <div>
+      <md-list *ngFor="let fileAttach of fileAttachs">
+        <md-list-item [ngClass]="{'checked': fileAttach.check}">
+            <md-icon md-list-avatar>
+              <img src="assets/filetype/{{fileAttach.fileAttachType.substring(1)}}.svg"onError="this.src='assets/filetype/unknown.svg'" flex>
+            </md-icon>
+            <h3 md-line style="font-weight:bold">
+              <span>{{fileAttach.fileAttachName}}</span>]
+            </h3>
+            <h4 md-line></h4>
+            <p md-line></p>
+            <md-checkbox color="primary" [checked]="fileAttach.check" (change)="check($event, fileAttach)"></md-checkbox>
+        </md-list-item>
+
+        <md-divider md-inset></md-divider>
+      </md-list>
+    </div>
+  </md-card-content>
+
+  <md-divider></md-divider>
+
+  <md-card-actions layout="row" layout-align="end center">
+    <button *ngIf="countCheck==0" md-raised-button disabled>เลือก</button>
+    <button *ngIf="countCheck>0" md-raised-button color="primary" (click)="ok()">เลือก&nbsp;{{countCheck}}&nbsp;รายการ</button>
+    <button md-raised-button style="padding-left: 5px;" (click)="close()">ปิด</button>
+  </md-card-actions>
+</md-card>
