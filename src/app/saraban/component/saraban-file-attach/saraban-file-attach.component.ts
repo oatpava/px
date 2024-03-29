@@ -290,32 +290,27 @@ export class SarabanFileAttachComponent implements OnInit {
       this._pxService.uploadList(this.uploader, this.genFileattachDetail2())
         .onCompleteAll = () => {
           if (this.deleted) {
-            this._pxService
-              .deleteFileAttachs(this.fileAttachRemoved)
-              .subscribe(response => {
-                msgs_tmp.push({
-                  severity: 'success',
-                  summary: 'ลบเอกสารแนบสำเร็จ',
-                  detail: 'คุณได้ทำการเพิ่มเอกสารแนบจำนวน ' + this.fileAttachRemoved.length + ' รายการ'
-                })
-                this.afterSaveAdd(msgs_tmp)
-              })
+            this.deleteAction(msgs_tmp)
           } else {
             this.afterSaveAdd(msgs_tmp)
           }
         }
     } else if (this.deleted) {
-      this._pxService
-        .deleteFileAttachs(this.fileAttachRemoved)
-        .subscribe(response => {
-          msgs_tmp.push({
-            severity: 'success',
-            summary: 'ลบเอกสารแนบสำเร็จ',
-            detail: 'คุณได้ทำการเพิ่มเอกสารแนบจำนวน ' + this.fileAttachRemoved.length + ' รายการ'
-          })
-          this.afterSaveAdd(msgs_tmp)
-        })
+      this.deleteAction(msgs_tmp)
     }
+  }
+
+  private deleteAction(msgs_tmp: Message[]) {
+    this._pxService
+      .deleteFileAttachs(this.fileAttachRemoved)
+      .subscribe(response => {
+        msgs_tmp.push({
+          severity: 'success',
+          summary: 'ลบเอกสารแนบสำเร็จ',
+          detail: 'คุณได้ทำการลบเอกสารแนบจำนวน ' + this.fileAttachRemoved.length + ' รายการ'
+        })
+        this.afterSaveAdd(msgs_tmp)
+      })
   }
 
   afterSaveAdd(msgs_tmp: Message[]) {
@@ -328,14 +323,6 @@ export class SarabanFileAttachComponent implements OnInit {
         this.msgs = []
         this.life = 3000
         this.msgs = msgs_tmp
-      })
-  }
-
-  delete() {
-    this._pxService
-      .deleteFileAttachs(this.fileAttachRemoved)
-      .subscribe(response => {
-
       })
   }
 
