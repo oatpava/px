@@ -10,7 +10,7 @@
   </md-card-title>
 
   <md-card-content class="dl-card-content">
-    <div *ngIf="fileAttach.id!=0" style="padding-bottom:1rem;">
+    <div *ngIf="fileAttach.id!=0 || uploader.queue.length!=0" style="padding-bottom:1rem;">
       <md-list>
         <md-list-item>
           <md-icon md-list-avatar>
@@ -19,30 +19,13 @@
           <h3 md-line>
             <input type="text" style="width: 95%;" minlength="1" maxlength="250" [(ngModel)]="fileName">
           </h3>
-          <h4 md-line>{{fileAttach.createdDate.substr(0, 16)}} ({{fileAttach.fileAttachSize/1000000}} MB)</h4>
-          <p md-line>{{fileAttach.createdName}}</p>
-          <button *ngIf="fileUpdated" md-icon-button title="มีการแก้ไขเอกสาร" disabled>
-            <md-icon>playlist_add_check</md-icon>
-          </button>
+          <h4 *ngIf="fileAttach.id!=0 && uploader.queue.length!=0" md-line style="color: red;">มีการแก้ไขเอกสาร</h4>
         </md-list-item>
       </md-list>
     </div>
 
     <div class="drop-files-area" ng2FileDrop [uploader]="uploader" [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
       (fileOver)="fileOverBase($event)" (onFileDrop)="add()">
-      <md-list *ngIf="fileAttach.id==0">
-        <md-list-item *ngFor="let item of uploader.queue">
-          <md-icon md-list-avatar>
-            <img src="assets/filetype/{{fileType.substring(1)}}.svg" onError="this.src='assets/filetype/unknown.svg'" flex>
-          </md-icon>
-          <h3 md-line>
-            <input type="text" style="width: 95%;" minlength="1" maxlength="250" [(ngModel)]="fileName">
-          </h3>
-          <button md-icon-button title="ลบรายการ" (click)="clear()">
-            <i class="material-icons">cancel</i>
-          </button>
-        </md-list-item>
-      </md-list>
       <div layout="column" layout-align="center center">
         <button md-icon-button title="นำเข้าไฟล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()">
           <i class="material-icons">cloud_upload</i>
@@ -56,10 +39,10 @@
   </md-card-content>
 
   <md-card-actions layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
-    <button *ngIf="fileAttach.id==0" md-raised-button [ngClass]="{'md-primary': validateSave}"
-      [disabled]="!validateSave" [style.margin-right]="'5px'" (click)="save()">บันทึก</button>
-    <button *ngIf="fileAttach.id!=0" md-raised-button [ngClass]="{'md-primary': validateEdit}"
-      [disabled]="!validateEdit" [style.margin-right]="'5px'" (click)="save()">แก้ไข</button>
+    <button *ngIf="fileAttach.id==0" md-raised-button [ngClass]="{'md-primary': validateSave()}"
+      [disabled]="!validateSave()" [style.margin-right]="'5px'" (click)="save()">บันทึก</button>
+    <button *ngIf="fileAttach.id!=0" md-raised-button [ngClass]="{'md-accent': validateEdit()}"
+      [disabled]="!validateEdit()" [style.margin-right]="'5px'" (click)="save()">แก้ไข</button>
     <button md-raised-button (click)="close()" [style.margin-right]="'5px'">ยกเลิก</button>
   </md-card-actions>
 </md-card>

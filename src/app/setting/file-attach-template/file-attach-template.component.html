@@ -13,17 +13,6 @@
 </div>
 <div layout="column" flex>
   <md-sidenav-layout layout="column" flex fullscreen>
-      <!-- <md-sidenav #sideSubMenu align="end">
-          <form layout-padding style="width: 100%;" layout="column" class="input-Login" #searchDms="ngForm" layout-align="center start">
-              <div *ngFor="let col of columns" layout="row" layout-align="left start" style="width: 100%; margin-bottom: 10px;">
-                  <div flex="100">
-                      <md-input-container flex style="width: 100%">
-                          <input md-input type="text" placeholder="{{col.label}}" name="{{col.name}}">
-                      </md-input-container>
-                  </div>
-              </div>
-          </form>
-      </md-sidenav> -->
       <div class="body-showCenter">
           <div layout-gt-md="row" layout-align-gt-md="center start" class="margin main-admin">
               <div flex-gt-md="90">
@@ -71,3 +60,5 @@
       <md-icon>add</md-icon>
   </button>
 </div>
+
+<p-growl [(value)]="msgs" [life]="5000"></p-growl>
