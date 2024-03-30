@@ -33,10 +33,10 @@
                                       <div>{{fileAttach.fileAttachName}}</div>
                                   </td>
                                   <td td-data-table-cell>
-                                    <div>{{fileAttach.updatedName}}</div>
+                                    <div *ngIf="fileAttach.updatedBy && fileAttach.updatedBy!=0">{{fileAttach.updatedName}}</div>
                                   </td>
                                   <td td-data-table-cell width="120px">
-                                    <div>{{fileAttach.updatedDate?.substr(0, 16)}}</div>
+                                    <div *ngIf="fileAttach.updatedBy && fileAttach.updatedBy!=0">{{fileAttach.updatedDate?.substr(0, 16)}}</div>
                                   </td>
                                   <td td-data-table-cell width="120px">
                                       <div *ngIf="hoverEdit==fileAttach.id" style="text-align: right;" >
