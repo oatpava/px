@@ -62,6 +62,7 @@ export class SarabanFileAttachComponent implements OnInit {
   loading: boolean = false
 
   fileAttachTemplates: FileAttach[] = []
+  addedFileAttachTemplates: FileAttach[] = []
 
   constructor(
     private _loadingService: TdLoadingService,
@@ -289,19 +290,23 @@ export class SarabanFileAttachComponent implements OnInit {
       msgs_tmp.push({
         severity: 'success',
         summary: 'เพิ่มเอกสารแนบสำเร็จ',
-        detail: 'คุณได้ทำการเพิ่มเอกสารแนบจำนวน ' + this.secrets.length + ' รายการ'
+        detail: 'คุณได้ทำการเพิ่มเอกสารแนบจำนวน ' + this.secrets.length + this.addedFileAttachTemplates.length + ' รายการ'
       })
 
       this._pxService.uploadList(this.uploader, this.genFileattachDetail2())
         .onCompleteAll = () => {
           if (this.deleted) {
             this.deleteAction(msgs_tmp)
+          } else if (this.addedFileAttachTemplates.length != 0) {
+            this.createFromTemplatesAction(msgs_tmp)
           } else {
             this.afterSaveAdd(msgs_tmp)
           }
         }
     } else if (this.deleted) {
       this.deleteAction(msgs_tmp)
+    } else {
+      this.createFromTemplatesAction(msgs_tmp)
     }
   }
 
@@ -314,6 +319,26 @@ export class SarabanFileAttachComponent implements OnInit {
           summary: 'ลบเอกสารแนบสำเร็จ',
           detail: 'คุณได้ทำการลบเอกสารแนบจำนวน ' + this.fileAttachRemoved.length + ' รายการ'
         })
+
+        if (this.addedFileAttachTemplates.length != 0) {
+          this.createFromTemplatesAction(msgs_tmp)
+        } else {
+          this.afterSaveAdd(msgs_tmp)
+        }
+      })
+  }
+
+  private createFromTemplatesAction(msgs_tmp: Message[]) {
+    this._pxService
+      .createFileAttachFromtemplates(this.linkType, this.linkId, this.addedFileAttachTemplates)
+      .subscribe(response => {
+        if (!this.added) {
+          msgs_tmp.push({
+            severity: 'success',
+            summary: 'เพิ่มเอกสารแนบสำเร็จ',
+            detail: 'คุณได้ทำการเพิ่มเอกสารแนบจำนวน ' + this.addedFileAttachTemplates.length + ' รายการ'
+          })
+        }
         this.afterSaveAdd(msgs_tmp)
       })
   }
@@ -328,6 +353,7 @@ export class SarabanFileAttachComponent implements OnInit {
         this.msgs = []
         this.life = 3000
         this.msgs = msgs_tmp
+        this.addedFileAttachTemplates = []
       })
   }
 
@@ -411,7 +437,9 @@ export class SarabanFileAttachComponent implements OnInit {
     })
     dialog.componentInstance.fileAttachs = this.fileAttachTemplates
     dialog.afterClosed().subscribe((result: any) => {
-      console.log('close', result)
+      if (result) {
+        this.addedFileAttachTemplates = result
+      }
     })
   }
 

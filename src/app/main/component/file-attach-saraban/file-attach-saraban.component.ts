@@ -29,6 +29,7 @@ export class FileAttachSarabanComponent implements OnInit {
   //@ViewChild('file2') uploaderUpdateRef: ElementRef
   @Input() fileAttachs: any[]
   @Input() fileAttachRemoved: any[]
+  @Input() addedFileAttachTemplates: any[]
   @Input() uploader: FileUploader   //added FileAttach
   @Input() secret: number[]//added FileAttach.secrets
   @Input() type: string[]//added FileAttach type_tmp
@@ -166,6 +167,10 @@ export class FileAttachSarabanComponent implements OnInit {
     this.type.splice(index, 1)
     this.uploader.queue[index].remove()
     if (index == 0) this.addFileAttach.emit(false)//no added file left
+  }
+
+  removeTemplate(index: number) {
+    this.addedFileAttachTemplates.splice(index, 1)
   }
 
   view(fileAttach: any) {

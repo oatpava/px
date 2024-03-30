@@ -15,7 +15,8 @@
                 <md-card-title *ngIf="editMode" class="dl-card-title">กำลังแก้ไขเอกสารแนบ</md-card-title>
                 <md-card-content *ngIf="!loading" class="dl-card-content">
                     <app-file-attach-saraban [uploader]="uploader" [secret]="secrets" [type]="types" [fileAttachs]="fileAttachs" [fileAttachRemoved]="fileAttachRemoved" [editMode]="editMode" [uploaderUpdate]="uploaderUpdate" [auth]="auth" (addFileAttach)=addFileAttach($event)
-                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()" (editFileAttachView)="editFileAttachView()">
+                        (editFileAttach)="editFileAttach($event)" [viewOnly]="viewOnly" [uploaderUpdateIndex]="uploaderUpdateIndex" (uploadFileAttach)="uploadFileAttach()" (editFileAttachView)="editFileAttachView()"
+                        [addedFileAttachTemplates]="addedFileAttachTemplates">
                     </app-file-attach-saraban>
                 </md-card-content>
                 <md-card-content *ngIf="loading" class="dl-card-content">
@@ -24,9 +25,12 @@
                     </div>
                 </md-card-content>
                 <md-card-actions *ngIf="!viewOnly && !loading" layout="row" layout-align="center start" style="width: 100%;" [style.margin-top]="'15px'">
-                    <button *ngIf="!editMode" md-raised-button [ngClass]="{'md-primary': added || deleted}" [disabled]="!added && !deleted" [style.margin-right]="'5px'" (click)="saveAdd()">บันทึก</button>
-                    <button *ngIf="!editMode && num>0" md-raised-button [ngClass]="{'md-accent': !added && !deleted}" [disabled]="added || deleted" [style.margin-right]="'5px'" (click)="edit()">แก้ไข</button>
-                    <button *ngIf="editMode" md-raised-button [ngClass]="{'md-primary': edited}" [disabled]="!edited" [style.margin-right]="'5px'" (click)="saveEdit()">แก้ไขและบันทึก</button>
+                    <button *ngIf="!editMode" md-raised-button [ngClass]="{'md-primary': added || deleted || addedFileAttachTemplates.length!=0}" 
+                        [disabled]="!added && !deleted && addedFileAttachTemplates.length==0" [style.margin-right]="'5px'" (click)="saveAdd()">บันทึก</button>
+                    <button *ngIf="!editMode && num>0" md-raised-button [ngClass]="{'md-accent': !added && !deleted}" 
+                        [disabled]="added || deleted" [style.margin-right]="'5px'" (click)="edit()">แก้ไข</button>
+                    <button *ngIf="editMode" md-raised-button [ngClass]="{'md-primary': edited}" 
+                        [disabled]="!edited" [style.margin-right]="'5px'" (click)="saveEdit()">แก้ไขและบันทึก</button>
                     <button md-raised-button (click)="cancel()" [style.margin-right]="'5px'">ยกเลิก</button>
                 </md-card-actions>
             </md-card>

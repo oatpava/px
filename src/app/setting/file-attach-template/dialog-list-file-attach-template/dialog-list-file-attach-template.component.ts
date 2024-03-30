@@ -34,7 +34,16 @@ export class DialogListFileAttachTemplateComponent implements OnInit {
   }
 
   ok() {
-    this._dialogRef.close(this.fileAttachs.filter(fileAttach => fileAttach.check == true))
+    const tmp = this.fileAttachs
+      .filter(fileAttach => fileAttach.check)
+      .map(fileAttach => {
+        const name: string = fileAttach.fileAttachName
+        const typePos: number = name.lastIndexOf('.')
+        fileAttach.fileAttachName = name.substring(0, typePos)
+        return fileAttach
+      })
+
+    this._dialogRef.close(tmp)
   }
-  
+
 }

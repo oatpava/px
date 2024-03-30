@@ -60,6 +60,19 @@
                 </md-select>
                 <button md-icon-button title="ลบรายการ" (click)="remove(i)"><i class="material-icons">cancel</i></button>
             </md-list-item>
+
+            <md-list-item *ngFor="let template of addedFileAttachTemplates; let i = index;">
+                <md-icon md-list-avatar>
+                    <img src="assets/filetype/{{template.fileAttachType.substring(1)}}.svg" onError="this.src='assets/filetype/unknown.svg'" flex>
+                </md-icon>
+                <h3 md-line>
+                    <input type="text" style="width: 95%;" minlength="1" maxlength="250" [(ngModel)]="template.fileAttachName">
+                </h3>
+                <md-select placeholder="ชั้นความลับ" [(ngModel)]="template.secrets">
+                    <md-option *ngFor="let class of secretClass" [value]="class.value">{{class.label}}</md-option>
+                </md-select>
+                <button md-icon-button title="ลบรายการ" (click)="removeTemplate(i)"><i class="material-icons">cancel</i></button>
+            </md-list-item>
         </md-list>
         <div layout="column" layout-align="center center">
             <button md-icon-button title="นำเข้าไฟล์เอกสาร ขนาดไม่เกิน {{fileSizeLimit}} MB" (click)="file.click()"><i class="material-icons">cloud_upload</i></button>

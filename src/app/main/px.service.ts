@@ -450,4 +450,20 @@ export class PxService {
       .catch(this.loggerService.handleError)
   }
 
+  createFileAttachFromtemplates(linkType: string, linkId: number, fileAttachs: FileAttach[]): Observable<FileAttach> {
+    const tmp = fileAttachs.map(fileAttach => new FileAttach({
+      id: fileAttach.id,
+      fileAttachName: fileAttach.fileAttachName,
+      linkType: linkType,
+      linkId: linkId,
+      secrets: fileAttach.secrets
+    }))
+
+    return this._http.post(this._apiUrl + '/v1/fileAttachs/createFromtemplates', tmp, this._options)
+      .map((response: Response) => {
+        return this.verifyResponseArray(response.json().data)
+      })
+      .catch(this.loggerService.handleError)
+  }
+
 }
