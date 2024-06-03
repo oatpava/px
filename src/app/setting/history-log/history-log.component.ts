@@ -93,12 +93,6 @@ export class HistoryLogComponent implements OnInit {
     this.getHistoryList(limit)
   }
 
-  sideNavAlert(event) {
-    if (event.toElement.className === 'md-sidenav-backdrop') {
-      this.ModeSearch = true
-    }
-  }
-
   closeSideNave() {
     this.sidenav.close()
     this.ModeSearch = true
@@ -127,11 +121,13 @@ export class HistoryLogComponent implements OnInit {
   }
 
   prepareSearchModel(searchField: any): any {
+    searchField.type = ''
     for (let i = 0; i < this.logTypes.length; i++) {
       if (this.logTypes[i].checked) {
-        searchField.type = this.logTypes[i].type
+        searchField.type += `${this.logTypes[i].type}฿`
       }
     }
+
     searchField.createdDateBegin = this.getStringDate(searchField.dateBegin)
     searchField.createdDateEnd = this.getStringDate(searchField.dateEnd)
     return searchField
