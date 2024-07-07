@@ -23,10 +23,8 @@ const limit: number = 1000
 })
 export class HistoryLogComponent implements OnInit {
   @ViewChild('sideSubMenu') sidenav: MdSidenav
-  listMenu: string = 'menu'
-  hoverMenuEdit: boolean = true
-  showMenu: boolean = true
   ModeSearch: boolean = true
+  menuClick: boolean = false
   reportData: any
   logTypes: any = [
     { name: 'logType1', "checked": false, type: 1, label: 'สร้าง' },
@@ -99,19 +97,14 @@ export class HistoryLogComponent implements OnInit {
     }
   }
 
+  openSidenav() {
+    this.sidenav.open()
+    this.ModeSearch = false
+    this.menuClick = false
+  }
   closeSideNave() {
     this.sidenav.close()
     this.ModeSearch = true
-  }
-
-  overMenu(value: string) {
-    this.hoverMenuEdit = false
-    this.listMenu = 'keyboard_arrow_up'
-  }
-
-  leaveMenu() {
-    this.hoverMenuEdit = true
-    this.listMenu = 'menu'
   }
 
   getHistoryList(limit: number) {
@@ -152,6 +145,7 @@ export class HistoryLogComponent implements OnInit {
         this.datas = response.data
         this.listReturn = response.list
         this.reportData = response.listModule
+        this.menuClick = false
         this.closeSideNave()
       })
   }
@@ -174,6 +168,7 @@ export class HistoryLogComponent implements OnInit {
   }
 
   goBack() {
+    this.menuClick = false
     this._location.back()
   }
 

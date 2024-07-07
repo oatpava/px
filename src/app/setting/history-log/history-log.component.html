@@ -108,37 +108,37 @@
     </md-sidenav-layout>
 </div>
 
-<div layout="column" [tdToggle]="!ModeSearch" id="fixedbutton" (click)="overMenu();" (mouseleave)="leaveMenu();">
-    <div [tdToggle]="hoverMenuEdit">
 
-        <div class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab title="ค้นหา" color="accent" (click)="sideSubMenu.open(); ModeSearch = false">
-                <md-icon>search</md-icon>
-            </button>
-        </div>
-        <div class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab [style.background]="'#00cc00'" title="กราฟ" color="accent" (click)="report();">
-                <md-icon>pie_chart</md-icon>
-            </button>
-        </div>
-        <div class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab [style.background]="'#cc7a00'" title="รายงาน PDF" color="accent" (click)="reportpdf('pdf');">
-                <md-icon>assignment</md-icon>
-            </button>
-        </div>
-        <div class="showbutton" style="padding-bottom: 3px;">
-            <button md-fab [style.background]="'#cc7a00'" title="รายงาน Excel" color="accent" (click)="reportpdf('xls');">
-                <md-icon>grid_on</md-icon>
-            </button>
-        </div>
+<div hide show-gt-md [tdToggle]="!ModeSearch" layout="column" id="fixedbutton">
+    <div [tdToggle]="!menuClick" class="menuList">
+        <button md-fab title="ค้นหา" color="accent" (click)="openSidenav()">
+            <md-icon>search</md-icon>
+        </button>
     </div>
-    <button *ngIf="showMenu" md-fab color="accent" title="รายการเมนู">
-        <md-icon>{{listMenu}}</md-icon>
+    <div [tdToggle]="!menuClick" class="menuList">
+        <button md-fab [style.background]="'#00cc00'" title="กราฟ" color="accent" (click)="report();">
+            <md-icon>pie_chart</md-icon>
+        </button>
+    </div>
+    <div [tdToggle]="!menuClick" class="menuList">
+        <button md-fab [style.background]="'#cc7a00'" title="รายงาน PDF" color="accent" (click)="reportpdf('pdf');">
+            <md-icon>assignment</md-icon>
+        </button>
+    </div>
+    <div [tdToggle]="!menuClick" class="menuList">
+        <button md-fab [style.background]="'#cc7a00'" title="รายงาน Excel" color="accent" (click)="reportpdf('xls');">
+            <md-icon>grid_on</md-icon>
+        </button>
+    </div>
+
+    <button md-fab color="accent" title="รายการเมนู" (click)="menuClick=!menuClick">
+            <md-icon *ngIf="!menuClick">menu</md-icon>
+            <md-icon *ngIf="menuClick">keyboard_arrow_up</md-icon>
     </button>
 </div>
 
 <div [tdToggle]="ModeSearch" layout="column" id="fixedbutton">
-    <button md-fab [style.background]="'#1976d2'" title="ค้นหา" [color]="form.valid ? 'accent':''" [disabled]="!form.valid" (click)="searchLog(searchField,additional);">
+    <button md-fab [style.background]="'#1976d2'" [color]="form.valid ? 'accent':''" [disabled]="!form.valid" title="ค้นหา" (click)="searchLog(searchField,additional);">
         <md-icon>search</md-icon>
     </button>
 </div>
