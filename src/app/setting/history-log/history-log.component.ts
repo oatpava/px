@@ -127,11 +127,13 @@ export class HistoryLogComponent implements OnInit {
   }
 
   prepareSearchModel(searchField: any): any {
+    searchField.type = ''
     for (let i = 0; i < this.logTypes.length; i++) {
       if (this.logTypes[i].checked) {
-        searchField.type = this.logTypes[i].type
+        searchField.type += `${this.logTypes[i].type}฿`
       }
     }
+
     searchField.createdDateBegin = this.getStringDate(searchField.dateBegin)
     searchField.createdDateEnd = this.getStringDate(searchField.dateEnd)
     return searchField
@@ -161,7 +163,7 @@ export class HistoryLogComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: UserProfile) => {
       if (result) {
         this.searchField.userName = result.fullName
-        this.searchField.createdBy = '' + result.user.id
+        this.searchField.createdBy = `${result.id}`
       }
     })
   }
