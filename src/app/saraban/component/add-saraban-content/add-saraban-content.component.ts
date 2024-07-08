@@ -40,7 +40,6 @@ import { SarabanFileAttachComponent } from '../saraban-file-attach/saraban-file-
 import { SendSarabanContentComponent } from '../send-saraban-content/send-saraban-content.component'
 import { SendEmailComponent } from '../send-email/send-email.component'
 import { DialogViewComponent } from './dialog-view/dialog-view.component'
-import { Outbox } from '../../../mwp/model/outbox.model'
 import { DialogRecordComponent } from './dialog-record/dialog-record.component'
 import { SendEcmsComponent } from '../../../ecms/component/send-ecms/send-ecms.component'
 
