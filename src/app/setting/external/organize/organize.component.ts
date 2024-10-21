@@ -1,16 +1,15 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { TdLoadingService } from '@covalent/core'
-import { TreeModule, TreeNode, Message } from 'primeng/primeng'
-import { MdDialog, MdDialogRef } from '@angular/material';
-
-import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core'
-import { IPageChangeEvent } from '@covalent/core'
+import { Message } from 'primeng/primeng'
+import { MdDialog } from '@angular/material';
+import { ITdDataTableColumn } from '@covalent/core'
 import { MoveStructureComponent } from '../../component/move-structure/move-structure.component'
 import { OrderStructureComponent } from '../../component/order-structure/order-structure.component'
 import { StructureService } from '../../component/structure/structure.service'
 import { Observable } from 'rxjs/Observable'
+import { ParamSarabanService } from '../../../saraban/service/param-saraban.service'
 
 @Component({
   selector: 'app-organize',
@@ -43,9 +42,9 @@ export class OrganizeComponent implements OnInit {
     private _router: Router,
     private _loadingService: TdLoadingService,
     private _location: Location,
-    private _dataTableService: TdDataTableService,
     private _dialog: MdDialog,
-    private _structureService: StructureService
+    private _structureService: StructureService,
+    private _paramSarabanService: ParamSarabanService
   ) {
     this.parentId = 1
   }
@@ -147,59 +146,25 @@ export class OrganizeComponent implements OnInit {
   }
 
   structureMove() {
-    console.log('structureMove', this.parentStructure)
-    let dialogRef = this._dialog.open(MoveStructureComponent, {
+    const dialog = this._dialog.open(MoveStructureComponent, {
       width: '40%',
-    });
-    let instance = dialogRef.componentInstance
-    instance.structureData = this.parentStructure
-    instance.isOrganize = true
-    dialogRef.afterClosed().subscribe(result => {
+    })
+    dialog.componentInstance.structure = this.parentStructure
+    dialog.componentInstance.isOrganize = true
+    dialog.afterClosed().subscribe(result => {
       if (result) {
+        this.parentStructure.parentId = result.id
+        delete this.parentStructure.type
+
         this._loadingService.register('main')
-        this.msgs = [];
-        this.msgs.push({
-          severity: 'success',
-          summary: 'บันทึกสำเร็จ',
-          detail: 'ย้ายหน่วยงาน' + this.parentStructure.name
+        this._structureService.updateOrg(this.parentStructure).subscribe(response => {
+          this._loadingService.resolve('main')
+
+          // *** change on param tree too
+          this.backWithMsg('success', 'ย้ายหน่วยงานสำเร็จ', '')
         })
-        this.structureTree = []
-        this._structureService
-          .getOutStructures('1.0', '0', '1', '', '', 0)
-          .subscribe(response => {
-            let i = 0
-            for (let node of response) {
-              this.structureTree.push({
-                "label": node.name,
-                "data": node.id,
-                "expandedIcon": "fa-home",
-                "collapsedIcon": "fa-home",
-                "leaf": false,
-                "expanded": true,
-                "dataObj": node,
-                "children": []
-              })
-              Observable.forkJoin(
-                this._structureService.getOutStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
-              ).subscribe((response: Array<any>) => {
-                this._loadingService.resolve('main')
-                for (let structure of response[0]) {
-                  this.structureTree[i].children.push({
-                    "label": structure.name,
-                    "data": structure.id,
-                    "expandedIcon": "fa-tag",
-                    "collapsedIcon": "fa-tag",
-                    "leaf": false,
-                    "selectable": true,
-                    "dataObj": structure
-                  })
-                }
-                i++;
-              });
-            }
-          });
       }
-    });
+    })
   }
 
   searchOrganize() {
@@ -234,6 +199,11 @@ export class OrganizeComponent implements OnInit {
         }
       }],
       { relativeTo: this._route })
+  }
+
+  backWithMsg(severity: string, summary: string, detail: string) {
+    this._paramSarabanService.msg = { severity: severity, summary: summary, detail: detail }
+    this._location.back()
   }
 
 }
