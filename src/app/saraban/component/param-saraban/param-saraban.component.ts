@@ -45,11 +45,13 @@ export class ParamSarabanComponent implements OnInit {
         this._paramSarabanService.privateGroupTree[1].push(nodePG)
       })
       response[1].forEach(user => {
-        let node = this._paramSarabanService.genNode(user, null)
-        this._paramSarabanService.structureTree.push(node)
-        this._paramSarabanService.structureTree_filter.push(node)
-        let nodePG = this.genNode_PG(user, null)
-        this._paramSarabanService.privateGroupTree[0].push(nodePG)
+        if (user.userStatus.id == 1) {
+          let node = this._paramSarabanService.genNode(user, null)
+          this._paramSarabanService.structureTree.push(node)
+          this._paramSarabanService.structureTree_filter.push(node)
+          let nodePG = this.genNode_PG(user, null)
+          this._paramSarabanService.privateGroupTree[0].push(nodePG)
+        }
       })
       this._paramSarabanService.structureTree.forEach(node => {
         this.getStructuresTreeRecursive(node)
@@ -71,11 +73,13 @@ export class ParamSarabanComponent implements OnInit {
           this._paramSarabanService.privateGroupTree[1].push(tmpPG)
         })
         response[1].forEach(user => {
-          let tmp = this._paramSarabanService.genNode(user, node)
-          node.children.push(tmp)
-          this._paramSarabanService.structureTree_filter.push(tmp)
-          let tmpPG = this.genNode_PG(user, node)
-          this._paramSarabanService.privateGroupTree[0].push(tmpPG)
+          if (user.userStatus.id == 1) {
+            let tmp = this._paramSarabanService.genNode(user, node)
+            node.children.push(tmp)
+            this._paramSarabanService.structureTree_filter.push(tmp)
+            let tmpPG = this.genNode_PG(user, node)
+            this._paramSarabanService.privateGroupTree[0].push(tmpPG)
+          }
         })
         node.children.forEach(childNode => {
           this.getStructuresTreeRecursive(childNode)
@@ -96,7 +100,7 @@ export class ParamSarabanComponent implements OnInit {
       children: child
     }
   }
-  
+
   genNode_PG(user: any, parentNode: TreeNode): TreeNode {
     let child: TreeNode[] = []
     let parentKey = this._paramSarabanService.convertParentKey(user.structure.parentKey)
@@ -132,7 +136,7 @@ export class ParamSarabanComponent implements OnInit {
             let tmp = this.genExternalParentNode(structure, node)
             node.children.push(tmp)
             this._paramSarabanService.externalTree_filter.push(tmp)
-          })         
+          })
           node.children.forEach(childNode => {
             this.getExternalStructuresTreeRecursive(childNode)
           })
