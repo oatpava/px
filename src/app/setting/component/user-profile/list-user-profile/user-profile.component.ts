@@ -301,72 +301,6 @@ export class UserProfileComponent implements OnInit {
 
   rootStructureId = 0
 
-  structureMove() {
-    let dialogRef = this._dialog.open(MoveStructureComponent, {
-      width: '40%',
-    });
-    let instance = dialogRef.componentInstance
-    instance.structureData = this.parentStructure
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this._loadingService.register('main')
-        this.msgs = [];
-        this.msgs.push({
-          severity: 'success',
-          summary: 'บันทึกสำเร็จ',
-          detail: 'ย้ายหน่วยงาน' + this.parentStructure.name
-        })
-        this.structureTree = []
-        this._structureService
-          .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
-          .subscribe(response => {
-            let i = 0
-            for (let node of response) {
-              this.structureTree.push({
-                "label": node.name,
-                "data": node.id,
-                "expandedIcon": "fa-home",
-                "collapsedIcon": "fa-home",
-                "leaf": false,
-                "expanded": true,
-                "dataObj": node,
-                "children": []
-              })
-              Observable.forkJoin(
-                this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
-                this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
-              ).subscribe((response: Array<any>) => {
-                this._loadingService.resolve('main')
-                for (let structure of response[0]) {
-                  this.structureTree[i].children.push({
-                    "label": structure.name,
-                    "data": structure.id,
-                    "expandedIcon": "fa-tag",
-                    "collapsedIcon": "fa-tag",
-                    "leaf": false,
-                    "selectable": true,
-                    "dataObj": structure
-                  })
-                }
-                for (let userProfile of response[1]) {
-                  this.structureTree[i].children.push({
-                    "label": userProfile.fullName,
-                    "data": userProfile.id,
-                    "expandedIcon": "fa-user",
-                    "collapsedIcon": "fa-user",
-                    "leaf": true,
-                    "selectable": true,
-                    "dataObj": userProfile
-                  })
-                }
-                i++;
-              });
-            }
-          });
-      }
-    });
-  }
-
   orderStructure() {
     let dialogRef = this._dialog.open(OrderStructureComponent, {
       width: '40%',
@@ -482,6 +416,27 @@ export class UserProfileComponent implements OnInit {
             });
           }
         });
+    })
+  }
+
+  structureMove() {
+    const dialog = this._dialog.open(MoveStructureComponent, {
+      width: '40%',
+    })
+    dialog.componentInstance.structure = this.parentStructure
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.parentStructure.parentId = result.id
+        delete this.parentStructure.type
+
+        this._loadingService.register('main')
+        this._structureService.updateStructure(this.parentStructure).subscribe(response => {
+          this._loadingService.resolve('main')
+
+          // *** change on param tree too
+          this.backWithMsg('success', 'ย้ายหน่วยงานสำเร็จ', '')
+        })
+      }
     })
   }
 
