@@ -486,63 +486,27 @@ export class UserProfileComponent implements OnInit {
   }
 
   userProfileMove() {
-    let dialogRef = this._dialog.open(MoveProfileComponent, {
+    const dialog = this._dialog.open(MoveProfileComponent, {
       width: '40%',
-    });
-    let instance = dialogRef.componentInstance
-    instance.user = this.parentStructure
-    dialogRef.afterClosed().subscribe(result => {
+    })
+    dialog.componentInstance.userProfile = this.parentStructure
+    dialog.afterClosed().subscribe(result => {
       if (result) {
+        this.parentStructure.structure.id = result.id
+        delete this.parentStructure.type
+
         this._loadingService.register('main')
-        this.structureTree = []
-        this._structureService
-          .getStructures('1.0', '0', '1', '', '', this.rootStructureId)
-          .subscribe(response => {
-            let i = 0
-            for (let node of response) {
-              this.structureTree.push({
-                "label": node.name,
-                "data": node.id,
-                "expandedIcon": "fa-home",
-                "collapsedIcon": "fa-home",
-                "leaf": false,
-                "expanded": true,
-                "dataObj": node,
-                "children": []
-              })
-              Observable.forkJoin(
-                this._structureService.getStructures('1.0', '0', '200', 'orderNo', 'asc', node.id),
-                this._structureService.getUserProfiles('1.1', '0', '200', '', '', node.id),
-              ).subscribe((response: Array<any>) => {
-                this._loadingService.resolve('main')
-                for (let structure of response[0]) {
-                  this.structureTree[i].children.push({
-                    "label": structure.name,
-                    "data": structure.id,
-                    "expandedIcon": "fa-tag",
-                    "collapsedIcon": "fa-tag",
-                    "leaf": false,
-                    "selectable": true,
-                    "dataObj": structure
-                  })
-                }
-                for (let userProfile of response[1]) {
-                  this.structureTree[i].children.push({
-                    "label": userProfile.fullName,
-                    "data": userProfile.id,
-                    "expandedIcon": "fa-user",
-                    "collapsedIcon": "fa-user",
-                    "leaf": true,
-                    "selectable": true,
-                    "dataObj": userProfile
-                  })
-                }
-                i++;
-              });
-            }
-          });
+        this._userProfileService.updateUserProfile(this.parentStructure).subscribe(response => {
+          this._loadingService.resolve('main')
+
+          // *** change on param tree too
+          // console.log('p tree', this._paramSarabanService.structureTree)
+          // console.log('p treeFilter', this._paramSarabanService.structureTree_filter)
+          // console.log('pg tree', this._paramSarabanService.privateGroupTree)
+          this.backWithMsg('success', 'ย้ายผู้ใช้งานสำเร็จ', '')
+        })
       }
-    });
+    })
   }
 
   lockuser() {
@@ -683,6 +647,11 @@ export class UserProfileComponent implements OnInit {
         params.set("createdBy", '' + this._paramSarabanService.userId)
         this._pxService.report('user_status2', 'xls', params)
       })
+  }
+
+  backWithMsg(severity: string, summary: string, detail: string) {
+    this._paramSarabanService.msg = { severity: severity, summary: summary, detail: detail }
+    this._location.back()
   }
 
 }

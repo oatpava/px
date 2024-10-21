@@ -4,12 +4,14 @@ padding: 12px;
 color: #FFF;
 margin-bottom: 10px;
 font-size: large;">
-    <span flex="99">ย้ายบุคลากร </span>
+    <span flex="99">ย้ายผู้ใช้งาน</span>
     <md-icon md-list-avatar style="cursor: pointer;" (click)="close()">close</md-icon>
 </div>
 <div class="bodyDialogHeigthMove">
     <px-structure [selectDepartment]="true" [noneUser]="true" (onselectData)="selectStructure($event)"></px-structure>
 </div>
 <div layout="row" layout-align="end start" style="width: 100%; padding: 5px; background: #d4daec;" [style.margin-top]="'15px'">
-    <button md-raised-button (click)="selectMove() " color="primary" [style.margin-right]="'5px'">ตกลง</button>
+    <button md-raised-button (click)="ok()" color="primary" [style.margin-right]="'5px'">ตกลง</button>
 </div>
+
+<p-growl [(value)]="msgs" [life]="3000"></p-growl>

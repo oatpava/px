@@ -34,6 +34,12 @@ export class SettingComponent implements OnInit {
   ngOnInit() {
     this.getSettings()
     console.log('settingcomponent')
+
+    if (this._paramSarabanService.msg != null) {
+      this.msgs.push(this._paramSarabanService.msg)
+      this._paramSarabanService.msg = null
+      setTimeout(() => this.msgs = [], 3000)
+    }
   }
 
   getSettings() {
