@@ -405,6 +405,7 @@ export class SarabanContentService {
     if (environment.production) {
       let params = new URLSearchParams()
       let replacedName = name.replace(/ /g, 'xxxx')//this is repeace all for typescript, //because cant decrypt whitespace
+      replacedName = replacedName.replace(/\t/g, 'yyyy')//'\t' (tab character)
       params.set('q', this.pxService.encrypt('name=' + replacedName))
       this._options.search = params
       return this._http.get(this._apiUrl + '/prepareShowFromTo/' + searchOrder, this._options)
