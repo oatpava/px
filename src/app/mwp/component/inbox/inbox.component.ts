@@ -290,6 +290,7 @@ export class InboxComponent implements OnInit {
     this._paramSarabanService.inboxFlag = { open: inbox.inboxOpenFlag, action: inbox.inboxActionFlag, finish: inbox.inboxFinishFlag }
     this._paramSarabanService.folderId = null
     this._paramSarabanService.folderName = "หนังสือเข้า"
+    this._paramSarabanService.folderParentName = this.inboxAssign[this.index].label
     this._paramSarabanService.folderIcon = "move_to_inbox"
     this._paramSarabanService.pathOld = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath
     this._paramSarabanService.path = 'หนังสือเข้า: ' + this.inboxAssign[this.index].label + searchedPath

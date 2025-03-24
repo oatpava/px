@@ -221,6 +221,7 @@ export class OutboxComponent implements OnInit {
     this._paramSarabanService.sarabanContentId = outbox.linkId2
     this._paramSarabanService.menuType = "outbox"
     this._paramSarabanService.folderName = "หนังสือออก"
+    this._paramSarabanService.folderParentName = ""
     this._paramSarabanService.folderIcon = "assignment_return"
     this._paramSarabanService.pathOld = this.path[this.searched]
     this._paramSarabanService.path = this.path[this.searched]

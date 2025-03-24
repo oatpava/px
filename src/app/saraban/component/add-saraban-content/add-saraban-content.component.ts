@@ -246,7 +246,7 @@ export class AddSarabanContentComponent implements OnInit {
 
   showSarabanContent(sarabanContentId: number) {
     this.disable = true
-    this.getSarabanContent(sarabanContentId)
+    this.getSarabanContent(sarabanContentId, true)
     // this.getFileAttachs(sarabanContentId)
   }
 
@@ -285,13 +285,21 @@ export class AddSarabanContentComponent implements OnInit {
     } else this.getSarabanLastNumber(folder, null)
   }
 
-  getSarabanContent(sarabanContentId: number) {
+  getSarabanContent(sarabanContentId: number, isInit: boolean) {
     this._loadingService.register('main')
     this._sarabanContentService
       .getSarabanContent(sarabanContentId)
       .subscribe(response => {
         this._loadingService.resolve('main')
         //this.getFileAttachs(response.wfDocumentId)
+
+        if (isInit) {//create log open
+          let tmp = new SarabanContent()
+          Object.assign(tmp, response)
+          if (this._paramSarabanService.inboxId == null) tmp.wfContentText09 = this._paramSarabanService.folderName
+          tmp.wfContentText10 = this._paramSarabanService.folderParentName
+          this._sarabanContentService.createLogOpen(tmp).subscribe()
+        }
 
         this._paramSarabanService.path += ' / เลขทะเบียน: ' + response.wfContentContentNo
         this.path = this._paramSarabanService.path
@@ -1547,7 +1555,7 @@ export class AddSarabanContentComponent implements OnInit {
       if (mode == "edit" || mode == "register") {
         this.mode = "show"
         this.disable = true
-        this.getSarabanContent(this._paramSarabanService.sarabanContentId)
+        this.getSarabanContent(this._paramSarabanService.sarabanContentId, false)
 
       } else {
         this._location.back()
