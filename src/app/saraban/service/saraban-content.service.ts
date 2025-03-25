@@ -496,4 +496,21 @@ export class SarabanContentService {
       .catch(this.loggerService.handleError)
   }
 
+  createLogViewFile(content: SarabanContent): Observable<any> {
+    return this._http.post(this._apiUrl + '/logViewFile', content, this._options)
+      .map((response: Response) => {
+        return response.json().data
+      })
+      .catch(this.loggerService.handleError)
+  }
+
+  createLogDownloadFile(content: SarabanContent): Observable<any> {
+    return this._http.post(this._apiUrl + '/logDownloadFile', content, this._options)
+      .map((response: Response) => {
+        return response.json().data
+      })
+      .catch(this.loggerService.handleError)
+  }
+
+
 }

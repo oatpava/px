@@ -45,6 +45,8 @@ export class FileAttachSarabanComponent implements OnInit {
   @Output() editFileAttach = new EventEmitter()
   @Output() uploadFileAttach = new EventEmitter()
   @Output() editFileAttachView = new EventEmitter()
+  @Output() viewFileAttach = new EventEmitter()
+  @Output() downloadFileAttach = new EventEmitter()
 
   hasBaseDropZoneOver: boolean = false
   hoverEdit: number = -1
@@ -207,6 +209,8 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   download(fileAttach: FileAttach) {
+    this.downloadFileAttach.emit(fileAttach)
+    
     this._pxService.downloadFileAttach(fileAttach)
   }
 
@@ -294,12 +298,16 @@ export class FileAttachSarabanComponent implements OnInit {
   }
 
   viewImage(fileAttach: any) {
+    this.viewFileAttach.emit(fileAttach)
+
     this._pxService.crateTmpFile(fileAttach).subscribe(response => {
       window.open(this._pxService.getExpiredPath(fileAttach), "_blank", "height=600,width=1000")
     })
   }
 
   // viewImage(fileAttach: any) {
+  //   this.viewFileAttach.emit(fileAttach) 
+  //
   //   let dialogRef = this._dialog.open(DialogViewImageComponent, {
   //     width: '90%', height: '90%'
   //   })
@@ -309,6 +317,8 @@ export class FileAttachSarabanComponent implements OnInit {
   // }
 
   //   viewImage(fileAttach: any) {
+    //   this.viewFileAttach.emit(fileAttach) 
+  //
   //     // console.log(encodeURIComponent(fileAttach.url))
   //     // console.log(decodeURIComponent(fileAttach.url))
 

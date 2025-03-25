@@ -1531,6 +1531,7 @@ export class AddSarabanContentComponent implements OnInit {
     dialogRef.componentInstance.linkId = documentId
     dialogRef.componentInstance.num = this.numFileAttach
     dialogRef.componentInstance.title = this.trimTitle(this.sarabanContent.wfContentTitle)
+    dialogRef.componentInstance.sarabanContent = Object.assign({}, this.sarabanContent)
     dialogRef.afterClosed().subscribe(result => {
       if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
       this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num

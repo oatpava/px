@@ -17,6 +17,7 @@ import { SarabanAuth } from '../../model/SarabanAuth.model'
 
 import { DialogWarningComponent } from '../add-saraban-content/dialog-warning/dialog-warning.component'
 import { DialogListFileAttachTemplateComponent } from '../../../setting/file-attach-template/dialog-list-file-attach-template/dialog-list-file-attach-template.component'
+import { SarabanContent } from '../../model/sarabanContent.model'
 
 @Component({
   selector: 'app-saraban-file-attach',
@@ -59,6 +60,7 @@ export class SarabanFileAttachComponent implements OnInit {
 
   num: number
   title: string
+  sarabanContent: SarabanContent
   loading: boolean = false
 
   fileAttachTemplates: FileAttach[] = []
@@ -451,6 +453,22 @@ export class SarabanFileAttachComponent implements OnInit {
         this._loadingService.resolve('main')
         this.fileAttachTemplates = response
       })
+  }
+
+  viewFileAttach(fileAttach: any) {
+    let tmp = new SarabanContent()
+    Object.assign(tmp, this.sarabanContent)
+    tmp.wfContentInt10 = fileAttach.id
+    tmp.wfContentText10 = `${fileAttach.fileAttachName}${fileAttach.type}`
+    this._sarabanContentService.createLogViewFile(tmp).subscribe()
+  }
+
+  downloadFileAttach(fileAttach: any) {
+    let tmp = new SarabanContent()
+    Object.assign(tmp, this.sarabanContent)
+    tmp.wfContentInt10 = fileAttach.id
+    tmp.wfContentText10 = `${fileAttach.fileAttachName}${fileAttach.type}`
+    this._sarabanContentService.createLogDownloadFile(tmp).subscribe()
   }
 
 }
