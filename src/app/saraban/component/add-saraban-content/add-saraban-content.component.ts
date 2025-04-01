@@ -1525,13 +1525,17 @@ export class AddSarabanContentComponent implements OnInit {
   }
 
   fileAttachContent(documentId: number) {
+    const tmp = Object.assign({}, this.sarabanContent)
+    if (this._paramSarabanService.inboxId == null) tmp.wfContentText09 = this._paramSarabanService.folderName
+    tmp.wfContentText10 = this._paramSarabanService.folderParentName
+    
     let dialogRef = this._dialog.open(SarabanFileAttachComponent, {
       width: '80%', height: '90%'
     })
     dialogRef.componentInstance.linkId = documentId
     dialogRef.componentInstance.num = this.numFileAttach
     dialogRef.componentInstance.title = this.trimTitle(this.sarabanContent.wfContentTitle)
-    dialogRef.componentInstance.sarabanContent = Object.assign({}, this.sarabanContent)
+    dialogRef.componentInstance.sarabanContent = tmp
     dialogRef.afterClosed().subscribe(result => {
       if (this._paramSarabanService.ScanSubscription) this._paramSarabanService.ScanSubscription.unsubscribe()
       this.sarabanContent.numFileAttach = this.numFileAttach = dialogRef.componentInstance.num
