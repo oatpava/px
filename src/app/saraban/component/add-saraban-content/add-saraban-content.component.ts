@@ -293,13 +293,13 @@ export class AddSarabanContentComponent implements OnInit {
         this._loadingService.resolve('main')
         //this.getFileAttachs(response.wfDocumentId)
 
-        // if (isInit) {//create log open
-        //   let tmp = new SarabanContent()
-        //   Object.assign(tmp, response)
-        //   if (this._paramSarabanService.inboxId == null) tmp.wfContentText09 = this._paramSarabanService.folderName
-        //   tmp.wfContentText10 = this._paramSarabanService.folderParentName
-        //   this._sarabanContentService.createLogOpen(tmp).subscribe()
-        // }
+        if (isInit) {//create log open
+          let tmp = new SarabanContent()
+          Object.assign(tmp, response)
+          if (this._paramSarabanService.inboxId == null) tmp.wfContentText09 = this._paramSarabanService.folderName
+          tmp.wfContentText10 = this._paramSarabanService.folderParentName
+          this._sarabanContentService.createLogOpen(tmp).subscribe()
+        }
 
         this._paramSarabanService.path += ' / เลขทะเบียน: ' + response.wfContentContentNo
         this.path = this._paramSarabanService.path
