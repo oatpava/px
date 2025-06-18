@@ -456,19 +456,19 @@ export class SarabanFileAttachComponent implements OnInit {
   }
 
   viewFileAttach(fileAttach: any) {
-    // let tmp = new SarabanContent()
-    // Object.assign(tmp, this.sarabanContent)
-    // tmp.wfContentInt10 = fileAttach.id
-    // tmp.wfContentText08 = `${fileAttach.fileAttachName}${fileAttach.type}`
-    // this._sarabanContentService.createLogViewFile(tmp).subscribe()
+    let tmp = new SarabanContent()
+    Object.assign(tmp, this.sarabanContent)
+    tmp.wfContentInt10 = fileAttach.id
+    tmp.wfContentText08 = `${fileAttach.fileAttachName}${fileAttach.type}`
+    this._sarabanContentService.createLogViewFile(tmp).subscribe()
   }
 
   downloadFileAttach(fileAttach: any) {
-    // let tmp = new SarabanContent()
-    // Object.assign(tmp, this.sarabanContent)
-    // tmp.wfContentInt10 = fileAttach.id
-    // tmp.wfContentText08 = `${fileAttach.fileAttachName}${fileAttach.type}`
-    // this._sarabanContentService.createLogDownloadFile(tmp).subscribe()
+    let tmp = new SarabanContent()
+    Object.assign(tmp, this.sarabanContent)
+    tmp.wfContentInt10 = fileAttach.id
+    tmp.wfContentText08 = `${fileAttach.fileAttachName}${fileAttach.type}`
+    this._sarabanContentService.createLogDownloadFile(tmp).subscribe()
   }
 
 }

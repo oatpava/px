@@ -34,8 +34,8 @@ export class HistoryLogComponent implements OnInit {
     { name: 'logType5', "checked": false, type: 5, label: 'กู้คืน' },
     { name: 'logType6', "checked": false, type: 10, label: 'ออกจากระบบ' },
     { name: 'logType7', "checked": false, type: 9, label: 'เปิดอ่านหนังสือ' },
-    // { name: 'logType8', "checked": false, type: 11, label: 'เปิดอ่านเอกสาร' },
-    // { name: 'logType9', "checked": false, type: 8, label: 'สำเนาเอกสาร' },
+    { name: 'logType8', "checked": false, type: 11, label: 'เปิดอ่านเอกสาร' },
+    { name: 'logType9', "checked": false, type: 8, label: 'สำเนาเอกสาร' },
   ]
   modules: any[] = [
     { id: 1, name: 'ทั้งหมด', code: '' },
