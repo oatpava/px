@@ -358,7 +358,7 @@ export class PxService {
     const tmp: string[] = fileAttach.url.split('/document/Temp/')
 
     const uri: string = '/viewFile/' + tmp[1].replace(fileAttach.linkType + '/', '')
-    const expires: string = (Math.ceil(Date.now() / 1000) + 1).toString()
+    const expires: string = (Math.ceil(Date.now() / 1000) + 3).toString()
     const md5: string = this.generateSecurePathHash(expires, uri, this._paramSarabanService.clientIp)
     return tmp[0] + uri + '?linkType=' + fileAttach.linkType + '&md5=' + md5 + '&expires=' + expires
   }
