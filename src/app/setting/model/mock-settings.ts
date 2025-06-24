@@ -83,20 +83,20 @@ export const SETTINGS: Setting[] = [
       // },      
     ]
   }
-  ,{
+  , {
     id: 2,
     moduleId: 1,
     name: 'ระบบจัดเก็บเอกสาร',
     type: 'DMS',
     subSetting: '',
     iconModule: 'dashboard',
-    child: [ 
+    child: [
       {
         childId: 1,
         childName: 'การจัดการประเภทเอกสาร',
         childIcon: 'text_fields',
         subSetting: 'document-type',
-      }, 
+      },
       // {
       //   childId: 2,
       //   childName: 'รายการสิทธิ์แฟ้มทะเบียน',
@@ -180,6 +180,12 @@ export const SETTINGS: Setting[] = [
         childName: 'แบบฟอร์มเอกสารกรมอุตสาหกรรมพื้นฐานและการเหมืองแร่',
         childIcon: 'description',
         subSetting: 'file-attach-template',
+      },
+      {
+        childId: 57,//9,
+        childName: 'ข้อมูลการเชื่อมระบบ',
+        childIcon: 'vpn_key',
+        subSetting: 'import-profile',
       },
     ]
 

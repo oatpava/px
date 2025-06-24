@@ -145,7 +145,8 @@ import {
     DialogsShowThEGifComponent,
     AuthTemplateComponent,
     DialogViewImageComponent,
-    FileAttachTemplateComponent
+    FileAttachTemplateComponent,
+    ImportProfileComponent
 } from './shared'
 
 const routes: Routes = [
@@ -324,7 +325,8 @@ const routes: Routes = [
             { path: 'auth-admin', component: AuthAdminComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'auth-template', component: AuthTemplateComponent, canActivate: [AuthGuard], outlet: 'center' },
             { path: 'dialog-view-image', component: DialogViewImageComponent, canActivate: [AuthGuard], outlet: 'center' },
-            { path: 'file-attach-template', component: FileAttachTemplateComponent, canActivate: [AuthGuard], outlet: 'center' }
+            { path: 'file-attach-template', component: FileAttachTemplateComponent, canActivate: [AuthGuard], outlet: 'center' },
+            { path: 'import-profile', component: ImportProfileComponent, canActivate: [AuthGuard], outlet: 'center' }
         ]
     },
     { path: '**', component: LoginComponent },

@@ -198,6 +198,8 @@ export * from '../setting/auth-template/auth-template.component'
 export * from '../setting/file-attach-template/file-attach-template.component'
 export * from '../setting/file-attach-template/dialog-add-file-attach-template/dialog-add-file-attach-template.component'
 export * from '../setting/file-attach-template/dialog-list-file-attach-template/dialog-list-file-attach-template.component'
+export * from '../setting/import-profile/import-profile.component'
+export * from '../setting/import-profile/dialog-add-import-profile/dialog-add-import-profile.component'
 
 export * from '../setting/history-log/list-histtory-user/list-histtory-user.component'
 export * from '../setting/history-log/report-log/report-log.component'
