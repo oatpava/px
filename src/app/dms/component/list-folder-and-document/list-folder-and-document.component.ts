@@ -1497,6 +1497,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
 
   loadMoreContents() {
     this.allCheck = false
+    this._loadingService.register('main')
     this._documentService
       .getDocuments(this.parentId, this.listReturn.count, limit)
       .subscribe(response => {
@@ -1510,6 +1511,7 @@ export class ListFolderAndDocumentComponent implements OnInit {
         for (let i = 0; i < this.allData.length; i++) {
           this.flagCheck[i] = false
         }
+        this._loadingService.resolve('main')
       })
 
 
