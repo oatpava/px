@@ -24,36 +24,17 @@ export class LoginService {
     this._apiUrlLogin = environment.apiServer + environment.apiName + '/v1/users'
     this._headers = new Headers()
     this._headers.append('Content-Type', 'application/json; charset=UTF-8')
-    //  this._options = new RequestOptions({ headers: this._headers })
   }
 
-  // changeSetapiUrl() {
-  //   environment.apiServer = environment.apiServerArchive
-  //   environment.apiName = environment.apiNameArchive
-  //   this._apiUrl = environment.apiServer + environment.apiName + '/v1/users'
-  //   let result
-  //   return result
-  // }
-
-  // changeapiUrl() {
-  //   environment.apiServer = environment.apiServerHome
-  //   environment.apiName = environment.apiNameHome
-  //   this._apiUrl = environment.apiServer + environment.apiName + '/v1/users'
-  //   let result
-  //   return result
-  // }
-
-  // checkLogin(user: User): Observable<boolean> {
   checkLogin(user: User): Observable<any> {
     if (environment.production) {
       return this._http.post(this._apiUrlLogin + '/login', user, { headers: this._headers })
         .map((response: Response) => {
           let result = response.json()
-          if (result.data.result) {
+          if (result.data) {
             localStorage.setItem('px-auth-token', response.headers.get('px-auth-token'))
             this._paramSarabanService.token = response.headers.get('px-auth-token')
           }
-          // return response.json().data.result
           return this.pxService.verifyResponseArray(result)
         })
         .catch(this.loggerService.handleError)
@@ -63,21 +44,21 @@ export class LoginService {
     }
   }
 
-  checkChangePassword(user: User): Observable<any> {
-    this._headers.set('px-auth-token', this._paramSarabanService.token)
-    if (environment.production) {
-      return this._http.post(this._apiUrl + '/checkChangePassword', user, { headers: this._headers })
-        .map((response: Response) => {
-          let result = response.json()
-          // return response.json().data.result
-          return this.pxService.verifyResponseArray(result)
-        })
-        .catch(this.loggerService.handleError)
-    } else {
-      let result = USERS.filter(item => (item.name === user.name) && (item.passwords === user.passwords))
-      return this.pxService.createObservable(result.length > 0)
-    }
-  }
+  // checkChangePassword(user: User): Observable<any> {
+  //   this._headers.set('px-auth-token', this._paramSarabanService.token)
+  //   if (environment.production) {
+  //     return this._http.post(this._apiUrl + '/checkChangePassword', user, { headers: this._headers })
+  //       .map((response: Response) => {
+  //         let result = response.json()
+  //         // return response.json().data.result
+  //         return this.pxService.verifyResponseArray(result)
+  //       })
+  //       .catch(this.loggerService.handleError)
+  //   } else {
+  //     let result = USERS.filter(item => (item.name === user.name) && (item.passwords === user.passwords))
+  //     return this.pxService.createObservable(result.length > 0)
+  //   }
+  // }
 
   checkEmail(username: String, email: String): Observable<any> {
     this._headers.set('px-auth-token', this._paramSarabanService.token)
@@ -103,10 +84,8 @@ export class LoginService {
       params.set('q', this.pxService.encrypt('api_key=praXis'))
       this._options.search = params
       return this._http.put(this._apiUrl + '/userName', user, this._options)
-        // return this._http.put(this._apiUrl + '/userName/'+ user.name, user, this._options)
         .map((response: Response) => {
           let result = response.json()
-          // return response.json().data.result
           return this.pxService.verifyResponseArray(result)
         })
         .catch(this.loggerService.handleError)

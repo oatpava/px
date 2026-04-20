@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
   selectSystem: number = 1
   showPassword: boolean = false
   logo: string = ''
-  errorCount: number = 0
-  userName: string = ''
+
+  wrongPasswordErrorCount: number = 0
 
   constructor(
     private _router: Router,
@@ -51,34 +51,27 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('px-auth-token')
   }
 
-  checkLogin(user: User): void {
-    localStorage.removeItem('px-auth-token')
+  checkLogin(user: User) {
     this._loadingService.register('main')
     this._loginService
       .checkLogin(user)
       .subscribe(response => {
-        console.log('login', response)
-        this._paramSarabanService.clientIp = response.clientIp
-        this._paramSarabanService.userProfiles = response.userProfiles
-        this._paramSarabanService.haveCa = response.haveCa
         this._loadingService.resolve('main')
-        if (response.data.result) {
-          this._loadingService.register('main')
-          this._loginService
-            .checkChangePassword(user)
-            .subscribe(response => {
-              this._loadingService.resolve('main')
-              if (response.data.result) {
-                this.openDialogRequestChangePassword(response.message)
-              } else {
-                this._router.navigate(['/load'])
-              }
-            })
-          this._loadingService.resolve('main')
+        console.log('login', response)
+
+        if (response.data) {
+          this._paramSarabanService.clientIp = response.clientIp
+          this._paramSarabanService.userProfiles = response.userProfiles
+          this._paramSarabanService.haveCa = response.haveCa
+          this._router.navigate(['/load'])
         } else {
-          localStorage.removeItem('px-auth-token')
-          if (user.name == this.userName) {
-            if (this.errorCount >= 2) {
+          if (response.status == -3) {
+            this.wrongPasswordErrorCount++
+            
+            if (this.wrongPasswordErrorCount == 3) {
+              const dialogRef = this._dialog.open(ErrorPasswordComponent)
+              dialogRef.componentInstance.message = 'รหัสผ่านผิดครบ 3 ครั้ง ' + response.message
+
               user.status.id = 3
               this._loadingService.register('main')
               this._loginService
@@ -86,18 +79,17 @@ export class LoginComponent implements OnInit {
                 .subscribe(response => {
                   this._loadingService.resolve('main')
                 })
-              this.openDialogErrorPassword("", true)
-            } else {
-              this.openDialogErrorPassword(response.message, false)
-              this.errorCount++
+              return
             }
-          } else {
-            this.userName = user.name
-            if (this.errorCount == 0) {
-              this.openDialogErrorPassword(response.message, false)
-              this.errorCount++
-            }
-            this.errorCount = 0
+          }
+          this.wrongPasswordErrorCount = 0
+
+          const dialogRef = this._dialog.open(AlertMessageComponent, { width: '40%' })
+          dialogRef.componentInstance.message = response.message
+          if (response.status == 2) {
+            dialogRef.afterClosed().subscribe(result => {
+              this._dialog.open(ChangePasswordComponent, { width: '40%' })
+            })
           }
         }
       })
@@ -125,20 +117,6 @@ export class LoginComponent implements OnInit {
     this._dialog.open(ForgotPasswordComponent, {
       width: '40%',
     });
-  }
-
-  openDialogRequestChangePassword(mess: string): void {
-    let dialogRef = this._dialog.open(AlertMessageComponent, {
-      width: '40%',
-    });
-    dialogRef.componentInstance.message = mess
-    if (mess.indexOf('ชื่อผู้ใช้หมดอายุการใช้งาน') < 0) {
-      dialogRef.afterClosed().subscribe(result => {
-        this._dialog.open(ChangePasswordComponent, {
-          width: '40%',
-        });
-      });
-    }
   }
 
   openCircularNotice() {
