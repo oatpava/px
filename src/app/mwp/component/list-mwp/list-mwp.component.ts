@@ -12,12 +12,16 @@ import { Mwp } from '../../model/mwp.model'
 import { SarabanFolder } from '../../../saraban/model/sarabanFolder.model'
 
 import { DialogInstructionComponent } from '../../../main/component/dialog-instruction/dialog-instruction.component'
+import { AlertService } from '../../../setting/alert/alert.service'
+import { Alert } from '../../../setting/model/alert.model'
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component'
+
 
 @Component({
   selector: 'app-list-mwp',
   templateUrl: './list-mwp.component.html',
   styleUrls: ['./list-mwp.component.styl'],
-  providers: [MwpService, SarabanService, InboxService]
+  providers: [MwpService, SarabanService, InboxService, AlertService]
 })
 export class ListMwpComponent implements OnInit {
   mwps: Mwp[]
@@ -34,7 +38,8 @@ export class ListMwpComponent implements OnInit {
     private _sarabanService: SarabanService,
     private _dialog: MdDialog,
     private _paramSarabanService: ParamSarabanService,
-    private _inboxService: InboxService
+    private _inboxService: InboxService,
+    private _alertService: AlertService
   ) {
     this._paramSarabanService.pathOld = null
     this._paramSarabanService.path = null
@@ -55,10 +60,11 @@ export class ListMwpComponent implements OnInit {
     this._route.params
       .subscribe((params: Params) => {
         if (!this._paramSarabanService.inboxToContent) {
-          if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId!=1) {
+          if (!this._paramSarabanService.isArchive && this._paramSarabanService.userId != 1) {
             this.getUserProfileFolders()
             this.getShortcutSarabanFolders()
             this.getStructureInboxs()
+            this.listAlert()
           }
         } else {
           setTimeout(() => this.selectShortcutFolder(this._paramSarabanService.registedFolder), 1)
@@ -183,4 +189,44 @@ export class ListMwpComponent implements OnInit {
       })
   }
 
+  listAlert() {
+    let alertIds: number[] = []
+    const stored = localStorage.getItem('ALERT_STORAGE')
+    if (stored) {
+      const alertStorage: AlertStorage = JSON.parse(stored)
+      const today = new Date().toISOString().split('T')[0]
+      if (alertStorage.date == today) alertIds = alertStorage.alertIds//if not expire yet
+    }
+
+    this._loadingService.register('main')
+    this._alertService.listCurrent(alertIds)
+      .subscribe(response => {
+        this._loadingService.resolve('main')
+        if (response && response.length) this.openAlertDialog(response, alertIds)
+      })
+  }
+
+  private openAlertDialog(alerts: Alert[], alertIds: number[]) {
+    const dialogRef = this._dialog.open(AlertDialogComponent, { width: '40%' })
+    dialogRef.componentInstance.message = alerts[0].message
+    dialogRef.afterClosed().subscribe(result => {
+      if (dialogRef.componentInstance.hide) alertIds.push(alerts[0].id)
+
+      alerts.shift()
+      if (!alerts.length) {
+        const today = new Date().toISOString().split('T')[0]
+        const alertStorage: AlertStorage = {
+          alertIds: alertIds,
+          date: today
+        }
+        localStorage.setItem('ALERT_STORAGE', JSON.stringify(alertStorage))
+      } else this.openAlertDialog(alerts, alertIds)
+    })
+  }
+
+}
+
+type AlertStorage = {
+  alertIds: number[]
+  date: string
 }

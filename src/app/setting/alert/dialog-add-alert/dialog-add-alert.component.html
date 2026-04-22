@@ -1,0 +1,46 @@
+<md-card class="dl-card dialog">
+  <md-card-title class="dl-card-title" layout="row" flex>
+    <div>
+      <span *ngIf="alert.id==0">เพิ่มข้อมูลการแจ้งเตือน</span>
+      <span *ngIf="alert.id!=0">แก้ไขข้อมูลการแจ้งเตือน</span>
+    </div>
+  </md-card-title>
+
+  <div class="boxDialog">
+    <form layout="column" #form="ngForm" layout-align="top center">
+      <md-textarea rows="3" placeholder="ข้อความแจ้งเตือน" name="message" [(ngModel)]="alert.message" required></md-textarea>
+      
+      <!-- <my-date-picker [options]="myDatePickerOptions" placeholder="วันที่เริ่มต้น" locale="th" name="startDate" [(ngModel)]="alert.startDate">
+      </my-date-picker> -->
+
+      <div flex layout="row" style="padding-top:1rem;" >
+        <div layout="column" flex="50">
+          วันที่เริ่มต้น
+          <my-date-picker flex [options]="myDatePickerOptions" locale="th" name="startDate" [(ngModel)]="startDate" required>
+          </my-date-picker>
+        </div>
+        <div layout="column" flex="50">
+          วันที่สิ้นสุด
+          <my-date-picker flex [options]="myDatePickerOptions" locale="th" name="endDate" [(ngModel)]="endDate" required>
+          </my-date-picker>
+        </div>
+      </div>
+
+      <md-radio-group flex layout="row" style="padding-top:1rem;" name="active" [(ngModel)]="alert.active">
+        <md-list-item style="height:24px;">
+          <md-radio-button [value]="true" [checked]="alert.active" style="font-size:14px;">ใช้งาน</md-radio-button>
+        </md-list-item>
+        <md-list-item style="height:24px;">
+          <md-radio-button [value]="false" [checked]="!alert.active" style="font-size:14px; padding-left:14px;">ไม่ใช้งาน</md-radio-button>
+        </md-list-item>
+      </md-radio-group>
+    </form>
+  </div>
+
+  <md-divider></md-divider>
+  
+  <div class="bottomboxDialog" align="right">
+      <button md-raised-button [ngClass]="{'md-primary': form.form.valid}" [disabled]="!form.form.valid" (click)="ok()">บันทึก</button>
+      <button md-raised-button style="padding-left: 0.5rem;" (click)="close()">ยกเลิก</button>
+  </div>
+</md-card>

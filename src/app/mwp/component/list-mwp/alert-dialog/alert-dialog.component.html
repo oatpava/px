@@ -1,0 +1,20 @@
+<div class="bgc-blue-500">
+    <div layout="row">
+        <div flex class="headReport">แจ้งเตือน</div>
+        <div class="headReport" (click)="close()">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+</div>
+<div class="boxDialog">
+    <p>{{message}}</p>
+</div>
+<md-divider></md-divider>
+<div class="bottomboxDialog">
+    <div>
+        <md-checkbox color="primary" [checked]="hide" (change)="hide=!hide;" class="checkbox">ไม่แสดงข้อความนี้อีกในวันนี้</md-checkbox>
+    </div>
+    <div>
+        <button md-raised-button color="primary" (click)="close()">ปิด</button>
+    </div>
+</div>

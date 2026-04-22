@@ -196,7 +196,10 @@ import {
     DialogAddFileAttachTemplateComponent,
     DialogListFileAttachTemplateComponent,
     ImportProfileComponent,
-    DialogAddImportProfileComponent
+    DialogAddImportProfileComponent,
+    AlertDialogComponent,
+    AlertComponent,
+    DialogAddAlertComponent
 } from './shared';
 
 @NgModule({
@@ -366,7 +369,10 @@ import {
         DialogAddFileAttachTemplateComponent,
         DialogListFileAttachTemplateComponent,
         ImportProfileComponent,
-        DialogAddImportProfileComponent
+        DialogAddImportProfileComponent,
+        AlertDialogComponent,
+        AlertComponent,
+        DialogAddAlertComponent
     ],
     imports: [
         BrowserModule,
@@ -402,7 +408,9 @@ import {
         DialogConfirmPasswordComponent,
         DialogAddFileAttachTemplateComponent,
         DialogListFileAttachTemplateComponent,
-        DialogAddImportProfileComponent
+        DialogAddImportProfileComponent,
+        AlertDialogComponent,
+        DialogAddAlertComponent
     ],
     providers: [
         appRoutingProviders,

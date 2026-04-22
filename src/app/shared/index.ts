@@ -80,6 +80,7 @@ export * from '../mwp/component/private-group/add-private-group/dialog-search-ou
 export * from '../mwp/component/outbox/dialog-cancel-send/dialog-cancel-send.component'
 export * from '../mwp/component/my-work/my-work.component'
 export * from '../mwp/component/my-work/add-my-work/add-my-work.component'
+export * from '../mwp/component/list-mwp/alert-dialog/alert-dialog.component'
 
 export * from '../saraban/component/sarabanMain/saraban.component'
 export * from '../saraban/component/list-saraban-folder/list-saraban-folder.component'
@@ -200,6 +201,8 @@ export * from '../setting/file-attach-template/dialog-add-file-attach-template/d
 export * from '../setting/file-attach-template/dialog-list-file-attach-template/dialog-list-file-attach-template.component'
 export * from '../setting/import-profile/import-profile.component'
 export * from '../setting/import-profile/dialog-add-import-profile/dialog-add-import-profile.component'
+export * from '../setting/alert/alert.component'
+export * from '../setting/alert/dialog-add-alert/dialog-add-alert.component'
 
 export * from '../setting/history-log/list-histtory-user/list-histtory-user.component'
 export * from '../setting/history-log/report-log/report-log.component'

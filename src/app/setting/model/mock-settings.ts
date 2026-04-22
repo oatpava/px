@@ -80,7 +80,13 @@ export const SETTINGS: Setting[] = [
       //   childName: 'ปรับปรุง (รายชื่อบุคลากร)',
       //   childIcon: 'thumbs_up_down',
       //   subSetting: 'up-user',
-      // },      
+      // },
+      {
+        childId: 50,//6,
+        childName: 'แจ้งเตือน',
+        childIcon: 'notifications_active',
+        subSetting: 'alert',
+      },
     ]
   }
   , {
