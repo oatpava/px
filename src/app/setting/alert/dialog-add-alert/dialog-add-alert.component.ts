@@ -100,7 +100,7 @@ export class DialogAddAlertComponent implements OnInit {
   //   const day = datestr.substring(0, 2)
   //   const month = datestr.substring(3, 2)
   //   const year = datestr.substring(6, 4)
-  //   return { day: +day, month: +month - 1, year: +year - 543 }
+  //   return { day: +day, month: +month - 1, year: +year }
   // }
 
   private getStrDate(dateObj: DateObj): string {

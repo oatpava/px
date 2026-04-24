@@ -1,4 +1,5 @@
 export class Alert {
+    version: number
     id: number
     startDate: string
     endDate: string
@@ -6,6 +7,7 @@ export class Alert {
     active: boolean
 
     constructor(values: Object = {}) {
+        this.version = 1
         this.id = 0
         this.startDate = ''
         this.endDate = ''

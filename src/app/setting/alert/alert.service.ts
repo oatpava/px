@@ -37,6 +37,7 @@ export class AlertService {
   }
 
   update(alert: Alert): Observable<Alert> {
+    alert.version = 1
     let params = new URLSearchParams()
     this._options.search = params
 
