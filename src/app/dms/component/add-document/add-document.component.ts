@@ -1007,7 +1007,6 @@ export class AddDocumentComponent implements OnInit {
 
     let temp = environment.plugIn
     console.log('temp url', temp)
-    // let url = 'http://192.168.1.8/scan/?'
 
     let url = temp + '/scan/?'
     let mode = 'add'

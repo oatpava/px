@@ -177,7 +177,6 @@ export class FileAttachComponent implements OnInit {
       // if (this.authEditDocFile && staus == 1) {
       //   auth = 1
       // }
-      // // let url = 'http://192.168.1.8/scan/?'
       // let url = temp + '/scan/?'
       // let mode = 'view'
       // localStorage.setItem('scan', 'uncomplete')
@@ -245,7 +244,6 @@ export class FileAttachComponent implements OnInit {
     if (this.authEditDocFile) {
       auth = 1
     }
-    // let url = 'http://192.168.1.8/scan/?'
     let url = temp + '/scan/?'
     let mode = 'view'
 

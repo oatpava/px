@@ -6,7 +6,7 @@ export const HISTORYLOG: HistoryLog[] = [
         id: 1,
         Modules: 'หน้าจอส่วนตัว',
         userName: 'ผู้ดูแลระบบ',
-        ip: '192.168.1.8',
+        ip: 'x.x.x.x',
         detail: 'เข้าสู่ระบบ',
     },{
         version: 0,
@@ -20,21 +20,21 @@ export const HISTORYLOG: HistoryLog[] = [
         id: 3,
         Modules: 'ระบบสารบรรณ',
         userName: 'ผู้ดูแลระบบ',
-        ip: '192.168.1.8',
+        ip: 'x.x.x.x',
         detail: 'สร้างหนังสือ เลขทะเบียน 00001/2560 : แฟ้มทะเบียนส่งภายนอก(ศบน.)',
     },{
         version: 0,
         id: 3,
         Modules: 'ระบบสารบรรณ',
         userName: 'ผู้ดูแลระบบ',
-        ip: '192.168.1.8',
+        ip: 'x.x.x.x',
         detail: 'แก้ไขหนังสือ เลขทะเบียน 00001/2560 : แฟ้มทะเบียนส่งภายนอก(ศบน.)',
     },{
         version: 0,
         id: 3,
         Modules: 'ระบบสารบรรณ',
         userName: 'ผู้ดูแลระบบ',
-        ip: '192.168.1.8',
+        ip: 'x.x.x.x',
         detail: 'ลบแฟ้มทะเบียน : แฟ้มทะเบียนส่งภายใน(ศบน.)',
     }
 ]
